@@ -1,18 +1,21 @@
 <script setup>
-import { Head, useForm } from '@inertiajs/vue3';
-import AuthenticationCard from '@/Components/AuthenticationCard.vue';
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import {useForm} from '@inertiajs/vue3';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import PublicLayout from '@/Layouts/PublicLayout.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import {__} from '@/Composables/Translate';
 
 defineProps({
-    status: String,
+  status: {
+      type: String,
+      default: ''
+  }
 });
 
 const form = useForm({
-    email: '',
+    email: ''
 });
 
 const submit = () => {
@@ -21,41 +24,48 @@ const submit = () => {
 </script>
 
 <template>
-    <Head title="Forgot Password" />
-
-    <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
-        </template>
-
+  <PublicLayout title="Forgot Password">
+    <div class="flex justify-center">
+      <div class="w-full sm:max-w-lg mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
         <div class="mb-4 text-sm text-gray-600">
-            Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.
+          {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
         </div>
-
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
+        <div
+          v-if="status"
+          class="mb-4 font-medium text-sm text-green-600"
+        >
+          {{ status }}
         </div>
-
         <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-                <TextInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Email Password Reset Link
-                </PrimaryButton>
-            </div>
+          <div>
+            <InputLabel for="email">
+              {{ __('Email address') }}
+            </InputLabel>
+            <TextInput
+              v-model="form.email"
+              name="email"
+              type="email"
+              class="mt-1 block w-full"
+              required
+              autofocus
+              autocomplete="email"
+            />
+            <InputError
+              :message="form.errors.email"
+              class="mt-1"
+            />
+          </div>
+          <div class="flex items-center justify-end mt-4">
+            <PrimaryButton
+              :class="{ 'opacity-25': form.processing }"
+              :disabled="form.processing"
+              type="submit"
+            >
+              {{ __('Email Password Reset Link') }}
+            </PrimaryButton>
+          </div>
         </form>
-    </AuthenticationCard>
+      </div>
+    </div>
+  </PublicLayout>
 </template>

@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use App\Enums\AccountStatus;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -23,8 +24,15 @@ class CreateNewUser implements CreatesNewUsers
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users', 'confirmed'],
             'password' => $this->passwordRules(),
+            'organization' => ['required', 'string'],
+            'country' => ['required', 'string'],
+            'address' => ['required', 'string'],
+            'city' => ['required', 'string'],
+            'subdivision' => ['required', 'string'],
+            'phone_number' => ['required', 'string'],
+            'timezone' => ['required', 'timezone'],
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
 
@@ -33,8 +41,8 @@ class CreateNewUser implements CreatesNewUsers
                 'name' => $input['name'],
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
-            ]), function (User $user) {
-                $this->createTeam($user);
+            ]), function (User $user) use ($input) {
+                $this->createTeam($user, $input);
             });
         });
     }
@@ -42,12 +50,21 @@ class CreateNewUser implements CreatesNewUsers
     /**
      * Create a personal team for the user.
      */
-    protected function createTeam(User $user): void
+    protected function createTeam(User $user, array $input): void
     {
         $user->ownedTeams()->save(Team::forceCreate([
             'user_id' => $user->id,
-            'name' => explode(' ', $user->name, 2)[0]."'s Team",
+            'name' => $input['organization'],
             'personal_team' => true,
+            'status' => AccountStatus::ACTIVE->value,
+            'contact_name' => $input['name'],
+            'contact_email' => $input['email'],
+            'country' => $input['country'],
+            'address' => $input['address'],
+            'city' => $input['city'],
+            'subdivision' => $input['subdivision'],
+            'phone_number' => $input['phone_number'],
+            'timezone' => $input['timezone'],
         ]));
     }
 }

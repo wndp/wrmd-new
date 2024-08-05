@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Analytics\Numbers;
+
+use App\Analytics\Contracts\Number;
+use App\Models\Admission;
+use App\Repositories\SettingsStore;
+use App\Support\Wrmd;
+use Carbon\Carbon;
+
+class PatientsInCare extends Number
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function compute()
+    {
+        $inCare = Admission::inCareOnDate($this->team, Carbon::now(Wrmd::settings('timezone')))->count();
+
+        $other = $this->filters->compare
+            ? Admission::inCareOnDate($this->team, Carbon::now(Wrmd::settings('timezone'))->subDay())->count()
+            : null;
+
+        $this->calculatePercentageDifference($inCare, $other);
+
+        $this->now = $inCare;
+        $this->prev = $other;
+    }
+}

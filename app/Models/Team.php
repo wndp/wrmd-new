@@ -2,15 +2,23 @@
 
 namespace App\Models;
 
+use App\Concerns\HasSubAccounts;
+use App\Enums\AccountStatus;
+use App\Repositories\SettingsStore;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Jetstream\Events\TeamCreated;
 use Laravel\Jetstream\Events\TeamDeleted;
 use Laravel\Jetstream\Events\TeamUpdated;
+use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\Team as JetstreamTeam;
 
 class Team extends JetstreamTeam
 {
     use HasFactory;
+    use HasProfilePhoto;
+    use HasSubAccounts;
 
     /**
      * The attributes that are mass assignable.
@@ -20,6 +28,10 @@ class Team extends JetstreamTeam
     protected $fillable = [
         'name',
         'personal_team',
+    ];
+
+    protected $appends = [
+        'profile_photo_url',
     ];
 
     /**
@@ -42,6 +54,31 @@ class Team extends JetstreamTeam
     {
         return [
             'personal_team' => 'boolean',
+            'status' => AccountStatus::class
         ];
+    }
+
+    /**
+     * An account has many extensions.
+     */
+    public function extensions(): BelongsToMany
+    {
+        return $this->belongsToMany(Extension::class, 'team_extension', 'team_id', 'extension_id')->withTimestamps();
+    }
+
+    /**
+     * Get the accounts settings.
+     */
+    public function settings(): HasMany
+    {
+        return $this->hasMany(Setting::class);
+    }
+
+    /**
+     * Return the accounts SettingsStore.
+     */
+    public function settingsStore(): SettingsStore
+    {
+        return new SettingsStore($this);
     }
 }

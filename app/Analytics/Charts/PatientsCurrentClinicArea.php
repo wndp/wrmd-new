@@ -1,0 +1,80 @@
+<?php
+
+namespace App\Analytics\Charts;
+
+use App\Models\Admission;
+use App\Analytics\ChronologicalCollection;
+use App\Analytics\Concerns\HandleChronologicalData;
+use App\Analytics\Contracts\Chart;
+use App\Analytics\DataSet;
+
+class PatientsCurrentClinicArea extends Chart
+{
+    use HandleChronologicalData;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function compute()
+    {
+        $this->handleChronologicalDataWithSubGroups();
+    }
+
+    /**
+     * Query for the requested data.
+     */
+    public function query($segment): ChronologicalCollection
+    {
+        $query = Admission::where('team_id', $this->team->id)
+            ->selectRaw('count(*) as aggregate, date(moved_in_at) as date, area as subgroup')
+            ->joinPatients()
+            ->joinLastLocation()
+            ->where('facility', 'Clinic')
+            ->whereNotNull('area')
+            ->groupBy('date')
+            ->groupBy('subgroup')
+            ->orderBy('date');
+
+        if ($this->filters->date_period !== 'all-dates') {
+            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+        }
+
+        $this->withSegment($query, $segment);
+
+        return new ChronologicalCollection($this->aggregateData($query->get())->mapInto(DataSet::class));
+    }
+
+    /**
+     * Query for the requested comparative data.
+     */
+    public function compareQuery($segment): ChronologicalCollection
+    {
+        $query = Admission::where('team_id', $this->team->id)
+            ->selectRaw('count(*) as aggregate, date(moved_in_at) as date, area as subgroup')
+            ->joinPatients()
+            ->joinLastLocation()
+            ->where('facility', 'Clinic')
+            ->whereNotNull('area')
+            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to)
+            ->groupBy('date')
+            ->groupBy('subgroup')
+            ->orderBy('date');
+
+        $this->withSegment($query, $segment);
+
+        return new ChronologicalCollection($this->aggregateData($query->get())->mapInto(DataSet::class));
+    }
+
+    public function aggregateData($data)
+    {
+        $mostPrevelent = $data->groupBy('subgroup')->map(function ($group) {
+            return $group->sum('aggregate');
+        })->sortByDesc(function ($sum) {
+            return $sum;
+        })
+            ->take(15)
+            ->keys();
+
+        return $data->whereIn('subgroup', $mostPrevelent);
+    }
+}

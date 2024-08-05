@@ -11,10 +11,19 @@
         "laravel/jetstream": "^5.1",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "tightenco/ziggy": "^2.0"
+        "pusher/pusher-php-server": "^7.2",
+        "silber/bouncer": "^1.0",
+        "singlestoredb/singlestoredb-laravel": "^1.5",
+        "sokil/php-isocodes": "^4.2",
+        "sokil/php-isocodes-db-i18n": "^4.0",
+        "spatie/laravel-honeypot": "^4.5",
+        "spatie/laravel-sluggable": "^3.6",
+        "tightenco/ziggy": "^2.0",
+        "vemcogroup/laravel-translation": "^3.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
+        "knuckleswtf/scribe": "^4.37",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",

@@ -1,0 +1,55 @@
+<?php
+
+namespace App\Analytics\Charts;
+
+use App\Models\Admission;
+use App\Analytics\Concerns\HandlePieData;
+use App\Analytics\Contracts\Chart;
+
+class PatientsByAge extends Chart
+{
+    use HandlePieData;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function compute()
+    {
+        $this->handlePieData();
+    }
+
+    public function query($segment)
+    {
+        $query = Admission::where('team_id', $this->team->id)
+            ->selectRaw('count(*) as aggregate, age_unit as subgroup')
+            ->joinPatients()
+            ->joinIntakeExam()
+            ->whereNotNull('age_unit')
+            ->orderByDesc('aggregate')
+            ->groupBy('age_unit');
+
+        if ($this->filters->date_period !== 'all-dates') {
+            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+        }
+
+        $this->withSegment($query, $segment);
+
+        return $query->get();
+    }
+
+    public function compareQuery($segment)
+    {
+        $query = Admission::where('team_id', $this->team->id)
+            ->selectRaw('count(*) as aggregate, age_unit as subgroup')
+            ->joinPatients()
+            ->joinIntakeExam()
+            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to)
+            ->whereNotNull('age_unit')
+            ->orderByDesc('aggregate')
+            ->groupBy('age_unit');
+
+        $this->withSegment($query, $segment);
+
+        return $query->get();
+    }
+}
