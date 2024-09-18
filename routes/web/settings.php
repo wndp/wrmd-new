@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Ability;
 use App\Http\Controllers\Settings\AccountExtensionsController;
 use App\Http\Controllers\Settings\AccountProfileController;
 use App\Http\Controllers\Settings\ApiController;
@@ -13,8 +14,10 @@ use App\Http\Controllers\Settings\SecurityController;
 use App\Http\Controllers\Settings\UsersAuthorizationsController;
 use App\Http\Controllers\Settings\UsersController;
 use App\Http\Controllers\Settings\VeterinariansController;
+use Illuminate\Auth\Middleware\Authorize;
 
-Route::prefix('settings')->middleware('can:displaySettings')->group(function () {
+// ->middleware(Authorize::using(Ability::VIEW_WRMD_SETTINGS->value))
+Route::prefix('settings')->group(function () {
     Route::controller(AccountProfileController::class)->group(function () {
         Route::get('account/profile', 'edit')->name('account.profile.edit');
         Route::put('account/profile', 'update')->name('account.profile.update');

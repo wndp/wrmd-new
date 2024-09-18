@@ -2,12 +2,13 @@
 
 namespace App\Analytics\Charts;
 
-use App\Models\Admission;
 use App\Analytics\ChronologicalCollection;
 use App\Analytics\Concerns\HandleSeriesNames;
 use App\Analytics\Contracts\Chart;
 use App\Analytics\DataSet;
-use App\Domain\Patients\ExamOptions;
+use App\Enums\AttributeOptionName;
+use App\Models\Admission;
+use App\Models\AttributeOption;
 use App\Temperature;
 use App\Weight;
 use Illuminate\Support\Collection;
@@ -22,10 +23,19 @@ class PatientHealthIndicators extends Chart
      */
     public function compute()
     {
-        $ages = collect(ExamOptions::$ageUnits)
-            ->flatten()
-            ->unique()
-            ->values();
+        $attributeOptions = AttributeOption::getDropdownOptions([
+            AttributeOptionName::EXAM_SEXES->value,
+            AttributeOptionName::EXAM_CHRONOLOGICAL_AGE_UNITS->value,
+            AttributeOptionName::EXAM_WEIGHT_UNITS->value,
+            AttributeOptionName::EXAM_BODY_CONDITIONS->value,
+            AttributeOptionName::EXAM_DEHYDRATIONS->value,
+            AttributeOptionName::EXAM_ATTITUDES->value,
+            AttributeOptionName::EXAM_MUCUS_MEMBRANE_COLORS->value,
+            AttributeOptionName::EXAM_MUCUS_MEMBRANE_TEXTURES->value,
+            AttributeOptionName::EXAM_TEMPERATURE_UNITS->value
+        ]);
+
+        $ages = [];
 
         $this->categories = [
             'Sex',
@@ -35,19 +45,19 @@ class PatientHealthIndicators extends Chart
             'Dehydration',
             'Attitude',
             'Mucous Membrane Color',
-            'Mucous Membrane Color',
+            'Mucous Membrane Texture',
             'Temperature (c)',
         ];
 
         $this->yAxis = [
-            ['categories' => ExamOptions::$sexes],
-            ['categories' => $ages->all()],
+            ['categories' => $attributeOptions[AttributeOptionName::EXAM_SEXES->value]],
+            ['categories' => $ages],
             ['min' => 0, 'tooltipValueFormat' => '{value} g'],
-            ['categories' => ExamOptions::$bodyConditions],
-            ['categories' => ExamOptions::$dehydrations],
-            ['categories' => ExamOptions::$attitudes],
-            ['categories' => ExamOptions::$mmColors],
-            ['categories' => ExamOptions::$mmTextures],
+            ['categories' => $attributeOptions[AttributeOptionName::EXAM_BODY_CONDITIONS->value]],
+            ['categories' => $attributeOptions[AttributeOptionName::EXAM_DEHYDRATIONS->value]],
+            ['categories' => $attributeOptions[AttributeOptionName::EXAM_ATTITUDES->value]],
+            ['categories' => $attributeOptions[AttributeOptionName::EXAM_MUCUS_MEMBRANE_COLORS->value]],
+            ['categories' => $attributeOptions[AttributeOptionName::EXAM_MUCUS_MEMBRANE_TEXTURES->value]],
             ['min' => 0, 'tooltipValueFormat' => '{value} C'],
         ];
 
@@ -106,7 +116,7 @@ class PatientHealthIndicators extends Chart
             ->joinIntakeExam();
 
         if ($this->filters->date_period !== 'all-dates') {
-            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+            $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         }
 
         $this->withSegment($query, $segment);
@@ -127,7 +137,7 @@ class PatientHealthIndicators extends Chart
     //         ->joinPatients()
     //         ->joinIntakeExam()
     //         ->whereNotNull('bcs')
-    //         ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to)
+    //         ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at')
     //         ->groupBy('date')
     //         ->groupBy('subgroup')
     //         ->orderBy('date');

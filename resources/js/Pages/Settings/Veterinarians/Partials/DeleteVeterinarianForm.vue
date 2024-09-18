@@ -1,3 +1,30 @@
+<script setup>
+import { inject, ref } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+import FormSection from '@/Components/FormElements/FormSection.vue';
+import DangerButton from '@/Components/FormElements/DangerButton.vue';
+import SecondaryButton from '@/Components/FormElements/SecondaryButton.vue';
+import ConfirmationModal from '@/Components/ConfirmationModal.vue';
+import Alert from '@/Components/Alert.vue';
+import {__} from '@/Composables/Translate';
+
+const route = inject('route');
+
+const props = defineProps({
+  veterinarian: {
+    type: Object,
+    required: true
+  }
+});
+
+const confirmingVeterinarianDeletion = ref(false);
+const form = useForm({});
+
+const deleteVeterinarian = () => {
+  form.delete(route('veterinarians.destroy', props.veterinarian.id));
+};
+</script>
+
 <template>
   <div>
     <FormSection>
@@ -54,26 +81,3 @@
     </ConfirmationModal>
   </div>
 </template>
-
-<script setup>
-import { inject, ref } from 'vue';
-import { useForm } from '@inertiajs/vue3';
-import FormSection from '@/Components/FormElements/FormSection.vue';
-import DangerButton from '@/Components/FormElements/DangerButton.vue';
-import SecondaryButton from '@/Components/FormElements/SecondaryButton.vue';
-import ConfirmationModal from '@/Components/ConfirmationModal.vue';
-import Alert from '@/Components/Alert.vue';
-
-const route = inject('route');
-
-const props = defineProps({
-  veterinarian: Object
-});
-
-const confirmingVeterinarianDeletion = ref(false);
-const form = useForm({});
-
-const deleteVeterinarian = () => {
-  form.delete(route('veterinarians.destroy', props.veterinarian.id));
-};
-</script>

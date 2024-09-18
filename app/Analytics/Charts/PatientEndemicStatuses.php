@@ -34,7 +34,7 @@ class PatientEndemicStatuses extends Chart
             ->orderBy('date');
 
         if ($this->filters->date_period !== 'all-dates') {
-            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+            $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         }
 
         $this->withSegment($query, $segment);
@@ -52,7 +52,7 @@ class PatientEndemicStatuses extends Chart
             ->addSelect('native_distributions')
             ->joinPatients()
             ->joinTaxa()
-            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to)
+            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at')
             ->orderBy('date');
 
         $this->withSegment($query, $segment);

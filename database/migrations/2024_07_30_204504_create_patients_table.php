@@ -14,12 +14,12 @@ return new class () extends Migration {
             $table->id();
             $table->unsignedBigInteger('team_possession_id')->index();
             $table->unsignedBigInteger('rescuer_id')->index();
-            $table->unsignedBigInteger('taxon_id')->index();
-            $table->boolean('is_voided')->default(0);
-            $table->boolean('is_locked')->default(0);
+            $table->unsignedBigInteger('taxon_id')->nullable()->index();
             $table->boolean('is_resident')->default(0);
+            $table->datetime('voided_at')->nullable();
+            $table->datetime('locked_at')->nullable();
             $table->string('common_name', 50);
-            $table->string('morph', 50)->nullable();
+            $table->unsignedBigInteger('morph_id')->nullable()->index();
             $table->date('date_admitted_at')->nullable();
             $table->time('time_admitted_at')->nullable();
             $table->string('admitted_by', 50)->nullable();
@@ -40,9 +40,9 @@ return new class () extends Migration {
             $table->string('reference_number')->nullable();
             $table->string('name', 50)->nullable();
             //'keywords',
-            $table->string('disposition', 50)->nullable();
-            $table->string('transfer_type', 50)->nullable();
-            $table->string('release_type', 50)->nullable();
+            $table->unsignedBigInteger('disposition_id')->nullable()->index();
+            $table->unsignedBigInteger('transfer_type_id')->nullable()->index();
+            $table->unsignedBigInteger('release_type_id')->nullable()->index();
             $table->date('dispositioned_at')->nullable();
             $table->string('disposition_address', 150)->nullable();
             $table->string('disposition_city', 50)->nullable();

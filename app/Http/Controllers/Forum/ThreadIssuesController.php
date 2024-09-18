@@ -18,7 +18,7 @@ class ThreadIssuesController extends Controller
      */
     public function show(Thread $thread): JsonResponse
     {
-        //abort_unless(Auth::user()->current_account_id === SpecialtyAccounts::WRMD, 404);
+        //abort_unless(Auth::user()->current_team_id === SpecialtyAccounts::WRMD, 404);
 
         $result = $this->getGitHubIssue($thread);
 
@@ -37,7 +37,7 @@ class ThreadIssuesController extends Controller
      */
     public function store(Thread $thread): JsonResponse
     {
-        abort_unless(Auth::user()->current_account_id === SpecialtyAccounts::WRMD, 404);
+        abort_unless(Auth::user()->current_team_id === SpecialtyAccounts::WRMD, 404);
 
         try {
             $this->setAuthAccessToken();
@@ -59,7 +59,7 @@ class ThreadIssuesController extends Controller
      */
     public function destroy(Thread $thread): JsonResponse
     {
-        abort_unless(Auth::user()->current_account_id === SpecialtyAccounts::WRMD, 404);
+        abort_unless(Auth::user()->current_team_id === SpecialtyAccounts::WRMD, 404);
 
         $result = $this->getGitHubIssue($thread);
 

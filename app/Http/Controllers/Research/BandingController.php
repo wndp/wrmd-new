@@ -12,7 +12,7 @@ class BandingController extends Controller
 {
     public function __invoke(Request $request, Patient $patient)
     {
-        $patient->validateOwnership(Auth::user()->current_account_id);
+        $patient->validateOwnership(Auth::user()->current_team_id);
         $admittedAt = $patient->admitted_at->setTimezone(settings('timezone'))->startOfDay();
 
         $request->validate([

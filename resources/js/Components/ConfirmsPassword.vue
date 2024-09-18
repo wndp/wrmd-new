@@ -4,8 +4,9 @@ import DialogModal from './DialogModal.vue';
 import InputError from './FormElements/InputError.vue';
 import PrimaryButton from './FormElements/PrimaryButton.vue';
 import SecondaryButton from './FormElements/SecondaryButton.vue';
-import Input from './FormElements/Input.vue';
-import Translate from '@/Mixins/Translate';
+import TextInput from './FormElements/TextInput.vue';
+import {__} from '@/Composables/Translate';
+import axios from 'axios';
 
 const emit = defineEmits(['confirmed']);
 const route = inject('route');
@@ -13,15 +14,15 @@ const route = inject('route');
 defineProps({
     title: {
         type: String,
-        default: Translate.methods.__('Confirm Password'),
+        default: __('Confirm Password'),
     },
     content: {
         type: String,
-        default: Translate.methods.__('For your security, please confirm your password to continue.'),
+        default: __('For your security, please confirm your password to continue.'),
     },
     button: {
         type: String,
-        default: Translate.methods.__('Confirm'),
+        default: __('Confirm'),
     },
 });
 
@@ -36,7 +37,7 @@ const form = reactive({
 const passwordInput = ref(null);
 
 const startConfirmingPassword = () => {
-    window.axios.get(route('password.confirmation')).then(response => {
+    axios.get(route('password.confirmation')).then(response => {
         if (response.data.confirmed) {
             emit('confirmed');
         } else {
@@ -50,7 +51,7 @@ const startConfirmingPassword = () => {
 const confirmPassword = () => {
     form.processing = true;
 
-    window.axios.post(route('password.confirm'), {
+    axios.post(route('password.confirm'), {
         password: form.password,
     }).then(() => {
         form.processing = false;
@@ -90,7 +91,7 @@ const closeModal = () => {
         {{ content }}
 
         <div class="mt-4">
-          <Input
+          <TextInput
             ref="passwordInput"
             v-model="form.password"
             type="password"

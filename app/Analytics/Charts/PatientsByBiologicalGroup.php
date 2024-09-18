@@ -66,7 +66,7 @@ class PatientsByBiologicalGroup extends Chart
             ->where('class', 'Aves');
 
         if ($this->filters->date_period !== 'all-dates') {
-            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+            $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         }
 
         $this->withSegment($query, $segment);
@@ -81,7 +81,7 @@ class PatientsByBiologicalGroup extends Chart
             ->joinPatients()
             ->join('species', 'patients.taxon_id', '=', 'species.id')
             ->where('class', 'Aves')
-            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to);
+            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at');
 
         $this->withSegment($query, $segment);
 

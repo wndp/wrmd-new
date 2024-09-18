@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Domain\Locality\LocaleOptions;
-use App\Domain\OptionsStore;
-use App\Domain\People\PeopleOptions;
+use App\Enums\AttributeOptionName;
+use App\Models\AttributeOption;
+use App\Options\LocaleOptions;
+use App\Repositories\OptionsStore;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -13,10 +14,14 @@ class RescuerController extends Controller
     /**
      * Show the form for updating a rescuer.
      */
-    public function __invoke(PeopleOptions $peopleOptions, LocaleOptions $localeOptions): Response
+    public function __invoke(): Response
     {
-        OptionsStore::merge($peopleOptions);
-        OptionsStore::merge($localeOptions);
+        OptionsStore::add([
+            new LocaleOptions(),
+            AttributeOption::getDropdownOptions([
+                AttributeOptionName::PERSON_ENTITY_TYPES->value,
+            ])
+        ]);
 
         $admission = $this->loadAdmissionAndSharePagination();
 

@@ -1,3 +1,56 @@
+<script setup>
+import AppLayout from '@/Layouts/AppLayout.vue';
+import SettingsAside from '../Partials/SettingsAside.vue';
+import FormSection from '@/Components/FormElements/FormSection.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import SelectInput from '@/Components/FormElements/SelectInput.vue';
+import Checkbox from '@/Components/FormElements/Checkbox.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import SecondaryButton from '@/Components/FormElements/SecondaryButton.vue';
+import Alert from '@/Components/Alert.vue';
+import isEmpty from 'lodash/isEmpty';
+import { useForm, router } from '@inertiajs/vue3';
+import { ref, inject } from 'vue';
+import {__} from '@/Composables/Translate';
+
+const route = inject('route');
+
+let form = useForm({
+    name: '',
+    email: '',
+    email_confirmation: '',
+    role: 'User',
+    password: '',
+    password_confirmation: '',
+    send_email: false
+});
+
+let emailExists = ref(false);
+let role = ref(null);
+
+const storeUser = () => {
+    form.post(route('users.store'), {
+        errorBag: 'addTeamMember',
+        preserveScroll: true
+    });
+};
+
+const lookUpUser = () => {
+  window.axios.get('/internal-api/users/search/?email=' + form.email)
+    .then(response => {
+      emailExists.value = ! isEmpty(response.data);
+      role.value.focus();
+    });
+};
+
+const goBack = () => {
+    router.get(route('users.index'));
+}
+</script>
+
 <template>
   <AppLayout title="Users">
     <div class="lg:grid grid-cols-8 gap-8 mt-4">
@@ -11,8 +64,8 @@
             {{ __('Use this form to add a new user to your account. Users can exist in multiple accounts and may already be known to Wildlife Rehabilitation MD.') }}
           </template>
           <div class="col-span-4 sm:col-span-2">
-            <Label for="email">{{ __('Email address') }}</Label>
-            <Input
+            <InputLabel for="email">{{ __('Email address') }}</InputLabel>
+            <TextInput
               v-model="form.email"
               type="email"
               name="email"
@@ -29,8 +82,8 @@
             v-if="!emailExists"
             class="col-span-4 sm:col-span-2"
           >
-            <Label for="email_confirmation">{{ __('Email address confirmation') }}</Label>
-            <Input
+            <InputLabel for="email_confirmation">{{ __('Email address confirmation') }}</InputLabel>
+            <TextInput
               v-model="form.email_confirmation"
               type="email"
               name="email_confirmation"
@@ -42,8 +95,8 @@
             v-if="!emailExists"
             class="col-span-4 sm:col-span-2"
           >
-            <Label for="name">{{ __('Name') }}</Label>
-            <Input
+            <InputLabel for="name">{{ __('Name') }}</InputLabel>
+            <TextInput
               v-model="form.name"
               name="name"
               autocomplete="given-name"
@@ -55,8 +108,8 @@
             />
           </div>
           <div class="col-span-4 sm:col-span-2">
-            <Label for="role">{{ __('Role') }}</Label>
-            <Select
+            <InputLabel for="role">{{ __('Role') }}</InputLabel>
+            <SelectInput
               ref="role"
               v-model="form.role"
               name="role"
@@ -72,8 +125,8 @@
             v-if="!emailExists"
             class="col-span-4 sm:col-span-2"
           >
-            <Label for="password">{{ __('Password') }}</Label>
-            <Input
+            <InputLabel for="password">{{ __('Password') }}</InputLabel>
+            <TextInput
               v-model="form.password"
               type="password"
               name="password"
@@ -89,8 +142,8 @@
             v-if="!emailExists"
             class="col-span-4 sm:col-span-2"
           >
-            <Label for="password_confirmation">{{ __('Password Confirmation') }}</Label>
-            <Input
+            <InputLabel for="password_confirmation">{{ __('Password Confirmation') }}</InputLabel>
+            <TextInput
               v-model="form.password_confirmation"
               type="password"
               name="password_confirmation"
@@ -111,7 +164,7 @@
                 />
               </div>
               <div class="ml-3 text-sm">
-                <Label for="send_email">{{ __('Send a welcome email, including the password, to the new user.') }}</Label>
+                <InputLabel for="send_email">{{ __('Send a welcome email, including the password, to the new user.') }}</InputLabel>
               </div>
             </div>
           </div>
@@ -144,54 +197,3 @@
     </div>
   </AppLayout>
 </template>
-
-<script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import SettingsAside from '../Partials/SettingsAside.vue';
-import FormSection from '@/Components/FormElements/FormSection.vue';
-import Label from '@/Components/FormElements/Label.vue';
-import Input from '@/Components/FormElements/Input.vue';
-import Select from '@/Components/FormElements/Select.vue';
-import Checkbox from '@/Components/FormElements/Checkbox.vue';
-import InputError from '@/Components/FormElements/InputError.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import SecondaryButton from '@/Components/FormElements/SecondaryButton.vue';
-import Alert from '@/Components/Alert.vue';
-import isEmpty from 'lodash/isEmpty';
-import { useForm, router } from '@inertiajs/vue3';
-import { ref, inject } from 'vue';
-
-const route = inject('route');
-
-let form = useForm({
-    name: '',
-    email: '',
-    email_confirmation: '',
-    role: 'User',
-    password: '',
-    password_confirmation: '',
-    send_email: false
-});
-
-let emailExists = ref(false);
-let role = ref(null);
-
-const storeUser = () => {
-    form.post(route('users.store'), {
-        preserveScroll: true
-    });
-};
-
-const lookUpUser = () => {
-  window.axios.get('/internal-api/users/search/?email=' + form.email)
-    .then(response => {
-      emailExists.value = ! isEmpty(response.data);
-      role.value.focus();
-    });
-};
-
-const goBack = () => {
-    router.get(route('users.index'));
-}
-</script>

@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Options\Options;
+use App\Support\AttributeOptionsCollection;
 
 class OptionsStore
 {
@@ -12,6 +13,11 @@ class OptionsStore
      * @var array
      */
     public static $options = [];
+
+    public static function clearCache()
+    {
+        static::$options = [];
+    }
 
     /**
      * Get all the defined options.
@@ -25,14 +31,18 @@ class OptionsStore
         );
     }
 
-    /**
-     * Register new options.
-     */
-    public static function merge(Options|array $options, string $key = null): void
+    public static function add(Options|array $options): void
     {
         $array = $options instanceof Options ? $options->toArray() : $options;
-        $array = is_null($key) ? $array : [$key => $array];
 
-        static::$options = array_merge_recursive(static::$options, $array);
+        foreach ($array as $key => $value) {
+            if ($value instanceof Options) {
+                static::$options = array_merge_recursive(static::$options, $value->toArray());
+            } elseif ($value instanceof AttributeOptionsCollection) {
+                static::$options = array_merge_recursive(static::$options, $value->optionsToSelectable());
+            } else {
+                static::$options = array_merge_recursive(static::$options, [$key => $value]);
+            }
+        }
     }
 }

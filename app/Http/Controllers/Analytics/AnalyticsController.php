@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Analytics;
 
 use App\Domain\Analytics\AnalyticFilters;
 use App\Domain\Analytics\AnalyticFiltersStore;
+use App\Enums\AttributeOptionName;
 use App\Http\Controllers\Controller;
+use App\Models\AttributeOption;
+use App\Repositories\OptionsStore;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -12,6 +15,7 @@ class AnalyticsController extends Controller
 {
     public function index(): Response
     {
+        dd('what');
         //AnalyticFiltersStore::destroy();
 
         $filters = new AnalyticFilters();

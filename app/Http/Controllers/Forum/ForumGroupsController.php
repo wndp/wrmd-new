@@ -52,12 +52,12 @@ class ForumGroupsController extends Controller
 
         $group->members->each(fn ($account) => ForumRepository::forgetGroupsFor($account));
         $group->members
-            ->filter(fn ($account) => $account->id !== Auth::user()->current_account_id)
+            ->filter(fn ($account) => $account->id !== Auth::user()->current_team_id)
             ->each(fn ($account) => $account->notify(new ForumGroupCreated($group)));
 
         return redirect()->route('forum.index', ['group' => $group->slug])
-            ->with('flash.notificationHeading', __('Success!'))
-            ->with('flash.notification', __('Your :groupName group has been created.', ['groupName' => $group->name]));
+            ->with('notification.heading', __('Success!'))
+            ->with('notification.text', __('Your :groupName group has been created.', ['groupName' => $group->name]));
     }
 
     public function update(Request $request, Group $group)
@@ -87,14 +87,14 @@ class ForumGroupsController extends Controller
         $group->members->each(fn ($account) => ForumRepository::forgetGroupsFor($account));
         $group->fresh()->members
             ->filter(function ($account) {
-                return $account->id !== Auth::user()->current_account_id;
+                return $account->id !== Auth::user()->current_team_id;
             })
             ->diff($originalMembers)
             ->each(fn ($account) => $account->notify(new ForumGroupCreated($group)));
 
         return redirect()->route('forum.index', ['group' => $group->slug])
-            ->with('flash.notificationHeading', __('Success!'))
-            ->with('flash.notification', __('The :groupName group was updated.', ['groupName' => $data['name']]));
+            ->with('notification.heading', __('Success!'))
+            ->with('notification.text', __('The :groupName group was updated.', ['groupName' => $data['name']]));
     }
 
     public function destroy(Group $group): RedirectResponse
@@ -107,7 +107,7 @@ class ForumGroupsController extends Controller
         $group->delete();
 
         return redirect()->route('forum.index')
-            ->with('flash.notificationHeading', __(':groupName group deleted.', ['groupName' => $group->name]))
-            ->with('flash.notification', __('We hope you meant that.'));
+            ->with('notification.heading', __(':groupName group deleted.', ['groupName' => $group->name]))
+            ->with('notification.text', __('We hope you meant that.'));
     }
 }

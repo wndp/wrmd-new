@@ -1,34 +1,6 @@
-<template>
-  <div class="flex sapce-between space-x-4">
-    <div
-      v-for="(option, i) in computedOptions"
-      :key="i"
-      class="flex items-start"
-    >
-      <div class="flex items-center">
-        <input
-          :id="option.value+i"
-          v-model="proxyModelValue"
-          :name="name"
-          type="radio"
-          :value="option.value"
-          class="focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded-full disabled:bg-gray-200"
-          @input="$emit('update:modelValue', option.value)"
-        >
-        <Label
-          :for="option.value+i"
-          class="ml-2 font-normal"
-        >{{ option.name }}</Label>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { computed } from 'vue';
-import Label from '@/Components/FormElements/Label.vue';
-
-const emit = defineEmits(['update:modelValue']);
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
 
 const props = defineProps({
     modelValue: {
@@ -44,6 +16,8 @@ const props = defineProps({
       default: null
     }
 });
+
+const emit = defineEmits(['update:modelValue']);
 
 const proxyModelValue = computed({
   get() {
@@ -67,3 +41,29 @@ const computedOptions = computed(() => {
   });
 })
 </script>
+
+<template>
+  <div class="flex sapce-between space-x-4">
+    <div
+      v-for="(option, i) in computedOptions"
+      :key="i"
+      class="flex items-start"
+    >
+      <div class="flex items-center">
+        <input
+          :id="option.value+i"
+          v-model="proxyModelValue"
+          :name="name"
+          type="radio"
+          :value="option.value"
+          class="focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded-full disabled:bg-gray-200"
+          @input="$emit('update:modelValue', option.value)"
+        >
+        <InputLabel
+          :for="option.value+i"
+          class="ml-2 font-normal"
+        >{{ option.name }}</InputLabel>
+      </div>
+    </div>
+  </div>
+</template>

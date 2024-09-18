@@ -1,3 +1,38 @@
+<script setup>
+import {ref, onMounted} from 'vue';
+import Loading from '@/Components/Loading.vue';
+import {__} from '@/Composables/Translate';
+import axios from 'axios';
+
+const props = defineProps({
+  id: {
+    type: String,
+    required: true
+  },
+  urlParams: {
+      type: Object,
+      default () {
+          return {};
+      }
+  },
+});
+
+const rows = ref([]);
+const loading = ref(true);
+
+const getData = () => {
+  axios.get('/analytics/tables/' + props.id, {
+    params: props.urlParams
+  })
+  .then(response => {
+      rows.value = response.data.series;
+      loading.value = false;
+  });
+};
+
+onMounted(() => getData());
+</script>
+
 <template>
   <div>
     <div
@@ -7,7 +42,7 @@
       <Loading />
     </div>
     <div
-      v-else="!loading"
+      v-else
       class="flex flex-col"
     >
       <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -156,53 +191,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import Loading from '@/Components/Loading.vue';
-
-export default {
-    components: {
-        Loading
-    },
-    props: {
-        id: {
-          type: String,
-          required: true
-        },
-        urlParams: {
-            type: Object,
-            default () {
-                return {};
-            }
-        },
-    },
-    data() {
-        return {
-            loading: true,
-            rows: []
-        };
-    },
-    created () {
-        this.getData();
-        //mitt.on('appliedAnalyticsFilters', this.listener);
-    },
-    methods: {
-        getData() {
-            window.axios.get('/analytics/tables/' + this.id, {
-                params: this.urlParams
-            })
-                .then(response => {
-                    this.rows = response.data.series;
-                    this.loading = false;
-                });
-        },
-        // listener() {
-        //     this.loading = false;
-        //     this.getData();
-        // }
-    },
-    // beforeDestroy () {
-    //     mitt.off('appliedAnalyticsFilters', this.listener);
-    // }
-};
-</script>

@@ -28,14 +28,14 @@ class PatientsCurrentFacility extends Chart
         $query = Admission::where('team_id', $this->team->id)
             ->selectRaw('count(*) as aggregate, date(moved_in_at) as date, facility as subgroup')
             ->joinPatients()
-            ->joinLastLocation()
+            ->leftJoinCurrentLocation()
             ->whereNotNull('facility')
             ->groupBy('date')
             ->groupBy('subgroup')
             ->orderBy('date');
 
         if ($this->filters->date_period !== 'all-dates') {
-            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+            $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         }
 
         $this->withSegment($query, $segment);
@@ -51,9 +51,9 @@ class PatientsCurrentFacility extends Chart
         $query = Admission::where('team_id', $this->team->id)
             ->selectRaw('count(*) as aggregate, date(moved_in_at) as date, facility as subgroup')
             ->joinPatients()
-            ->joinLastLocation()
+            ->leftJoinCurrentLocation()
             ->whereNotNull('facility')
-            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to)
+            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at')
             ->groupBy('date')
             ->groupBy('subgroup')
             ->orderBy('date');

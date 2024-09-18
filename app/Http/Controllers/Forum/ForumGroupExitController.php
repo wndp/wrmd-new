@@ -14,11 +14,11 @@ class ForumGroupExitController extends Controller
     {
         ForumRepository::forgetGroupsFor(Auth::user()->currentAccount);
 
-        $group->members()->detach(Auth::user()->current_account_id);
+        $group->members()->detach(Auth::user()->current_team_id);
         $group->threads->each(fn ($thread) => $thread->unsubscribe(Auth::user()->currentAccount));
 
         return redirect()->route('forum.index')
-            ->with('flash.notificationHeading', __('We hope you meant that.'))
-            ->with('flash.notification', __('Removed from the group :groupName.', ['groupName' => $group->name]));
+            ->with('notification.heading', __('We hope you meant that.'))
+            ->with('notification.text', __('Removed from the group :groupName.', ['groupName' => $group->name]));
     }
 }

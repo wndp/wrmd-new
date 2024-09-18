@@ -1,3 +1,19 @@
+<script setup>
+import { ref } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import SettingsAside from './Partials/SettingsAside.vue';
+import AccountProfileForm from './Partials/AccountProfileForm.vue';
+import ContactForm from './Partials/ContactForm.vue';
+import LocalizationForm from './Partials/LocalizationForm.vue';
+
+const mutableTimezones = ref(usePage().props.options.timezoneOptions)
+
+const onCountryChange = (locale) => {
+  mutableTimezones.value = locale.timezones;
+};
+</script>
+
 <template>
   <AppLayout title="Profile">
     <div class="lg:grid grid-cols-8 gap-8 mt-4">
@@ -16,19 +32,3 @@
     </div>
   </AppLayout>
 </template>
-
-<script setup>
-import { ref } from 'vue';
-import { usePage } from '@inertiajs/vue3';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import SettingsAside from './Partials/SettingsAside.vue';
-import AccountProfileForm from './Partials/AccountProfileForm.vue';
-import ContactForm from './Partials/ContactForm.vue';
-import LocalizationForm from './Partials/LocalizationForm.vue';
-
-const mutableTimezones = ref(usePage().props.options.timezones)
-
-const onCountryChange = (locale) => {
-  mutableTimezones.value = locale.timezones;
-};
-</script>

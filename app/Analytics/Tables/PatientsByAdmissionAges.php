@@ -15,7 +15,7 @@ class PatientsByAdmissionAges extends Table
         foreach ($this->filters->segments as $segment) {
             $this->series = $this->series->merge(
                 $this->query($segment)
-                    ->groupBy('age_unit')
+                    ->groupBy('age_unit_id')
                     ->sortKeys()
                     ->mapInto(MapIntoDataTableRow::class)
                     ->map(function ($mapIntoDataTableRow) use ($segment) {
@@ -29,7 +29,7 @@ class PatientsByAdmissionAges extends Table
             if ($this->filters->compare) {
                 $this->series = $this->series->merge(
                     $this->compareQuery($segment)
-                        ->groupBy('age_unit')
+                        ->groupBy('age_unit_id')
                         ->sortKeys()
                         ->mapInto(MapIntoDataTableRow::class)
                         ->map(function ($mapIntoDataTableRow) use ($segment) {
@@ -46,9 +46,9 @@ class PatientsByAdmissionAges extends Table
     public function query($segment)
     {
         return $this->baseQuery()
-            ->addSelect('age_unit')
+            ->addSelect('age_unit_id')
             ->joinIntakeExam()
-            ->whereNotNull('age_unit')
+            ->whereNotNull('age_unit_id')
             ->withSegment($segment)
             ->get();
     }
@@ -56,9 +56,9 @@ class PatientsByAdmissionAges extends Table
     public function compareQuery($segment)
     {
         return $this->baseCompareQuery()
-            ->addSelect('age_unit')
+            ->addSelect('age_unit_id')
             ->joinIntakeExam()
-            ->whereNotNull('age_unit')
+            ->whereNotNull('age_unit_id')
             ->withSegment($segment)
             ->get();
     }

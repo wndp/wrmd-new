@@ -35,7 +35,7 @@ export default function LocalStorage() {
         if (storedTime < current) {
 
             // Remove
-            this.remove(name);
+            remove(name);
 
             return 0;
         } else {

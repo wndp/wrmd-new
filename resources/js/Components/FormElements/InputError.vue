@@ -1,7 +1,7 @@
 <template>
   <div
     v-show="message"
-    class="flex"
+    class="flex mt-2"
   >
     <div class="pr-3 flex items-center pointer-events-none">
       <ExclamationCircleIcon

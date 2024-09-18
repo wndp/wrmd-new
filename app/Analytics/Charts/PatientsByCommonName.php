@@ -53,7 +53,7 @@ class PatientsByCommonName extends Chart
             ->limit(5);
 
         if ($this->filters->date_period !== 'all-dates') {
-            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+            $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         }
 
         $this->withSegment($query, $segment);
@@ -67,7 +67,7 @@ class PatientsByCommonName extends Chart
             ->selectRaw('count(*) as aggregate, common_name')
             ->joinPatients()
             ->joinTaxa()
-            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to)
+            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at')
             ->orderByDesc('aggregate')
             ->groupBy('common_name')
             ->limit(5);

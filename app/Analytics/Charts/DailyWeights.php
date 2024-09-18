@@ -7,7 +7,7 @@ use App\Analytics\ChronologicalCollection;
 use App\Analytics\Concerns\HandleSeriesNames;
 use App\Analytics\Contracts\Chart;
 use App\Analytics\DataSet;
-use App\Domain\Patients\Patient;
+use App\Models\Patient;
 use App\Weight;
 
 class DailyWeights extends Chart
@@ -35,6 +35,7 @@ class DailyWeights extends Chart
                 $this->filters->date_from,
                 $this->filters->date_to
             ),
+
             // In the event that multiple weights were record on a single date,
             // get and return the last/most recent one.
             $data->groupByTimePeriod($this->filters->group_by_period)->sumSeriesGroup(function ($data) {

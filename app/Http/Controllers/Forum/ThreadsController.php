@@ -121,8 +121,8 @@ class ThreadsController extends Controller
             ->notifyTeamsThreadWasCreated(Auth::user()->currentTeam);
 
         return redirect()->route('forum.index', $redirectSegment)
-            ->with('flash.notificationHeading', __('Success!'))
-            ->with('flash.notification', __('Your discussion has been posted.'));
+            ->with('notification.heading', __('Success!'))
+            ->with('notification.text', __('Your discussion has been posted.'));
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Analytics;
 
-use App\Domain\Analytics\AnalyticFiltersStore;
+use App\Analytics\AnalyticFiltersStore;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 

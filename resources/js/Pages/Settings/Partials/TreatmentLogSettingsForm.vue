@@ -1,3 +1,47 @@
+<script setup>
+import {useForm} from '@inertiajs/vue3';
+import FormSection from '@/Components/FormElements/FormSection.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import RadioGroup from '@/Components/FormElements/RadioGroup.vue';
+import Checkbox from '@/Components/FormElements/Checkbox.vue';
+import Toggle from '@/Components/FormElements/Toggle.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import {__} from '@/Composables/Translate';
+
+const props = defineProps({
+  generalSettings: {
+    type: Object,
+    required: true
+  }
+});
+
+const form = useForm({
+  logOrder: props.generalSettings.logOrder,
+  logAllowAuthorEdit: props.generalSettings.logAllowAuthorEdit,
+  logAllowEdit: props.generalSettings.logAllowEdit,
+  logAllowDelete: props.generalSettings.logAllowDelete,
+  logShares: props.generalSettings.logShares,
+});
+
+const orderOptions = [
+  {
+    value: 'desc',
+    name: __('Newest -> Oldest')
+  },
+  {
+    value: 'asc',
+    name: __('Oldest -> Newest')
+  },
+];
+
+const updateTreatmentLog = () => {
+  form.put(route('general-settings.update.treatment-log'), {
+    preserveScroll: true
+  });
+};
+</script>
+
 <template>
   <FormSection>
     <template #title>
@@ -7,7 +51,7 @@
       {{ __('Update these settings to adjust how the Treatment Log will perform for your account.') }}
     </template>
     <div class="col-span-4 sm:col-span-2">
-      <Label for="first-name">{{ __('Show Treatment Log in this Order') }}</label>
+      <InputLabel for="first-name">{{ __('Show Treatment Log in this Order') }}</InputLabel>
       <div class="mt-1">
         <RadioGroup
           v-model="form.logOrder"
@@ -17,7 +61,7 @@
       </div>
     </div>
     <div class="col-span-4 sm:col-span-2">
-      <Label for="first-name">{{ __('Allow Authors to Edit Entries?') }}</label>
+      <InputLabel for="first-name">{{ __('Allow Authors to Edit Entries?') }}</InputLabel>
       <div class="mt-2">
         <Toggle
           v-model="form.logAllowAuthorEdit"
@@ -26,7 +70,7 @@
       </div>
     </div>
     <div class="col-span-4 sm:col-span-2">
-      <Label>{{ __('Allow These Users to Edit Entries.') }}</label>
+      <InputLabel>{{ __('Allow These Users to Edit Entries.') }}</InputLabel>
       <div class="mt-1 flex sapce-between space-x-4">
         <div
           v-for="role in $page.props.options.roles"
@@ -40,16 +84,16 @@
               :value="role.value"
               name="logAllowEdit"
             />
-            <Label
+            <InputLabel
               :for="'logAllowEdit-'+role.value"
               class="ml-2 font-normal"
-            >{{ role.label }}</Label>
+            >{{ role.label }}</InputLabel>
           </div>
         </div>
       </div>
     </div>
     <div class="col-span-4 sm:col-span-2">
-      <Label>{{ __('Allow These Users to Delete Entries.') }}</label>
+      <InputLabel>{{ __('Allow These Users to Delete Entries.') }}</InputLabel>
       <div class="mt-1 flex sapce-between space-x-4">
         <div
           v-for="role in $page.props.options.roles"
@@ -63,16 +107,16 @@
               :value="role.value"
               name="logAllowDelete"
             />
-            <Label
+            <InputLabel
               :for="'logAllowDelete-'+role.value"
               class="ml-2 font-normal"
-            >{{ role.label }}</Label>
+            >{{ role.label }}</InputLabel>
           </div>
         </div>
       </div>
     </div>
     <div class="col-span-4 sm:col-span-2">
-      <Label for="first-name">{{ __('Create a Treatment Log Entry When a Patient is Shared?') }}</label>
+      <InputLabel for="first-name">{{ __('Create a Treatment Log Entry When a Patient is Shared?') }}</InputLabel>
       <div class="mt-2">
         <Toggle
           v-model="form.logShares"
@@ -97,56 +141,3 @@
     </template>
   </FormSection>
 </template>
-
-<script>
-import FormSection from '@/Components/FormElements/FormSection.vue';
-import Label from '@/Components/FormElements/Label.vue';
-import RadioGroup from '@/Components/FormElements/RadioGroup.vue';
-import Checkbox from '@/Components/FormElements/Checkbox.vue';
-import Toggle from '@/Components/FormElements/Toggle.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-
-export default {
-    components: {
-        FormSection,
-        Label,
-        RadioGroup,
-        Checkbox,
-        Toggle,
-        PrimaryButton,
-        ActionMessage
-    },
-    props: {
-        generalSettings: Object
-    },
-    data() {
-        return {
-            orderOptions: [
-                {
-                    value: 'desc',
-                    name: this.__('Newest -> Oldest')
-                },
-                {
-                    value: 'asc',
-                    name: this.__('Oldest -> Newest')
-                },
-            ],
-            form: this.$inertia.form({
-                logOrder: this.generalSettings.logOrder,
-                logAllowAuthorEdit: this.generalSettings.logAllowAuthorEdit,
-                logAllowEdit: this.generalSettings.logAllowEdit,
-                logAllowDelete: this.generalSettings.logAllowDelete,
-                logShares: this.generalSettings.logShares,
-            }),
-        };
-    },
-    methods: {
-        updateTreatmentLog() {
-            this.form.put(this.route('general-settings.update.treatment-log'), {
-                preserveScroll: true
-            });
-        },
-    },
-};
-</script>

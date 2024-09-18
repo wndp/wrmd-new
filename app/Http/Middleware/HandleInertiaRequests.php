@@ -5,9 +5,11 @@ namespace App\Http\Middleware;
 use App\Repositories\OptionsStore;
 use App\Repositories\RecentPatients;
 use App\Repositories\SettingsStore;
+use App\Support\ExtensionNavigation;
 use App\Support\Wrmd;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -45,14 +47,14 @@ class HandleInertiaRequests extends Middleware
         )
             ->keys()
             ->filter(fn ($ability) => $request->user()->can($ability))
-            ->when($request->user()->can('anything'), fn ($abilities) => $abilities->push('anything'))
-            // Merge in abilities managed by Bouncer.
+            ->map(fn ($ability) => 'COMPUTED_'.Str::of($ability)->snake()->upper())
+            ->when($request->user()->can('ANYTHING'), fn ($abilities) => $abilities->push('ANYTHING'))
             ->merge($request->user()->getAbilities()->pluck('name'))
             ->sort()
             ->values()
             : [];
 
-        $team = $request->user()?->currentTeam->id
+        $team = $request->user()?->current_team_id
             ? $request->user()->currentTeam
             : null;
 
@@ -60,27 +62,28 @@ class HandleInertiaRequests extends Middleware
             ... parent::share($request),
             'appName' => config('app.name'),
             'showDonateHeader' => config('wrmd.donateHeader'),
-            'abilities' => $abilities,
-            // 'auth' => [
-            //     'user' => fn () => $request->user()
-            //         ? array_merge($request->user()->only('id', 'name', 'email'), [
-            //             'two_factor_enabled' => ! is_null($request->user()?->two_factor_secret),
-            //         ])
-            //         : null,
-            //     'abilities' => $abilities,
-            //     'team' => fn () => $team
-            //         ? $team
-            //         : null,
-            // ],
+            'auth' => [
+                'user' => fn () => $request->user()
+                    ? array_merge($request->user()->only('id', 'name', 'email'), [
+                        'two_factor_enabled' => ! is_null($request->user()?->two_factor_secret),
+                        'all_teams' => $request->user()->allTeams()->values(),
+                        'current_team' => $request->user()->currentTeam
+                    ])
+                    : null,
+                'abilities' => $abilities,
+                'team' => fn () => $team
+                    ? $team
+                    : null,
+            ],
             'settings' => fn () => $team
                 ? Wrmd::settings()->all()//$team->settingsStore()->all()
                 : [],
             'options' => fn () => $team
                 ? OptionsStore::all()
                 : [],
-            // 'extensions' => fn () => $team
-            //     ? ExtensionNavigation::all()
-            //     : [],
+            'extensions' => fn () => $team
+                ? ExtensionNavigation::all()
+                : [],
             'recentUpdatedPatients' => fn () => $team
                 ? RecentPatients::updated($team)
                 : [],
@@ -96,7 +99,6 @@ class HandleInertiaRequests extends Middleware
             // fn () => $team
             //     ? $team->unreadNotifications->transform(function ($notification) {
             //         $notification->created_at_for_humans = $notification->created_at->diffForHumans();
-
             //         return $notification;
             //     })
             //     : [],

@@ -1,3 +1,45 @@
+<script setup>
+import { inject } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+import FormSection from '@/Components/FormElements/FormSection.vue';
+import Radio from '@/Components/FormElements/Radio.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import Alert from '@/Components/Alert.vue';
+import merge from 'lodash/merge';
+import {__} from '@/Composables/Translate';
+
+const route = inject('route');
+
+const props = defineProps({
+  user: Object,
+  abilities: Array,
+  allowedAbilities: Array,
+  forbiddenAbilities: Array,
+  unAllowedAbilities: Array
+});
+
+const allowed = props.allowedAbilities.reduce((carry, ability) => {
+    carry[ability.name] = 'allowed';
+    return carry;
+}, {});
+
+const forbidden = props.forbiddenAbilities.reduce((carry, ability) => {
+    carry[ability.name] = 'forbidden';
+    return carry;
+}, {});
+
+const form = useForm({
+  userAbilities: merge(allowed, forbidden)
+});
+
+const updateAuthorizations = () => {
+    form.put(route('users.authorizations.update', props.user.id), {
+        preserveScroll: true
+    });
+};
+</script>
+
 <template>
   <FormSection>
     <template #title>
@@ -82,44 +124,3 @@
     </template>
   </FormSection>
 </template>
-
-<script setup>
-import { inject } from 'vue';
-import { useForm } from '@inertiajs/vue3';
-import FormSection from '@/Components/FormElements/FormSection.vue';
-import Radio from '@/Components/FormElements/Radio.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import Alert from '@/Components/Alert.vue';
-import merge from 'lodash/merge';
-
-const route = inject('route');
-
-const props = defineProps({
-  user: Object,
-  abilities: Array,
-  allowedAbilities: Array,
-  forbiddenAbilities: Array,
-  unAllowedAbilities: Array
-});
-
-const allowed = props.allowedAbilities.reduce((carry, ability) => {
-    carry[ability.name] = 'allowed';
-    return carry;
-}, {});
-
-const forbidden = props.forbiddenAbilities.reduce((carry, ability) => {
-    carry[ability.name] = 'forbidden';
-    return carry;
-}, {});
-
-const form = useForm({
-  userAbilities: merge(allowed, forbidden)
-});
-
-const updateAuthorizations = () => {
-    form.put(route('users.authorizations.update', props.user.id), {
-        preserveScroll: true
-    });
-};
-</script>

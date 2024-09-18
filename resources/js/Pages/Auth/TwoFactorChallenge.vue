@@ -6,6 +6,7 @@ import PublicLayout from '@/Layouts/PublicLayout.vue';
 import TextInput from '@/Components/FormElements/TextInput.vue';
 import InputLabel from '@/Components/FormElements/InputLabel.vue';
 import InputError from '@/Components/FormElements/InputError.vue';
+import {__} from '@/Composables/Translate';
 
 const route = inject('route');
 const recovery = ref(false);

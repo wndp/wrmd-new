@@ -58,7 +58,8 @@ class PatientsInCare extends Chart
 
         DB::statement('set @i = -1;');
 
-        $query = Admission::useWritePdo()->owner($this->team->id)
+        $query = Admission::useWritePdo()
+            ->where('team_id', $this->team->id)
             ->select(DB::raw("count(*) as aggregate, cal.selected_date as date, 'Patients in Care' as segment"))
             ->joinPatients()
             ->crossJoin(
@@ -97,7 +98,8 @@ class PatientsInCare extends Chart
 
         DB::statement('set @i = -1;');
 
-        $query = Admission::useWritePdo()->owner($this->team->id)
+        $query = Admission::useWritePdo()
+            ->where('team_id', $this->team->id)
             ->select(DB::raw("count(*) as aggregate, cal.selected_date as date, 'Patients in Care' as segment"))
             ->joinPatients()
             ->crossJoin(

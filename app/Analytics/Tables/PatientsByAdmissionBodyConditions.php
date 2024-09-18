@@ -18,7 +18,7 @@ class PatientsByAdmissionBodyConditions extends Table
         foreach ($this->filters->segments as $segment) {
             $this->series = $this->series->merge(
                 $this->query($segment)
-                    ->groupBy('bcs')
+                    ->groupBy('body_condition_id')
                     ->sortKeys()
                     ->mapInto(MapIntoDataTableRow::class)
                     ->map(function ($mapIntoDataTableRow) use ($segment) {

@@ -162,7 +162,7 @@ defineProps({
       />
       <AnalyticNumber
         id="species-admitted"
-        :title="__('Species Admitted This Year')"
+        :title="__('Species This Year')"
         :urlParams="analyticFiltersForThisYear"
       />
       <AnalyticNumber

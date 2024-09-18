@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Concerns\RetrievesTreatmentLogs;
-use App\Domain\Admissions\Admission;
-use App\Domain\Classifications\CategorizationOfClinicalSigns;
-use App\Domain\Classifications\ClinicalClassifications;
-use App\Domain\Locality\LocaleOptions;
-use App\Domain\Options;
-use App\Domain\OptionsStore;
-use App\Domain\Patients\ExamOptions;
-use App\Domain\Patients\TreatmentLog;
+use App\Concerns\GetsCareLogs;
+use App\Enums\AttributeOptionName;
 use App\Events\PatientUpdated;
+use App\Models\AttributeOption;
+use App\Models\AttributeOptionUiBehavior;
+use App\Options\LocaleOptions;
+use App\Repositories\OptionsStore;
+use App\Support\Wrmd;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -20,31 +18,45 @@ use Inertia\Response;
 
 class ContinuedCareController extends Controller
 {
-    use RetrievesTreatmentLogs;
+    use GetsCareLogs;
 
     /**
      * Show the form for updating the continued care.
      */
-    public function __invoke(
-        ExamOptions $examOptions,
-        LocaleOptions $localeOptions,
-    ): Response {
-        OptionsStore::merge($examOptions);
-        OptionsStore::merge($localeOptions);
+    public function __invoke(): Response
+    {
+        $admission = $this->loadAdmissionAndSharePagination();
 
-        if (settings('showTags')) {
-            OptionsStore::merge([
+        if (! ($teamIsInPossession = $admission->patient->team_possession_id === Auth::user()->current_team_id)) {
+            $admission->load('patient.possession');
+        }
+
+        OptionsStore::add([
+            new LocaleOptions(),
+            AttributeOption::getDropdownOptions([
+                AttributeOptionName::PATIENT_DISPOSITIONS->value,
+                AttributeOptionName::PATIENT_RELEASE_TYPES->value,
+                AttributeOptionName::PATIENT_TRANSFER_TYPES->value,
+                AttributeOptionName::EXAM_WEIGHT_UNITS->value,
+                AttributeOptionName::EXAM_TEMPERATURE_UNITS->value
+            ])
+        ]);
+
+        if (Wrmd::settings('showTags')) {
+            OptionsStore::add([
                 'clinicalClassifications' => Options::arrayToSelectable(app(ClinicalClassifications::class)::terms()),
                 'categorizationOfClinicalSigns' => Options::arrayToSelectable(app(CategorizationOfClinicalSigns::class)::terms()),
             ]);
         }
 
-        $admission = $this->loadAdmissionAndSharePagination();
-        $logs = $this->getTreatmentLogs($admission->patient, Auth::user(), (settings('logOrder') === 'desc'));
-
-        return Inertia::render('Patients/Continued', compact(
-            'logs'
-        ));
+        return Inertia::render('Patients/Continued', [
+            'attributeOptionUiBehaviors' => AttributeOptionUiBehavior::getGroupedAttributeOptions([
+                AttributeOptionName::PATIENT_DISPOSITIONS->value,
+            ]),
+            'teamIsInPossession' => $teamIsInPossession,
+            'patient' => $admission->patient,
+            'logs' => fn () => $this->getCareLogs($admission->patient, Auth::user(), (Wrmd::settings('logOrder') === 'desc'))
+        ]);
     }
 
     /**

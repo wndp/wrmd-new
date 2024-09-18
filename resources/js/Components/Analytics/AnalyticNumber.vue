@@ -2,7 +2,6 @@
 import {ref, computed, onMounted} from 'vue';
 import Loading from '@/Components/Loading.vue';
 import {
-    ArrowPathIcon,
     ArrowUpIcon,
     ArrowDownIcon,
     MinusIcon
@@ -60,7 +59,7 @@ onMounted(() => getData());
 </script>
 
 <template>
-  <div class="bg-white shadow overflow-hidden border-b border-gray-300 sm:rounded-lg relative">
+  <div class="bg-white shadow overflow-hidden border-b border-gray-300 sm:rounded-lg relative min-w-48">
     <Loading
       v-if="loading"
       :style="{height: `${height}px`}"

@@ -1,3 +1,45 @@
+<script setup>
+import { inject, computed } from 'vue';
+import { useForm, usePage } from '@inertiajs/vue3';
+import FormSection from '@/Components/FormElements/FormSection.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import SelectInput from '@/Components/FormElements/SelectInput.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import Alert from '@/Components/Alert.vue';
+import {__} from '@/Composables/Translate';
+
+const route = inject('route');
+
+const props = defineProps({
+  user: {
+    type: Object,
+    required: true
+  }
+})
+
+const form = useForm({
+  name: props.user.name,
+  email: props.user.email,
+  email_confirmation: '',
+  role: props.user.role_name,
+  password: '',
+  password_confirmation: ''
+});
+
+// Was this user created by the usePage().props.auth.team.id?
+const belongsToTeam = computed(() => true);
+// props.user.parent_account_id === usePage().props.auth.team.id
+
+const updateUser = () => {
+  form.put(route('users.update', props.user.id), {
+    preserveScroll: true,
+  });
+};
+</script>
+
 <template>
   <FormSection>
     <template #title>
@@ -9,10 +51,12 @@
     >
       {{ __('Updating the users role will also reset their permissions to the new roles defaults.') }}
     </Alert>
-    <template v-if="belongsToAccount">
+    <template v-if="belongsToTeam">
       <div class="col-span-4 sm:col-span-2">
-        <Label for="email">{{ __('Email address') }}</Label>
-        <Input
+        <InputLabel for="email">
+          {{ __('Email address') }}
+        </InputLabel>
+        <TextInput
           v-model="form.email"
           type="email"
           name="email"
@@ -25,8 +69,10 @@
         />
       </div>
       <div class="col-span-4 sm:col-span-2">
-        <Label for="email_confirmation">{{ __('Email address confirmation') }}</Label>
-        <Input
+        <InputLabel for="email_confirmation">
+          {{ __('Email address confirmation') }}
+        </InputLabel>
+        <TextInput
           v-model="form.email_confirmation"
           type="email"
           name="email_confirmation"
@@ -35,8 +81,10 @@
         />
       </div>
       <div class="col-span-4 sm:col-span-2">
-        <Label for="name">{{ __('Name') }}</Label>
-        <Input
+        <InputLabel for="name">
+          {{ __('Name') }}
+        </InputLabel>
+        <TextInput
           v-model="form.name"
           name="name"
           autocomplete="given-name"
@@ -48,8 +96,10 @@
         />
       </div>
       <div class="col-span-4 sm:col-span-2">
-        <Label for="role">{{ __('Role') }}</Label>
-        <Select
+        <InputLabel for="role">
+          {{ __('Role') }}
+        </InputLabel>
+        <SelectInput
           ref="role"
           v-model="form.role"
           name="role"
@@ -65,8 +115,10 @@
         {{ __("Only fill in the password fields if you are changing :user's password", {user: user.name}) }}.
       </Alert>
       <div class="col-span-4 sm:col-span-2">
-        <Label for="password">{{ __('Password') }}</label>
-        <Input
+        <InputLabel for="password">
+          {{ __('Password') }}
+        </InputLabel>
+        <TextInput
           v-model="form.password"
           type="password"
           name="password"
@@ -79,8 +131,10 @@
         />
       </div>
       <div class="col-span-4 sm:col-span-2">
-        <Label for="password_confirmation">{{ __('Password Confirmation') }}</label>
-        <Input
+        <InputLabel for="password_confirmation">
+          {{ __('Password Confirmation') }}
+        </InputLabel>
+        <TextInput
           v-model="form.password_confirmation"
           type="password"
           name="password_confirmation"
@@ -94,14 +148,18 @@
         {{ __('This email belongs to a user of a different account. You can update their role on your account but you can not update their email address, name or password.') }}
       </Alert>
       <div class="col-span-4 sm:col-span-2">
-        <Label for="name">{{ __('Email address') }}</Label>
+        <InputLabel for="name">
+          {{ __('Email address') }}
+        </InputLabel>
         <p class="text-sm mt-1">
           {{ user.email }}
         </p>
       </div>
       <div class="col-span-4 sm:col-span-2">
-        <Label for="role">{{ __('Role') }}</Label>
-        <Select
+        <InputLabel for="role">
+          {{ __('Role') }}
+        </InputLabel>
+        <SelectInput
           ref="role"
           v-model="form.role"
           name="role"
@@ -114,13 +172,14 @@
         />
       </div>
       <div class="col-span-4 sm:col-span-2">
-        <Label for="name">{{ __('Name') }}</Label>
+        <InputLabel for="name">
+          {{ __('Name') }}
+        </InputLabel>
         <p class="text-sm mt-1">
           {{ user.name }}
         </p>
       </div>
     </template>
-
     <template #actions>
       <ActionMessage
         :on="form.recentlySuccessful"
@@ -138,42 +197,3 @@
     </template>
   </FormSection>
 </template>
-
-<script setup>
-import { inject, computed } from 'vue';
-import { useForm, usePage } from '@inertiajs/vue3';
-import FormSection from '@/Components/FormElements/FormSection.vue';
-import Label from '@/Components/FormElements/Label.vue';
-import Input from '@/Components/FormElements/Input.vue';
-import Select from '@/Components/FormElements/Select.vue';
-import InputError from '@/Components/FormElements/InputError.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import Alert from '@/Components/Alert.vue';
-
-const route = inject('route');
-
-const props = defineProps({
-  user: {
-    type: Object,
-    required: true
-  }
-})
-
-const form = useForm({
-  name: props.user.name,
-  email: props.user.email,
-  email_confirmation: '',
-  role: props.user.role_name_for_humans,
-  password: '',
-  password_confirmation: ''
-});
-
-const belongsToAccount = computed(() => props.user.parent_account_id === usePage().props.auth.account.id);
-
-const updateUser = () => {
-  form.put(route('users.update', props.user.id), {
-    preserveScroll: true,
-  });
-};
-</script>

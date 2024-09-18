@@ -1,3 +1,88 @@
+<script setup>
+import {ref} from 'vue';
+import {useForm} from '@inertiajs/vue3';
+import VueComboBlocks from 'vue-combo-blocks';
+import Draggable from 'vuedraggable';
+import FormSection from '@/Components/FormElements/FormSection.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import Toggle from '@/Components/FormElements/Toggle.vue';
+import { XMarkIcon } from '@heroicons/vue/24/outline';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import {__} from '@/Composables/Translate';
+
+const props = defineProps({
+  generalSettings: Object,
+  selectableFields: Array,
+  listedFields: Array
+})
+
+const form = useForm({
+    showLookupRescuer: props.generalSettings.showLookupRescuer,
+    showGeolocationFields: props.generalSettings.showGeolocationFields,
+    listFields: []
+});
+const filteredList = ref(props.selectableFields);
+const selectedItems = ref(props.listedFields);
+
+const updateProfile = () => {
+    form.transform((data) => ({
+        ...data,
+        listFields: selectedItems.value.map(item => item.value)
+    }))
+    .put(route('general-settings.update'), {
+        preserveScroll: true
+    });
+};
+
+const itemToString = (item) => {
+  return item ? item.label : '';
+};
+
+const stateReducer = (state, actionAndChanges) => {
+  const { changes, type } = actionAndChanges;
+  switch (type) {
+    case VueComboBlocks.stateChangeTypes.InputKeyUpEnter:
+    case VueComboBlocks.stateChangeTypes.ItemClick:
+      return {
+        ...changes,
+        isOpen: true, // keep menu open after selection.
+        hoveredIndex: state.hoveredIndex,
+        inputValue: '', // don't add the item string as input value at selection.
+      };
+    case VueComboBlocks.stateChangeTypes.InputBlur:
+      return {
+        ...changes,
+        inputValue: '', // don't add the item string as input value at selection.
+      };
+    default:
+      return changes;
+  }
+};
+
+const handleSelectedItemChange = (selectedItem) => {
+  if (!selectedItem) return;
+  const index = selectedItems.value.indexOf(selectedItem);
+  if (index > 0) {
+    selectedItems.value = [
+      ...selectedItems.value.slice(0, index),
+      ...selectedItems.value.slice(index + 1),
+    ];
+  } else if (index === 0) {
+    selectedItems.value = [...selectedItems.value.slice(1)];
+  } else {
+    // Add item
+    selectedItems.value.push(selectedItem);
+  }
+};
+
+const updateList = (text) => {
+  filteredList.value = props.selectableFields
+    .filter((item) => item.label.toLowerCase()
+    .includes(text.toLowerCase()));
+};
+</script>
+
 <template>
   <FormSection>
     <template #title>
@@ -6,13 +91,13 @@
     <template #description>
       {{ __('Update these settings to adjust some generic behavior on your account.') }}
     </template>
-
     <div class="col-span-4">
-      <Label for="first-name">{{ __('Columns Shown When Listing Patients.') }}</label>
+      <InputLabel for="first-name">
+        {{ __('Columns Shown When Listing Patients.') }}
+      </InputLabel>
       <p class="mt-1 text-sm text-gray-500">
         {{ __('Case #, Common Name and Date Admitted will always be included in any list of patients.') }}
       </p>
-
       <VueComboBlocks
         v-slot="{
           getInputProps,
@@ -27,9 +112,9 @@
           selectedItem,
           reset,
         }"
-        :item-to-string="itemToString"
+        :itemToString="itemToString"
         :items="filteredList"
-        :state-reducer="stateReducer"
+        :stateReducer="stateReducer"
         @input-value-change="updateList"
         @select="handleSelectedItemChange"
       >
@@ -42,7 +127,7 @@
               v-model="selectedItems"
               element="ul"
               class="flex flex-wrap gap-2"
-              item-key="id"
+              itemKey="id"
             >
               <template #item="{element}">
                 <li
@@ -66,9 +151,9 @@
               v-on="getInputEventListeners()"
             >
             <Transition
-              leave-active-class="transition duration-100 ease-in"
-              leave-from-class="opacity-100"
-              leave-to-class="opacity-0"
+              leaveActiveClass="transition duration-100 ease-in"
+              leaveFromClass="opacity-100"
+              leaveToClass="opacity-0"
             >
               <ul
                 v-show="isOpen"
@@ -87,7 +172,9 @@
                   ]"
                   v-on="getItemEventListeners({ item, index })"
                 >
-                  <button type="button">{{ item.label }}</button>
+                  <button type="button">
+                    {{ item.label }}
+                  </button>
                 </li>
               </ul>
             </Transition>
@@ -96,7 +183,7 @@
       </VueComboBlocks>
     </div>
     <div class="col-span-4 sm:col-span-2">
-      <Label for="first-name">{{ __('Show Lookup Rescuer Tab First When Creating a New Patient?') }}</label>
+      <InputLabel for="first-name">{{ __('Show Lookup Rescuer Tab First When Creating a New Patient?') }}</InputLabel>
       <div class="mt-2">
         <Toggle
           v-model="form.showLookupRescuer"
@@ -105,7 +192,7 @@
       </div>
     </div>
     <div class="col-span-4 sm:col-span-2">
-      <Label for="first-name">{{ __('Show County, Latitude and Longitude fields?') }}</label>
+      <InputLabel for="first-name">{{ __('Show County, Latitude and Longitude fields?') }}</InputLabel>
       <div class="mt-2">
         <Toggle
           v-model="form.showGeolocationFields"
@@ -113,7 +200,6 @@
         />
       </div>
     </div>
-
     <template #actions>
       <ActionMessage
         :on="form.recentlySuccessful"
@@ -131,97 +217,3 @@
     </template>
   </FormSection>
 </template>
-
-<script>
-import VueComboBlocks from 'vue-combo-blocks';
-import Draggable from 'vuedraggable';
-import FormSection from '@/Components/FormElements/FormSection.vue';
-import Label from '@/Components/FormElements/Label.vue';
-import Toggle from '@/Components/FormElements/Toggle.vue';
-import { XMarkIcon } from '@heroicons/vue/24/outline';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-
-export default {
-    components: {
-        FormSection,
-        Label,
-        Draggable,
-        VueComboBlocks,
-        XMarkIcon,
-        Toggle,
-        PrimaryButton,
-        ActionMessage
-    },
-    props: {
-        generalSettings: Object,
-        selectableFields: Array,
-        listedFields: Array
-    },
-    data() {
-        return {
-            form: this.$inertia.form({
-                showLookupRescuer: this.generalSettings.showLookupRescuer,
-                showGeolocationFields: this.generalSettings.showGeolocationFields,
-                listFields: []
-            }),
-            selectedItems: this.listedFields,
-            filteredList: this.selectableFields
-        };
-    },
-    methods: {
-        updateProfile() {
-            this.form
-            .transform((data) => ({
-                ...data,
-                listFields: this.selectedItems.map(item => item.value)
-            }))
-            .put(this.route('general-settings.update'), {
-                preserveScroll: true
-            });
-        },
-        itemToString(item) {
-          return item ? item.label : '';
-        },
-        stateReducer(state, actionAndChanges) {
-          const { changes, type } = actionAndChanges;
-          switch (type) {
-            case VueComboBlocks.stateChangeTypes.InputKeyUpEnter:
-            case VueComboBlocks.stateChangeTypes.ItemClick:
-              return {
-                ...changes,
-                isOpen: true, // keep menu open after selection.
-                hoveredIndex: state.hoveredIndex,
-                inputValue: '', // don't add the item string as input value at selection.
-              };
-            case VueComboBlocks.stateChangeTypes.InputBlur:
-              return {
-                ...changes,
-                inputValue: '', // don't add the item string as input value at selection.
-              };
-            default:
-              return changes;
-          }
-        },
-        handleSelectedItemChange(selectedItem) {
-          if (!selectedItem) return;
-          const index = this.selectedItems.indexOf(selectedItem);
-          if (index > 0) {
-            this.selectedItems = [
-              ...this.selectedItems.slice(0, index),
-              ...this.selectedItems.slice(index + 1),
-            ];
-          } else if (index === 0) {
-            this.selectedItems = [...this.selectedItems.slice(1)];
-          } else {
-            // Add item
-            this.selectedItems.push(selectedItem);
-          }
-        },
-        updateList(text) {
-          this.filteredList = this.selectableFields.filter((item) => item.label.toLowerCase()
-            .includes(text.toLowerCase()));
-        },
-    },
-};
-</script>

@@ -15,6 +15,8 @@ class PatientAnalyticsController extends Controller
     {
         $admission = $this->loadAdmissionAndSharePagination();
 
-        return Inertia::render('Patients/Analytics');
+        return Inertia::render('Patients/Analytics', [
+            'patient' => $admission->patient,
+        ]);
     }
 }

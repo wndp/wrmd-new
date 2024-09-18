@@ -18,7 +18,7 @@ class PatientsCurrentFacility extends Table
         foreach ($this->filters->segments as $segment) {
             $this->series = $this->series->merge(
                 $this->query($segment)
-                    ->groupBy('facility')
+                    ->groupBy('facility_id')
                     ->sortKeys()
                     ->mapInto(MapIntoDataTableRow::class)
                     ->map(function ($mapIntoDataTableRow) use ($segment) {
@@ -32,7 +32,7 @@ class PatientsCurrentFacility extends Table
             if ($this->filters->compare) {
                 $this->series = $this->series->merge(
                     $this->compareQuery($segment)
-                        ->groupBy('facility')
+                        ->groupBy('facility_id')
                         ->sortKeys()
                         ->mapInto(MapIntoDataTableRow::class)
                         ->map(function ($mapIntoDataTableRow) use ($segment) {
@@ -49,9 +49,9 @@ class PatientsCurrentFacility extends Table
     public function query($segment)
     {
         return $this->baseQuery()
-            ->addSelect('facility')
-            ->joinLastLocation()
-            ->whereNotNull('facility')
+            ->addSelect('facility_id')
+            ->leftJoinCurrentLocation()
+            ->whereNotNull('facility_id')
             ->withSegment($segment)
             ->get();
     }
@@ -59,9 +59,9 @@ class PatientsCurrentFacility extends Table
     public function compareQuery($segment)
     {
         return $this->baseCompareQuery()
-            ->addSelect('facility')
-            ->joinLastLocation()
-            ->whereNotNull('facility')
+            ->addSelect('facility_id')
+            ->leftJoinCurrentLocation()
+            ->whereNotNull('facility_id')
             ->withSegment($segment)
             ->get();
     }

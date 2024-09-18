@@ -3,7 +3,7 @@
 namespace App\Analytics\Maps;
 
 use App\Analytics\Contracts\Map;
-use App\Domain\Hotline\Models\Incident;
+use App\Models\Incident;
 
 class IncidentLocations extends Map
 {
@@ -15,8 +15,8 @@ class IncidentLocations extends Map
                 'data' => $this->query()->map(function ($incident) {
                     return [
                         'coordinates' => [
-                            'lat' => $incident->coordinates->latitude,
-                            'lng' => $incident->coordinates->longitude,
+                            'lat' => $incident->incident_coordinates?->latitude,
+                            'lng' => $incident->incident_coordinates?->longitude,
                         ],
                         'title' => "{$incident->incident_number} {$incident->suspected_species}",
                         'content' => $incident->getCoordinatesSpatialData()['address']->format(),
@@ -33,8 +33,8 @@ class IncidentLocations extends Map
                     'data' => $this->compareQuery()->map(function ($incident) {
                         return [
                             'coordinates' => [
-                                'lat' => $incident->coordinates->latitude,
-                                'lng' => $incident->coordinates->longitude,
+                                'lat' => $incident->incident_coordinates?->latitude,
+                                'lng' => $incident->incident_coordinates?->longitude,
                             ],
                             'title' => "{$incident->incident_number} {$incident->suspected_species}",
                             'content' => $incident->getCoordinatesSpatialData()['address']->format(),
@@ -49,9 +49,9 @@ class IncidentLocations extends Map
     public function query()
     {
         $query = Incident::where('team_id', $this->team->id)
-            ->whereRaw('coordinates != POINT(0, 0)')
-            ->whereNotNull('coordinates')
-            ->whereNotNull('location');
+            ->whereRaw('incident_coordinates != GEOGRAPHY_POINT(0, 0)')
+            ->whereNotNull('incident_coordinates')
+            ->whereNotNull('incident_address');
 
         if ($this->filters->date_period !== 'all-dates') {
             $query->dateRange($this->filters->date_from, $this->filters->date_to, 'occurred_at');
@@ -63,9 +63,9 @@ class IncidentLocations extends Map
     public function compareQuery()
     {
         return Incident::where('team_id', $this->team->id)
-            ->whereRaw('coordinates != POINT(0, 0)')
-            ->whereNotNull('coordinates')
-            ->whereNotNull('location')
+            ->whereRaw('incident_coordinates != GEOGRAPHY_POINT(0, 0)')
+            ->whereNotNull('incident_coordinates')
+            ->whereNotNull('incident_address')
             ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'occurred_at')
             ->get();
     }

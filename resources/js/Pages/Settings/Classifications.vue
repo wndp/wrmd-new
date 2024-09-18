@@ -1,3 +1,53 @@
+<script setup>
+import { inject } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import Alert from '@/Components/Alert.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import FormSection from '@/Components/FormElements/FormSection.vue';
+import Toggle from '@/Components/FormElements/Toggle.vue';
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import ClassificationTree from './Partials/ClassificationTree.vue';
+import SettingsAside from './Partials/SettingsAside.vue';
+import {__} from '@/Composables/Translate';
+
+const route = inject('route');
+
+const props =  defineProps({
+  showTags: Boolean
+});
+
+const form = useForm({
+  showTags: props.showTags,
+});
+
+const tabs = [
+  {
+    key: 'CircumstancesOfAdmission',
+    name: 'Circumstances Of Admission',
+    description: 'Why did the rescuer bring me this animal?'
+  },
+  {
+    key: 'ClinicalClassifications',
+    name: 'Clinical Classifications',
+    description: 'What are the physical exam findings by body system?'
+  },
+  {
+    key: 'CategorizationOfClinicalSigns',
+    name: 'Categorization Of Clinical Signs',
+    description: 'What caused the abnormal physical exam findings (Clinical Classifications)?'
+  }
+];
+
+const updateClassifications = () => {
+  form.put(route('classification-tagging.update'), {
+    preserveScroll: true
+  });
+};
+</script>
+
 <template>
   <AppLayout title="Classifications">
     <div class="lg:grid grid-cols-8 gap-8 mt-4">
@@ -34,7 +84,7 @@
             </div>
           </template>
           <div class="col-span-4">
-            <Label for="first-name">{{ __('Show Classification Fields?') }}</label>
+            <InputLabel for="first-name">{{ __('Show Classification Fields?') }}</InputLabel>
             <div class="mt-2">
               <Toggle v-model="form.showTags" dusk="showTags" />
             </div>
@@ -110,51 +160,3 @@
     </div>
   </AppLayout>
 </template>
-
-<script setup>
-import { inject } from 'vue';
-import { useForm } from '@inertiajs/vue3';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import Alert from '@/Components/Alert.vue';
-import FormSection from '@/Components/FormElements/FormSection.vue';
-import Toggle from '@/Components/FormElements/Toggle.vue';
-import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import ClassificationTree from './Partials/ClassificationTree.vue';
-import SettingsAside from './Partials/SettingsAside.vue';
-
-const route = inject('route');
-
-const props =  defineProps({
-  showTags: Boolean
-});
-
-const form = useForm({
-  showTags: props.showTags,
-});
-
-const tabs = [
-  {
-    key: 'CircumstancesOfAdmission',
-    name: 'Circumstances Of Admission',
-    description: 'Why did the rescuer bring me this animal?'
-  },
-  {
-    key: 'ClinicalClassifications',
-    name: 'Clinical Classifications',
-    description: 'What are the physical exam findings by body system?'
-  },
-  {
-    key: 'CategorizationOfClinicalSigns',
-    name: 'Categorization Of Clinical Signs',
-    description: 'What caused the abnormal physical exam findings (Clinical Classifications)?'
-  }
-];
-
-const updateClassifications = () => {
-  form.put(route('classification-tagging.update'), {
-    preserveScroll: true
-  });
-};
-</script>

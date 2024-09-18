@@ -3,10 +3,11 @@
 use App\Http\Controllers\Reports\FavoriteReportsController;
 use App\Http\Controllers\Reports\ReportEmailController;
 use App\Http\Controllers\Reports\ReportGeneratorController;
-use App\Http\Controllers\Reports\ReportsController;
 use App\Http\Controllers\Reports\ReportStreamController;
+use App\Http\Controllers\Reports\ReportsController;
+use Illuminate\Auth\Middleware\Authorize;
 
-Route::middleware('can:display-reports')->group(function () {
+Route::middleware(Authorize::using('VIEW_REPORTS'))->group(function () {
     Route::get('reports', [ReportsController::class, 'index'])->name('reports.index');
 
     Route::post('reports/favorite/{report}', [FavoriteReportsController::class, 'store']);

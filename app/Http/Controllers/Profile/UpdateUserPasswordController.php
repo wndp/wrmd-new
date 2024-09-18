@@ -25,7 +25,7 @@ class UpdateUserPasswordController extends Controller
         ])->save();
 
         return redirect()->route('profile.edit')
-            ->with('flash.notificationHeading', 'Success!')
-            ->with('flash.notification', __('Your password was updated.'));
+            ->with('notification.heading', 'Success!')
+            ->with('notification.text', __('Your password was updated.'));
     }
 }

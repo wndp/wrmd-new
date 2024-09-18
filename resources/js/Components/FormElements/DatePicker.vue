@@ -20,7 +20,7 @@
         ref="datePickerWrap"
         v-model="mutableValue"
         :config="config"
-        class="focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md pl-10 py-1.5"
+        class="focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md pl-10 py-1.5 shadow-sm"
         :name="name"
         @on-change="onChange"
       />
@@ -34,7 +34,7 @@ import FlatPickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
 import merge from 'lodash/merge';
 import { parseISO } from 'date-fns';
-import { utcToZonedTime } from 'date-fns-tz';
+import { toZonedTime } from 'date-fns-tz';
 import { usePage } from '@inertiajs/vue3';
 
 export default {
@@ -77,7 +77,7 @@ export default {
                 static: true,
                 parseDate: (dateString) => {
                     let timezone = usePage().props.settings.timezone;
-                    return utcToZonedTime(
+                    return toZonedTime(
                         parseISO(dateString),
                         (this.time ? timezone : null)
                     );

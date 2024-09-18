@@ -26,17 +26,17 @@ class PatientAdmissionMucousMembranes extends Chart
     public function query($segment): ChronologicalCollection
     {
         $query = Admission::where('team_id', $this->team->id)
-            ->selectRaw("count(*) as aggregate, date_admitted_at as date, concat(mm_color, ' and ', mm_texture) as subgroup")
+            ->selectRaw("count(*) as aggregate, date_admitted_at as date, concat(mucous_membrane_color_id, ' and ', mucous_membrane_texture_id) as subgroup")
             ->joinPatients()
             ->joinIntakeExam()
-            ->whereNotNull('mm_color')
-            ->whereNotNull('mm_texture')
+            ->whereNotNull('mucous_membrane_color_id')
+            ->whereNotNull('mucous_membrane_texture_id')
             ->groupBy('date')
             ->groupBy('subgroup')
             ->orderBy('date');
 
         if ($this->filters->date_period !== 'all-dates') {
-            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+            $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         }
 
         $this->withSegment($query, $segment);
@@ -50,12 +50,12 @@ class PatientAdmissionMucousMembranes extends Chart
     public function compareQuery($segment): ChronologicalCollection
     {
         $query = Admission::where('team_id', $this->team->id)
-            ->selectRaw("count(*) as aggregate, date_admitted_at as date, concat(mm_color, ' and ', mm_texture) as subgroup")
+            ->selectRaw("count(*) as aggregate, date_admitted_at as date, concat(mucous_membrane_color_id, ' and ', mucous_membrane_texture_id) as subgroup")
             ->joinPatients()
             ->joinIntakeExam()
-            ->whereNotNull('mm_color')
-            ->whereNotNull('mm_texture')
-            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to)
+            ->whereNotNull('mucous_membrane_color_id')
+            ->whereNotNull('mucous_membrane_texture_id')
+            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at')
             ->groupBy('date')
             ->groupBy('subgroup')
             ->orderBy('date');

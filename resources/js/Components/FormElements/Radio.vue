@@ -1,22 +1,6 @@
-<template>
-  <div class="flex items-center">
-    <input
-      v-model="proxyModelValue"
-      type="radio"
-      :value="value"
-      class="focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded-full disabled:bg-gray-200"
-    >
-    <Label
-      v-if="label"
-      :for="value"
-      class="ml-2 font-normal"
-    >{{ label }}</Label>
-  </div>
-</template>
-
 <script setup>
 import { computed } from 'vue';
-import Label from '@/Components/FormElements/Label.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
 
 const emit = defineEmits(['update:modelValue']);
 
@@ -45,3 +29,19 @@ const proxyModelValue = computed({
   },
 });
 </script>
+
+<template>
+  <div class="flex items-center">
+    <input
+      v-model="proxyModelValue"
+      type="radio"
+      :value="value"
+      class="focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded-full disabled:bg-gray-200"
+    >
+    <InputLabel
+      v-if="label"
+      :for="value"
+      class="ml-2 font-normal"
+    >{{ label }}</InputLabel>
+  </div>
+</template>

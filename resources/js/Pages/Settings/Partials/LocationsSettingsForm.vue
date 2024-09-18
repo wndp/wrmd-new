@@ -1,3 +1,38 @@
+<script setup>
+import {useForm} from '@inertiajs/vue3';
+import FormSection from '@/Components/FormElements/FormSection.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import TextareaInput from '@/Components/FormElements/TextareaInput.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import {__} from '@/Composables/Translate';
+import LocalStorage from '@/Composables/LocalStorage';
+
+const localStorage = LocalStorage();
+
+const props = defineProps({
+  generalSettings: {
+    type: Object,
+    required: true
+  }
+});
+
+const form = useForm({
+    areas: props.generalSettings.areas,
+    enclosures: props.generalSettings.enclosures,
+});
+
+const updateLocations = () => {
+  form.put(route('general-settings.update.locations'), {
+    preserveScroll: true,
+    onSuccess: () => {
+      localStorage.remove('areas');
+      localStorage.remove('enclosures');
+    },
+  });
+};
+</script>
+
 <template>
   <FormSection>
     <template #title>
@@ -11,11 +46,11 @@
       </div>
     </template>
     <div class="col-span-4">
-      <Label for="first-name">{{ __('Areas / Rooms') }}</label>
+      <InputLabel for="first-name">{{ __('Areas / Rooms') }}</InputLabel>
       <p class="mt-1 text-sm text-gray-500">
         <em class="italic">{{ __('example: Treatment Room, Nursery, Aviary, ...') }}</em>
       </p>
-      <Textarea
+      <TextareaInput
         v-model="form.areas"
         name="areas"
         autocomplete="off"
@@ -23,11 +58,11 @@
       />
     </div>
     <div class="col-span-4">
-      <Label for="first-name">{{ __('Enclosures') }}</label>
+      <InputLabel for="first-name">{{ __('Enclosures') }}</InputLabel>
       <p class="mt-1 text-sm text-gray-500">
         <em class="italic">example: Flight Cage, Incubator, Mammal Cage, ...</em>
       </p>
-      <Textarea
+      <TextareaInput
         v-model="form.enclosures"
         name="enclosures"
         autocomplete="off"
@@ -51,44 +86,3 @@
     </template>
   </FormSection>
 </template>
-
-<script>
-import LocalStorage from '@/Utilities/LocalStorage';
-import FormSection from '@/Components/FormElements/FormSection.vue';
-import Label from '@/Components/FormElements/Label.vue';
-import Textarea from '@/Components/FormElements/Textarea.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-
-export default {
-    components: {
-        FormSection,
-        Label,
-        Textarea,
-        PrimaryButton,
-        ActionMessage
-    },
-    props: {
-        generalSettings: Object
-    },
-    data() {
-        return {
-            form: this.$inertia.form({
-                areas: this.generalSettings.areas,
-                enclosures: this.generalSettings.enclosures,
-            }),
-        };
-    },
-    methods: {
-        updateLocations() {
-            this.form.put(this.route('general-settings.update.locations'), {
-                preserveScroll: true,
-                onSuccess: () => {
-                    LocalStorage.remove('areas');
-                    LocalStorage.remove('enclosures');
-                },
-            });
-        },
-    },
-};
-</script>

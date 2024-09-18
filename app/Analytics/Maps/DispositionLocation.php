@@ -2,8 +2,10 @@
 
 namespace App\Analytics\Maps;
 
-use App\Models\Admission;
 use App\Analytics\Contracts\Map;
+use App\Enums\AttributeOptionName;
+use App\Enums\AttributeOptionUiBehavior;
+use App\Models\Admission;
 
 class DispositionLocation extends Map
 {
@@ -16,8 +18,8 @@ class DispositionLocation extends Map
                     'data' => $this->query($segment)->map(function ($admission) {
                         return [
                             'coordinates' => [
-                                'lat' => $admission->patient->disposition_coordinates->latitude,
-                                'lng' => $admission->patient->disposition_coordinates->longitude,
+                                'lat' => $admission->patient->disposition_coordinates?->latitude,
+                                'lng' => $admission->patient->disposition_coordinates?->longitude,
                             ],
                             'title' => "{$admission->case_number} {$admission->patient->common_name}",
                             'content' => $admission->patient->disposition_address,
@@ -34,8 +36,8 @@ class DispositionLocation extends Map
                         'data' => $this->compareQuery($segment)->map(function ($admission) {
                             return [
                                 'coordinates' => [
-                                    'lat' => $admission->patient->disposition_coordinates->latitude,
-                                    'lng' => $admission->patient->disposition_coordinates->longitude,
+                                    'lat' => $admission->patient->disposition_coordinates?->latitude,
+                                    'lng' => $admission->patient->disposition_coordinates?->longitude,
                                 ],
                                 'title' => "{$admission->case_number} {$admission->patient->common_name}",
                                 'content' => $admission->patient->disposition_address,
@@ -50,16 +52,21 @@ class DispositionLocation extends Map
 
     public function query($segment)
     {
+        $releasedAndTransferredIds = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
+           [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_RELEASED->value],
+           [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_TRANSFERRED->value]
+        ]);
+
         $query = Admission::where('team_id', $this->team->id)
             ->select('admissions.*')
             ->joinPatients()
-            ->whereRaw('disposition_coordinates != POINT(0, 0)')
+            ->whereRaw('disposition_coordinates != GEOGRAPHY_POINT(0, 0)')
             ->whereNotNull('disposition_coordinates')
             ->whereNotNull('disposition_address')
-            ->whereIn('disposition', ['released', 'transferred']);
+            ->whereIn('disposition_id', $releasedAndTransferredIds);
 
         if ($this->filters->date_period !== 'all-dates') {
-            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+            $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         }
 
         $this->withSegment($query, $segment);
@@ -69,14 +76,19 @@ class DispositionLocation extends Map
 
     public function compareQuery($segment)
     {
+        $releasedAndTransferredIds = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
+           [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_RELEASED->value],
+           [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_TRANSFERRED->value]
+        ]);
+
         $query = Admission::where('team_id', $this->team->id)
             ->select('admissions.*')
             ->joinPatients()
-            ->whereRaw('disposition_coordinates != POINT(0, 0)')
+            ->whereRaw('disposition_coordinates != GEOGRAPHY_POINT(0, 0)')
             ->whereNotNull('disposition_coordinates')
             ->whereNotNull('disposition_address')
-            ->whereIn('disposition', ['released', 'transferred'])
-            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to);
+            ->whereIn('disposition_id', $releasedAndTransferredIds)
+            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at');
 
         $this->withSegment($query, $segment);
 

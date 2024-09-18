@@ -50,7 +50,7 @@ class PatientsCurrentClinicArea extends Table
     {
         return $this->baseQuery()
             ->addSelect('area')
-            ->joinLastLocation()
+            ->leftJoinCurrentLocation()
             ->where('facility', 'Clinic')
             ->whereNotNull('area')
             ->withSegment($segment)
@@ -61,7 +61,7 @@ class PatientsCurrentClinicArea extends Table
     {
         return $this->baseCompareQuery()
             ->addSelect('area')
-            ->joinLastLocation()
+            ->leftJoinCurrentLocation()
             ->where('facility', 'Clinic')
             ->whereNotNull('area')
             ->withSegment($segment)

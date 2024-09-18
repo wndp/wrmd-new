@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Search\AdvancedSearchController;
-use App\Http\Controllers\Search\CommoNnamesPrefetchController;
+use App\Http\Controllers\Search\CommonNamesPrefetchController;
 use App\Http\Controllers\Search\QuickSearchController;
 use App\Http\Controllers\Search\SearchCommonNamesController;
 use App\Http\Controllers\Search\SearchController;
@@ -15,6 +15,6 @@ Route::name('search.')->group(function () {
     Route::get('search-advanced', [AdvancedSearchController::class, 'create'])->name('advanced.create');
     Route::post('search-advanced', [AdvancedSearchController::class, 'search'])->name('advanced.search');
 
-    Route::get('internal-api/search/common-names-prefetch', CommoNnamesPrefetchController::class)->name('common-names-prefetch');
+    Route::get('internal-api/search/common-names-prefetch', CommonNamesPrefetchController::class)->name('common-names-prefetch');
     Route::get('internal-api/search/common-names', SearchCommonNamesController::class)->name('common-names');
 });

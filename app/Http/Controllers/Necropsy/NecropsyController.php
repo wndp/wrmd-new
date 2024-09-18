@@ -17,8 +17,8 @@ class NecropsyController extends Controller
 {
     public function edit(NecropsyOptions $necropsyOptions, ExamOptions $examOptions)
     {
-        OptionsStore::merge($necropsyOptions);
-        OptionsStore::merge($examOptions);
+        OptionsStore::add($necropsyOptions);
+        OptionsStore::add($examOptions);
 
         $admission = $this->loadAdmissionAndSharePagination();
         $admission->patient->load('necropsy');
@@ -29,7 +29,7 @@ class NecropsyController extends Controller
 
     public function update(Request $request, Patient $patient)
     {
-        $patient->validateOwnership(Auth::user()->current_account_id);
+        $patient->validateOwnership(Auth::user()->current_team_id);
 
         $request->validate([
             'necropsied_at' => 'required|date',

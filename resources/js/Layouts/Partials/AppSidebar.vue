@@ -18,6 +18,7 @@ import {
 import RecentPatients from './RecentPatients.vue';
 import {__} from '@/Composables/Translate';
 import {can} from '@/Composables/Can';
+import {Abilities} from '@/Enums/Abilities';
 </script>
 
 <script>
@@ -31,19 +32,19 @@ export default {
             navigation: [
                 { name: __('Donate $25 Today'), route: 'donate.index', icon: HeartIcon, can: this.$page.props.showDonateHeader },
                 { name: __('Dashboard'), route: 'dashboard', icon: ComputerDesktopIcon, can: true },
-                { name: __('Add New Patient'), route: 'patients.create', icon: PlusIcon, can: can('create-patients') },
+                { name: __('Add New Patient'), route: 'patients.create', icon: PlusIcon, can: can(Abilities.CREATE_PATIENTS) },
                 { name: __('List Patients'), route: 'patients.index', routeParams: {
                   page: this.$page.props.listPaginationPage,
                   y: this.$page.props.caseYear
                 }, icon: ListBulletIcon, can: true },
-                { name: __('Search Patients'), route: 'search.simple.create', icon: MagnifyingGlassIcon, can: can('search-patients') },
-                { name: __('Daily Tasks'), route: 'daily-tasks.index', icon: CalendarIcon, can: can('display-daily-tasks') },
-                { name: __('Reports'), route: 'reports.index', icon: DocumentTextIcon, can: can('display-reports') },
-                { name: __('Analytics'), route: 'analytics.index', icon: ChartBarIcon, can: can('display-analytics') },
+                { name: __('Search Patients'), route: 'search.simple.create', icon: MagnifyingGlassIcon, can: can(Abilities.SEARCH_PATIENTS) },
+                { name: __('Daily Tasks'), route: 'daily-tasks.index', icon: CalendarIcon, can: can(Abilities.VIEW_DAILY_TASKS) },
+                { name: __('Hotline'), route: 'hotline.open.index', icon: PhoneIcon, can: can(Abilities.VIEW_HOTLINE) },
+                { name: __('Reports'), route: 'reports.index', icon: DocumentTextIcon, can: can(Abilities.VIEW_REPORTS) },
+                { name: __('Analytics'), route: 'analytics.index', icon: ChartBarIcon, can: can(Abilities.VIEW_ANALYTICS) },
                 { name: __('People'), route: 'people.rescuers.index', icon: UsersIcon, can: can('displayPeople') },
-                { name: __('Hotline'), route: 'hotline.open.index', icon: PhoneIcon, can: can('display-hotline') },
                 { name: __('Forum'), route: 'forum.index', icon: ChatBubbleOvalLeftEllipsisIcon, can: true },
-                { name: __('Admin'), route: 'admin.dashboard', icon: CommandLineIcon, can: can('viewAdmin') },
+                { name: __('Admin'), route: 'admin.dashboard', icon: CommandLineIcon, can: can(Abilities.VIEW_WRMD_ADMIN) },
             ]
         };
     },
@@ -77,32 +78,32 @@ export default {
       <TransitionChild
         as="template"
         enter="transition-opacity ease-linear duration-300"
-        enter-from="opacity-0"
-        enter-to="opacity-100"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
         leave="transition-opacity ease-linear duration-300"
-        leave-from="opacity-100"
-        leave-to="opacity-0"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
       >
         <DialogOverlay class="fixed inset-0 bg-gray-600 bg-opacity-75" />
       </TransitionChild>
       <TransitionChild
         as="template"
         enter="transition ease-in-out duration-300 transform"
-        enter-from="-translate-x-full"
-        enter-to="translate-x-0"
+        enterFrom="-translate-x-full"
+        enterTo="translate-x-0"
         leave="transition ease-in-out duration-300 transform"
-        leave-from="translate-x-0"
-        leave-to="-translate-x-full"
+        leaveFrom="translate-x-0"
+        leaveTo="-translate-x-full"
       >
         <div class="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-white">
           <TransitionChild
             as="template"
             enter="ease-in-out duration-300"
-            enter-from="opacity-0"
-            enter-to="opacity-100"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
             leave="ease-in-out duration-300"
-            leave-from="opacity-100"
-            leave-to="opacity-0"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
           >
             <div class="absolute top-0 right-0 -mr-12 pt-2">
               <button

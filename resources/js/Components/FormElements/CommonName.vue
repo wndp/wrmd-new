@@ -1,3 +1,106 @@
+<script>
+import VueComboBlocks from 'vue-combo-blocks';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import { ArrowPathIcon } from '@heroicons/vue/24/solid';
+import LocalStorage from '@/Composables/LocalStorage';
+import debounce from 'lodash/debounce';
+
+const localStorage = LocalStorage();
+
+export default {
+    components: {
+        VueComboBlocks,
+        TextInput,
+        ArrowPathIcon
+    },
+    props: ['modelValue'],
+    emits: ['update:modelValue', 'select'],
+    data() {
+        return {
+            // selected: {
+            //     common_name: this.modelValue
+            // },
+            selected: this.modelValue,
+            fetching: false,
+            prefetchedList: [],
+            searchedList: [],
+            text: ''
+            //filteredList: []
+        };
+    },
+    computed: {
+        filteredList() {
+            return this.prefetchedList.filter(item => {
+                return this.text.toLowerCase().split(/[\s|-]/).every(word => {
+                    return item.label.toLowerCase().includes(word);
+                });
+            })
+            .concat(this.searchedList)
+            // .concat({
+            //     common_name: this.modelValue,
+            // })
+            .map(item => item.label)
+            .slice(0, 10);
+        }
+    },
+    mounted() {
+        this.prefetchCommonNames();
+    },
+    methods: {
+        itemToString(item) {
+            return item;//? item.common_name : '';
+        },
+        stateReducer(state, actionAndChanges) {
+          const { changes, type } = actionAndChanges;
+          switch (type) {
+            case VueComboBlocks.stateChangeTypes.InputBlur:
+              //this.text = state.inputValue;
+              return {
+                ...changes,
+                inputValue: state.inputValue, // Allow selection of item that's not in the options array
+                selectedItem: state.inputValue // Allow selection of item that's not in the options array
+              };
+            default:
+              return changes;
+          }
+        },
+        updateList(text) {
+            if (text.trim().length > 0) {
+                this.fetchCommonNames(text);
+            }
+        },
+        onChange() {
+            this.$emit('update:modelValue', this.selected);
+        },
+        onSelect() {
+            this.$emit('select', this.prefetchedList.find((item) => item.label === this.selected));
+        },
+        prefetchCommonNames() {
+            let cacheStatus = localStorage.status('wrmdCommonNames');
+
+            // Has Data
+            if (cacheStatus === 1) {
+                this.prefetchedList = localStorage.get('wrmdCommonNames');
+
+            // Expired or Empty Cache
+            } else {
+                window.axios.get('/internal-api/search/common-names-prefetch').then(response => {
+                    localStorage.store('wrmdCommonNames', response.data, 7200); // 2 hours
+                    this.prefetchedList = response.data;
+                });
+            }
+        },
+        fetchCommonNames: debounce(function (text) {
+            this.fetching = true;
+            window.axios.get('/internal-api/search/common-names/?q=' + text).then(response => {
+                this.searchedList = response.data;
+                this.fetching = false;
+            });
+        }, 500),
+    },
+};
+</script>
+
 <template>
   <div class="relative">
     <VueComboBlocks
@@ -15,15 +118,15 @@
         inputValue
       }"
       v-model="selected"
-      :item-to-string="itemToString"
+      :itemToString="itemToString"
       :items="filteredList"
-      :state-reducer="stateReducer"
+      :stateReducer="stateReducer"
       @input-value-change="updateList"
-      @update:modelValue="onChange"
+      @update:model-value="onChange"
       @select="onSelect"
     >
       <div v-bind="getComboboxProps()">
-        <Input
+        <TextInput
           v-bind="getInputProps(), $attrs"
           v-model="text"
           placeholder="Search"
@@ -31,9 +134,9 @@
           v-on="getInputEventListeners()"
         />
         <Transition
-          leave-active-class="transition duration-100 ease-in"
-          leave-from-class="opacity-100"
-          leave-to-class="opacity-0"
+          leaveActiveClass="transition duration-100 ease-in"
+          leaveFromClass="opacity-100"
+          leaveToClass="opacity-0"
         >
           <ul
             v-show="isOpen"
@@ -73,106 +176,3 @@
     </VueComboBlocks>
   </div>
 </template>
-
-<script>
-// https://github.com/sssmi/vue-combo-blocks
-import VueComboBlocks from 'vue-combo-blocks';
-import Input from '@/Components/FormElements/Input.vue';
-import { ArrowPathIcon } from '@heroicons/vue/24/solid';
-import LocalStorage from '@/Utilities/LocalStorage';
-import debounce from 'lodash/debounce';
-
-export default {
-    components: {
-        VueComboBlocks,
-        Input,
-        ArrowPathIcon
-    },
-    props: ['modelValue'],
-    emits: ['update:modelValue', 'select'],
-    data() {
-        return {
-            // selected: {
-            //     common_name: this.modelValue
-            // },
-            selected: this.modelValue,
-            fetching: false,
-            prefetchedList: [],
-            searchedList: [],
-            text: ''
-            //filteredList: []
-        };
-    },
-    computed: {
-        filteredList() {
-            return this.prefetchedList.filter(item => {
-                return this.text.toLowerCase().split(/[\s|-]/).every(word => {
-                    return item.common_name.toLowerCase().includes(word);
-                });
-            })
-            .concat(this.searchedList)
-            // .concat({
-            //     common_name: this.modelValue,
-            // })
-            .map(item => item.common_name)
-            .slice(0, 10);
-        }
-    },
-    methods: {
-        itemToString(item) {
-            return item;//? item.common_name : '';
-        },
-        stateReducer(state, actionAndChanges) {
-          const { changes, type } = actionAndChanges;
-          switch (type) {
-            case VueComboBlocks.stateChangeTypes.InputBlur:
-              //this.text = state.inputValue;
-              return {
-                ...changes,
-                inputValue: state.inputValue, // Allow selection of item that's not in the options array
-                selectedItem: state.inputValue // Allow selection of item that's not in the options array
-              };
-            default:
-              return changes;
-          }
-        },
-        updateList(text) {
-            if (text.trim().length > 0) {
-                this.fetchCommonNames(text);
-            }
-        },
-        onChange() {
-            this.$emit('update:modelValue', this.selected);
-        },
-        onSelect() {
-            this.$emit('select', this.selected);
-        },
-        prefetchCommonNames() {
-            let cacheStatus = LocalStorage.status('wrmdCommonNames');
-
-            // Has Data
-            if (cacheStatus === 1) {
-                this.prefetchedList = LocalStorage.get('wrmdCommonNames');
-
-            // Expired or Empty Cache
-            } else {
-                window.axios.get('/internal-api/search/common-names-prefetch').then(response => {
-                    LocalStorage.store('wrmdCommonNames', response.data, 7200); // 2 hours
-                    this.prefetchedList = response.data;
-                });
-            }
-        },
-        fetchCommonNames: debounce(function (text) {
-            this.fetching = true;
-            window.axios.get('/internal-api/search/common-names/?q=' + text).then(response => {
-                this.searchedList = response.data;
-                this.fetching = false;
-            });
-        }, 500),
-    },
-    mounted() {
-        this.prefetchCommonNames();
-    },
-};
-</script>
-

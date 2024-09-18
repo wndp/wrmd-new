@@ -32,7 +32,7 @@ const navigation = [
 
 const currentRoute = ref(route().current())
 
-const redirectToTab = () => router.get(route(currentRoute));
+const redirectToTab = () => router.get(route(currentRoute.value));
 </script>
 
 <template>

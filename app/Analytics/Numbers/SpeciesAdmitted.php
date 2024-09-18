@@ -30,7 +30,7 @@ class SpeciesAdmitted extends Number
             ->joinPatients();
 
         if ($this->filters->date_period !== 'all-dates') {
-            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+            $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         }
 
         $this->withSegment($query, $segment);
@@ -43,7 +43,7 @@ class SpeciesAdmitted extends Number
         $query = Admission::where('team_id', $this->team->id)
             ->select('common_name')
             ->joinPatients()
-            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to);
+            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at');
 
         $this->withSegment($query, $segment);
 

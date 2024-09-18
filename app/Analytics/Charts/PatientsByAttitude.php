@@ -21,15 +21,15 @@ class PatientsByAttitude extends Chart
     public function query($segment)
     {
         $query = Admission::where('team_id', $this->team->id)
-            ->selectRaw('count(*) as aggregate, attitude as subgroup')
+            ->selectRaw('count(*) as aggregate, attitude_id as subgroup')
             ->joinPatients()
             ->joinIntakeExam()
-            ->whereNotNull('attitude')
+            ->whereNotNull('attitude_id')
             ->orderByDesc('aggregate')
-            ->groupBy('subgroup');
+            ->groupBy('attitude_id');
 
         if ($this->filters->date_period !== 'all-dates') {
-            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+            $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         }
 
         $this->withSegment($query, $segment);
@@ -40,13 +40,13 @@ class PatientsByAttitude extends Chart
     public function compareQuery($segment)
     {
         $query = Admission::where('team_id', $this->team->id)
-            ->selectRaw('count(*) as aggregate, attitude as subgroup')
+            ->selectRaw('count(*) as aggregate, attitude_id as subgroup')
             ->joinPatients()
             ->joinIntakeExam()
-            ->whereNotNull('attitude')
-            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to)
+            ->whereNotNull('attitude_id')
+            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at')
             ->orderByDesc('aggregate')
-            ->groupBy('subgroup');
+            ->groupBy('attitude_id');
 
         $this->withSegment($query, $segment);
 

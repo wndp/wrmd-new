@@ -50,7 +50,6 @@ if (typeof window !== 'undefined' && typeof window.Beacon !== 'undefined') {
       <Alert
         v-if="differentTimeZone"
         color="red"
-        dismissible
       >
         {{ __('You appear to be in a different timezone than what is used by this organization. Dates will display in the organizations chosen timezone: :timezone.', {timezone}) }}
         <AlertAction color="red">

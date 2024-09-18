@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Cache;
+namespace App\Caches;
 
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Request;

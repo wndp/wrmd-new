@@ -37,11 +37,11 @@ class AcquisitionLocation extends Map
         $query = Admission::where('team_id', $this->team->id)
             ->select('admissions.*')
             ->joinPatients()
-            ->whereRaw('coordinates_found != POINT(0, 0)')
+            ->whereRaw('coordinates_found != GEOGRAPHY_POINT(0, 0)')
             ->whereNotNull('coordinates_found');
 
         if ($this->filters->date_period !== 'all-dates') {
-            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+            $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         }
 
         $this->withSegment($query, $segment);
@@ -56,7 +56,7 @@ class AcquisitionLocation extends Map
             ->joinPatients()
             ->whereRaw('coordinates_found != POINT(0, 0)')
             ->whereNotNull('coordinates_found')
-            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to);
+            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at');
 
         $this->withSegment($query, $segment);
 

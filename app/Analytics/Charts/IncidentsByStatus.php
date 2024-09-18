@@ -4,7 +4,7 @@ namespace App\Analytics\Charts;
 
 use App\Analytics\Concerns\HandlePieData;
 use App\Analytics\Contracts\Chart;
-use App\Domain\Hotline\Models\Incident;
+use App\Models\Incident;
 
 class IncidentsByStatus extends Chart
 {
@@ -21,10 +21,9 @@ class IncidentsByStatus extends Chart
     public function query()
     {
         $query = Incident::where('team_id', $this->team->id)
-            ->selectRaw('count(*) as aggregate, status as subgroup')
-            ->whereNotNull('status')
+            ->selectRaw('count(*) as aggregate, incident_status_id as subgroup')
             ->orderByDesc('aggregate')
-            ->groupBy('status')
+            ->groupBy('incident_status_id')
             ->limit(5);
 
         if ($this->filters->date_period !== 'all-dates') {
@@ -37,11 +36,10 @@ class IncidentsByStatus extends Chart
     public function compareQuery()
     {
         $query = Incident::where('team_id', $this->team->id)
-            ->selectRaw('count(*) as aggregate, status as subgroup')
+            ->selectRaw('count(*) as aggregate, incident_status_id as subgroup')
             ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'occurred_at')
-            ->whereNotNull('status')
             ->orderByDesc('aggregate')
-            ->groupBy('status')
+            ->groupBy('incident_status_id')
             ->limit(5);
 
         return $query->get();

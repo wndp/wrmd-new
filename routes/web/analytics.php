@@ -10,7 +10,7 @@ Route::get('analytics', AnalyticsViewController::class)
 Route::get('analytics/{group}/{subGroup?}', AnalyticsViewController::class)
     ->where(
         'group',
-        'taxa|demographics|origin|location|circumstances-of-admission|clinical-classifications|disposition|hotline'
+        'taxa|demographics|origin|location|classifications|disposition|hotline'
     );
 
 Route::put('analytics/filters', [AnalyticsFiltersController::class, 'update']);

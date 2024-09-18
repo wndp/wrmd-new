@@ -14,6 +14,9 @@ export default [
             "vue/first-attribute-linebreak": ["error", {
                 "singleline": "ignore",
                 "multiline": "below"
+            }],
+            'vue/no-mutating-props': ['error', {
+                'shallowOnly': true
             }]
         }
     }

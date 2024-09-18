@@ -2,7 +2,11 @@
 
 namespace App\Options;
 
+use CommerceGuys\Addressing\Country\CountryRepository;
+use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class LocaleOptions extends Options
 {
@@ -14,40 +18,27 @@ class LocaleOptions extends Options
 
     public function toArray(): array
     {
-        $driver = new \Sokil\IsoCodes\TranslationDriver\SymfonyTranslationDriver();
-        $isoCodes = new \Sokil\IsoCodes\IsoCodesFactory(null, $driver);
+        $countryRepository = new CountryRepository();
+        $subdivisionRepository = new SubdivisionRepository();
 
-        //$countries = $isoCodes->getCountries();//->getByAlpha2('US');
-        //dd($countries);
-
-        $countries = Arr::mapWithKeys(
-            $isoCodes->getCountries()->toArray(),
-            fn ($country) => [$country->getAlpha2() => $country->getLocalName()]
-        );
-
-        $subdivisions = Arr::map(
-            $isoCodes->getSubdivisions()->getAllByCountryCode('US'),
-            fn ($subdivision) => $subdivision->getLocalName()
-        );
+        $countries = $countryRepository->getList(app()->getLocale());
+        $timezones = static::formatTimezones($countryRepository->get('US')->getTimezones());
+        $subdivisions = $subdivisionRepository->getList(['US'], app()->getLocale());
 
         return [
-            'countries' => static::arrayToSelectable($countries),
-            'subdivisions' => static::arrayToSelectable($subdivisions),
-            'timezones' => static::arrayToSelectable($this->timezones('US')),
-            'languages' => static::arrayToSelectable(static::$languages),
+            'countryOptions' => static::arrayToSelectable($countries),
+            'subdivisionOptions' => static::arrayToSelectable($subdivisions),
+            'timezoneOptions' => static::arrayToSelectable($timezones),
+            'languageOptions' => static::arrayToSelectable(static::$languages),
         ];
     }
 
-    public static function timezones($countryCode)
+    public static function formatTimezones($timezones)
     {
-        $timezones = \DateTimeZone::listIdentifiers(\DateTimeZone::PER_COUNTRY, $countryCode);
-
-        return array_reduce($timezones, function ($carry, $timezone) {
-            $carry[$timezone] = \Illuminate\Support\Str::headline(
-                \Illuminate\Support\Str::of($timezone)->explode('/')->last()
-            );
-
-            return $carry;
-        }, []);
+        return Collection::make($timezones)->map(fn ($timezone) => Str::headline(
+            Str::of($timezone)->explode('/')->last()
+        ))
+        ->sort()
+        ->toArray();
     }
 }

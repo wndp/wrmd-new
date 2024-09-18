@@ -35,7 +35,7 @@ class AllPatientsAdmitted extends Chart
             ->orderBy('date');
 
         if ($this->filters->date_period !== 'all-dates') {
-            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+            $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         } else {
             $query->dateRange($period->first()->format('Y-m-d'), $period->last()->format('Y-m-d'));
         }
@@ -56,7 +56,7 @@ class AllPatientsAdmitted extends Chart
     //         ->join('accounts', 'admissions.team_id', '=', 'accounts.id')
     //         ->selectRaw("count(*) as aggregate, date_admitted_at as date")
     //         ->where('accounts.is_active', true)
-    //         ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to)
+    //         ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at')
     //         ->groupBy('date')
     //         ->orderBy('date');
 

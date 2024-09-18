@@ -5,6 +5,12 @@ namespace App\Models;
 use App\Concerns\HasSubAccounts;
 use App\Enums\AccountStatus;
 use App\Repositories\SettingsStore;
+use CommerceGuys\Addressing\Address;
+use CommerceGuys\Addressing\AddressFormat\AddressFormatRepository;
+use CommerceGuys\Addressing\Country\CountryRepository;
+use CommerceGuys\Addressing\Formatter\DefaultFormatter;
+use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -28,10 +34,26 @@ class Team extends JetstreamTeam
     protected $fillable = [
         'name',
         'personal_team',
+        'is_master_account',
+        'contact_name',
+        'contact_email',
+        'country',
+        'address',
+        'city',
+        'subdivision',
+        'postal_code',
+        'coordinates',
+        'phone_number',
+        'website',
+        'federal_permit_number',
+        'subdivision_permit_number',
+        'profile_photo_path',
+        'notes',
     ];
 
     protected $appends = [
         'profile_photo_url',
+        'formatted_inline_address',
     ];
 
     /**
@@ -80,5 +102,27 @@ class Team extends JetstreamTeam
     public function settingsStore(): SettingsStore
     {
         return new SettingsStore($this);
+    }
+
+    protected function formattedInlineAddress(): Attribute
+    {
+        return Attribute::get(function () {
+            $formatter = new DefaultFormatter(
+                new AddressFormatRepository(),
+                new CountryRepository(),
+                new SubdivisionRepository()
+            );
+
+            $address = (new Address())
+                ->withCountryCode($this->country)
+                ->withAdministrativeArea($this->subdivision)
+                ->withLocality($this->city)
+                ->withAddressLine1($this->address)
+                ->withPostalCode($this->postal_code);
+
+            return $formatter->format($address, [
+                'html' => false
+            ]);
+        });
     }
 }

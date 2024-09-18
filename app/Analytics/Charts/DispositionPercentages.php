@@ -21,15 +21,14 @@ class DispositionPercentages extends Chart
     public function query($segment)
     {
         $query = Admission::where('team_id', $this->team->id)
-            ->selectRaw('count(*) as aggregate, disposition as subgroup')
+            ->selectRaw('count(*) as aggregate, disposition_id as subgroup')
             ->joinPatients()
-            ->whereNotNull('disposition')
             ->orderByDesc('aggregate')
-            ->groupBy('disposition')
+            ->groupBy('disposition_id')
             ->limit(10);
 
         if ($this->filters->date_period !== 'all-dates') {
-            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+            $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         }
 
         $this->withSegment($query, $segment);
@@ -40,11 +39,11 @@ class DispositionPercentages extends Chart
     public function compareQuery($segment)
     {
         $query = Admission::where('team_id', $this->team->id)
-            ->selectRaw('count(*) as aggregate, disposition as subgroup')
+            ->selectRaw('count(*) as aggregate, disposition_id as subgroup')
             ->joinPatients()
-            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to)
+            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at')
             ->orderByDesc('aggregate')
-            ->groupBy('disposition')
+            ->groupBy('disposition_id')
             ->limit(10);
 
         $this->withSegment($query, $segment);

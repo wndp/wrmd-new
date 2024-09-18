@@ -69,8 +69,8 @@ class AccountExtensionsController extends Controller
 
         return redirect()
             ->back()
-            ->with('flash.notificationHeading', 'Extension Activated!')
-            ->with('flash.notification', "$extension->name is activated and ready to use.");
+            ->with('notification.heading', 'Extension Activated!')
+            ->with('notification.text', "$extension->name is activated and ready to use.");
     }
 
     /**
@@ -94,13 +94,13 @@ class AccountExtensionsController extends Controller
 
             return redirect()
                 ->back()
-                ->with('flash.notificationHeading', 'Extension Deactivated')
-                ->with('flash.notification', "$extension->name is deactivated.");
+                ->with('notification.heading', 'Extension Deactivated')
+                ->with('notification.text', "$extension->name is deactivated.");
         } catch (\DomainException $e) {
             return redirect()
                 ->back()
-                ->with('flash.notificationHeading', 'Oops!')
-                ->with('flash.notification', $e->getMessage())
+                ->with('notification.heading', 'Oops!')
+                ->with('notification.text', $e->getMessage())
                 ->with('flash.style', 'danger');
         }
     }

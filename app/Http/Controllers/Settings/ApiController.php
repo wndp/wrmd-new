@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Settings;
 
-use App\Domain\Users\User;
 use App\Events\AccountUpdated;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use Laravel\Jetstream\Events\TeamUpdated;
 use Laravel\Sanctum\PersonalAccessToken;
 
 class ApiController extends Controller
@@ -25,7 +26,7 @@ class ApiController extends Controller
             ['donations:view'],
         ];
 
-        $tokens = User::apiUserFor(Auth::user()->current_account)->tokens;
+        $tokens = User::apiUserFor(Auth::user()->currentTeam)->tokens->sortBy('name');
 
         return Inertia::render('Settings/Api', compact('abilities', 'tokens'));
     }
@@ -35,8 +36,8 @@ class ApiController extends Controller
      */
     public function store(Request $request)
     {
-        $account = $request->user()->current_account;
-        $apiUser = User::apiUserFor($account);
+        $team = $request->user()->currentTeam;
+        $apiUser = User::apiUserFor($team);
 
         $data = $request->validate([
             'token_name' => ['required', Rule::unique('\Laravel\Sanctum\PersonalAccessToken', 'name')->where(function ($query) use ($apiUser) {
@@ -47,11 +48,13 @@ class ApiController extends Controller
 
         $token = $apiUser->createToken($data['token_name'], array_values($data['token_abilities']));
 
-        event(new AccountUpdated($account));
+        TeamUpdated::dispatch($team);
 
-        return redirect()->route('api.index')
-            ->with('flash.notificationHeading', 'Success!')
-            ->with('flash.notification', __(':tokenName token was created.', ['tokenName' => $request->get('token_name')]))
+        return back()
+            ->with('notification.heading', __('Success!'))
+            ->with('notification.text', __(':tokenName token was created.', [
+                'tokenName' => $request->get('token_name')
+            ]))
             ->with('flash.token', $token);
     }
 
@@ -62,12 +65,16 @@ class ApiController extends Controller
      */
     public function delete(PersonalAccessToken $token)
     {
-        $token->tokenable->validateOwnership(auth()->user()->currentAccount->id);
+        $token->tokenable->validateOwnership(Auth::user()->currentTeam->id);
 
         $token->delete();
 
+        TeamUpdated::dispatch(Auth::user()->currentTeam);
+
         return redirect()->route('api.index')
-            ->with('flash.notificationHeading', 'Token Deleted!')
-            ->with('flash.notification', "$token->name token was deleted.");
+            ->with('notification.heading', __('Token Deleted!'))
+            ->with('notification.text', __(':tokenName token was deleted.', [
+                'tokenName' => $token->name
+            ]));
     }
 }

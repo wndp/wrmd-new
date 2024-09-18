@@ -15,9 +15,11 @@ use Inertia\Response;
 
 class AccountProfileController extends Controller
 {
-    public function edit(LocaleOptions $options): Response
+    public function edit(): Response
     {
-        OptionsStore::merge($options);
+        OptionsStore::add([
+            new LocaleOptions()
+        ]);
 
         return Inertia::render('Settings/AccountProfile');
     }
@@ -48,8 +50,8 @@ class AccountProfileController extends Controller
         }
 
         return redirect()->route('account.profile.edit')
-            ->with('flash.notificationHeading', __('Success!'))
-            ->with('flash.notification', __('Your account profile was updated.'));
+            ->with('notification.heading', __('Success!'))
+            ->with('notification.text', __('Your account profile was updated.'));
     }
 
     /**
@@ -67,8 +69,8 @@ class AccountProfileController extends Controller
         ]));
 
         return redirect()->route('account.profile.edit')
-            ->with('flash.notificationHeading', __('Success!'))
-            ->with('flash.notification', __('Your account contact details were updated.'));
+            ->with('notification.heading', __('Success!'))
+            ->with('notification.text', __('Your account contact details were updated.'));
     }
 
     /**
@@ -90,7 +92,7 @@ class AccountProfileController extends Controller
             $request->language,
             2628000
         )
-            ->with('flash.notificationHeading', __('Success!'))
-            ->with('flash.notification', __('Your account localization was updated.'));
+            ->with('notification.heading', __('Success!'))
+            ->with('notification.text', __('Your account localization was updated.'));
     }
 }

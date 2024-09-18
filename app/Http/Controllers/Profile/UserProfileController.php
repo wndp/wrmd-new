@@ -25,8 +25,8 @@ class UserProfileController extends Controller
         ]));
 
         return redirect()->route('profile.edit')
-            ->with('flash.notificationHeading', 'Success!')
-            ->with('flash.notification', __('Your profile was updated.'));
+            ->with('notification.heading', 'Success!')
+            ->with('notification.text', __('Your profile was updated.'));
     }
 
     /**

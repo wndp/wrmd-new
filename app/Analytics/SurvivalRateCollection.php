@@ -4,6 +4,7 @@ namespace App\Analytics;
 
 use App\Analytics\Concerns\HandleAggregates;
 use App\Analytics\Concerns\HandleSeriesNames;
+use Illuminate\Support\Number;
 
 class SurvivalRateCollection extends CategorizedCollection
 {
@@ -13,8 +14,8 @@ class SurvivalRateCollection extends CategorizedCollection
     public function calculateSurvivalRates()
     {
         $this->items = $this->map(function ($dataSet) {
-            $dataSet->offsetSet('including24Hours', survival_rate($dataSet, false));
-            $dataSet->offsetSet('after24Hours', survival_rate($dataSet, true));
+            $dataSet->offsetSet('including24Hours', Number::survivalRate($dataSet, false));
+            $dataSet->offsetSet('after24Hours', Number::survivalRate($dataSet, true));
 
             return $dataSet;
         })

@@ -49,7 +49,7 @@ Route::prefix('internal-api')->group(function () {
     // /** Misc */
     Route::get('admissions/year/{year}', AdmissionYearController::class)->name('admissions.year');
 
-    Route::middleware('can:displayPeople')->group(function () {
+    Route::middleware('can:viewPeople')->group(function () {
         Route::get('people/search', SearchPeopleController::class)->name('people.search');
     });
 

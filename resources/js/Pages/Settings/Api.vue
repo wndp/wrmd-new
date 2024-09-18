@@ -1,3 +1,54 @@
+<script setup>
+import { inject, ref, computed, watch } from 'vue';
+import { useForm, usePage } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import SettingsAside from './Partials/SettingsAside.vue';
+import FormSection from '@/Components/FormElements/FormSection.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import Checkbox from '@/Components/FormElements/Checkbox.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import SecondaryButton from '@/Components/FormElements/SecondaryButton.vue';
+import DialogModal from '@/Components/DialogModal.vue';
+import { XCircleIcon } from '@heroicons/vue/24/outline';
+import {__} from '@/Composables/Translate';
+
+const route = inject('route');
+
+defineProps({
+  abilities: {
+    type: Array,
+    required: true
+  },
+  tokens: {
+    type: Array,
+    required: true
+  }
+});
+
+const form = useForm({
+  token_name: '',
+  token_abilities: []
+});
+
+let newTokenModal = ref(false);
+
+const createdToken = computed(() => usePage().props.jetstream.flash.token);
+
+watch(createdToken, (value) => {
+  if (value !== undefined) newTokenModal.value = true
+});
+
+const save = () => {
+  form.post(route('api.store'), {
+    preserveScroll: true,
+    onSuccess: () => form.reset()
+  });
+};
+</script>
+
 <template>
   <AppLayout title="API">
     <div class="lg:grid grid-cols-8 gap-8 mt-4">
@@ -17,8 +68,8 @@
             </p>
           </template>
           <div class="col-span-4">
-            <Label for="token_name">{{ __('Name') }}</Label>
-            <Input
+            <InputLabel for="token_name">{{ __('Your Application Name') }}</InputLabel>
+            <TextInput
               v-model="form.token_name"
               name="token_name"
               autocomplete="off"
@@ -30,7 +81,7 @@
             />
           </div>
           <div class="col-span-4">
-            <Label for="abilities">{{ __('Abilities') }}</Label>
+            <InputLabel for="abilities">{{ __('Abilities') }}</InputLabel>
             <InputError
               :message="form.errors.token_abilities"
               class="mt-2"
@@ -44,7 +95,7 @@
                 <div
                   v-for="ability in abilityGroup"
                   :key="ability"
-                  class="flex items-start"
+                  class="flex items-start mb-2"
                 >
                   <div class="flex items-center h-5">
                     <Checkbox
@@ -55,10 +106,10 @@
                     />
                   </div>
                   <div class="ml-3 text-sm">
-                    <Label
+                    <InputLabel
                       :for="ability"
                       class="font-normal"
-                    >{{ ability }}</Label>
+                    >{{ ability }}</InputLabel>
                   </div>
                 </div>
               </div>
@@ -165,7 +216,7 @@
           <p class="text-md text-gray-600">
             {{ __("Please copy your new API token. For your security, it won't be shown again.") }}
           </p>
-          <Input
+          <TextInput
             name="new_token"
             :value="createdToken.plainTextToken"
             autocomplete="off"
@@ -185,53 +236,3 @@
     </DialogModal>
   </AppLayout>
 </template>
-
-<script setup>
-import { inject, ref, computed, watch } from 'vue';
-import { useForm, usePage } from '@inertiajs/vue3';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import SettingsAside from './Partials/SettingsAside.vue';
-import FormSection from '@/Components/FormElements/FormSection.vue';
-import Label from '@/Components/FormElements/Label.vue';
-import Input from '@/Components/FormElements/Input.vue';
-import Checkbox from '@/Components/FormElements/Checkbox.vue';
-import InputError from '@/Components/FormElements/InputError.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import SecondaryButton from '@/Components/FormElements/SecondaryButton.vue';
-import DialogModal from '@/Components/DialogModal.vue';
-import { XCircleIcon } from '@heroicons/vue/24/outline';
-
-const route = inject('route');
-
-defineProps({
-  abilities: {
-    type: Array,
-    required: true
-  },
-  tokens: {
-    type: Array,
-    required: true
-  }
-});
-
-const form = useForm({
-  token_name: '',
-  token_abilities: []
-});
-
-let newTokenModal = ref(false);
-
-const createdToken = computed(() => usePage().props.flash.token);
-
-watch(createdToken, (value) => {
-  if (value !== undefined) newTokenModal.value = true
-});
-
-const save = () => {
-  form.post(route('api.store'), {
-    preserveScroll: true,
-    onSuccess: () => form.reset()
-  });
-};
-</script>

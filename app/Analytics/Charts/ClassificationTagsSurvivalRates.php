@@ -80,7 +80,7 @@ class ClassificationTagsSurvivalRates extends Chart
             ->orderBy('prediction');
 
         if ($this->filters->date_period !== 'all-dates') {
-            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+            $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         }
 
         $this->withSegment($query, $segment);
@@ -101,7 +101,7 @@ class ClassificationTagsSurvivalRates extends Chart
             ->selectRaw("sum(if(`disposition` = 'Euthanized in 24hr', 1, 0)) as `euthanized_in_24`")
             ->joinPatients()
             ->join('patient_model_predictions', 'patients.id', '=', 'patient_model_predictions.patient_id')
-            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to)
+            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at')
             ->where('category', $this->filters->category)
             ->groupBy('prediction')
             ->orderBy('prediction');

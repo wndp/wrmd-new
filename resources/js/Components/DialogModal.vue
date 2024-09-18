@@ -1,7 +1,7 @@
 <template>
   <modal
     :show="show"
-    :max-width="maxWidth"
+    :maxWidth="maxWidth"
     :closeable="closeable"
     @close="close"
   >

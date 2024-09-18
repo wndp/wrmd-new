@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Events\AccountUpdated;
+use App\Events\TeamUpdated;
 use App\Http\Controllers\Controller;
+use App\Support\Wrmd;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -16,7 +18,7 @@ class ClassificationsController extends Controller
      */
     public function edit(): Response
     {
-        $showTags = (bool) settings('showTags');
+        $showTags = (bool) Wrmd::settings('showTags');
 
         return Inertia::render('Settings/Classifications', compact('showTags'));
     }
@@ -26,12 +28,12 @@ class ClassificationsController extends Controller
      */
     public function update(): RedirectResponse
     {
-        settings()->set(request()->all('showTags'));
+        Wrmd::settings(request()->all('showTags'));
 
-        event(new AccountUpdated(Auth::user()->currentAccount));
+        event(new TeamUpdated(Auth::user()->currentAccount));
 
         return redirect()->route('classification-tagging.edit')
-            ->with('flash.notificationHeading', 'Success!')
-            ->with('flash.notification', 'Classification settings updated.');
+            ->with('notification.heading', __('Success!'))
+            ->with('notification.text', __('Classification settings updated.'));
     }
 }

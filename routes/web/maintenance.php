@@ -14,13 +14,13 @@ use App\Http\Controllers\Maintenance\UnrecognizedPatientsController;
 
 Route::prefix('maintenance')->name('maintenance.')->group(function () {
     Route::get('/unrecognized-patients', UnrecognizedPatientsController::class)
-        ->can('displayMaintenance')
+        ->can('viewMaintenance')
         ->name('unrecognized-patients');
 
     Route::get('/transfers', TransfersController::class)->name('transfers');
     Route::post('/transfers/{transfer:uuid}/uncollaborate', UncollaborateTransferController::class)->name('transfers.uncollaborate');
 
-    Route::controller(FormulaController::class)->middleware('can:displayMaintenance')->group(function () {
+    Route::controller(FormulaController::class)->middleware('can:viewMaintenance')->group(function () {
         Route::get('/prescription-formulas', 'index')->name('formulas.index');
         Route::get('/prescription-formulas/create', 'create')->name('formulas.create');
         Route::post('/prescription-formulas', 'store')->name('formulas.store');
@@ -29,7 +29,7 @@ Route::prefix('maintenance')->name('maintenance.')->group(function () {
         Route::delete('/prescription-formulas/{formula}', 'destroy')->name('formulas.destroy');
     });
 
-    Route::controller(AutocompleteController::class)->middleware('can:displayMaintenance')->group(function () {
+    Route::controller(AutocompleteController::class)->middleware('can:viewMaintenance')->group(function () {
         Route::get('/autocomplete', 'index')->name('autocomplete.index');
         Route::post('/autocomplete', 'store')->name('autocomplete.store');
         Route::put('/autocomplete/{field}', 'update')->name('autocomplete.update');

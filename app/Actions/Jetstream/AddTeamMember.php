@@ -4,14 +4,16 @@ namespace App\Actions\Jetstream;
 
 use App\Models\Team;
 use App\Models\User;
+use App\Rules\Role;
 use Closure;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Laravel\Jetstream\Contracts\AddsTeamMembers;
 use Laravel\Jetstream\Events\AddingTeamMember;
 use Laravel\Jetstream\Events\TeamMemberAdded;
 use Laravel\Jetstream\Jetstream;
-use Laravel\Jetstream\Rules\Role;
+use Silber\Bouncer\BouncerFacade;
 
 class AddTeamMember implements AddsTeamMembers
 {
@@ -29,8 +31,11 @@ class AddTeamMember implements AddsTeamMembers
         AddingTeamMember::dispatch($team, $newTeamMember);
 
         $team->users()->attach(
-            $newTeamMember, ['role' => $role]
+            $newTeamMember
         );
+
+        BouncerFacade::scope()->to($team->id)->onlyRelations()->dontScopeRoleAbilities();
+        BouncerFacade::assign($role)->to($newTeamMember->id);
 
         TeamMemberAdded::dispatch($team, $newTeamMember);
     }
@@ -59,9 +64,7 @@ class AddTeamMember implements AddsTeamMembers
     {
         return array_filter([
             'email' => ['required', 'email', 'exists:users'],
-            'role' => Jetstream::hasRoles()
-                            ? ['required', 'string', new Role]
-                            : null,
+            'role' => ['required', 'string', new Role()]
         ]);
     }
 

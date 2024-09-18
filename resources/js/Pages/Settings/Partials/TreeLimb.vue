@@ -1,104 +1,14 @@
-<template>
-  <li class="ml-6">
-    <div
-      class="flex items-center font-medium mb-2"
-      @click="toggle"
-    >
-      <template v-if="hasChildren">
-        <ChevronDownIcon
-          v-if="isOpen"
-          class="h-5 w-5"
-        />
-        <ChevronRightIcon
-          v-else
-          class="h-5 w-5"
-        />
-      </template>
-
-      <Input
-        v-if="editing"
-        ref="input"
-        v-model="text"
-        name="child-term-editing"
-        class="w-52"
-      />
-      <span
-        v-else-if="limb.data.isCustom"
-        class="ml-7"
-      >
-        {{ text }}
-      </span>
-      <button
-        v-else
-        :class="[hasChildren ? 'ml-2' : 'ml-7']"
-      >
-        {{ text }}
-      </button>
-      <PrimaryButton
-        v-if="limb.data.canHaveCustom"
-        class="ml-3 py-1"
-        @click="addChild(limb)"
-      >
-        {{ __('Add Child Term') }}
-      </PrimaryButton>
-
-      <PrimaryButton
-        v-if="editing"
-        class="ml-3 py-1"
-        @click="updateChild(limb)"
-      >
-        {{ __('Save') }}
-      </PrimaryButton>
-      <div v-else>
-        <SecondaryButton
-          v-if="limb.data.isCustom"
-          class="ml-3 py-1"
-          @click="editChild(limb)"
-        >
-          {{ __('Edit') }}
-        </SecondaryButton>
-        <DangerButton
-          v-if="limb.data.isCustom"
-          class="ml-3 py-1"
-          @click="deleteChild(limb)"
-        >
-          {{ __('Remove') }}
-        </DangerButton>
-      </div>
-    </div>
-    <ul
-      v-show="isOpen"
-      v-if="hasChildren"
-      class="space-y-2"
-    >
-      <TreeLimb
-        v-for="child in limb.children"
-        :key="child.id"
-        :ref="'node'+child.id"
-        :limb="child"
-        :category="category"
-        @delete-limb="spliceLimb"
-      />
-    </ul>
-  </li>
-</template>
-
-<script>
+<script setup>
 import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/vue/24/outline';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import SecondaryButton from '@/Components/FormElements/SecondaryButton.vue';
 import DangerButton from '@/Components/FormElements/DangerButton.vue';
-import Input from '@/Components/FormElements/Input.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import {__} from '@/Composables/Translate';
+</script>
 
+<script>
 export default {
-    components: {
-        ChevronRightIcon,
-        ChevronDownIcon,
-        PrimaryButton,
-        SecondaryButton,
-        DangerButton,
-        Input
-    },
     props: {
         limb: Object,
         category: String
@@ -180,3 +90,87 @@ export default {
     }
 };
 </script>
+
+<template>
+  <li class="ml-6">
+    <div
+      class="flex items-center font-medium mb-2"
+      @click="toggle"
+    >
+      <template v-if="hasChildren">
+        <ChevronDownIcon
+          v-if="isOpen"
+          class="h-5 w-5"
+        />
+        <ChevronRightIcon
+          v-else
+          class="h-5 w-5"
+        />
+      </template>
+      <TextInput
+        v-if="editing"
+        ref="input"
+        v-model="text"
+        name="child-term-editing"
+        class="w-52"
+      />
+      <span
+        v-else-if="limb.data.isCustom"
+        class="ml-7"
+      >
+        {{ text }}
+      </span>
+      <button
+        v-else
+        :class="[hasChildren ? 'ml-2' : 'ml-7']"
+      >
+        {{ text }}
+      </button>
+      <PrimaryButton
+        v-if="limb.data.canHaveCustom"
+        class="ml-3 py-1"
+        @click="addChild(limb)"
+      >
+        {{ __('Add Child Term') }}
+      </PrimaryButton>
+
+      <PrimaryButton
+        v-if="editing"
+        class="ml-3 py-1"
+        @click="updateChild(limb)"
+      >
+        {{ __('Save') }}
+      </PrimaryButton>
+      <div v-else>
+        <SecondaryButton
+          v-if="limb.data.isCustom"
+          class="ml-3 py-1"
+          @click="editChild(limb)"
+        >
+          {{ __('Edit') }}
+        </SecondaryButton>
+        <DangerButton
+          v-if="limb.data.isCustom"
+          class="ml-3 py-1"
+          @click="deleteChild(limb)"
+        >
+          {{ __('Remove') }}
+        </DangerButton>
+      </div>
+    </div>
+    <ul
+      v-show="isOpen"
+      v-if="hasChildren"
+      class="space-y-2"
+    >
+      <TreeLimb
+        v-for="child in limb.children"
+        :key="child.id"
+        :ref="'node'+child.id"
+        :limb="child"
+        :category="category"
+        @delete-limb="spliceLimb"
+      />
+    </ul>
+  </li>
+</template>

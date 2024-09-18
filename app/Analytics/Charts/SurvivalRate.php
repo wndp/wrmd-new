@@ -2,11 +2,14 @@
 
 namespace App\Analytics\Charts;
 
-use App\Models\Admission;
 use App\Analytics\Concerns\HandleSeriesNames;
 use App\Analytics\Contracts\Chart;
 use App\Analytics\DataSet;
 use App\Analytics\SurvivalRateCollection;
+use App\Enums\AttributeOptionName;
+use App\Enums\AttributeOptionUiBehavior;
+use App\Models\Admission;
+use Illuminate\Support\Facades\DB;
 
 class SurvivalRate extends Chart
 {
@@ -61,18 +64,34 @@ class SurvivalRate extends Chart
 
     public function query($segment)
     {
+        [
+            $pendingPatientId,
+            $releasedPatientId,
+            $transferredPatientId,
+            $doaPatientId,
+            $diedPatientId,
+            $euthanizedPatientId
+        ] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_PENDING->value],
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_RELEASED->value],
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_TRANSFERRED->value],
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_DOA->value],
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_DIED->value],
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_EUTHANIZED->value]
+        ]);
+
         $query = Admission::where('team_id', $this->team->id)
-            ->selectRaw('count(*) as `total`')
-            ->selectRaw("sum(if(`disposition` = 'Pending', 1, 0)) as `pending`")
-            ->selectRaw("sum(if(`disposition` = 'Released', 1, 0)) as `released`")
-            ->selectRaw("sum(if(`disposition` = 'Transferred', 1, 0)) as `transferred`")
-            ->selectRaw("sum(if(`disposition` = 'Dead on arrival', 1, 0)) as `doa`")
-            ->selectRaw("sum(if(`disposition` = 'Died in 24hr', 1, 0)) as `died_in_24`")
-            ->selectRaw("sum(if(`disposition` = 'Euthanized in 24hr', 1, 0)) as `euthanized_in_24`")
+            ->addSelect(DB::raw('count(*) as `total`'))
+            ->addSelect(DB::raw("sum(if(`disposition_id` = $pendingPatientId, 1, 0)) as `pending`"))
+            ->addSelect(DB::raw("sum(if(`disposition_id` = $releasedPatientId, 1, 0)) as `released`"))
+            ->addSelect(DB::raw("sum(if(`disposition_id` = $transferredPatientId, 1, 0)) as `transferred`"))
+            ->addSelect(DB::raw("sum(if(`disposition_id` = $doaPatientId, 1, 0)) as `doa`"))
+            ->addSelect(DB::raw("sum(if(`disposition_id` in (".implode(',', $diedPatientId)."), 1, 0)) as `died`"))
+            ->addSelect(DB::raw("sum(if(`disposition_id` in (".implode(',', $euthanizedPatientId)."), 1, 0)) as `euthanized`"))
             ->joinPatients();
 
         if ($this->filters->date_period !== 'all-dates') {
-            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+            $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         }
 
         $this->withSegment($query, $segment);
@@ -82,16 +101,32 @@ class SurvivalRate extends Chart
 
     public function compareQuery($segment)
     {
+        [
+            $pendingPatientId,
+            $releasedPatientId,
+            $transferredPatientId,
+            $doaPatientId,
+            $diedPatientId,
+            $euthanizedPatientId
+        ] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_PENDING->value],
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_RELEASED->value],
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_TRANSFERRED->value],
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_DOA->value],
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_DIED->value],
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_EUTHANIZED->value]
+        ]);
+
         $query = Admission::where('team_id', $this->team->id)
-            ->selectRaw('count(*) as `total`')
-            ->selectRaw("sum(if(`disposition` = 'Pending', 1, 0)) as `pending`")
-            ->selectRaw("sum(if(`disposition` = 'Released', 1, 0)) as `released`")
-            ->selectRaw("sum(if(`disposition` = 'Transferred', 1, 0)) as `transferred`")
-            ->selectRaw("sum(if(`disposition` = 'Dead on arrival', 1, 0)) as `doa`")
-            ->selectRaw("sum(if(`disposition` = 'Died in 24hr', 1, 0)) as `died_in_24`")
-            ->selectRaw("sum(if(`disposition` = 'Euthanized in 24hr', 1, 0)) as `euthanized_in_24`")
+            ->addSelect(DB::raw('count(*) as `total`'))
+            ->addSelect(DB::raw("sum(if(`disposition_id` = $pendingPatientId, 1, 0)) as `pending`"))
+            ->addSelect(DB::raw("sum(if(`disposition_id` = $releasedPatientId, 1, 0)) as `released`"))
+            ->addSelect(DB::raw("sum(if(`disposition_id` = $transferredPatientId, 1, 0)) as `transferred`"))
+            ->addSelect(DB::raw("sum(if(`disposition_id` = $doaPatientId, 1, 0)) as `doa`"))
+            ->addSelect(DB::raw("sum(if(`disposition_id` in (".implode(',', $diedPatientId)."), 1, 0)) as `died`"))
+            ->addSelect(DB::raw("sum(if(`disposition_id` in (".implode(',', $euthanizedPatientId)."), 1, 0)) as `euthanized`"))
             ->joinPatients()
-            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to);
+            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at');
 
         $this->withSegment($query, $segment);
 

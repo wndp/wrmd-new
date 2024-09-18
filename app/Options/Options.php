@@ -7,6 +7,13 @@ use Illuminate\Support\Arr;
 
 class Options implements Arrayable
 {
+    public static function enumsToSelectable(array $enums)
+    {
+        $array = Arr::mapWithKeys($enums, fn ($enum) => [$enum->value => $enum->label()]);
+
+        return static::arrayToSelectable($array);
+    }
+
     /**
      * Get the transformed options as an array.
      */
@@ -47,7 +54,7 @@ class Options implements Arrayable
         }
 
         if (! Arr::isAssoc($array)) {
-            $array = value_as_key($array);
+            $array = static::valueAsKey($array);
         }
 
         return collect($array)->transform(function ($label, $value) {
@@ -61,5 +68,34 @@ class Options implements Arrayable
     public static function isMultidimensional(array $array): bool
     {
         return count($array) !== count($array, COUNT_RECURSIVE);
+    }
+
+    /**
+     * Create an array where the values are also the keys.
+     *
+     * @param  bool  $nullFirstOption
+     * @return array
+     */
+    public static function valueAsKey(array $oldArray = [], $nullFirstOption = false)
+    {
+        $newArray = [];
+
+        if (empty($oldArray)) {
+            return $newArray;
+        }
+
+        if ($nullFirstOption) {
+            $newArray[''] = '';
+        }
+
+        if (is_array($oldArray[key($oldArray)])) {
+            $newArray += array_map(function ($array) {
+                return static::valueAsKey($array);
+            }, $oldArray);
+        } else {
+            $newArray += array_combine($oldArray, $oldArray);
+        }
+
+        return $newArray;
     }
 }

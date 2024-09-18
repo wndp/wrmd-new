@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Settings;
 
-use App\Domain\Accounts\Veterinarian;
-use App\Domain\Locality\LocaleOptions;
-use App\Domain\Options;
-use App\Domain\OptionsStore;
 use App\Http\Controllers\Controller;
+use App\Models\Veterinarian;
+use App\Options\LocaleOptions;
+use App\Options\Options;
+use App\Repositories\OptionsStore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -18,7 +18,7 @@ class VeterinariansController extends Controller
      */
     public function index()
     {
-        $veterinarians = Veterinarian::where('account_id', Auth::user()->currentAccount->id)
+        $veterinarians = Veterinarian::where('team_id', Auth::user()->currentTeam->id)
             ->get()
             ->append('full_address');
 
@@ -30,10 +30,10 @@ class VeterinariansController extends Controller
      */
     public function create(LocaleOptions $options)
     {
-        OptionsStore::merge($options);
+        OptionsStore::add($options);
 
         $users = Options::arrayToSelectable(
-            Auth::user()->currentAccount->users->where('is_api_user', false)->pluck('name', 'id')->toArray()
+            Auth::user()->currentTeam->allUsers()->where('is_api_user', false)->pluck('name', 'id')->toArray()
         );
 
         return Inertia::render('Settings/Veterinarians/Create', compact('users'));
@@ -60,14 +60,14 @@ class VeterinariansController extends Controller
             'phone',
             'email',
         )), function ($veterinarian) use ($request) {
-            $veterinarian->account_id = Auth::user()->currentAccount->id;
+            $veterinarian->team_id = Auth::user()->currentTeam->id;
             $veterinarian->user_id = $request->input('user_id');
             $veterinarian->save();
         });
 
         return redirect()->route('veterinarians.index')
-            ->with('flash.notificationHeading', __('Veterinarian Created'))
-            ->with('flash.notification', __(':name was added to your account.', ['name' => $veterinarian->name]));
+            ->with('notification.heading', __('Veterinarian Created'))
+            ->with('notification.text', __(':name was added to your account.', ['name' => $veterinarian->name]));
     }
 
     /**
@@ -75,12 +75,12 @@ class VeterinariansController extends Controller
      */
     public function edit(Veterinarian $veterinarian, LocaleOptions $options)
     {
-        OptionsStore::merge($options);
+        OptionsStore::add($options);
 
-        $veterinarian->validateOwnership(Auth::user()->currentAccount->id);
+        $veterinarian->validateOwnership(Auth::user()->currentTeam->id);
 
         $users = Options::arrayToSelectable(
-            Auth::user()->currentAccount->users->where('is_api_user', false)->pluck('name', 'id')->toArray()
+            Auth::user()->currentTeam->allUsers()->where('is_api_user', false)->pluck('name', 'id')->toArray()
         );
 
         return Inertia::render('Settings/Veterinarians/Edit', compact('users', 'veterinarian'));
@@ -96,7 +96,7 @@ class VeterinariansController extends Controller
             'license' => 'required',
         ]);
 
-        $veterinarian->validateOwnership(Auth::user()->currentAccount->id);
+        $veterinarian->validateOwnership(Auth::user()->currentTeam->id);
 
         $veterinarian = tap($veterinarian->fill($request->only(
             'name',
@@ -114,8 +114,8 @@ class VeterinariansController extends Controller
         });
 
         return redirect()->route('veterinarians.index')
-            ->with('flash.notificationHeading', __('Veterinarian Updated'))
-            ->with('flash.notification', __(':name was updated.', ['name' => $veterinarian->name]));
+            ->with('notification.heading', __('Veterinarian Updated'))
+            ->with('notification.text', __(':name was updated.', ['name' => $veterinarian->name]));
     }
 
     /**
@@ -123,12 +123,12 @@ class VeterinariansController extends Controller
      */
     public function destroy(Veterinarian $veterinarian)
     {
-        $veterinarian->validateOwnership(Auth::user()->currentAccount->id);
+        $veterinarian->validateOwnership(Auth::user()->currentTeam->id);
 
         $veterinarian->delete();
 
         return redirect()->route('veterinarians.index')
-            ->with('flash.notificationHeading', __('Veterinarian Deleted'))
-            ->with('flash.notification', __(':name was deleted from your account.', ['name' => $veterinarian->name]));
+            ->with('notification.heading', __('Veterinarian Deleted'))
+            ->with('notification.text', __(':name was deleted from your account.', ['name' => $veterinarian->name]));
     }
 }

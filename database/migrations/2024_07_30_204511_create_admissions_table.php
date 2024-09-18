@@ -11,11 +11,13 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('admissions', function (Blueprint $table) {
+            $table->uuid()->index();
             $table->unsignedBigInteger('team_id');
             $table->unsignedInteger('case_year');
             $table->unsignedBigInteger('case_id');
             $table->unsignedBigInteger('patient_id')->index();
-            $table->string('hash', 20)->index();
+            $table->string('hash', 20)->nullable()->index();
+            $table->timestamps();
 
             $table->shardKey(['team_id', 'case_year', 'case_id']);
         });

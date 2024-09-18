@@ -1,3 +1,35 @@
+<script setup>
+import FormSection from '@/Components/FormElements/FormSection.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import SelectInput from '@/Components/FormElements/SelectInput.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import {__} from '@/Composables/Translate';
+
+defineProps({
+  title: {
+    type: String,
+    required: true
+  },
+  form: {
+    type: Object,
+    default: () => ({})
+  },
+  action: {
+    type: String,
+    required: true
+  },
+  users: {
+    type: Array,
+    required: true
+  }
+});
+
+defineEmits(['actionClicked']);
+</script>
+
 <template>
   <FormSection>
     <template #title>
@@ -7,8 +39,10 @@
       {{ __('Adding veterinarians to your account allows them to assign duties and responsibilities (daily tasks, prescriptions, ...) under their authority. You may include address and contact information for your veterinarians if they do not primary work at your organization.') }}
     </template>
     <div class="col-span-4 sm:col-span-2">
-      <Label for="name">{{ __('Name') }}</Label>
-      <Input
+      <InputLabel for="name">
+        {{ __('Name') }}
+      </InputLabel>
+      <TextInput
         v-model="form.name"
         name="name"
         autocomplete="given-name"
@@ -20,8 +54,10 @@
       />
     </div>
     <div class="col-span-4 sm:col-span-2">
-      <Label for="license">{{ __('License Number') }}</Label>
-      <Input
+      <InputLabel for="license">
+        {{ __('License Number') }}
+      </InputLabel>
+      <TextInput
         v-model="form.license"
         name="license"
         autocomplete="off"
@@ -33,8 +69,10 @@
       />
     </div>
     <div class="col-span-4 sm:col-span-2">
-      <Label for="user_id">{{ __('WRMD User') }}</Label>
-      <Select
+      <InputLabel for="user_id">
+        {{ __('WRMD User') }}
+      </InputLabel>
+      <SelectInput
         v-model="form.user_id"
         name="user_id"
         :options="$page.props.users"
@@ -46,8 +84,10 @@
       />
     </div>
     <div class="col-span-4 sm:col-span-2">
-      <Label for="business_name">{{ __('Business Name') }}</label>
-      <Input
+      <InputLabel for="business_name">
+        {{ __('Business Name') }}
+      </InputLabel>
+      <TextInput
         v-model="form.business_name"
         name="business_name"
         autocomplete="organization"
@@ -59,8 +99,10 @@
       />
     </div>
     <div class="col-span-4 sm:col-span-2">
-      <Label for="address">{{ __('Address') }}</label>
-      <Input
+      <InputLabel for="address">
+        {{ __('Address') }}
+      </InputLabel>
+      <TextInput
         v-model="form.address"
         name="address"
         autocomplete="address-line1"
@@ -72,8 +114,10 @@
       />
     </div>
     <div class="col-span-4 sm:col-span-2">
-      <Label for="city">{{ __('City') }}</label>
-      <Input
+      <InputLabel for="city">
+        {{ __('City') }}
+      </InputLabel>
+      <TextInput
         v-model="form.city"
         name="city"
         autocomplete="address-level2"
@@ -85,8 +129,10 @@
       />
     </div>
     <div class="col-span-4 sm:col-span-2">
-      <Label for="subdivision">{{ __('State') }}</label>
-      <Select
+      <InputLabel for="subdivision">
+        {{ __('State') }}
+      </InputLabel>
+      <SelectInput
         v-model="form.subdivision"
         name="subdivision"
         :options="$page.props.options.subdivisions"
@@ -98,8 +144,10 @@
       />
     </div>
     <div class="col-span-4 sm:col-span-2">
-      <Label for="postal-code">{{ __('ZIP / Postal') }}</label>
-      <Input
+      <InputLabel for="postal-code">
+        {{ __('ZIP / Postal') }}
+      </InputLabel>
+      <TextInput
         v-model="form.postal_code"
         name="postal-code"
         autocomplete="postal-code"
@@ -111,8 +159,10 @@
       />
     </div>
     <div class="col-span-4 sm:col-span-2">
-      <Label for="email">{{ __('Email address') }}</Label>
-      <Input
+      <InputLabel for="email">
+        {{ __('Email address') }}
+      </InputLabel>
+      <TextInput
         v-model="form.email"
         type="email"
         name="email"
@@ -125,8 +175,10 @@
       />
     </div>
     <div class="col-span-4 sm:col-span-2">
-      <Label for="email">{{ __('Phone Number') }}</Label>
-      <Input
+      <InputLabel for="email">
+        {{ __('Phone Number') }}
+      </InputLabel>
+      <TextInput
         v-model="form.phone"
         name="phone"
         autocomplete="tel"
@@ -137,7 +189,6 @@
         class="mt-2"
       />
     </div>
-
     <template #actions>
       <ActionMessage
         :on="form.recentlySuccessful"
@@ -148,62 +199,10 @@
       <PrimaryButton
         :class="{ 'opacity-25': form.processing }"
         :disabled="form.processing"
-        @click="$emit('saved')"
+        @click="$emit('actionClicked')"
       >
         {{ action }}
       </PrimaryButton>
     </template>
   </FormSection>
 </template>
-
-<script setup>
-import FormSection from '@/Components/FormElements/FormSection.vue';
-import Label from '@/Components/FormElements/Label.vue';
-import Input from '@/Components/FormElements/Input.vue';
-import Select from '@/Components/FormElements/Select.vue';
-import InputError from '@/Components/FormElements/InputError.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import hoistForm from '@/Mixins/HoistForm';
-</script>
-
-<script>
-  export default {
-    mixins: [hoistForm],
-    props: {
-      title: {
-        type: String,
-        required: true
-      },
-      action: {
-        type: String,
-        required: true
-      },
-      users: {
-        type: Array,
-        required: true
-      },
-      veterinarian: {
-        type: Object,
-        default: () => ({})
-      }
-    },
-    emits: ['saved'],
-    data() {
-      return {
-        form: this.$inertia.form({
-          name: this.veterinarian.id ? this.veterinarian.name : '',
-          license: this.veterinarian.id ? this.veterinarian.license : '',
-          business_name: this.veterinarian.id ? this.veterinarian.business_name : '',
-          address: this.veterinarian.id ? this.veterinarian.address : '',
-          city: this.veterinarian.id ? this.veterinarian.city : '',
-          subdivision: this.veterinarian.id ? this.veterinarian.subdivision : '',
-          postal_code: this.veterinarian.id ? this.veterinarian.postal_code : '',
-          phone: this.veterinarian.id ? this.veterinarian.phone : '',
-          email: this.veterinarian.id ? this.veterinarian.email : '',
-          user_id: this.veterinarian.id ? this.veterinarian.user?.id : '',
-        }),
-      };
-    },
-  };
-</script>

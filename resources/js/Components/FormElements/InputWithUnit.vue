@@ -1,17 +1,61 @@
+<script setup>
+import {ref, watch} from 'vue';
+import TextInput from './TextInput.vue';
+import SelectInput from './SelectInput.vue';
+
+defineOptions({
+    inheritAttrs: false,
+});
+
+const props = defineProps({
+    text: {
+        type: [String, Number],
+        default: null
+    },
+    unit: {
+        type: [String, Number],
+        default: null
+    },
+    units: {
+        type: Array,
+        required: true
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    type: {
+        type: String,
+        default: 'number'
+    }
+});
+
+const emit = defineEmits(['update:text', 'update:unit']);
+
+const mutableTextValue = ref(props.text);
+const mutableUnitValue = ref(props.unit);
+
+watch(() => props.text, (newValue) => mutableTextValue.value = newValue);
+watch(() => props.unit, (newValue) => mutableUnitValue.value = newValue);
+watch(() => mutableTextValue.value, (newValue) => emit('update:text', newValue));
+watch(() => mutableUnitValue.value, (newValue) => emit('update:unit', newValue));
+</script>
+
 <template>
   <div>
     <div class="flex relative rounded-md shadow-sm">
-      <Input
+      <TextInput
         v-model="mutableTextValue"
         :name="name"
-        class="rounded-r-none border-r-gray-200 text-right"
+        :type="type"
+        class="rounded-r-none border-r-gray-200 text-right flex-1"
       />
       <div class="absolut inset-y-0 right-0 flex items-center">
         <label
           for="currency"
           class="sr-only"
         >Unit</label>
-        <Select
+        <SelectInput
           v-model="mutableUnitValue"
           :name="`${name}_unit`"
           :options="units"
@@ -21,42 +65,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import Input from './Input.vue';
-import Select from './Select.vue';
-</script>
-
-<script>
-export default {
-    inheritAttrs: false,
-    props: ['text', 'unit', 'units', 'name'],
-    emits: ['update:text', 'update:unit'],
-    data() {
-      return {
-        mutableTextValue: this.text,
-        mutableUnitValue: this.unit
-      }
-    },
-    watch: {
-        text (newValue) {
-            this.mutableTextValue = newValue;
-        },
-        unit (newValue) {
-            this.mutableUnitValue = newValue;
-        },
-        mutableTextValue (newValue) {
-            this.$emit('update:text', newValue);
-        },
-        mutableUnitValue (newValue) {
-            this.$emit('update:unit', newValue);
-        }
-    },
-    methods: {
-        focus() {
-            this.$refs.input.focus();
-        }
-    }
-};
-</script>
-

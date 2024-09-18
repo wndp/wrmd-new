@@ -2,26 +2,21 @@
 
 namespace App\Providers;
 
+use App\Models\Patient;
 use App\Repositories\SettingsStore;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Number;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * The application level policy definitions.
-     *
-     * @var array
-     */
-    protected $applicationPolicies = [
-        \App\Policies\AdminPolicy::class,
-        \App\Policies\PrivacyPolicy::class,
-        \App\Policies\OperationsPolicy::class,
-    ];
-
     /**
      * Register any application services.
      */
@@ -30,6 +25,14 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(SettingsStore::class, function () {
             if (Auth::check()) {
                 return new SettingsStore(Auth::user()->currentTeam);
+            }
+        });
+
+        $this->app->singleton(PdfApiInterface::class, function () {
+            if (config('wrmd.reporting.pdf_driver') === 'api2pdf') {
+                return new Api2Pdf(config('services.api2pdf.key'));
+            } else {
+                return new NullPdfEngine();
             }
         });
     }
@@ -51,21 +54,39 @@ class AppServiceProvider extends ServiceProvider
             return ['data' => $jobData];
         });
 
-        foreach ($this->applicationPolicies as $policy) {
+        RateLimiter::for(
+            'auth',
+            fn (Request $request) =>
+            App::isProduction() ? [
+                Limit::perMinute(500),
+                Limit::perMinute(5)->by($request->ip()),
+                Limit::perMinute(5)->by($request->input('email')),
+            ] : Limit::none()
+        );
+
+        RateLimiter::for(
+            'api',
+            fn (Request $request) => Limit::perMinute(60)->by($request->user()?->id ?: $request->ip())
+        );
+
+        Route::bind('voidedPatient', fn ($value) => Patient::onlyVoided()->findOrFail($value));
+
+        foreach ([
+            \App\Policies\AdminPolicy::class,
+            \App\Policies\PrivacyPolicy::class,
+            \App\Policies\OperationsPolicy::class,
+        ] as $policy) {
             foreach (get_class_methods(new $policy()) as $method) {
                 Gate::define($method, "$policy@$method");
             }
         }
 
-        Number::macro('significantFigures', function ($number, $significantFigures) {
-            // May be negative.
-            $decimalPlaces = intval(floor($significantFigures - log10(abs($number))));
-
-            // Round as a regular number.
-            $number = round($number, $decimalPlaces);
-
-            // Leave the formatting to number_format(), but always format 0 to 0 decimal places.
-            return (float) number_format($number, 0 == $number ? 0 : $decimalPlaces);
-        });
+        foreach ([
+            'significantFigures' => \App\Macros\SignificantFigures::class,
+            'percentageOf' => \App\Macros\PercentageOf::class,
+            'survivalRate' => \App\Macros\SurvivalRate::class
+        ] as $macro => $class) {
+            Number::macro($macro, app($class)());
+        }
     }
 }

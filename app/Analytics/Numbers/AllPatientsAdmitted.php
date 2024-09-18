@@ -30,7 +30,7 @@ class AllPatientsAdmitted extends Number
             ->where('accounts.is_active', true);
 
         if ($this->filters->date_period !== 'all-dates') {
-            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+            $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         }
 
         return $query->count();

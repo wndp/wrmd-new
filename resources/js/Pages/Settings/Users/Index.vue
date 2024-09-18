@@ -1,3 +1,16 @@
+<script setup>
+import AppLayout from '@/Layouts/AppLayout.vue';
+import SettingsAside from '../Partials/SettingsAside.vue';
+import {__} from '@/Composables/Translate';
+
+defineProps({
+  users: {
+    type: Array,
+    required: true
+  }
+});
+</script>
+
 <template>
   <AppLayout title="Users">
     <div class="lg:grid grid-cols-8 gap-8 mt-4">
@@ -78,15 +91,3 @@
     </div>
   </AppLayout>
 </template>
-
-<script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import SettingsAside from '../Partials/SettingsAside.vue';
-
-defineProps({
-  users: {
-    type: Array,
-    required: true
-  }
-});
-</script>

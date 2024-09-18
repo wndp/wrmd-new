@@ -28,7 +28,7 @@ class PatientsAdmitted extends Number
         $query = Admission::where('team_id', $this->team->id)->joinPatients();
 
         if ($this->filters->date_period !== 'all-dates') {
-            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+            $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         }
 
         $this->withSegment($query, $segment);
@@ -40,7 +40,7 @@ class PatientsAdmitted extends Number
     {
         $query = Admission::where('team_id', $this->team->id)
             ->joinPatients()
-            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to);
+            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at');
 
         $this->withSegment($query, $segment);
 

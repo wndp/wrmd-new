@@ -53,7 +53,7 @@ watch(() => props.timezones, (newVal) => form.timezone = newVal[0].value)
       <SelectInput
         v-model="form.language"
         name="language"
-        :options="$page.props.options.languages"
+        :options="$page.props.options.languageOptions"
         class="mt-1"
       />
     </div>

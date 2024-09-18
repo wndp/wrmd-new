@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Settings;
 
-use App\Domain\Users\User;
 use App\Events\AccountUpdated;
+use App\Events\TeamUpdated;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Support\Wrmd;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -15,13 +18,30 @@ use Silber\Bouncer\BouncerFacade;
 
 class PrivacyController extends Controller
 {
+    public function __construct()
+    {
+        Collection::macro('flipFlop', function () {
+            $result = $this->keys()->reduce(function ($carry1, $previousKey) {
+                $keys = $this->offsetGet($previousKey);
+
+                return array_merge_recursive($carry1, array_reduce($keys, function ($carry2, $newKey) use ($previousKey) {
+                    $carry2[$newKey][] = $previousKey;
+
+                    return $carry2;
+                }, []));
+            }, []);
+
+            return new self($result);
+        });
+    }
+
     /**
      * Show the form for editing the privacy settings.
      */
     public function edit(): Response
     {
-        $users = Auth::user()->currentAccount->users->where('is_api_user', false)->values();
-        $fullPeopleAccess = (bool) settings('fullPeopleAccess', 0);
+        $users = Auth::user()->currentTeam->allUsers()->where('is_api_user', false)->values();
+        $fullPeopleAccess = (bool) Wrmd::settings('fullPeopleAccess', 0);
         $authorized = $users
             ->each
             ->load('abilities')
@@ -46,25 +66,27 @@ class PrivacyController extends Controller
             'combinePeople'
         );
 
-        $accountUsers = Auth::user()->currentAccount->users;
-        $this->disallowAllPeopleAbilities($accountUsers);
-        $this->allowPeopleAbilities($accountUsers, $abilities);
-        settings()->set($request->all('fullPeopleAccess'));
+        $teammates = Auth::user()->currentTeam->allUsers()->where('is_api_user', false)->values();
 
-        event(new AccountUpdated(auth()->user()->currentAccount));
+        $this->disallowAllPeopleAbilities($teammates);
+        $this->allowPeopleAbilities($teammates, $abilities);
+
+        Wrmd::settings($request->all('fullPeopleAccess'));
+
+        event(new TeamUpdated(auth()->user()->currentTeam));
         BouncerFacade::refresh();
 
         return redirect()->route('privacy.edit')
-            ->with('flash.notificationHeading', __('Success!'))
-            ->with('flash.notification', __('People privacy settings updated.'));
+            ->with('notification.heading', __('Success'))
+            ->with('notification.text', __('People privacy settings updated.'));
     }
 
     /**
      * Disallow all people abilities from all users of the current account.
      */
-    private function disallowAllPeopleAbilities($accountUsers): void
+    private function disallowAllPeopleAbilities($teammates): void
     {
-        $accountUsers->each(function ($user) {
+        $teammates->each(function ($user) {
             $user->disallow([
                 'display-people',
                 'display-rescuer',
@@ -80,7 +102,7 @@ class PrivacyController extends Controller
     /**
      * Assign allowed people abilities to the requested account users.
      */
-    private function allowPeopleAbilities($accountUsers, array $abilities): void
+    private function allowPeopleAbilities($teammates, array $abilities): void
     {
         $flopped = collect($abilities)
             ->mapWithKeys(function ($emails, $ability) {
@@ -89,7 +111,7 @@ class PrivacyController extends Controller
             ->filter()
             ->flipFlop();
 
-        $users = $accountUsers->whereIn('email', $flopped->keys());
+        $users = $teammates->whereIn('email', $flopped->keys());
 
         foreach ($flopped as $userEmail => $abilities) {
             $user = $users->where('email', $userEmail)->first();

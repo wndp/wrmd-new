@@ -31,7 +31,7 @@ class UsersAuthorizationsController extends Controller
         BouncerFacade::refreshFor($user);
 
         return redirect()->route('users.edit', $user)
-            ->with('flash.notificationHeading', 'Authorizations Updated')
-            ->with('flash.notification', "Updated {$user->name}'s authorizations.");
+            ->with('notification.heading', 'Authorizations Updated')
+            ->with('notification.text', "Updated {$user->name}'s authorizations.");
     }
 }

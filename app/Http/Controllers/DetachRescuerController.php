@@ -11,14 +11,14 @@ class DetachRescuerController extends Controller
 {
     public function __invoke(Request $request, Patient $patient): RedirectResponse
     {
-        $patient->validateOwnership(Auth::user()->current_account_id);
+        $patient->validateOwnership(Auth::user()->current_team_id);
 
         $newRescuer = tap($patient->rescuer->replicate(), fn ($newRescuer) => $newRescuer->save());
         $patient->rescuer_id = $newRescuer->id;
         $patient->save();
 
         return redirect()->back()
-            ->with('flash.notificationHeading', 'Success!')
-            ->with('flash.notification', 'This rescuer has been detached.');
+            ->with('notification.heading', 'Success!')
+            ->with('notification.text', 'This rescuer has been detached.');
     }
 }

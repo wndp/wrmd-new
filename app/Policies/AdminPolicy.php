@@ -51,7 +51,7 @@ class AdminPolicy
         ]);
     }
 
-    public function displayRevisions($user)
+    public function viewRevisions($user)
     {
         return in_array($user->id, []);
     }

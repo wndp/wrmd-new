@@ -1,5 +1,6 @@
 <script setup>
-import Label from '@/Components/FormElements/Label.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
 
 defineProps({
     id: {
@@ -10,18 +11,23 @@ defineProps({
         type: String,
         default: null
     },
+    required: {
+      type: Boolean,
+      default: false
+    }
 });
 </script>
 
 <template>
-  <div class="lg:flex lg:items-center">
-    <Label
+  <div>
+    <InputLabel
       v-if="label !== null"
       :for="id"
-      class="lg:mr-2 lg:w-28 lg:text-right"
-    >{{ label }}</Label>
-    <div class="mt-2 lg:mt-0 lg:flex-1">
-      <slot />
-    </div>
+      :class="{'mb-2': label !== null}"
+    >
+      {{ label }}
+      <RequiredInput v-if="required" />
+    </InputLabel>
+    <slot />
   </div>
 </template>

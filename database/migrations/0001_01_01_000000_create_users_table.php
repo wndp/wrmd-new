@@ -19,6 +19,7 @@ return new class () extends Migration {
             $table->rememberToken();
             $table->unsignedBigInteger('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
+            $table->boolean('is_api_user')->default(0);
             $table->timestamps();
         });
 

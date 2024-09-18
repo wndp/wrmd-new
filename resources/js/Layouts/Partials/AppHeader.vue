@@ -20,6 +20,7 @@ import {
 } from '@heroicons/vue/24/outline';
 import {__} from '@/Composables/Translate';
 import {can} from '@/Composables/Can';
+import {Abilities} from '@/Enums/Abilities';
 </script>
 
 <script>
@@ -215,9 +216,9 @@ export default {
                     </Link>
                   </MenuItem>
                 </div>
-                <div v-if="can('displaySettings') || can('displayMaintenance')">
+                <div v-if="can(Abilities.COMPUTED_VIEW_SETTINGS) || can(Abilities.COMPUTED_VIEW_MAINTENANCE)">
                   <MenuItem
-                    v-if="can('displaySettings')"
+                    v-if="can(Abilities.COMPUTED_VIEW_SETTINGS)"
                     v-slot="{ active }"
                   >
                     <Link
@@ -233,7 +234,7 @@ export default {
                     </Link>
                   </MenuItem>
                   <MenuItem
-                    v-if="can('displayMaintenance')"
+                    v-if="can(Abilities.COMPUTED_VIEW_MAINTENANCE)"
                     v-slot="{ active }"
                   >
                     <Link
@@ -251,7 +252,7 @@ export default {
                 </div>
                 <div>
                   <MenuItem
-                    v-if="currentTeam.is_master_account && can('viewSubAccounts')"
+                    v-if="currentTeam.is_master_account && can(Abilities.COMPUTED_VIEW_SUB_ACCOUNTS)"
                     v-slot="{ active }"
                   >
                     <Link
@@ -299,7 +300,7 @@ export default {
                           </Link>
                         </form>
                       </template>
-                      <!-- <Link
+                      <Link
                         :href="route('choose_account.index')"
                         :class="[active ? 'bg-gray-100' : '', 'group flex items-center px-2 py-2 text-base text-gray-800']"
                       >
@@ -309,7 +310,7 @@ export default {
                           aria-hidden="true"
                         />
                         {{ __('Switch Accounts') }}
-                      </Link> -->
+                      </Link>
                     </MenuItem>
                   </template>
                   <MenuItem v-slot="{ active }">

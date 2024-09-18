@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Settings;
 
 use App\Events\AccountUpdated;
 use App\Http\Controllers\Controller;
+use App\Support\Wrmd;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
+use Laravel\Jetstream\Events\TeamUpdated;
 
 class DataSharingController extends Controller
 {
@@ -18,8 +20,8 @@ class DataSharingController extends Controller
     public function edit(): Response
     {
         $sharingSettings = [
-            'wildAlertSharing' => (bool) settings()->get('wildAlertSharing', true),
-            'exportSharing' => (bool) settings()->get('exportSharing', true),
+            'wildAlertSharing' => (bool) Wrmd::settings('wildAlertSharing', true),
+            'exportSharing' => (bool) Wrmd::settings('exportSharing', true),
         ];
 
         return Inertia::render('Settings/DataSharing', compact('sharingSettings'));
@@ -30,15 +32,15 @@ class DataSharingController extends Controller
      */
     public function update(Request $request): RedirectResponse
     {
-        settings()->set([
+        Wrmd::settings([
             'wildAlertSharing' => $request->get('wildAlertSharing'),
             'exportSharing' => $request->get('exportSharing'),
         ]);
 
-        event(new AccountUpdated(Auth::user()->currentAccount));
+        TeamUpdated::dispatch(Auth::user()->currentTeam);
 
         return redirect()->route('data-sharing.edit')
-            ->with('flash.notificationHeading', __('Success!'))
-            ->with('flash.notification', __('Data sharing settings have been updated.'));
+            ->with('notification.heading', __('Success!'))
+            ->with('notification.text', __('Data sharing settings have been updated.'));
     }
 }

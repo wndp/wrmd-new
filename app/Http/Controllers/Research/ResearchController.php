@@ -12,7 +12,7 @@ class ResearchController extends Controller
 {
     public function __invoke(ResearchOptions $researchOptions)
     {
-        OptionsStore::merge($researchOptions);
+        OptionsStore::add($researchOptions);
 
         $admission = $this->loadAdmissionAndSharePagination();
         $admission->patient->load(['banding', 'morphometric']);

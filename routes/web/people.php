@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Ability;
 use App\Http\Controllers\People\Combine\CombineMatchesController;
 use App\Http\Controllers\People\Combine\CombineMergeController;
 use App\Http\Controllers\People\Combine\CombineReviewController;
@@ -9,8 +10,9 @@ use App\Http\Controllers\People\PersonDonationsController;
 use App\Http\Controllers\People\PersonExportController;
 use App\Http\Controllers\People\PersonIncidentsController;
 use App\Http\Controllers\People\PersonPatientsController;
+use Illuminate\Auth\Middleware\Authorize;
 
-Route::middleware('can:displayPeople')->group(function () {
+Route::middleware(Authorize::using(Ability::VIEW_PEOPLE->value))->group(function () {
     Route::get('people/rescuers', [PersonController::class, 'index'])
         ->name('people.rescuers.index');
 
@@ -26,15 +28,15 @@ Route::middleware('can:displayPeople')->group(function () {
     Route::get('people/donors', [PersonController::class, 'index'])
         ->name('people.donors.index');
 
-    Route::middleware('can:create-people')
+    Route::middleware(Authorize::using(Ability::CREATE_PEOPLE->value))
         ->get('people/create', [PersonController::class, 'create'])
         ->name('people.create');
 
-    Route::middleware('can:export-people')
+    Route::middleware(Authorize::using(Ability::EXPORT_PEOPLE->value))
         ->post('people/export', PersonExportController::class)
         ->name('people.export');
 
-    Route::middleware('can:create-people')
+    Route::middleware(Authorize::using(Ability::CREATE_PEOPLE->value))
         ->post('people', [PersonController::class, 'store'])
         ->name('people.store');
 
@@ -47,7 +49,7 @@ Route::middleware('can:displayPeople')->group(function () {
     Route::delete('people/{person}', [PersonController::class, 'destroy'])
         ->name('people.destroy');
 
-    Route::middleware('can:combine-people')->group(function () {
+    Route::middleware(Authorize::using(Ability::COMBINE_PEOPLE->value))->group(function () {
         Route::get('people/combine', CombineSearchController::class)
             ->name('people.combine.search');
 

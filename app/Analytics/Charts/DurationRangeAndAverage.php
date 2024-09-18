@@ -8,7 +8,7 @@ use App\Analytics\Concerns\HandleChartPeriod;
 use App\Analytics\Concerns\HandleSeriesNames;
 use App\Analytics\Contracts\Chart;
 use App\Analytics\DataSet;
-use App\Domain\Hotline\Models\Incident;
+use App\Models\Incident;
 use Illuminate\Support\Collection;
 
 class DurationRangeAndAverage extends Chart

@@ -14,11 +14,11 @@ abstract class Table extends Analytic
     public function baseQuery()
     {
         $query = Admission::where('team_id', $this->team->id)
-            ->select('patients.taxon_id', 'disposition', 'admissions.patient_id')
+            ->select('patients.taxon_id', 'disposition_id', 'admissions.patient_id')
             ->joinPatients();
 
         if ($this->filters->date_period !== 'all-dates') {
-            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+            $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         }
 
         return $query;
@@ -34,6 +34,6 @@ abstract class Table extends Analytic
         return Admission::where('team_id', $this->team->id)
             ->select('patients.taxon_id', 'disposition', 'admissions.patient_id')
             ->joinPatients()
-            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to);
+            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at');
     }
 }

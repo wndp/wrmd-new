@@ -2,7 +2,9 @@
 
 namespace App\Support;
 
+use App\Models\Admission;
 use App\Repositories\SettingsStore;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
@@ -15,64 +17,64 @@ class Wrmd
      *
      * @var array
      */
-    public static $resources = [];
+    //public static $resources = [];
 
     /**
      * An index of resource names keyed by the model name.
      *
      * @var array
      */
-    public static $resourcesByModel = [];
+    //public static $resourcesByModel = [];
 
     /**
      * Register the given resources.
      */
-    public static function resources(string|array $resources): static
-    {
-        static::$resources = array_merge(static::$resources, Arr::wrap($resources));
+    // public static function resources(string|array $resources): static
+    // {
+    //     static::$resources = array_merge(static::$resources, Arr::wrap($resources));
 
-        return new static();
-    }
+    //     return new static();
+    // }
 
     /**
      * Get the resource class name for a given model class.
      *
      * @param  object|string  $class
      */
-    public static function resourceForModel($class): ?string
-    {
-        if (is_object($class)) {
-            $class = get_class($class);
-        }
+    // public static function resourceForModel($class): ?string
+    // {
+    //     if (is_object($class)) {
+    //         $class = get_class($class);
+    //     }
 
-        if (isset(static::$resourcesByModel[$class])) {
-            return static::$resourcesByModel[$class];
-        }
+    //     if (isset(static::$resourcesByModel[$class])) {
+    //         return static::$resourcesByModel[$class];
+    //     }
 
-        $resource = collect(static::$resources)->first(function ($value) use ($class) {
-            return $value::$resourceKey === $class;
-        });
+    //     $resource = collect(static::$resources)->first(function ($value) use ($class) {
+    //         return $value::$resourceKey === $class;
+    //     });
 
-        return static::$resourcesByModel[$class] = $resource;
-    }
+    //     return static::$resourcesByModel[$class] = $resource;
+    // }
 
     /**
      * Find a model by its resource key and primary key or throw an exception.
      *
      * @param  mixed  $class
      */
-    public static function resourceForModelOrFail($class, int $id): Model
-    {
-        $model = static::resourceForModel($class);
+    // public static function resourceForModelOrFail($class, int $id): Model
+    // {
+    //     $model = static::resourceForModel($class);
 
-        abort_if(is_null($model), 404);
+    //     abort_if(is_null($model), 404);
 
-        try {
-            return $model::findOrFail($id);
-        } catch (ModelNotFoundException $e) {
-            abort(404);
-        }
-    }
+    //     try {
+    //         return $model::findOrFail($id);
+    //     } catch (ModelNotFoundException $e) {
+    //         abort(404);
+    //     }
+    // }
 
     /**
      * Humanize the given value into a proper name.
@@ -101,29 +103,10 @@ class Wrmd
     /**
      * Get the badge color for the given model.
      */
-    public static function badge(string $value): string
-    {
-        return 'green';
-    }
-
-    /**
-     * Determine if given text is a 4 character year.
-     *
-     * @param  mixed  $text
-     * @return bool
-     */
-    public static function isYear($text)
-    {
-        if (strlen($text) === 4) {
-            if (is_int($text)) {
-                return true;
-            } elseif (is_string($text)) {
-                return ctype_digit($text);
-            }
-        }
-
-        return false;
-    }
+    // public static function badge(string $value): string
+    // {
+    //     return 'green';
+    // }
 
     public static function settings($key = null, $default = null)
     {
@@ -143,4 +126,32 @@ class Wrmd
 
         return $settings->get($key, $default);
     }
+
+    public static function patientRoute(Admission $admission)
+    {
+        // dd($admission->patient->admitted_at);
+        // $now = is_float($admission->patient->admitted_at) ? microtime(true) : time();
+        // $time = $now - $admission->patient->admitted_at;
+
+        $isWithin24hr = $admission->patient->admitted_at->greaterThan(Carbon::now()->subDays(1)); //$time <= 86400;
+        $defaultRoute = $isWithin24hr ? 'patients.initial.edit' : 'patients.continued.edit';
+
+        $events = event('patient_route', $admission->patient);
+        $route = empty($events) || empty($events[0]) ? $defaultRoute : $events[0];
+
+        //if (! empty($parameters)) {
+        return route($route, ['y' => $admission->case_year, 'c' => $admission->case_id]);
+        //}
+
+        //return $route;
+    }
+
+    // public static function iso3166(string $country, string $subdivision = null): string
+    // {
+    //     return strtoupper(
+    //         implode('-', array_filter(
+    //             [$country, $subdivision]
+    //         ))
+    //     );
+    // }
 }

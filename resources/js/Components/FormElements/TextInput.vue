@@ -9,7 +9,7 @@
     v-else
     ref="input"
     type="text"
-    class="focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md py-1.5 px-2"
+    class="focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md py-1.5 px-2 shadow-sm"
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)"
   >

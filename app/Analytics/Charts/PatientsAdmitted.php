@@ -32,7 +32,7 @@ class PatientsAdmitted extends Chart
             ->orderBy('date');
 
         if ($this->filters->date_period !== 'all-dates') {
-            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+            $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         }
 
         // if ($this->filters->limit_to_search) {
@@ -51,7 +51,7 @@ class PatientsAdmitted extends Chart
     {
         $query = Admission::where('team_id', $this->team->id)
             ->joinPatients()
-            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to)
+            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at')
             ->selectRaw('count(*) as aggregate, date_admitted_at as date')
             ->groupBy('date')
             ->orderBy('date');

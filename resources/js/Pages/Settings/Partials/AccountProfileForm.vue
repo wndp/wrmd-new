@@ -32,7 +32,7 @@ const form = useForm({
 
 const photoPreview = ref(null);
 const photoInput = ref(null);
-const mutableSubdivisions = ref(usePage().props.options.subdivisions);
+const mutableSubdivisions = ref(usePage().props.options.subdivisionOptions);
 const subdivisionLabel = ref('State');
 
 const updateProfileInformation = () => {
@@ -81,7 +81,7 @@ const clearPhotoFileInput = () => {
 };
 
 const onCountryChange = () => {
-  axios.get('/internal-api/locale/' + this.form.country)
+  axios.get('/internal-api/locale/' + form.country)
     .then(response => {
       subdivisionLabel.value = response.data.subdivision;
       mutableSubdivisions.value = response.data.subdivisions;
@@ -180,7 +180,7 @@ const onCountryChange = () => {
         v-model="form.country"
         name="country"
         autocomplete="country"
-        :options="$page.props.options.countries"
+        :options="$page.props.options.countryOptions"
         class="mt-1 block w-full"
         @change="onCountryChange"
       />

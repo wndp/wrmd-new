@@ -12,7 +12,7 @@ class NecropsyMorphometricsController extends Controller
 {
     public function __invoke(Request $request, Patient $patient)
     {
-        $patient->validateOwnership(Auth::user()->current_account_id);
+        $patient->validateOwnership(Auth::user()->current_team_id);
 
         $necropsy = Necropsy::firstOrNew(['patient_id' => $patient->id]);
         $necropsy->patient_id = $patient->id;

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Analytics;
 
-use App\Domain\Analytics\AnalyticFilters;
-use App\Domain\Analytics\AnalyticFiltersStore;
-use App\Domain\Classifications\ClassificationOptions;
-use App\Domain\OptionsStore;
-use App\Domain\Taxonomy\TaxonomyOptions;
+use App\Analytics\AnalyticFilters;
+use App\Analytics\AnalyticFiltersStore;
+use App\Enums\AttributeOptionName;
 use App\Http\Controllers\Controller;
+use App\Models\AttributeOption;
+use App\Repositories\OptionsStore;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -23,9 +23,16 @@ class AnalyticsViewController extends Controller
             'groupStudly' => Str::studly($group),
         ]]);
 
-        OptionsStore::merge(new TaxonomyOptions());
-        OptionsStore::merge(new ClassificationOptions('CircumstancesOfAdmission'), 'circumstancesOfAdmission');
-        OptionsStore::merge(new ClassificationOptions('ClinicalClassifications'), 'clinicalClassifications');
+        OptionsStore::add([
+            AttributeOption::getDropdownOptions([
+                AttributeOptionName::PATIENT_DISPOSITIONS->value,
+                AttributeOptionName::TAXA_CLASSES->value,
+            ])
+        ]);
+
+        // OptionsStore::add(new TaxonomyOptions());
+        // OptionsStore::add(new ClassificationOptions('CircumstancesOfAdmission'), 'circumstancesOfAdmission');
+        // OptionsStore::add(new ClassificationOptions('ClinicalClassifications'), 'clinicalClassifications');
 
         return Inertia::render($component);
     }

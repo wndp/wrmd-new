@@ -6,17 +6,23 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "commerceguys/addressing": "^2.2",
+        "geocodio/geocodio-library-php": "^1.7",
         "inertiajs/inertia-laravel": "^1.0",
         "laravel/framework": "^11.9",
         "laravel/jetstream": "^5.1",
+        "laravel/octane": "^2.5",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
+        "laravel/vapor-core": "^2.37",
+        "league/flysystem-aws-s3-v3": "^3.0",
+        "maatwebsite/excel": "^3.1",
+        "matanyadaev/laravel-eloquent-spatial": "^4.3",
         "pusher/pusher-php-server": "^7.2",
         "silber/bouncer": "^1.0",
         "singlestoredb/singlestoredb-laravel": "^1.5",
-        "sokil/php-isocodes": "^4.2",
-        "sokil/php-isocodes-db-i18n": "^4.0",
         "spatie/laravel-honeypot": "^4.5",
+        "spatie/laravel-medialibrary": "^11.9",
         "spatie/laravel-sluggable": "^3.6",
         "tightenco/ziggy": "^2.0",
         "vemcogroup/laravel-translation": "^3.0"
@@ -35,7 +41,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Support/Helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

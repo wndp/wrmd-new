@@ -5,9 +5,9 @@
       <div class="col-span-6">
         <SecuritySettingsForm :security="security" />
         <RemoteAccessForm
-          :ip-address="ipAddress"
+          :ipAddress="ipAddress"
           :users="users"
-          :remote-access="remoteAccess"
+          :remoteAccess="remoteAccess"
           class="mt-8"
         />
       </div>

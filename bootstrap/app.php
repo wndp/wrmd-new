@@ -14,16 +14,19 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
+            \App\Http\Middleware\ScopeBouncer::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
-            \App\Http\Middleware\SetAdmissionKeysInSession::class,
-            \App\Http\Middleware\SetDeviceUuid::class,
-            \App\Http\Middleware\SetLocale::class,
         ], remove: [
             \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
         ]);
 
-        //
+        $middleware->appendToGroup('app', [
+            \App\Http\Middleware\EnsureCurrentTeam::class,
+            \App\Http\Middleware\SetAdmissionKeysInSession::class,
+            \App\Http\Middleware\SetDeviceUuid::class,
+            \App\Http\Middleware\SetLocale::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

@@ -1,12 +1,14 @@
 <?php
 
+use App\Enums\Ability;
 use App\Http\Controllers\Sharing\EmailController;
 use App\Http\Controllers\Sharing\ExportController;
 use App\Http\Controllers\Sharing\PrintController;
 use App\Http\Controllers\Sharing\TransferRequestController;
 use App\Http\Controllers\Sharing\TransferResponseController;
+use Illuminate\Auth\Middleware\Authorize;
 
-Route::middleware('can:share-patients')->group(function () {
+Route::middleware(Authorize::using(Ability::SHARE_PATIENTS->value))->group(function () {
     Route::post('share/print/{patient?}', [PrintController::class, 'store'])
         ->name('share.print.store');
 

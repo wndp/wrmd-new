@@ -27,13 +27,13 @@ class SetAdmissionKeysInSession
             }
         }
 
-        if (Wrmd::isYear($request->change_year_to)) {
+        if (is_year($request->change_year_to)) {
             event(new CaseYearChanged($request->change_year_to));
             session([
                 'caseYear' => (int) $request->change_year_to,
                 'caseId' => 1,
             ]);
-        } elseif (Wrmd::isYear($request->y) && is_numeric($request->c)) {
+        } elseif (is_year($request->y) && is_numeric($request->c)) {
             if (session('caseYear') !== (int) $request->y) {
                 event(new CaseYearChanged((int) $request->y));
             }

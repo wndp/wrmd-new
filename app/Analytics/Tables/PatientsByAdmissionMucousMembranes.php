@@ -50,9 +50,9 @@ class PatientsByAdmissionMucousMembranes extends Table
     public function query($segment)
     {
         return $this->baseQuery()
-            ->addSelect(DB::raw('concat(mm_color, " and ", mm_texture) as mucous_membrane'))
+            ->addSelect(DB::raw('concat(mucous_membrane_color_id, " and ", mucous_membrane_texture_id) as mucous_membrane'))
             ->joinIntakeExam()
-            ->whereNotNull('mm_color')
+            ->whereNotNull('mucous_membrane_color_id')
             ->withSegment($segment)
             ->get()
             ->filter(function ($data) {
@@ -63,9 +63,9 @@ class PatientsByAdmissionMucousMembranes extends Table
     public function compareQuery($segment)
     {
         return $this->baseCompareQuery()
-            ->addSelect(DB::raw('concat(mm_color, " and ", mm_texture) as mucous_membrane'))
+            ->addSelect(DB::raw('concat(mucous_membrane_color_id, " and ", mucous_membrane_texture_id) as mucous_membrane'))
             ->joinIntakeExam()
-            ->whereNotNull('mm_color')
+            ->whereNotNull('mucous_membrane_color_id')
             ->withSegment($segment)
             ->get()
             ->filter(function ($data) {

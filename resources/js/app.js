@@ -6,6 +6,10 @@ import { createInertiaApp, Link } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import Notifications from 'notiwind'
+import mitt from 'mitt';
+import Vapor from 'laravel-vapor'
+
+const emitter = mitt();
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -16,6 +20,7 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
+            .provide('emitter', emitter)
             .use(Notifications)
             .component('Link', Link)
             .mount(el);

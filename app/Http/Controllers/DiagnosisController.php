@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Domain\Patients\Patient;
 use App\Events\PatientUpdated;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,7 +16,7 @@ class DiagnosisController extends Controller
      */
     public function __invoke(Request $request, Patient $patient)
     {
-        $patient->validateOwnership(Auth::user()->current_account_id)
+        $patient->validateOwnership(Auth::user()->current_team_id)
             ->update($request->only([
                 'diagnosis',
             ]));

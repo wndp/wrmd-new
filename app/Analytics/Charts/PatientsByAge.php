@@ -21,15 +21,15 @@ class PatientsByAge extends Chart
     public function query($segment)
     {
         $query = Admission::where('team_id', $this->team->id)
-            ->selectRaw('count(*) as aggregate, age_unit as subgroup')
+            ->selectRaw('count(*) as aggregate, age_unit_id as subgroup')
             ->joinPatients()
             ->joinIntakeExam()
-            ->whereNotNull('age_unit')
+            ->whereNotNull('age_unit_id')
             ->orderByDesc('aggregate')
-            ->groupBy('age_unit');
+            ->groupBy('age_unit_id');
 
         if ($this->filters->date_period !== 'all-dates') {
-            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+            $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         }
 
         $this->withSegment($query, $segment);
@@ -40,13 +40,13 @@ class PatientsByAge extends Chart
     public function compareQuery($segment)
     {
         $query = Admission::where('team_id', $this->team->id)
-            ->selectRaw('count(*) as aggregate, age_unit as subgroup')
+            ->selectRaw('count(*) as aggregate, age_unit_id as subgroup')
             ->joinPatients()
             ->joinIntakeExam()
-            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to)
-            ->whereNotNull('age_unit')
+            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at')
+            ->whereNotNull('age_unit_id')
             ->orderByDesc('aggregate')
-            ->groupBy('age_unit');
+            ->groupBy('age_unit_id');
 
         $this->withSegment($query, $segment);
 

@@ -1,3 +1,13 @@
+<script setup>
+import AppLayout from '@/Layouts/AppLayout.vue';
+import SettingsAside from '../Partials/SettingsAside.vue';
+import {__} from '@/Composables/Translate';
+
+defineProps({
+  veterinarians: Array
+});
+</script>
+
 <template>
   <AppLayout title="Veterinarians">
     <div class="lg:grid grid-cols-8 gap-8 mt-4">
@@ -74,8 +84,7 @@
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {{ veterinarian.phone }}
                       </td>
-                      <td class="px-6 py-4 text-sm text-gray-500">
-                        {{ veterinarian.full_address }}
+                      <td class="px-6 py-4 text-sm text-gray-500" v-html="veterinarian.full_address">
                       </td>
                     </tr>
                   </tbody>
@@ -88,12 +97,3 @@
     </div>
   </AppLayout>
 </template>
-
-<script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import SettingsAside from '../Partials/SettingsAside.vue';
-
-defineProps({
-  veterinarians: Array
-});
-</script>

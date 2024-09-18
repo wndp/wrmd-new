@@ -3,7 +3,7 @@
 namespace App\Analytics\Maps;
 
 use App\Analytics\Contracts\Map;
-use App\Domain\Hotline\Models\Incident as IncidentModel;
+use App\Models\Incident as IncidentModel;
 
 class Incident extends Map
 {

@@ -13,7 +13,7 @@ class LabsController extends Controller
 {
     public function __invoke(LabOptions $options): Response
     {
-        OptionsStore::merge($options);
+        OptionsStore::add($options);
 
         $admission = $this->loadAdmissionAndSharePagination();
         $admission->patient->load('labs');

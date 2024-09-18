@@ -2,8 +2,10 @@
 
 namespace App\Analytics\Numbers;
 
-use App\Models\Admission;
 use App\Analytics\Contracts\Number;
+use App\Enums\AttributeOptionName;
+use App\Enums\AttributeOptionUiBehavior;
+use App\Models\Admission;
 
 class PatientsDied extends Number
 {
@@ -25,12 +27,17 @@ class PatientsDied extends Number
 
     public function query($segment)
     {
+        [$dispositionDeadIds] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
+            AttributeOptionName::PATIENT_DISPOSITIONS->value,
+            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_DEAD->value,
+        ]);
+
         $query = Admission::where('team_id', $this->team->id)
             ->joinPatients()
-            ->where('disposition', 'like', '%Died%');
+            ->whereIn('disposition_id', $dispositionDeadIds);
 
         if ($this->filters->date_period !== 'all-dates') {
-            $query->dateRange($this->filters->date_from, $this->filters->date_to);
+            $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         }
 
         $this->withSegment($query, $segment);
@@ -40,10 +47,15 @@ class PatientsDied extends Number
 
     public function compareQuery($segment)
     {
+        [$dispositionDeadIds] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
+            AttributeOptionName::PATIENT_DISPOSITIONS->value,
+            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_DEAD->value,
+        ]);
+
         $query = Admission::where('team_id', $this->team->id)
             ->joinPatients()
-            ->where('disposition', 'like', '%Died%')
-            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to);
+            ->whereIn('disposition_id', $dispositionDeadIds)
+            ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at');
 
         $this->withSegment($query, $segment);
 

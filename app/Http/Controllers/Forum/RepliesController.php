@@ -18,7 +18,7 @@ class RepliesController extends Controller
         $request->validate(['reply' => 'required']);
 
         $thread->addReply(
-            Auth::user()->current_account_id,
+            Auth::user()->current_team_id,
             Auth::id(),
             request('reply')
         );

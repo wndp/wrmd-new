@@ -18,7 +18,7 @@ class PatientsByAdmissionDehydrations extends Table
         foreach ($this->filters->segments as $segment) {
             $this->series = $this->series->merge(
                 $this->query($segment)
-                    ->groupBy('dehydration')
+                    ->groupBy('dehydration_id')
                     ->sortKeys()
                     ->mapInto(MapIntoDataTableRow::class)
                     ->map(function ($mapIntoDataTableRow) use ($segment) {
@@ -32,7 +32,7 @@ class PatientsByAdmissionDehydrations extends Table
             if ($this->filters->compare) {
                 $this->series = $this->series->merge(
                     $this->compareQuery($segment)
-                        ->groupBy('dehydration')
+                        ->groupBy('dehydration_id')
                         ->sortKeys()
                         ->mapInto(MapIntoDataTableRow::class)
                         ->map(function ($mapIntoDataTableRow) use ($segment) {
@@ -49,9 +49,9 @@ class PatientsByAdmissionDehydrations extends Table
     public function query($segment)
     {
         return $this->baseQuery()
-            ->addSelect('dehydration')
+            ->addSelect('dehydration_id')
             ->joinIntakeExam()
-            ->whereNotNull('dehydration')
+            ->whereNotNull('dehydration_id')
             ->withSegment($segment)
             ->get();
     }
@@ -59,9 +59,9 @@ class PatientsByAdmissionDehydrations extends Table
     public function compareQuery($segment)
     {
         return $this->baseCompareQuery()
-            ->addSelect('dehydration')
+            ->addSelect('dehydration_id')
             ->joinIntakeExam()
-            ->whereNotNull('dehydration')
+            ->whereNotNull('dehydration_id')
             ->withSegment($segment)
             ->get();
     }

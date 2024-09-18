@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Domain\Patients\Patient;
 use App\Events\PatientUpdated;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,7 +16,7 @@ class PatientUnVoidController extends Controller
      */
     public function __invoke(Request $request, Patient $voidedPatient)
     {
-        $voidedPatient->validateOwnership(Auth::user()->current_account_id)->unVoid();
+        $voidedPatient->validateOwnership(Auth::user()->current_team_id)->unVoid();
 
         event(new PatientUpdated($voidedPatient));
 

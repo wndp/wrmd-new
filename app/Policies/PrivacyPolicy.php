@@ -2,6 +2,8 @@
 
 namespace App\Policies;
 
+use App\Enums\Ability;
+use App\Enums\Role;
 use App\Models\User;
 use App\Support\Wrmd;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -13,25 +15,25 @@ class PrivacyPolicy
     /**
      * Determine if the user is allowed to see people.
      */
-    public function displayPeople(User $user): bool
+    public function viewPeople(User $user): bool
     {
         return $this->hasFullPeopleAccess($user)
-            || $user->isA('super-admin')
-            || $user->can('display-people')
-            || $user->can('delete-people')
-            || $user->can('combine-people')
-            || $user->can('create-people')
-            || $user->can('export-people');
+            || $user->isA(Role::ADMIN->value)
+            || $user->can(Ability::VIEW_PEOPLE->value)
+            || $user->can(Ability::DELETE_PEOPLE->value)
+            || $user->can(Ability::COMBINE_PEOPLE->value)
+            || $user->can(Ability::CREATE_PEOPLE->value)
+            || $user->can(Ability::EXPORT_PEOPLE->value);
     }
 
     /**
      * Determine if the user is allowed to see rescuers.
      */
-    public function displayRescuer(User $user): bool
+    public function viewRescuer(User $user): bool
     {
         return $this->hasFullPeopleAccess($user)
-            || $user->isA('super-admin')
-            || $user->can('display-rescuer');
+            || $user->isA(Role::ADMIN->value)
+            || $user->can(Ability::VIEW_RESCUER->value);
     }
 
     /**
@@ -40,8 +42,8 @@ class PrivacyPolicy
     public function searchRescuers(User $user): bool
     {
         return $this->hasFullPeopleAccess($user)
-            || $user->isA('super-admin')
-            || $user->can('search-rescuers');
+            || $user->isA(Role::ADMIN->value)
+            || $user->can(Ability::SEARCH_RESCUERS->value);
     }
 
     /**
@@ -50,8 +52,8 @@ class PrivacyPolicy
     public function combinePeople(User $user): bool
     {
         return $this->hasFullPeopleAccess($user)
-            || $user->isA('super-admin')
-            || $user->can('combine-people');
+            || $user->isA(Role::ADMIN->value)
+            || $user->can(Ability::COMBINE_PEOPLE->value);
     }
 
     /**
@@ -60,8 +62,8 @@ class PrivacyPolicy
     public function exportPeople(User $user): bool
     {
         return $this->hasFullPeopleAccess($user)
-            || $user->isA('super-admin')
-            || $user->can('export-people');
+            || $user->isA(Role::ADMIN->value)
+            || $user->can(Ability::EXPORT_PEOPLE->value);
     }
 
     /**
@@ -70,8 +72,8 @@ class PrivacyPolicy
     public function createPeople(User $user): bool
     {
         return $this->hasFullPeopleAccess($user)
-            || $user->isA('super-admin')
-            || $user->can('create-people');
+            || $user->isA(Role::ADMIN->value)
+            || $user->can(Ability::CREATE_PEOPLE->value);
     }
 
     /**
@@ -80,8 +82,8 @@ class PrivacyPolicy
     public function deletePeople(User $user): bool
     {
         return $this->hasFullPeopleAccess($user)
-            || $user->isA('super-admin')
-            || $user->can('delete-people');
+            || $user->isA(Role::ADMIN->value)
+            || $user->can(Ability::DELETE_PEOPLE->value);
     }
 
     /**
