@@ -44,7 +44,7 @@
               class="sm:text-right"
             >
               {{ __('Admitted By') }}
-              <Required />
+              <RequiredInput />
             </Label>
             <div class="col-span-2 mt-1 sm:mt-0">
               <Input
@@ -74,7 +74,7 @@
               class="sm:text-right"
             >
               {{ __('Address Found') }}
-              <Required />
+              <RequiredInput />
             </Label>
             <div class="col-span-5 mt-1 sm:mt-0">
               <Input
@@ -94,7 +94,7 @@
               class="sm:text-right"
             >
               {{ __('City / State Found') }}
-              <Required />
+              <RequiredInput />
             </Label>
             <div class="col-span-2 mt-1 sm:mt-0 flex">
               <Input
@@ -123,7 +123,7 @@
               class="sm:text-right mt-4 sm:mt-0"
             >
               {{ __('Date Found') }}
-              <Required />
+              <RequiredInput />
             </Label>
             <div class="col-span-2 mt-1 sm:mt-0">
               <DatePicker
@@ -188,7 +188,7 @@
               class="sm:text-right"
             >
               {{ __('Reasons For Admission') }}
-              <Required />
+              <RequiredInput />
             </Label>
             <div class="col-span-5 mt-1 sm:mt-0">
               <Input
@@ -333,7 +333,7 @@ import DangerButton from '@/Components/FormElements/DangerButton.vue';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import ValidationErrors from '@/Components/FormElements/ValidationErrors.vue';
 import InputError from '@/Components/FormElements/InputError.vue';
-import Required from '@/Components/FormElements/Required.vue';
+import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
 import OutcomeForm from '@/Components/Forms/OutcomeForm.vue';
 import { formatISO9075 } from 'date-fns';
 

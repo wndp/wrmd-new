@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Maintenance;
 use App\Extensions\ExtensionNavigation;
 use App\Http\Controllers\Controller;
 use App\Models\Transfer;
+use App\Support\Timezone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -23,9 +24,16 @@ class TransfersController extends Controller
             ->whereNull('responded_at')
             ->with('patient.admissions', 'toTeam', 'fromTeam')
             ->latest()
-            ->get();
+            ->get()
+            ->transform(fn ($transfer) => [
+                ...$transfer->toArray(),
+                'created_at_for_humans' => Timezone::convertFromUtcToLocal($transfer->created_at)->toDayDateTimeString()
+            ]);
 
-        $transfers = Transfer::whereNotIn('id', $unansweredTransfers->pluck('id'))
+        $transfers = Transfer::when(
+            $unansweredTransfers->isNotEmpty(),
+            fn ($q) => $q->whereNotIn('uuid', $unansweredTransfers->pluck('uuid'))
+        )
             ->where(function ($query) {
                 $query->where('from_team_id', Auth::user()->current_team_id)
                     ->orWhere('to_team_id', Auth::user()->current_team_id);
@@ -33,7 +41,11 @@ class TransfersController extends Controller
             ->with('patient.admissions', 'clonedPatient.admissions', 'toTeam', 'fromTeam')
             ->latest()
             ->paginate()
-            ->onEachSide(1);
+            ->onEachSide(1)
+            ->through(fn ($transfer) => [
+                ...$transfer->toArray(),
+                'created_at_for_humans' => Timezone::convertFromUtcToLocal($transfer->created_at)->toDayDateTimeString()
+            ]);
 
         $uuid = $request->input('uuid');
 

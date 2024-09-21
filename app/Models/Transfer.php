@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,7 +21,7 @@ class Transfer extends Model
         'cloned_patient_id',
         'from_team_id',
         'to_team_id',
-        'thread_id',
+        //'thread_id',
         'is_collaborative',
         'is_accepted',
         'responded_at',
@@ -32,7 +33,7 @@ class Transfer extends Model
         'cloned_patient_id' => 'integer',
         'from_team_id' => 'integer',
         'to_team_id' => 'integer',
-        'thread_id' => 'integer',
+        //'thread_id' => 'integer',
         'is_collaborative' => 'boolean',
         'is_accepted' => 'boolean',
         'responded_at' => 'datetime',

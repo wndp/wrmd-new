@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Sharing;
 use App\Enums\AccountStatus;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendTransferRequest;
+use App\Models\Admission;
+use App\Models\Patient;
 use App\Models\Team;
 use App\Options\Options;
 use Illuminate\Http\RedirectResponse;
@@ -19,7 +21,7 @@ class TransferRequestController extends Controller
 {
     public function create(): Response
     {
-        $this->loadAdmissionAndSharePagination();
+        $admission = $this->loadAdmissionAndSharePagination();
 
         $team = Auth::user()->currentTeam;
         $subAccounts = $team->subAccounts;
@@ -43,6 +45,7 @@ class TransferRequestController extends Controller
             ->pluck('name', 'id');
 
         return Inertia::render('Patients/Transfer', [
+            'patientId' => $admission->patient_id,
             'teams' => Options::arrayToSelectable(
                 Collection::make([
                     __('Organizations Near Me') => $nearest->toArray(),
@@ -60,7 +63,7 @@ class TransferRequestController extends Controller
         $patient->validateOwnership(Auth::user()->current_team_id);
 
         $data = $request->validate([
-            'transferTo' => 'required|exists:accounts,id',
+            'transferTo' => 'required|exists:teams,id',
         ], [
             'transferTo.exists' => __('The selected organization is unknown.'),
         ]);
@@ -68,17 +71,17 @@ class TransferRequestController extends Controller
         $transferTo = Team::findOrFail($data['transferTo']);
 
         SendTransferRequest::dispatch(
-            Auth::user()->currentAccount,
+            Auth::user()->currentTeam,
             $transferTo,
             $patient,
             Auth::user(),
             $request->boolean('collaborate')
         );
 
-        $admission = Admission::custody(Auth::user()->currentAccount, $patient);
+        $admission = Admission::custody(Auth::user()->currentTeam, $patient);
 
         return redirect()->route('patients.continued.edit', ['y' => $admission->case_year, 'c' => $admission->case_id])
-            ->with('flash.notificationHeading', __('Transfer Request Sent!'))
-            ->with('flash.notification', __('A transfer request has been sent to :organization.', ['organization' => $transferTo->organization]));
+            ->with('notification.heading', __('Transfer Request Sent!'))
+            ->with('notification.text', __('A transfer request has been sent to :organization.', ['organization' => $transferTo->organization]));
     }
 }

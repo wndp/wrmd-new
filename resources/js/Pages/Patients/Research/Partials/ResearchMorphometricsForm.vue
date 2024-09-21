@@ -14,7 +14,7 @@
             class="md:text-right"
           >
             {{ __('Date Measured') }}
-            <Required v-if="enforceRequired" />
+            <RequiredInput v-if="enforceRequired" />
           </Label>
           <div class="col-span-5 mt-1 md:mt-0">
             <DatePicker
@@ -359,7 +359,7 @@ import TextInput from '@/Components/FormElements/TextInput.vue';
 import Checkbox from '@/Components/FormElements/Checkbox.vue';
 import DatePicker from '@/Components/FormElements/DatePicker.vue';
 import InputError from '@/Components/FormElements/InputError.vue';
-import Required from '@/Components/FormElements/Required.vue';
+import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
 import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import autoSave from '@/Mixins/AutoSave';

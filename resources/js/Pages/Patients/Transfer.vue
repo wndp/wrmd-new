@@ -11,8 +11,15 @@ import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import {__} from '@/Composables/Translate';
 
-defineProps({
-  teams: Array
+const props = defineProps({
+  patientId: {
+    type: Number,
+    required: true
+  },
+  teams: {
+    type: Array,
+    required: true
+  }
 });
 
 const form = useForm({
@@ -22,7 +29,7 @@ const form = useForm({
 
 const store = () => {
   form.post(route('share.transfer.store', {
-    patient: usePage().props.admission.patient
+    patient: props.patientId
   }));
 };
 </script>
@@ -57,7 +64,7 @@ const store = () => {
           />
         </FormRow>
       </template>
-      <template #footing>
+      <template #actions>
         <div class="flex items-center justify-end text-right">
           <ActionMessage
             :on="form.recentlySuccessful"

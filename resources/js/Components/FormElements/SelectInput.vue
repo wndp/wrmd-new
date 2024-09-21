@@ -25,18 +25,18 @@ const emit = defineEmits([
 //const select = ref(null);
 
 const computedOptions = computed(() => {
-    const options = [];
+    let options = [];
 
     if (props.hasBlankOption) {
-        options.push({
-            label: '',
-            value: null,
-            data: {},
-        });
+      options.push({
+          label: '',
+          value: null,
+          data: {},
+      });
     }
 
     if (isString(props.options[0]) || isNumber(props.options[0])) {
-      props.options.map(n => {
+      options = props.options.map(n => {
         return {
           value: n,
           label: n

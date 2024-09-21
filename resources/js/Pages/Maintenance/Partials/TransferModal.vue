@@ -9,6 +9,8 @@ import Badge from '@/Components/Badge.vue';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import DangerButton from '@/Components/FormElements/DangerButton.vue';
 import {__} from '@/Composables/Translate';
+import {can} from '@/Composables/Can';
+import {Abilities} from '@/Enums/Abilities';
 
 const props = defineProps({
   transfer: {
@@ -32,7 +34,7 @@ const uncollaborate = () => form.post(route('maintenance.transfers.uncollaborate
 const caseNumberFrom = (transfer) => {
   return transfer.patient.admissions.find(admission =>
     admission.team_id === transfer.from_team_id
-  ).case_number;
+  )?.case_number;
 };
 
 const caseNumberTo = (transfer) => {
@@ -110,13 +112,13 @@ const denyTransfer = () => {
                 <div class="mr-4 flex-shrink-0 self-center">
                   <img
                     class="h-10 w-10 rounded-full"
-                    :src="transfer.from_account.profile_photo_url"
+                    :src="transfer.from_team.profile_photo_url"
                     alt=""
                   >
                 </div>
                 <div>
                   <h4 class="text-sm text-gray-900">
-                    {{ transfer.from_account.organization }}
+                    {{ transfer.from_team.organization }}
                   </h4>
                   <p class="text-gray-500 mt-1">
                     {{ __('Patient') }}: <span class="text-gray-900">{{ caseNumberFrom(transfer) }}</span>
@@ -134,13 +136,13 @@ const denyTransfer = () => {
                 <div class="mr-4 flex-shrink-0 self-center">
                   <img
                     class="h-10 w-10 rounded-full"
-                    :src="transfer.to_account.profile_photo_url"
+                    :src="transfer.to_team.profile_photo_url"
                     alt=""
                   >
                 </div>
                 <div>
                   <h4 class="text-sm text-gray-900">
-                    {{ transfer.to_account.organization }}
+                    {{ transfer.to_team.organization }}
                   </h4>
                   <p
                     v-if="transfer.responded_at !== null && transfer.is_accepted"
@@ -208,7 +210,7 @@ const denyTransfer = () => {
         </dl>
       </div>
       <div
-        v-if="isTransferToAuthAccount && transfer.responded_at === null && can('create-patients')"
+        v-if="isTransferToAuthAccount && transfer.responded_at === null && can(Abilities.CREATE_PATIENTS)"
         class="flex justify-between items-center border-t border-gray-200 pt-4"
       >
         <PrimaryButton @click="acceptTransfer">

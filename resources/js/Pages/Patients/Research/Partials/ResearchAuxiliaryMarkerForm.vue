@@ -136,7 +136,7 @@ import InputLabel from '@/Components/FormElements/InputLabel.vue';
 import TextInput from '@/Components/FormElements/TextInput.vue';
 import SelectInput from '@/Components/FormElements/SelectInput.vue';
 import InputError from '@/Components/FormElements/InputError.vue';
-import Required from '@/Components/FormElements/Required.vue';
+import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
 import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import autoSave from '@/Mixins/AutoSave';

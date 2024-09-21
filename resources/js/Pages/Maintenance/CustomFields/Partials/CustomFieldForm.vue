@@ -11,7 +11,7 @@
         <Label
           for="label"
           class="sm:text-right"
-        >{{ __('Label') }} <Required /></Label>
+        >{{ __('Label') }} <RequiredInput /></Label>
         <div class="col-span-5 mt-1 sm:mt-0">
           <Input
             v-model="form.label"
@@ -27,7 +27,7 @@
         <Label
           for="group"
           class="sm:text-right"
-        >{{ __('Group') }} <Required /></Label>
+        >{{ __('Group') }} <RequiredInput /></Label>
         <div class="col-span-2 mt-1 sm:mt-0">
           <Select
             v-if="!isUpdating"
@@ -47,7 +47,7 @@
         <Label
           for="type"
           class="sm:text-right mt-4 sm:mt-0"
-        >{{ __('Type') }} <Required /></Label>
+        >{{ __('Type') }} <RequiredInput /></Label>
         <div class="col-span-2 mt-1 sm:mt-0">
           <Select
             v-if="!isUpdating"
@@ -69,7 +69,7 @@
           <Label
             for="panel"
             class="sm:text-right"
-          >{{ __('Panel') }} <Required /></Label>
+          >{{ __('Panel') }} <RequiredInput /></Label>
           <div class="col-span-2 mt-1 sm:mt-0">
             <Select
               v-model="form.panel"
@@ -85,7 +85,7 @@
         <Label
           for="location"
           class="sm:text-right mt-4 sm:mt-0"
-        >{{ __('Location') }} <Required /></Label>
+        >{{ __('Location') }} <RequiredInput /></Label>
         <div class="col-span-2 mt-1 sm:mt-0">
           <Select
             v-model="form.location"
@@ -113,7 +113,7 @@
           <Label
             for="options"
             class="sm:text-right"
-          >{{ __('List Options') }} <Required /></Label>
+          >{{ __('List Options') }} <RequiredInput /></Label>
           <div class="col-span-2 mt-1 sm:mt-0">
             <Textarea
               v-model="form.options"
@@ -157,7 +157,7 @@ import Input from '@/Components/FormElements/Input.vue';
 import Select from '@/Components/FormElements/Select.vue';
 import Textarea from '@/Components/FormElements/Textarea.vue';
 import Toggle from '@/Components/FormElements/Toggle.vue';
-import Required from '@/Components/FormElements/Required.vue';
+import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
 import InputError from '@/Components/FormElements/InputError.vue';
 import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';

@@ -1,18 +1,18 @@
 <script setup>
 import { ref } from 'vue';
 import { router, useForm, usePage } from '@inertiajs/vue3';
-import ActionMessage from '@/Components/ActionMessage.vue';
-import ActionSection from '@/Components/ActionSection.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import ActionSection from '@/Components/FormElements/ActionSection.vue';
 import ConfirmationModal from '@/Components/ConfirmationModal.vue';
-import DangerButton from '@/Components/DangerButton.vue';
+import DangerButton from '@/Components/FormElements/DangerButton.vue';
 import DialogModal from '@/Components/DialogModal.vue';
-import FormSection from '@/Components/FormSection.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
+import FormSection from '@/Components/FormElements/FormSection.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import SecondaryButton from '@/Components/FormElements/SecondaryButton.vue';
 import SectionBorder from '@/Components/SectionBorder.vue';
-import TextInput from '@/Components/TextInput.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
 
 const props = defineProps({
     team: Object,

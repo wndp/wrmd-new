@@ -32,8 +32,8 @@
                 <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
                   <div class="grid grid-cols-3 gap-6">
                     <div class="col-span-3 sm:col-span-2">
-                      <Label for="year">{{ __("Patient's Year") }}</Label>
-                      <Select
+                      <InputLabel for="year">{{ __("Patient's Year") }}</InputLabel>
+                      <SelectInput
                         v-model="form.year"
                         name="year"
                         :options="yearsInAccount"
@@ -47,8 +47,8 @@
 
                   <div class="grid grid-cols-3 gap-6">
                     <div class="col-span-3 sm:col-span-2">
-                      <Label for="password">{{ __('Your Password') }}</Label>
-                      <Input
+                      <InputLabel for="password">{{ __('Your Password') }}</InputLabel>
+                      <TextInput
                         ref="password"
                         v-model="form.password"
                         name="password"
@@ -63,8 +63,8 @@
 
                   <div class="grid grid-cols-3 gap-6">
                     <div class="col-span-3 sm:col-span-2">
-                      <Label for="password_confirmation">{{ __('Confirm Your Password') }}</Label>
-                      <Input
+                      <InputLabel for="password_confirmation">{{ __('Confirm Your Password') }}</InputLabel>
+                      <TextInput
                         v-model="form.password_confirmation"
                         name="password_confirmation"
                         type="password"
@@ -97,9 +97,9 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import MaintenanceAside from './Partials/MaintenanceAside.vue';
-import Label from '@/Components/FormElements/Label.vue';
-import Select from '@/Components/FormElements/Select.vue';
-import Input from '@/Components/FormElements/Input.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import SelectInput from '@/Components/FormElements/SelectInput.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
 import InputError from '@/Components/FormElements/InputError.vue';
 import DangerButton from '@/Components/FormElements/DangerButton.vue';
 </script>

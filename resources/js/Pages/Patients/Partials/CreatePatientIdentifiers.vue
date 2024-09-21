@@ -5,6 +5,7 @@ import TextInput from '@/Components/FormElements/TextInput.vue';
 import DatePicker from '@/Components/FormElements/DatePicker.vue';
 import SelectInput from '@/Components/FormElements/SelectInput.vue';
 import CommonName from '@/Components/FormElements/CommonName.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
 import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
 import range from 'lodash/range';
 import {__} from '@/Composables/Translate';

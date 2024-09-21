@@ -162,12 +162,12 @@ const showTransfer = (transfer) => {
                         </div>
                       </td>
                       <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        <Badge
+                        <!-- <Badge
                           v-if="transfer.is_collaborative"
                           color="blue"
                         >
                           {{ __('Collaborative') }}
-                        </Badge>
+                        </Badge> -->
                       </td>
                       <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                         <PrimaryButton @click="showTransfer(transfer)">
@@ -246,7 +246,7 @@ const showTransfer = (transfer) => {
                       </td>
                       <td class="whitespace-nowrap px-3 py-4 text-sm align-top text-gray-500">
                         <div class="text-gray-900">
-                          {{ admissionFrom(transfer).case_number }}
+                          {{ admissionFrom(transfer)?.case_number }}
                         </div>
                         <div
                           v-if="transfer.responded_at !== null && transfer.is_accepted"
@@ -263,12 +263,12 @@ const showTransfer = (transfer) => {
                       </td>
                       <td class="whitespace-nowrap px-3 py-4 text-sm align-top text-gray-900">
                         <div>{{ transfer.patient.common_name }}</div>
-                        <Badge
+                        <!-- <Badge
                           v-if="transfer.is_collaborative"
                           color="blue"
                         >
                           {{ __('Collaborative') }}
-                        </Badge>
+                        </Badge> -->
                       </td>
                       <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         <button

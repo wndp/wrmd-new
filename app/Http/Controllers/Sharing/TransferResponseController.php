@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Sharing;
 
-use App\Domain\Admissions\Admission;
-use App\Domain\Patients\Transfer;
 use App\Events\PatientAdmitted;
 use App\Http\Controllers\Controller;
+use App\Models\Admission;
+use App\Models\Transfer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 

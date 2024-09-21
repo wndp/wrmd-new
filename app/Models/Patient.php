@@ -6,6 +6,7 @@ use App\Concerns\QueriesDateRange;
 use App\Concerns\ValidatesOwnership;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
+use App\Events\PatientReplicated;
 use App\Models\Incident;
 use App\Models\Scopes\VoidedScope;
 use App\Support\Timezone;
@@ -240,5 +241,15 @@ class Patient extends Model
                 ? $this->dispositioned_at->diffInDays($this->date_admitted_at) + 1
                 : ($this->date_admitted_at instanceof Carbon ? $this->date_admitted_at->diffInDays() + 1 : null))
         );
+    }
+
+    public function clone(): Patient
+    {
+        $new = $this->replicate();
+        $new->save();
+
+        event(new PatientReplicated($this, $new));
+
+        return $new;
     }
 }
