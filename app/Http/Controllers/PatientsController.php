@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePatientRequest;
 use App\Actions\AdmitPatient;
 use App\Caches\QueryCache;
 use App\Enums\AttributeOptionName;
@@ -100,26 +101,8 @@ class PatientsController extends Controller
     /**
      * Store a newly created patient in storage.
      */
-    public function store(Request $request)
+    public function store(StorePatientRequest $request)
     {
-        $request->validate([
-            'action_after_store' => 'required',
-            'case_year' => 'required|in:'.AdmitPatient::availableYears(Auth::user()->currentTeam)->implode(','),
-            'common_name' => 'required',
-            'admitted_at' => 'required|date',
-            'admitted_by' => 'required',
-            'address_found' => 'required',
-            'city_found' => 'required',
-            'subdivision_found' => 'required',
-            'found_at' => 'required|date',
-            'reason_for_admission' => 'required',
-        ], [
-            'admitted_at.required' => __('The date admitted field is required.'),
-            'admitted_at.date' => __('The date admitted is not a valid date.'),
-            'found_at.required' => __('The date found field is required.'),
-            'found_at.date' => __('The date found is not a valid date.'),
-        ]);
-
         $admissions = AdmitPatient::run(
             Auth::user()->currentTeam,
             $request->input('case_year'),
