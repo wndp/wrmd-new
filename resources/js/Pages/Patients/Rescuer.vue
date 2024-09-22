@@ -1,6 +1,5 @@
 <script setup>
-import {computed} from 'vue';
-import {usePage, useForm, router} from '@inertiajs/vue3';
+import {useForm, router} from '@inertiajs/vue3';
 import PatientLayout from '@/Layouts/PatientLayout.vue';
 import PersonCard from '@/Components/FormCards/PersonCard.vue';
 import Alert from '@/Components/Alert.vue';
@@ -10,13 +9,15 @@ import {can} from '@/Composables/Can';
 import {Abilities} from '@/Enums/Abilities';
 
 const props = defineProps({
+  patient: {
+    type: Object,
+    required: true
+  },
   rescuer: {
     type: Object,
     required: true
   }
 });
-
-const patient = computed(() => usePage().props.admission.patient);
 
 const form = useForm({
   custom_values: props.rescuer.custom_values || {},
@@ -41,13 +42,13 @@ const form = useForm({
 const viewPatients = () => {
   router.visit(route('patients.index', {
     list: 'rescuer-patients-list',
-    rescuerId: patient.value.rescuer_id
+    rescuerId: props.patient.rescuer_id
   }));
 };
 
 const detachRescuer = () => {
   useForm({}).delete(
-    route('patients.detach_rescuer.destroy', patient)
+    route('patients.detach_rescuer.destroy', props.patient)
   );
 };
 

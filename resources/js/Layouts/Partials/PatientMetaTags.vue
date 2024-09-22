@@ -108,6 +108,8 @@ const daysInCareColor = computed(() => {
 
 const criminalActivityColor = computed(() => props.patientMeta.is_criminal_activity ? 'yellow' : 'gray');
 
+// const hasTasksDueToday = com
+
 const update = () => {
     form.put(route('patients.meta.update', props.patientMeta.patient_id), {
         preserveScroll: true,
@@ -189,14 +191,14 @@ const update = () => {
       <span class="mx-2 text-xs font-bold text-gray-600">{{ patientMeta.is_criminal_activity ? 'Yes' : 'No' }}</span>
     </button>
     <Link
-      v-if="true"
+      v-if="patientMeta.numberOfTasksDueToday"
       :href="route('patients.daily-tasks.edit', caseQueryString)"
       class="inline-flex items-center bg-gray-200 rounded-full p-0.5"
     >
       <Badge color="red">
         {{ __('Tasks Due Today') }}
       </Badge>
-      <span class="mx-2 text-xs font-bold text-gray-600">2</span>
+      <span class="mx-2 text-xs font-bold text-gray-600">{{ patientMeta.numberOfTasksDueToday }}</span>
     </Link>
     <Menu
       v-if="patientMeta.taxon?.class"

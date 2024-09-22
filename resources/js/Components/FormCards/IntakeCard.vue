@@ -152,7 +152,6 @@ const saveIntake = () => emit('submitted');
       <FormRow
         id="postal_code_found"
         :label="__('Postal Code Found')"
-        :required="enforceRequired"
         class="col-span-6 md:col-span-2"
       >
         <TextInput

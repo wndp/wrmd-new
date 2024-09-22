@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AttributeOptionName;
+use App\Enums\AttributeOptionUiBehavior;
 use App\Http\Requests\PrescriptionRequest;
+use App\Models\Admission;
+use App\Models\Patient;
+use App\Models\Prescription;
 use Illuminate\Support\Facades\Auth;
 
 class PrescriptionController extends Controller
@@ -14,7 +19,7 @@ class PrescriptionController extends Controller
      */
     public function store(PrescriptionRequest $request, Patient $patient)
     {
-        $patient->validateOwnership(Auth::user()->current_account_id);
+        $patient->validateOwnership(Auth::user()->current_team_id);
 
         $prescription = new Prescription([
             'drug' => $request->input('drug'),
@@ -36,7 +41,7 @@ class PrescriptionController extends Controller
 
         [$singleDoseFrequencyId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::DAILY_TASK_FREQUENCIES->value,
-            AttributeOptionUiBehavior::DAILY_TASK_FREQUENCIES_IS_SINGLE_DOSE->value,
+            AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_SINGLE_DOSE->value,
         ]);
 
         if ($request->integer('frequency_id') === $singleDoseFrequencyId) {
@@ -47,7 +52,7 @@ class PrescriptionController extends Controller
         $prescription->patient()->associate($patient);
         $prescription->save();
 
-        $caseNumber = Admission::custody(Auth::user()->currentAccount, $patient)->case_number;
+        $caseNumber = Admission::custody(Auth::user()->currentTeam, $patient)->case_number;
 
         return back()
             ->with('notification.heading', __('Prescription Created'))
@@ -64,7 +69,7 @@ class PrescriptionController extends Controller
             $this->validationRuleMessages()
         );
 
-        $prescription->validateOwnership(Auth::user()->current_account_id)
+        $prescription->validateOwnership(Auth::user()->current_team_id)
             ->fill([
                 'drug' => $request->drug,
                 'rx_started_at' => $request->convertDateFromLocal('rx_started_at'),
@@ -86,7 +91,7 @@ class PrescriptionController extends Controller
         $prescription->veterinarian_id = $request->veterinarian_id;
         $prescription->save();
 
-        $caseNumber = Admission::custody(Auth::user()->currentAccount, $patient)->case_number;
+        $caseNumber = Admission::custody(Auth::user()->currentTeam, $patient)->case_number;
 
         return back()
             ->with('notification.heading', __('Prescription Updated'))

@@ -4,9 +4,9 @@ import {usePage, useForm} from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import CreatePatientIdentifiers from './Partials/CreatePatientIdentifiers.vue';
 import Panel from '@/Components/Panel.vue';
+import FormRow from '@/Components/FormElements/FormRow.vue';
 import Alert from '@/Components/Alert.vue';
 import AlertAction from '@/Components/AlertAction.vue';
-import InputLabel from '@/Components/FormElements/InputLabel.vue';
 import TextInput from '@/Components/FormElements/TextInput.vue';
 import SelectInput from '@/Components/FormElements/SelectInput.vue';
 import IntakeCard from '@/Components/FormCards/IntakeCard.vue';
@@ -20,11 +20,11 @@ import DangerButton from '@/Components/FormElements/DangerButton.vue';
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import { PlusIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
 import isNil from 'lodash/isNil';
-import merge from 'lodash/merge';
-import omit from 'lodash/omit';
 import { formatISO9075 } from 'date-fns';
 import {__} from '@/Composables/Translate';
 import {can} from '@/Composables/Can';
+import {Abilities} from '@/Enums/Abilities';
+import axios from 'axios';
 
 const props = defineProps({
   incident: {
@@ -36,6 +36,7 @@ const props = defineProps({
 const rescuerTabIndex = ref(0);
 
 const form = useForm({
+  incident_id: props.incident.id || null,
   custom_values: {},
   case_year: usePage().props.lastCaseId.year,
   admitted_at: formatISO9075(new Date()),
@@ -80,7 +81,6 @@ const form = useForm({
   donation_comments: '',
   rescuer: props.incident.reporting_party || {},
   action_after_store: 'return',
-  incident: props.incident.id || null
 });
 
 const currentYear = computed(() => new Date().getFullYear());
@@ -93,7 +93,7 @@ const formatCaseNumber = (year, id) => {
 };
 
 const getNextCaseNumber = (caseYear) => {
-    window.axios.get(route('admissions.year', {year: caseYear})).then(response => {
+    axios.get(route('admissions.year', {year: caseYear})).then(response => {
         nextCaseNumber.value = formatCaseNumber(
             response.data.year,
             response.data.last_case_id + 1
@@ -198,7 +198,7 @@ const nextCaseNumber = ref(formatCaseNumber(usePage().props.lastCaseId.year, use
               </button>
             </Tab>
             <Tab
-              v-if="can('search-rescuers')"
+              v-if="can(Abilities.SEARCH_RESCUERS)"
               v-slot="{ selected }"
               as="template"
             >
@@ -239,7 +239,7 @@ const nextCaseNumber = ref(formatCaseNumber(usePage().props.lastCaseId.year, use
               </div>
             </div>
           </TabPanel>
-          <TabPanel v-if="can('search-rescuers')">
+          <TabPanel v-if="can(Abilities.SEARCH_RESCUERS)">
             <SearchPeopleCard @use="usePerson" />
           </TabPanel>
         </TabPanels>
@@ -250,25 +250,28 @@ const nextCaseNumber = ref(formatCaseNumber(usePage().props.lastCaseId.year, use
           {{ __('Donation') }}
         </template>
         <template #content>
-          <div class="col-span-6 md:col-span-3">
-            <InputLabel for="donation_method_id">
-              {{ __('Method') }}
-            </InputLabel>
+          <FormRow
+            id="donation_method_id"
+            :label="__('Method')"
+            class="col-span-6 md:col-span-3"
+          >
             <SelectInput
               v-model="form.donation_method_id"
               name="donation_method_id"
               :options="$page.props.options.donationMethodsOptions"
+              hasBlankOption
             />
             <InputError
               id="donation_method_id_error"
               class="mt-2"
               :message="form.errors?.donation?.method"
             />
-          </div>
-          <div class="col-span-6 md:col-span-3">
-            <InputLabel for="donation_value">
-              {{ __('Value') }}
-            </InputLabel>
+          </FormRow>
+          <FormRow
+            id="donation_value"
+            :label="__('Value')"
+            class="col-span-6 md:col-span-3"
+          >
             <TextInput
               v-model="form.donation_value"
               name="donation_value"
@@ -281,11 +284,12 @@ const nextCaseNumber = ref(formatCaseNumber(usePage().props.lastCaseId.year, use
               class="mt-2"
               :message="form.errors?.donation?.value"
             />
-          </div>
-          <div class="col-span-6">
-            <InputLabel for="donation_comments">
-              {{ __('Comments') }}
-            </InputLabel>
+          </FormRow>
+          <FormRow
+            id="donation_comments"
+            :label="__('Comments')"
+            class="col-span-6"
+          >
             <TextInput
               v-model="form.donation_comments"
               name="donation_comments"
@@ -295,7 +299,7 @@ const nextCaseNumber = ref(formatCaseNumber(usePage().props.lastCaseId.year, use
               class="mt-2"
               :message="form.errors?.donation?.comments"
             />
-          </div>
+          </FormRow>
         </template>
       </Panel>
       <IntakeCard

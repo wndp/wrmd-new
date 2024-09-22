@@ -1,12 +1,11 @@
 <script setup>
 import Panel from '@/Components/Panel.vue';
-import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import FormRow from '@/Components/FormElements/FormRow.vue';
 import TextInput from '@/Components/FormElements/TextInput.vue';
 import DatePicker from '@/Components/FormElements/DatePicker.vue';
 import SelectInput from '@/Components/FormElements/SelectInput.vue';
 import CommonName from '@/Components/FormElements/CommonName.vue';
 import InputError from '@/Components/FormElements/InputError.vue';
-import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
 import range from 'lodash/range';
 import {__} from '@/Composables/Translate';
 
@@ -25,11 +24,12 @@ let casesToCreate = range(1, 51);
 <template>
   <Panel class="mt-8">
     <template #content>
-      <div class="col-span-6 md:col-span-2">
-        <InputLabel for="case_year">
-          {{ __('Case Year') }}
-          <RequiredInput />
-        </InputLabel>
+      <FormRow
+        id="case_year"
+        :label="__('Case Year')"
+        required
+        class="col-span-6 md:col-span-2"
+      >
         <SelectInput
           v-model="form.case_year"
           name="case_year"
@@ -42,12 +42,13 @@ let casesToCreate = range(1, 51);
           class="mt-2"
           :message="form.errors?.case_year"
         />
-      </div>
-      <div class="col-span-6 md:col-span-2">
-        <InputLabel for="admitted_at">
-          {{ __('Date Admitted') }}
-          <RequiredInput />
-        </InputLabel>
+      </FormRow>
+      <FormRow
+        id="admitted_at"
+        :label="__('Date Admitted')"
+        required
+        class="col-span-6 md:col-span-2"
+      >
         <DatePicker
           id="admitted_at"
           v-model="form.admitted_at"
@@ -59,12 +60,13 @@ let casesToCreate = range(1, 51);
           class="mt-2"
           :message="form.errors?.admitted_at"
         />
-      </div>
-      <div class="col-span-6 md:col-start-1 md:col-span-4">
-        <InputLabel for="common_name">
-          {{ __('Common Name') }}
-          <RequiredInput />
-        </InputLabel>
+      </FormRow>
+      <FormRow
+        id="common_name"
+        :label="__('Common Name')"
+        required
+        class="col-span-6 md:col-start-1 md:col-span-4"
+      >
         <CommonName
           id="common_name"
           v-model="form.common_name"
@@ -75,27 +77,30 @@ let casesToCreate = range(1, 51);
           class="mt-2"
           :message="form.errors?.common_name"
         />
-      </div>
-      <div class="col-span-6 md:col-span-2">
-        <InputLabel for="morph_id">
-          {{ __('Morph') }}
-        </InputLabel>
+      </FormRow>
+      <FormRow
+        id="morph_id"
+        :label="__('Morph')"
+        class="col-span-6 md:col-span-2"
+      >
         <SelectInput
           v-model="form.morph_id"
           name="morph_id"
           :options="$page.props.options.taxaMorphsOptions"
+          hasBlankOption
         />
         <InputError
           id="morph_id_error"
           class="mt-2"
           :message="form.errors?.morph_id"
         />
-      </div>
-      <div class="col-span-6 md:col-span-2">
-        <InputLabel for="cases_to_create">
-          {{ __('Number of Patients') }}
-          <RequiredInput />
-        </InputLabel>
+      </FormRow>
+      <FormRow
+        id="cases_to_create"
+        :label="__('Number of Patients')"
+        required
+        class="col-span-6 md:col-span-2"
+      >
         <SelectInput
           v-model="form.cases_to_create"
           name="cases_to_create"
@@ -106,11 +111,12 @@ let casesToCreate = range(1, 51);
           class="mt-2"
           :message="form.errors?.cases_to_create"
         />
-      </div>
-      <div class="col-span-6 md:col-span-2">
-        <InputLabel for="reference_number">
-          {{ __('Reference Number') }}
-        </InputLabel>
+      </FormRow>
+      <FormRow
+        id="reference_number"
+        :label="__('Reference Number')"
+        class="col-span-6 md:col-span-2"
+      >
         <TextInput
           v-model="form.reference_number"
           name="reference_number"
@@ -120,11 +126,12 @@ let casesToCreate = range(1, 51);
           class="mt-2"
           :message="form.errors?.reference_number"
         />
-      </div>
-      <div class="col-span-6 md:col-span-2">
-        <InputLabel for="microchip_number">
-          {{ __('Microchip Number') }}
-        </InputLabel>
+      </FormRow>
+      <FormRow
+        id="microchip_number"
+        :label="__('Microchip Number')"
+        class="col-span-6 md:col-span-2"
+      >
         <TextInput
           v-model="form.microchip_number"
           name="microchip_number"
@@ -134,7 +141,7 @@ let casesToCreate = range(1, 51);
           class="mt-2"
           :message="form.errors?.microchip_number"
         />
-      </div>
+      </FormRow>
     </template>
   </Panel>
 </template>

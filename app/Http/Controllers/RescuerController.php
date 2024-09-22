@@ -26,6 +26,7 @@ class RescuerController extends Controller
         $admission = $this->loadAdmissionAndSharePagination();
 
         return Inertia::render('Patients/Rescuer', [
+            'patient' => $admission->patient,
             'rescuer' => $admission->patient->rescuer->loadCount('patients'),
         ]);
     }
