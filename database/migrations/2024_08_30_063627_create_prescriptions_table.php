@@ -13,7 +13,7 @@ return new class () extends Migration {
         Schema::create('prescriptions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('patient_id')->index();
-            $table->unsignedBigInteger('veterinarian_id')->index();
+            $table->unsignedBigInteger('veterinarian_id')->nullable()->index();
             $table->string('drug');
             $table->double('concentration')->nullable();
             $table->unsignedBigInteger('concentration_unit_id')->nullable();
