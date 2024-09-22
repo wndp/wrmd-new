@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\Role;
+use App\Models\Media;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
@@ -46,7 +47,7 @@ class DatabaseSeeder extends Seeder
             return;
         }
 
-        //Media::get()->each->delete();
+        Media::get()->each->delete();
     }
 
     private function cleanDatabase()
