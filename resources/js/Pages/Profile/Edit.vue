@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import UserProfileForm from './Partials/UserProfileForm.vue';
+import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
 import UserPasswordForm from './Partials/UserPasswordForm.vue';
 import TwoFactorAuthenticationForm from './Partials/TwoFactorAuthenticationForm.vue';
 import LogoutOtherBrowserSessionsForm from './Partials/LogoutOtherBrowserSessionsForm.vue';
@@ -37,7 +37,7 @@ defineProps({
           </div>
         </div>
         <div class="mt-5 md:col-span-2 md:mt-0">
-          <UserProfileForm />
+          <UpdateProfileInformationForm />
         </div>
       </div>
     </div>

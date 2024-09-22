@@ -99,12 +99,12 @@ import Panel from '@/Components/Panel.vue';
 import SelectInput from '@/Components/FormElements/SelectInput.vue';
 import InputError from '@/Components/FormElements/InputError.vue';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import PersonForm from '@/Components/Forms/PersonForm.vue';
-import IntakeForm from '@/Components/Forms/IntakeForm.vue';
-import ExamForm from '@/Components/Forms/ExamForm.vue';
-import DiagnosisForm from '@/Components/Forms/DiagnosisForm.vue';
-import OutcomeForm from '@/Components/Forms/OutcomeForm.vue';
-import CageCardForm from '@/Components/Forms/CageCardForm.vue';
+import PersonCard from '@/Components/FormCards/PersonCard.vue';
+import IntakeCard from '@/Components/FormCards/IntakeCard.vue';
+import ExamCard from '@/Components/FormCards/ExamCard.vue';
+import DiagnosisCard from '@/Components/FormCards/DiagnosisCard.vue';
+import OutcomeCard from '@/Components/FormCards/OutcomeCard.vue';
+import CageCardForm from '@/Components/FormCards/CageCardForm.vue';
 import { markRaw } from 'vue';
 import mapValues from 'lodash/mapValues';
 import isObject from 'lodash/isObject';
@@ -138,14 +138,14 @@ export default {
         ],
         tabs: [
             // {title: 'Admission', components: [
-            //     {component: markRaw(PersonForm), model: 'people', props: {affiliation: 'Rescuer'}},
-            //     {component: markRaw(IntakeForm), model: 'intake', props: {}}
+            //     {component: markRaw(PersonCard), model: 'people', props: {affiliation: 'Rescuer'}},
+            //     {component: markRaw(IntakeCard), model: 'intake', props: {}}
             // ]},
             // {title: 'Patient', components: [
             //     {component: markRaw(CageCardForm), model: 'cage_card', props: {}},
-            //     {component: markRaw(ExamForm), model: 'exams', props: {}},
-            //     {component: markRaw(DiagnosisForm), model: 'diagnosis', props: {}},
-            //     {component: markRaw(OutcomeForm), model: 'outcome', props: {}}
+            //     {component: markRaw(ExamCard), model: 'exams', props: {}},
+            //     {component: markRaw(DiagnosisCard), model: 'diagnosis', props: {}},
+            //     {component: markRaw(OutcomeCard), model: 'outcome', props: {}}
             // ]},
             // {title: 'Treatment Log', components: [
             //     //{component: markRaw(TreatmentLog), model: 'treatment_log', props: {}},

@@ -1,11 +1,11 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
 import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import FormSection from '@/Components/FormSection.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import FormSection from '@/Components/FormElements/FormSection.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
 
 const props = defineProps({
     team: Object,
