@@ -31,4 +31,12 @@ return new class () extends Migration {
             $table->shardKey(['uuid']);
         });
     }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('media');
+    }
 };
