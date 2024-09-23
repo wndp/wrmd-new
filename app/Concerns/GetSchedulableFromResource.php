@@ -8,7 +8,7 @@ use UnhandledMatchError;
 
 trait GetSchedulableFromResource
 {
-    public function getSchedulable($resource, $resourceId, $teamId = null)
+    public function getSchedulable($resource, $resourceId)
     {
         try {
             return DailyTaskSchedulable::tryFromUriKey($resource)

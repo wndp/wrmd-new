@@ -39,7 +39,7 @@ trait GeneratesPdfs
             $defaults = array_merge($defaults, [
                 'marginBottom' => '13mm',
                 'footerSpacing' => '3',
-                'footerLeft' => $this->report->account->organization.', '.$this->report->account->locale,
+                'footerLeft' => $this->report->team->name.', '.$this->report->team->locale,
                 'footerRight' => Str::random(10),
                 'footerFontSize' => '9',
             ]);

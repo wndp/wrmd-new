@@ -63,7 +63,7 @@
                   </td>
                 </tr>
                 <tr
-                  v-if="can('manage-expenses') && !patient.is_frozen"
+                  v-if="can(Abilities.MANAGE_EXPENSES) && patient.locked_at === null"
                   class="divide-x divide-gray-200"
                 >
                   <td
@@ -116,7 +116,7 @@
                   </td>
                 </tr>
                 <tr
-                  v-if="can('manage-expenses') && !patient.is_frozen"
+                  v-if="can(Abilities.MANAGE_EXPENSES) && patient.locked_at === null"
                   class="divide-x divide-gray-200"
                 >
                   <td
@@ -195,6 +195,9 @@ import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import ValidationErrors from '@/Components/FormElements/ValidationErrors.vue';
 import TransactionRow from './Partials/TransactionRow.vue';
 import { PlusIcon } from '@heroicons/vue/24/outline';
+import {__} from '@/Composables/Translate';
+import {can} from '@/Composables/Can';
+import {Abilities} from '@/Enums/Abilities';
 
 const route = inject('route');
 

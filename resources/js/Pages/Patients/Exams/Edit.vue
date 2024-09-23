@@ -18,7 +18,7 @@
       class="mt-8"
       :patient="patient"
       :exam="exam"
-      :can-submit="can('manage-exams') && !patient.is_frozen"
+      :can-submit="can(Abilities.MANAGE_EXAMS) && patient.locked_at === null"
       show-exam-type
     />
     <FormSection class="mt-8">
@@ -60,6 +60,9 @@ import FormSection from '@/Components/FormElements/FormSection.vue';
 import DangerButton from '@/Components/FormElements/DangerButton.vue';
 import { ArrowLongLeftIcon } from '@heroicons/vue/24/outline';
 import DeleteExamModal from './Partials/DeleteExamModal.vue';
+import {__} from '@/Composables/Translate';
+import {can} from '@/Composables/Can';
+import {Abilities} from '@/Enums/Abilities';
 
 defineProps({
   exam: {

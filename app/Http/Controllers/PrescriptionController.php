@@ -62,29 +62,24 @@ class PrescriptionController extends Controller
     /**
      * Update a prescription.
      */
-    public function update(Request $request, Patient $patient, Prescription $prescription)
+    public function update(PrescriptionRequest $request, Patient $patient, Prescription $prescription)
     {
-        $request->validate(
-            $this->validationRules(),
-            $this->validationRuleMessages()
-        );
-
         $prescription->validateOwnership(Auth::user()->current_team_id)
             ->fill([
                 'drug' => $request->drug,
-                'rx_started_at' => $request->convertDateFromLocal('rx_started_at'),
-                'rx_ended_at' => $request->convertDateFromLocal('rx_ended_at'),
-                'frequency' => $request->frequency,
+                'rx_started_at' => $request->input('rx_started_at'),
+                'rx_ended_at' => $request->input('rx_ended_at'),
+                'frequency_id' => $request->frequency_id,
                 'is_controlled_substance' => $request->is_controlled_substance,
                 'concentration' => $request->concentration,
-                'concentration_unit' => $request->concentration_unit,
+                'concentration_unit_id' => $request->concentration_unit_id,
                 'dosage' => $request->dosage,
-                'dosage_unit' => $request->dosage_unit,
+                'dosage_unit_id' => $request->dosage_unit_id,
                 'loading_dose' => $request->loading_dose,
-                'loading_dose_unit' => $request->loading_dose_unit,
+                'loading_dose_unit_id' => $request->loading_dose_unit_id,
                 'dose' => $request->dose,
-                'dose_unit' => $request->dose_unit,
-                'route' => $request->route,
+                'dose_unit_id' => $request->dose_unit_id,
+                'route_id' => $request->route_id,
                 'instructions' => $request->instructions,
             ]);
 

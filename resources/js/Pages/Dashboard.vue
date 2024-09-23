@@ -13,6 +13,7 @@ import {
 } from '@heroicons/vue/24/outline';
 import {__} from '@/Composables/Translate';
 import {can} from '@/Composables/Can';
+import {Abilities} from '@/Enums/Abilities';
 
 defineProps({
     recentNews: Array,
@@ -37,7 +38,7 @@ defineProps({
         </div>
         <div class="divide-y divide-gray-200">
           <Link
-            v-if="can('create-patients')"
+            v-if="can(Abilities.CREATE_PATIENTS)"
             :href="route('patients.create')"
             class="group flex items-center px-2 py-2 text-base leading-5 text-blue-600 rounded-md hover:text-blue-900 focus:outline-none focus:text-blue-900 transition ease-in-out duration-150 truncate"
           >
@@ -52,7 +53,7 @@ defineProps({
             <span class="flex-1 truncate">{{ __('List Patients') }}</span>
           </Link>
           <Link
-            v-if="can('search-patients')"
+            v-if="can(Abilities.SEARCH_PATIENTS)"
             :href="route('search.simple.create')"
             class="group flex items-center px-2 py-2 text-base leading-5 text-blue-600 rounded-md hover:text-blue-900 focus:outline-none focus:text-blue-900 transition ease-in-out duration-150 truncate"
           >

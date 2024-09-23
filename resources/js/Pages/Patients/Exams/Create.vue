@@ -17,7 +17,7 @@
     <ExamForm
       class="mt-8"
       :patient="patient"
-      :can-submit="can('manage-exams') && !patient.is_frozen"
+      :can-submit="can(Abilities.MANAGE_EXAMS) && patient.locked_at === null"
       form-method="post"
       form-route="patients.exam.store"
       show-exam-type
@@ -32,6 +32,9 @@ import { usePage } from '@inertiajs/vue3';
 import PatientLayout from '@/Layouts/PatientLayout.vue';
 import ExamForm from '@/Components/Forms/ExamForm.vue';
 import { ArrowLongLeftIcon } from '@heroicons/vue/24/outline';
+import {__} from '@/Composables/Translate';
+import {can} from '@/Composables/Can';
+import {Abilities} from '@/Enums/Abilities';
 
 let patient = computed(() => usePage().props.admission.patient);
 let caseQueryString = computed(() => {

@@ -47,30 +47,28 @@ class DailyTask extends Model implements Summarizable
         'created_at_for_humans'
     ];
 
-    /**
-     * Get all of the owning task-able models.
-     */
     public function task()
     {
         return $this->morphTo();
     }
 
-    /**
-     * Tasks are completed by a user.
-     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function getSummaryDateAttribute()
+    public function summaryDate(): Attribute
     {
-        return 'completed_at';
+        return Attribute::get(
+            fn () => 'completed_at'
+        );
     }
 
-    public function getSummaryBodyAttribute()
+    public function summaryBody(): Attribute
     {
-        return 'Did: '.Wrmd::humanize(class_basename($this->task_type));
+        return Attribute::get(
+            fn () => 'Did: '.Wrmd::humanize(class_basename($this->task_type))
+        );
     }
 
     protected function occurrenceAtForHumans(): Attribute

@@ -76,7 +76,7 @@ const redirectToTab = () => router.get(route(currentRoute.value));
             </span>
           </Link>
         </template>
-        <template v-if="can('display-danger-zone')">
+        <template v-if="can(Abilities.VIEW_DANGER_ZONE)">
           <div>
             <div class="border-t border-gray-200 my-4" />
           </div>

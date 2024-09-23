@@ -41,8 +41,8 @@ class ScheduledTasksController extends Controller
                 'recorded_tasks' => $schedulable->recordedTasks,
             ])
             ->sortBy([
-                ['start_date', Wrmd::settings('logOrder') === 'desc' ? 'desc' : 'asc'],
                 ['created_at', Wrmd::settings('logOrder') === 'desc' ? 'desc' : 'asc'],
+                ['start_date', Wrmd::settings('logOrder') === 'desc' ? 'desc' : 'asc'],
             ])
             ->values();
 

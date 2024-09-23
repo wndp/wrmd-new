@@ -12,7 +12,8 @@ use Maatwebsite\Excel\Concerns\WithProperties;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-abstract class ExportableReport extends Report implements FromQuery, WithTitle, WithEvents, WithMapping, WithHeadings, ShouldAutoSize, WithProperties
+abstract class ExportableReport extends Report implements
+    FromQuery, WithTitle, WithEvents, WithMapping, WithHeadings, ShouldAutoSize, WithProperties
 {
     public $canExport = true;
 

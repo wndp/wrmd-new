@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use Api2Pdf\Api2Pdf;
 use App\Models\Patient;
+use App\PdfApiInterface;
 use App\Repositories\SettingsStore;
+use App\Services\DomPdfEngine;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\App;
@@ -31,8 +34,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(PdfApiInterface::class, function () {
             if (config('wrmd.reporting.pdf_driver') === 'api2pdf') {
                 return new Api2Pdf(config('services.api2pdf.key'));
-            } else {
-                return new NullPdfEngine();
+            } else if (config('wrmd.reporting.pdf_driver') === 'domPdf') {
+                return new DomPdfEngine();
             }
         });
     }

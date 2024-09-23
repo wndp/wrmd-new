@@ -5,6 +5,7 @@ namespace App\Jobs\PatientNotifications;
 use App\Events\NotifyPatient;
 use App\Models\Patient;
 use App\Models\Team;
+use App\Support\DailyTasksCollection;
 use Carbon\Carbon;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -42,7 +43,7 @@ class PastDueTasks implements ShouldQueue
         $tomorrow = Carbon::tomorrow($this->team->settingsStore()->get('timezone'));
 
         Cache::remember($this->fingerPrint(), $tomorrow, function () {
-            return DailyTasks::make()->getPastDueForPatient($this->patient, $this->team);
+            return DailyTasksCollection::make()->getPastDueForPatient($this->patient, $this->team);
         })->whenNotEmpty(function ($pastDueTasks) {
             $count = $pastDueTasks->sum(function ($dateGroup) {
                 return $dateGroup['tasks']->count();

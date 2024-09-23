@@ -118,7 +118,7 @@ class CareLog extends Model implements Summarizable, Weighable
     //     return empty($this->temperature_unit) || !is_numeric($this->temperature) || $this->temperature <= 0 ? '' : $this->temperature.$this->temperature_unit;
     // }
 
-    public function getSummaryBodyAttribute()
+    public function summaryBody(): Attribute
     {
         $vitals = [];
         $weight = $this->fullWeight;
@@ -133,23 +133,29 @@ class CareLog extends Model implements Summarizable, Weighable
 
         $details[] = $this->comments;
 
-        return implode(' ', array_filter($details));
-
-        //return '<span class="text-inline-emphasize">' . implode(', ', $vitals) . '</span> ' . $this->comments;
+        return Attribute::get(
+            fn () => implode(' ', array_filter($details))
+        );
     }
 
-    public function getSummaryDateAttribute()
+    public function summaryDate(): Attribute
     {
-        return 'date_care_at';
+        return Attribute::get(
+            fn () => 'date_care_at'
+        );
     }
 
-    public function getSummaryWeightAttribute()
+    public function summaryWeight(): Attribute
     {
-        return $this->weight;
+        return Attribute::get(
+            fn () => $this->weight
+        );
     }
 
-    public function getSummaryWeightUnitIdAttribute()
+    public function summaryWeightUnitId(): Attribute
     {
-        return $this->weight_unit_id;
+        return Attribute::get(
+            fn () => $this->weight_unit_id
+        );
     }
 }

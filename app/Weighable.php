@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
+
 interface Weighable
 {
     /**
@@ -9,12 +11,12 @@ interface Weighable
      *
      * @return string
      */
-    public function getSummaryWeightAttribute();
+    public function summaryWeight(): Attribute;
 
     /**
      * Get the models weight unit.
      *
      * @return string
      */
-    public function getSummaryWeightUnitIdAttribute();
+    public function summaryWeightUnitId(): Attribute;
 }

@@ -6,7 +6,6 @@ import { ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/vue/24/outline';
 import Badge from '@/Components/Badge.vue';
 import FollowButton from './Partials/FollowButton.vue';
 import SolvedButton from './Partials/SolvedButton.vue';
-import GithubIssueButton from './Partials/GithubIssueButton.vue';
 import FormSection from '@/Components/FormElements/FormSection.vue';
 import TextareaInput from '@/Components/FormElements/TextareaInput.vue';
 import InputError from '@/Components/FormElements/InputError.vue';
@@ -15,6 +14,7 @@ import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import ForumAside from './Partials/ForumAside.vue';
 import {__} from '@/Composables/Translate';
 import {can} from '@/Composables/Can';
+import {Abilities} from '@/Enums/Abilities';
 
 const props = defineProps({
   thread: Object,
@@ -82,14 +82,6 @@ const postReply = () => {
               }) }}
             </p>
           </div>
-          <div class="mt-6 space-x-2">
-            <FollowButton :isFollowing="thread.is_following" />
-            <SolvedButton
-              v-if="canResolve"
-              :isSolved="thread.status === 'Solved'"
-            />
-            <GithubIssueButton v-if="can('anything')" />
-          </div>
         </div>
         <div class="flow-root mt-8">
           <ul
@@ -117,7 +109,7 @@ const postReply = () => {
                     <div>
                       <div class="text-sm">
                         <Link
-                          v-if="can('manageAccounts')"
+                          v-if="can(Abilities.COMPUTED_MANAGE_ACCOUNTS)"
                           :href="route('accounts.show', thread.account)"
                           class="font-medium text-gray-900"
                         >
@@ -166,7 +158,7 @@ const postReply = () => {
                     <div>
                       <div class="text-sm">
                         <Link
-                          v-if="can('manageAccounts')"
+                          v-if="can(Abilities.COMPUTED_MANAGE_ACCOUNTS)"
                           :href="route('accounts.show', reply.account)"
                           class="font-medium text-gray-900"
                         >

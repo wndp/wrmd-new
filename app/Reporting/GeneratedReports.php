@@ -56,7 +56,7 @@ class GeneratedReports
      */
     protected static function allGeneratedReports(Team $team): Collection
     {
-        return collect(Storage::allFiles("generated-reports/{$team->id}"));
+        return collect(Storage::allFiles("reports/{$team->id}"));
     }
 
     /**

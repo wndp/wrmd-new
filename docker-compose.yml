@@ -34,10 +34,10 @@ services:
         ports:
             - '${FORWARD_DB_PORT:-3306}:3306'
             - '${FORWARD_SINGLESTORE_UI_PORT:-8080}:8080'
-            - '${FORWARD_SINGLESTORE_API_PORT:-9000}:9000'
+            # - '${FORWARD_SINGLESTORE_API_PORT:-9000}:9000'
         volumes:
             - 'sail-singlestore:/data'
-            - '${PWD}/local/init.sql:/init.sql'
+            - './docker/singlestore/create_database.sql:/create_database.sql'
         environment:
             - SINGLESTORE_LICENSE=${SINGLESTORE_LICENSE}
             - ROOT_PASSWORD=${DB_PASSWORD}
@@ -80,7 +80,7 @@ services:
     minio:
         image: 'minio/minio:latest'
         ports:
-            - '${FORWARD_MINIO_PORT:-9001}:9001'
+            - '${FORWARD_MINIO_PORT:-9000}:9000'
             - '${FORWARD_MINIO_CONSOLE_PORT:-8900}:8900'
         environment:
             MINIO_ROOT_USER: sail
@@ -98,6 +98,20 @@ services:
                 - local
             retries: 3
             timeout: 5s
+    minio-create-bucket:
+        image: minio/mc
+        depends_on:
+            - minio
+        environment:
+            AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+            AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+            AWS_BUCKET: ${AWS_BUCKET}
+            AWS_ENDPOINT: ${AWS_ENDPOINT}
+        volumes:
+            - './docker/minio:/etc/minio'
+        networks:
+            - sail
+        entrypoint: /etc/minio/create_bucket.sh
     mailpit:
         image: 'axllent/mailpit:latest'
         ports:

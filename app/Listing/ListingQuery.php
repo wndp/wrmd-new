@@ -3,83 +3,129 @@
 namespace App\Listing;
 
 use App\Concerns\AsAction;
+use App\Concerns\JoinsTablesToPatients;
+use App\Enums\Attribute;
+use App\Enums\Entity;
 use App\Models\Admission;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ListingQuery
 {
     use AsAction;
+    use JoinsTablesToPatients;
 
     public $query;
 
     public function handle()
     {
-        $this->query = Admission::query()->joinPatients();
+        $this->query = Admission::query();//->joinPatients();
 
         return $this;
     }
 
-    public function selectColumns(array $select = []): self
+    public function eagerLoadUsing(array $selecting = [])
     {
-        if (Arr::first($select) === '*') {
+        $with = ['patient'];
 
-        } else {
-            $this->query->select($select);
-        }
+        // Eager load patient relationships
+        Collection::make($selecting)
+            ->map(fn ($tableDotField) => explode('.', $tableDotField)[0])
+            ->reject(fn ($table) => in_array($table, ['admissions', 'patients']))
+            ->unique()
+            ->each(function ($table) use (&$with) {
+                array_push(
+                    $with,
+                    implode('.', [
+                        'patient',
+                        Entity::tryFrom($table)->patientRelationshipName()
+                    ])
+                );
+            });
+
+        // Eager load attribute option relationships
+        Collection::make($selecting)
+            ->each(function ($tableDotField) use (&$with) {
+                [$table, $column] = explode('.', $tableDotField);
+                if (Attribute::tryFrom($tableDotField)?->hasAttributeOptions()) {
+                    array_push(
+                        $with,
+                        implode('.', array_filter([
+                            'patient',
+                            Entity::tryFrom($table)->patientRelationshipName(),
+                            Attribute::from($tableDotField)->attributeOptionOwningModelRelationship()
+                        ]))
+                    );
+                }
+            });
+
+        $this->query->with($with);
 
         return $this;
     }
+
+    // public function selectColumns(array $select = []): self
+    // {
+    //     if (Arr::first($select) === '*') {
+
+    //     } else {
+    //         $this->query->select($select);
+    //     }
+
+    //     return $this;
+    // }
 
     /**
      * Add admission keys to query to ensure results represent the actual admission.
      */
-    public function selectAdmissionKeys(): self
-    {
-        $this->query->addSelect([
-            'admissions.case_id as case_id',
-            'admissions.case_year as case_year',
-            'admissions.team_id as team_id',
-            'admissions.patient_id as patient_id',
-            'admissions.hash as hash',
-        ]);
+    // public function selectAdmissionKeys(): self
+    // {
+    //     $this->query->addSelect([
+    //         'admissions.case_id as case_id',
+    //         'admissions.case_year as case_year',
+    //         'admissions.team_id as team_id',
+    //         'admissions.patient_id as patient_id',
+    //         'admissions.hash as hash',
+    //     ]);
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function joinTables(array $selecting = []): self
-    {
-        if (Arr::first($selecting) === '*') {
-            $this->joinAllTables();
-        } else {
-            $this->joinSelectedTables($selecting);
-        }
+    // public function joinTables(array $selecting = []): self
+    // {
+    //     if (Arr::first($selecting) === '*') {
+    //         $this->joinAllTables();
+    //     } else {
+    //         $this->joinSelectedTables($selecting);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     /**
      * Join all available tables.
      */
-    public function joinAllTables(): void
-    {
-        $this->query
-            //->joinPatients()
-            ->joinTaxa()
-            ->joinPeople()
-            //->joinTreatmentLogs()
-            ->joinIntakeExam()
-            ->joinLastLocation()
-            ->joinRechecks();
+    // public function joinAllTables(): void
+    // {
+    //     dd('joinAllTables');
+    //     $this->query
+    //         //->joinPatients()
+    //         ->joinTaxa()
+    //         ->joinPeople()
+    //         //->joinTreatmentLogs()
+    //         ->joinIntakeExam()
+    //         ->joinLastLocation()
+    //         ->joinRechecks();
 
-        // Fire joinAll event to allow extensions to select and join in this query.
-        event('JoinTables.all', $query);
-    }
+    //     // Fire joinAll event to allow extensions to select and join in this query.
+    //     event('JoinTables.all', $query);
+    // }
 
     /**
-     * Cycle through the columns being selected to join the associated tables.
+     * Cycle through the columns being selected to join their tables.
      */
     public function joinSelectedTables($selecting): void
     {
@@ -89,7 +135,6 @@ class ListingQuery
             ->reject(function ($table) {
                 return in_array($table, ['admissions', 'patients']);
             })
-            //->prepend('patients')
             ->unique()
             ->each(function ($table) {
                 $joinMethod = 'join'.Str::studly($table);
@@ -102,12 +147,15 @@ class ListingQuery
             });
     }
 
-    // public function joinPatientLocations()
-    // {
-    //     $this->leftJoinCurrentLocation();
+    /**
+     * Shortcut method to only join the patients current location.
+     */
+    public function joinPatientLocations()
+    {
+        $this->leftJoinCurrentLocation();
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
     public function __call(string $method, array $parameters)
     {

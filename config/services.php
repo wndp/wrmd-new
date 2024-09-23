@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'api2pdf' => [
+        'key' => env('API_2_PDF_KEY'),
+    ],
+
 ];

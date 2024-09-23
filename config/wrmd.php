@@ -29,4 +29,8 @@ return [
     //     'patients.dispositioned_at',
     // ],
 
+    'reporting' => [
+        'pdf_driver' => env('PDF_DRIVER', 'domPdf'),
+    ]
+
 ];

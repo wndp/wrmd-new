@@ -4,6 +4,7 @@ namespace App\Listing;
 
 use App\Caches\PatientSelector;
 use App\Enums\Attribute;
+use App\Enums\Entity;
 use App\Models\Team;
 use App\Support\Wrmd;
 use Carbon\Carbon;
@@ -15,10 +16,6 @@ use JsonSerializable;
 
 abstract class LiveList implements JsonSerializable
 {
-    //use FiltersRecords;
-
-    public $team;
-
     protected $year;
 
     protected $columns;
@@ -28,12 +25,12 @@ abstract class LiveList implements JsonSerializable
     /**
      * Constructor.
      */
-    public function __construct(Team $team)
+    public function __construct(public Team $team)
     {
         $this->team = $team;
 
         $this->columns = $team->settingsStore()->get('listFields', [
-            Attribute::PATIENT_LOCATIONS_FACILITY->value,
+            Attribute::PATIENT_LOCATIONS_FACILITY_ID->value,
             Attribute::PATIENTS_BAND->value,
             Attribute::PATIENTS_DISPOSITION_ID->value,
             Attribute::PATIENTS_DISPOSITIONED_AT->value,
@@ -130,33 +127,49 @@ abstract class LiveList implements JsonSerializable
         return compact('rows', 'headers', 'selected');
     }
 
-    public function normalizeData($admissions)
+    public function normalizeRows($admissions)
     {
         return $admissions
-            ->each(fn ($admission) => $admission->load('patient'))
-            //->filter(fn ($admission) => $admission->patientIsNotVoided())
             ->map(function ($admission) {
-                $data['patient_id'] = $admission->patient_id;
-                $data['link'] = Wrmd::patientRoute($admission);
-                $data['case_number'] = $admission->case_number;
-                $data['admitted_at'] = $admission->patient->date_admitted_at->format(config('wrmd.date_format'));
-                $data['common_name'] = $admission->patient->common_name;
+                $row['patient_id'] = $admission->patient_id;
+                $row['url'] = Wrmd::patientRoute($admission);
+                $row['case_number'] = $admission->case_number;
+                $row['admitted_at'] = $admission->patient->date_admitted_at->format(config('wrmd.date_format'));
+                $row['common_name'] = $admission->patient->common_name;
 
                 foreach ($this->columns as $tableColumn) {
                     [$table, $column] = explode('.', $tableColumn);
+                    $entity = Entity::tryFrom($table);
+                    $patientRelationship = $entity->patientRelationshipName();
 
-                    $value = $admission->{$column};
-
-                    if (is_null($value)) {
-                        $data[$tableColumn] = $value;
-                    } elseif (Str::endsWith($column, '_at') || $value instanceof Carbon) {
-                        $data[$tableColumn] = Carbon::parse($value)->format(config('wrmd.date_format'));
+                    if ($entity === Entity::PATIENT) {
+                        $model = $admission->patient;
+                    } else if ($entity->shouldDisplayLatestInLists()) {
+                        $model = $admission->patient->{$patientRelationship}->last(
+                            fn ($model) => $model->created_at //
+                        );
                     } else {
-                        $data[$tableColumn] = $value;
+                        dd('what is this model?', $entity);
+                    }
+
+                    $rawValue = $model?->$column;
+
+                    if (is_null($rawValue)) {
+                        $row[$tableColumn] = null;
+
+                    } else if (Str::endsWith($column, '_at') || $rawValue instanceof Carbon) {
+                        $row[$tableColumn] = Carbon::parse($rawValue)->format(config('wrmd.date_format'));
+
+                    } else if (Attribute::tryFrom($tableColumn)?->hasAttributeOptions()) {
+                        $row[$tableColumn] = $model->{Attribute::from($tableColumn)->attributeOptionOwningModelRelationship()}?->value;
+
+                    } else {
+                        $row[$tableColumn] = $rawValue;
+
                     }
                 }
 
-                return $data;
+                return $row;
             })
             ->values();
     }
@@ -178,9 +191,9 @@ abstract class LiveList implements JsonSerializable
     /**
      * Format the list's headers to translated values.
      *
-     * @return \App\Domain\Locality\FieldsCollection
+     * @return array
      */
-    public function formatListHeaders()
+    public function formatListHeaders(): array
     {
         return array_map(function ($name) {
             $attribute = Attribute::tryFrom($name);
@@ -189,16 +202,6 @@ abstract class LiveList implements JsonSerializable
                 'key' => $name
             ];
         }, $this->columns);
-
-        // return fields()->getLabels()
-        //     ->intersectByKeys(array_flip($this->columns))
-        //     ->transform(function ($label, $key) {
-        //         return compact('label', 'key');
-        //     })
-        //     ->values();
-
-        // $keyList = array_flip($this->columns);
-        //return array_intersect_key(array_replace($keyList, fields()->getLabels()->all()), $keyList);
     }
 
     /**
@@ -208,18 +211,18 @@ abstract class LiveList implements JsonSerializable
      */
     private function formatListResults()
     {
-        $cases = $this->data();
-        $data = $this->normalizeData($cases);
+        $admissions = $this->data();
+        $data = $this->normalizeRows($admissions);
 
-        return $this->normalizePagination($cases, $data);
+        return $this->normalizePagination($admissions, $data);
 
         //return compact('pagination');
     }
 
-    private function normalizePagination($cases, $data)
+    private function normalizePagination($admissions, $data)
     {
-        if ($cases instanceof LengthAwarePaginator) {
-            return array_merge($cases->toArray(), compact('data'));
+        if ($admissions instanceof LengthAwarePaginator) {
+            return array_merge($admissions->toArray(), compact('data'));
             // return [
             //     'total' => $cases->total(),
             //     'per_page' => $cases->perPage(),
@@ -231,7 +234,7 @@ abstract class LiveList implements JsonSerializable
         }
 
         return array_merge(compact('data'), [
-            'total' => $cases->count(),
+            'total' => $admissions->count(),
         ]);
 
         // return [

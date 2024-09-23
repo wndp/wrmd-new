@@ -157,7 +157,6 @@ const saveIntake = () => emit('submitted');
         <TextInput
           v-model="form.postal_code_found"
           name="postal_code_found"
-          :required="enforceRequired"
         />
         <InputError
           class="mt-2"

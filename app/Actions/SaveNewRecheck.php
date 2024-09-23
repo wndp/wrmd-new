@@ -25,8 +25,8 @@ class SaveNewRecheck
         ]);
 
         [$singleDoseId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
-            AttributeOptionName::DAILY_TASK_FREQUENCIES,
-            AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_SINGLE_DOSE
+            AttributeOptionName::DAILY_TASK_FREQUENCIES->value,
+            AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_SINGLE_DOSE->value
         ]);
 
         if ($data['frequency_id'] === $singleDoseId && empty($data['recheck_end_at'])) {

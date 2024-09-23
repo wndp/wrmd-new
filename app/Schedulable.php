@@ -27,7 +27,7 @@ interface Schedulable extends Summarizable, Badgeable
      *
      * @return string|null
      */
-    public function getFrequencyAttribute();
+    //public function getFrequencyAttribute();
 
     /**
      * Get the schedulable's number of daily occurrences.

@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\AttributeOptionName;
 use App\Rules\AttributeOptionExistsRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PrescriptionRequest extends FormRequest
 {
@@ -63,6 +64,11 @@ class PrescriptionRequest extends FormRequest
             ],
             'is_controlled_substance' => 'nullable|boolean',
             'instructions' => 'nullable|string',
+            'veterinarian_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('veterinarians', 'id')->where('team_id', $this->user()->current_team_id)
+            ]
         ];
     }
 

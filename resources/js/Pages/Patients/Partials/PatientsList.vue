@@ -148,7 +148,7 @@ const togglePatient = (patientId) => {
                   />
                 </td>
                 <td class="px-2 py-2 whitespace-nowrap text-sm font-medium text-blue-700">
-                  <Link :href="patient.link">
+                  <Link :href="patient.url">
                     {{ patient.case_number }}
                   </Link>
                 </td>

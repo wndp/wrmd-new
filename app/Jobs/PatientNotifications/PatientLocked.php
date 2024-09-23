@@ -36,11 +36,11 @@ class PatientLocked implements ShouldQueue
      */
     public function handle(): void
     {
-        if ($this->patient->isFrozen()) {
+        if ($this->patient->locked_at !== null) {
             NotifyPatient::dispatch(
                 $this->patient,
                 __('Patient Frozen'),
-                __('This patient has been frozen and can not be updated.')
+                __('This patient has been locked and can not be updated.')
             );
         }
     }

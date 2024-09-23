@@ -4,6 +4,7 @@ namespace App\Reporting\Reports;
 
 use App\Listing\Lists\SelectedPatientsList;
 use App\Reporting\Contracts\ExportableReport;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
 class PatientsList extends ExportableReport implements FromCollection
@@ -41,17 +42,19 @@ class PatientsList extends ExportableReport implements FromCollection
      */
     public function headings(): array
     {
-        $this->listHeaders = (new SelectedPatientsList($this->team))->formatListHeaders();
+        $this->listHeaders = Collection::make(
+            (new SelectedPatientsList($this->team))->formatListHeaders()
+        );
 
         return $this->listHeaders
             ->pluck('label')
-            ->push('Date Admitted')
-            ->prepend('Common Name')
-            ->prepend('Case Number')
+            ->push(__('Date Admitted'))
+            ->prepend(__('Common Name'))
+            ->prepend(__('Case Number'))
             ->toArray();
     }
 
-    public function collection(): EloquentCollection
+    public function collection(): Collection
     {
         return (new SelectedPatientsList($this->team))->get()['rows']['data'];
     }

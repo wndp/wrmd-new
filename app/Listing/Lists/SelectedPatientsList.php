@@ -2,8 +2,8 @@
 
 namespace App\Listing\Lists;
 
-use App\Domain\Admissions\Admission;
-use App\Domain\Cache\PatientSelector;
+use App\Caches\PatientSelector;
+use App\Listing\ListingQuery;
 use App\Listing\LiveList;
 use Illuminate\Support\Collection;
 
@@ -28,15 +28,22 @@ class SelectedPatientsList extends LiveList
             return new Collection();
         }
 
-        return Admission::selectColumns($this->columns)
-            ->where('team_id', $this->team->id)
-            ->with('patient')
+        return ListingQuery::run()
+            ->eagerLoadUsing($this->columns)
             ->limitToSelected()
-            ->joinTables($this->columns)
-            ->selectAdmissionKeys()
+            ->where('team_id', $this->team->id)
             ->orderBy('admissions.case_year', 'desc')
             ->orderBy('admissions.case_id', 'desc')
             ->get();
+
+        // return Admission::selectColumns($this->columns)
+        //     ->where('team_id', $this->team->id)
+        //     ->with('patient')
+        //     ->joinTables($this->columns)
+        //     ->selectAdmissionKeys()
+        //     ->orderBy('admissions.case_year', 'desc')
+        //     ->orderBy('admissions.case_id', 'desc')
+        //     ->get();
 
         //return Admission::scopedList($this->team->id, null, $this->columns)->limitToSelected()->get();
     }

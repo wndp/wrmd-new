@@ -100,28 +100,28 @@ const showSaveComment = ref(false);
   </Menu>
   <SaveRecheckModal
     v-if="showSaveRecheck"
-    :patient="{id: patientId}"
+    :patientId="patientId"
     :show="true"
     :title="__('New Recheck')"
     @close="showSaveRecheck = false"
   />
   <SavePrescriptionModal
     v-if="showSavePrescription"
-    :patient="{id: patientId}"
+    :patientId="patientId"
     :show="true"
     :title="__('New Prescription')"
     @close="showSavePrescription = false"
   />
   <SaveNutritionModal
     v-if="showSaveNutrition"
-    :patient="{id: patientId}"
+    :patientId="patientId"
     :show="true"
     :title="__('New Nutrition Plan')"
     @close="showSaveNutrition = false"
   />
   <SaveCommentModal
     v-if="showSaveComment"
-    :patient="{id: patientId}"
+    :patientId="patientId"
     :show="true"
     :title="__('New Comment')"
     @close="showSaveComment = false"

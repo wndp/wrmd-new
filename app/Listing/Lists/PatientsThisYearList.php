@@ -28,14 +28,14 @@ class PatientsThisYearList extends LiveList
         $year = $this->request->get('y', Carbon::now()->year);
 
         return ListingQuery::run()
-            ->selectColumns($this->columns)
-            ->selectAdmissionKeys()
-            ->joinTables($this->columns)
+            // ->selectColumns($this->columns)
+            // ->selectAdmissionKeys()
+            // ->joinTables($this->columns)
+            ->eagerLoadUsing($this->columns)
             ->where([
                 'team_id' => $this->team->id,
                 'case_year' => $year,
             ])
-            ->with('patient')
             ->orderBy('admissions.case_year', 'desc')
             ->orderBy('admissions.case_id', 'desc')
             ->paginate()

@@ -17,6 +17,9 @@ use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
+use App\Support\DailyTasksCollection;
+use App\Support\DailyTasksFilters;
+use Carbon\Carbon;
 
 trait LoadsAdmissionAndSharesPagination
 {
@@ -61,7 +64,8 @@ trait LoadsAdmissionAndSharesPagination
                 'incident' => [
                     'id' => $admission->patient->incident?->id,
                     'incident_number' => $admission->patient->incident?->incident_number,
-                ]
+                ],
+                'numberOfTasksDueToday' => $this->getNumberOfTasksDueToday($admission->patient)
             ],
             'cageCard' => [
                 'patient_id' => $admission->patient->id,
@@ -281,5 +285,17 @@ trait LoadsAdmissionAndSharesPagination
                 'year' => session('caseYear'),
             ],
         ]);
+    }
+
+    public function getNumberOfTasksDueToday($patient)
+    {
+        return DailyTasksCollection::make()
+            ->withFilters(new DailyTasksFilters([
+                'date' => Carbon::now()
+            ]))
+            ->forPatient($patient, Auth::user()->currentTeam)
+            ->sum(fn ($task) => $task['number_of_occurrences'] - (
+                $task['completed_occurrences']->count() + $task['incomplete_occurrences']->count()
+            ));
     }
 }

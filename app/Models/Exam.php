@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Concerns\ValidatesOwnership;
 use App\Summarizable;
 use App\Support\Timezone;
+use App\Weighable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-class Exam extends Model implements Summarizable
+class Exam extends Model implements Summarizable, Weighable
 {
     use HasFactory;
     use SoftDeletes;
@@ -231,12 +232,14 @@ class Exam extends Model implements Summarizable
         });
     }
 
-    public function getSummaryDateAttribute()
+    public function summaryDate(): Attribute
     {
-        return 'examined_at';
+        return Attribute::get(
+            fn () => 'examined_at'
+        );
     }
 
-    public function getSummaryBodyAttribute()
+    public function summaryBody(): Attribute
     {
         $weight = $this->fullWeight;
         $temperature = $this->fullTemperature;
@@ -262,11 +265,27 @@ class Exam extends Model implements Summarizable
         $details[] = $this->treatment ? __('Treatment').': '.$this->treatment : '';
         $details[] = $this->examiner ? __('Examiner').': '.$this->examiner : '';
 
-        return sprintf(
-            '%s %s: %s',
-            Str::ucfirst($this->type),
-            __('Exam'),
-            implode(' ', array_filter($details))
+        return Attribute::get(
+            fn () => sprintf(
+                '%s %s: %s',
+                Str::ucfirst($this->type),
+                __('Exam'),
+                implode(' ', array_filter($details))
+            )
+        );
+    }
+
+    public function summaryWeight(): Attribute
+    {
+        return Attribute::get(
+            fn () => $this->weight
+        );
+    }
+
+    public function summaryWeightUnitId(): Attribute
+    {
+        return Attribute::get(
+            fn () => $this->weight_unit_id
         );
     }
 }

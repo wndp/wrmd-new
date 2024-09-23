@@ -33,30 +33,27 @@ class RecordedDailyTaskListController extends Controller
         $schedualableModel = $this->getSchedulable($resource, $resourceId)
             ->validateOwnership(Auth::user()->current_team_id);
 
-        $attributes = [
-            'occurrence' => $data['occurrence'],
-            'occurrence_at' => $data['occurrence_at'],
-        ];
+        //try {
+            $result = $schedualableModel->recordedTasks()->updateOrCreate([
+                'occurrence' => $data['occurrence'],
+                'occurrence_at' => $data['occurrence_at'],
+            ], [
+                'user_id' => Auth::id(),
+                'summary' => $schedualableModel->summary_body,
+                'completed_at' => Timezone::convertFromLocalToUtc($data['completed_at'])
+            ]);
 
-        $values = [
-            'user_id' => Auth::id(),
-            'summary' => $schedualableModel->summary_body,
-            'completed_at' => Timezone::convertFromLocalToUtc($data['completed_at'])
-        ];
-
-        try {
-            $result = $schedualableModel->recordedTasks()->updateOrCreate($attributes, $values);
             //event(new DailyTaskCompleted($schedualableModel, $check));
 
             return response()->json($result);
-        } catch (QueryException $e) {
-            if (Str::contains($e->getMessage(), 'Duplicate entry')) {
-                return response()->json([
-                    'message' => 'Task already recorded.',
-                ]);
-            }
-            throw $e;
-        }
+        // } catch (QueryException $e) {
+        //     if (Str::contains($e->getMessage(), 'Duplicate entry')) {
+        //         return response()->json([
+        //             'message' => 'Task already recorded.',
+        //         ]);
+        //     }
+        //     throw $e;
+        // }
     }
 
     /**

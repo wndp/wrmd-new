@@ -11,7 +11,7 @@
       </div>
       <div class="mt-3 sm:mt-0 sm:ml-4">
         <PrimaryButton
-          v-if="can('manage-exams') && !patient.is_frozen"
+          v-if="can(Abilities.MANAGE_EXAMS) && patient.locked_at === null"
           @click="$inertia.get(route('patients.exam.create', caseQueryString))"
         >
           <PlusIcon
@@ -119,6 +119,9 @@ import PatientLayout from '@/Layouts/PatientLayout.vue';
 import { PencilIcon, PlusIcon } from '@heroicons/vue/24/outline';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import Badge from '@/Components/Badge.vue';
+import {__} from '@/Composables/Translate';
+import {can} from '@/Composables/Can';
+import {Abilities} from '@/Enums/Abilities';
 
 defineProps({
   exams: {

@@ -6,10 +6,12 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "api2pdf/api2pdf.php": "^2.0",
         "commerceguys/addressing": "^2.2",
         "geocodio/geocodio-library-php": "^1.7",
         "inertiajs/inertia-laravel": "^1.0",
         "laravel/framework": "^11.9",
+        "laravel/horizon": "^5.28",
         "laravel/jetstream": "^5.1",
         "laravel/octane": "^2.5",
         "laravel/sanctum": "^4.0",
@@ -28,6 +30,7 @@
         "vemcogroup/laravel-translation": "^3.0"
     },
     "require-dev": {
+        "dompdf/dompdf": "^3.0",
         "fakerphp/faker": "^1.23",
         "knuckleswtf/scribe": "^4.37",
         "laravel/pint": "^1.13",

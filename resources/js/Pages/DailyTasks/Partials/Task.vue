@@ -64,25 +64,19 @@ const editModalProps = computed(() => {
       return {
         title: __('Update Recheck'),
         recheck: props.task.model,
-        patient: {
-          id: props.task.model.patient_id
-        }
+        patientId: props.task.model.patient_id
       };
     case 'prescription':
       return {
         title: __('Update Prescription'),
         prescription: props.task.model,
-        patient: {
-          id: props.task.model.patient_id
-        }
+        patientId: props.task.model.patient_id
       };
     case 'nutrition':
       return {
         title: __('Update Nutrition Plan'),
         nutrition: props.task.model,
-        patient: {
-          id: props.task.model.patient_id
-        }
+        patientId: props.task.model.patient_id
       };
     default:
       return {};

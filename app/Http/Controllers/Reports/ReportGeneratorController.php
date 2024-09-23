@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Reports;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReportRequest;
 use App\Models\Team;
+use App\Reporting\Contracts\Generator;
+use App\Reporting\Contracts\Report;
 use App\Reporting\GeneratedReports;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;

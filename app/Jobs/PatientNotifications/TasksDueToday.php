@@ -5,6 +5,8 @@ namespace App\Jobs\PatientNotifications;
 use App\Events\NotifyPatient;
 use App\Models\Patient;
 use App\Models\Team;
+use App\Support\DailyTasksCollection;
+use App\Support\DailyTasksFilters;
 use Carbon\Carbon;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -42,7 +44,7 @@ class TasksDueToday implements ShouldQueue
         $date = Carbon::now($this->team->settingsStore()->get('timezone'));
 
         Cache::remember($this->fingerPrint($date), $date->tomorrow(), function () use ($date) {
-            return DailyTasks::make()->withFilters(new DailyTasksFilters([
+            return DailyTasksCollection::make()->withFilters(new DailyTasksFilters([
                 'date' => $date,
             ]))->forPatient($this->patient, $this->team);
         })->whenNotEmpty(function ($tasksDue) {

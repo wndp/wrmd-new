@@ -57,14 +57,18 @@ class Recheck extends Model implements Schedulable
         return $this->belongsTo(AttributeOption::class, 'assigned_to_id');
     }
 
-    public function getSummaryBodyAttribute()
+    public function summaryBody(): Attribute
     {
-        return $this->description;
+        return Attribute::get(
+            fn () => $this->description
+        );
     }
 
-    public function getSummaryDateAttribute()
+    public function summaryDate(): Attribute
     {
-        return 'recheck_start_at';
+        return Attribute::get(
+            fn () => 'recheck_start_at'
+        );
     }
 
     public function startDate(): Attribute
@@ -89,7 +93,7 @@ class Recheck extends Model implements Schedulable
     public function badgeText(): Attribute
     {
         return Attribute::get(
-            fn () => Wrmd::humanize($this).': '.$this->assigned_to_id,
+            fn () => Wrmd::humanize($this).': '.$this->assignedTo?->value,
         );
     }
 

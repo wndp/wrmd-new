@@ -127,7 +127,7 @@ class Media extends BaseMedia
          */
 
         if (App::environment('local')) {
-            $url = str_replace('9001/', '9001/' . Config::get('filesystems.disks.s3.bucket') . '/', $url);
+            $url = str_replace('9000/', '9000/' . Config::get('filesystems.disks.s3.bucket') . '/', $url);
         }
 
         return $url;

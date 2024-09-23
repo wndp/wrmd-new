@@ -2,19 +2,21 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
+
 interface Summarizable
 {
     /**
      * Get a presentable representation of the models attributes.
      *
-     * @return \Illuminate\Support\HtmlString
+     * @return string
      */
-    public function getSummaryBodyAttribute();
+    public function summaryBody(): Attribute;
 
     /**
      * Get the models attribute which represents the date to be used to order the summary.
      *
      * @return string
      */
-    public function getSummaryDateAttribute();
+    public function summaryDate(): Attribute;
 }

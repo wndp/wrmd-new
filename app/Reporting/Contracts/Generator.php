@@ -2,6 +2,7 @@
 
 namespace App\Reporting\Contracts;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -48,7 +49,7 @@ abstract class Generator
      */
     protected function dirname()
     {
-        return "generated-reports/{$this->report->team->id}/".base64_encode(microtime()).'/';
+        return "reports/{$this->report->team->id}/".Carbon::now()->toIso8601ZuluString('millisecond').'/';
     }
 
     /**

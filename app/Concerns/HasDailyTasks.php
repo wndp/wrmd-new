@@ -110,7 +110,7 @@ trait HasDailyTasks
     public function hasOccurrenceWindowChanged()
     {
         return $this->wasChanged([
-            'frequency',
+            'frequency_id',
             'recheck_start_at',
             'recheck_end_at',
         ]);

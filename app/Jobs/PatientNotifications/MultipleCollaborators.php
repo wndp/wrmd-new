@@ -3,6 +3,7 @@
 namespace App\Jobs\PatientNotifications;
 
 use App\Events\NotifyPatient;
+use App\Models\Admission;
 use App\Models\Patient;
 use App\Models\Team;
 use Carbon\Carbon;
@@ -53,8 +54,10 @@ class MultipleCollaborators implements ShouldQueue
             $last = $collaborators->pop();
 
             if (! empty($collaborators)) {
-                $title = 'Multiple Collaborators!';
-                $text = 'This patient is shared with '.$collaborators->join(', ', ', and ');
+                $title = __('Multiple Collaborators!');
+                $text =  __('This patient is shared with :collaborators', [
+                    'collaborators' => $collaborators->join(', ', ', '.__('and').' ')
+                ]);
 
                 NotifyPatient::dispatch($this->patient, $title, $text);
             }
