@@ -6,6 +6,8 @@ use App\Enums\Role;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+use Laravel\Paddle\Cashier;
 use Silber\Bouncer\BouncerFacade;
 
 class CreateTestUser extends Command
@@ -29,9 +31,6 @@ class CreateTestUser extends Command
      */
     public function handle()
     {
-        // To prevent api request to Paddle
-        Http::fake();
-
         $user = User::factory()->withPersonalTeam()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',

@@ -6,8 +6,10 @@ use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Laravel\Jetstream\Features;
+use Laravel\Paddle\Cashier;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -57,6 +59,18 @@ class UserFactory extends Factory
         if (! Features::hasTeamFeatures()) {
             return $this->state([]);
         }
+
+        // To prevent api request to Paddle
+        // https://github.com/laravel/cashier-paddle/issues/280
+        Http::fake([
+            Cashier::apiUrl().'/*' => Http::response([
+                'data' => [[
+                    'id' => Str::random(),
+                    'name' => $user->name,
+                    'email' => $user->email,
+                ]]
+            ]),
+        ]);
 
         return $this->has(
             Team::factory()
