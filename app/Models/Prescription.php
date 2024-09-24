@@ -8,6 +8,7 @@ use App\Schedulable;
 use App\Support\Wrmd;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +20,7 @@ class Prescription extends Model implements Schedulable
     use HasFactory;
     use SoftDeletes;
     use HasDailyTasks;
+    use HasVersion7Uuids;
     use ValidatesOwnership;
 
     protected $fillable = [

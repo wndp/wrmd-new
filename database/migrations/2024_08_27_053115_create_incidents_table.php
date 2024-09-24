@@ -11,10 +11,11 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('incidents', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->unsignedBigInteger('legacy_id')->nullable()->index();
             $table->unsignedBigInteger('team_id')->index();
-            $table->unsignedBigInteger('responder_id')->index();
-            $table->unsignedBigInteger('patient_id')->nullable()->index();
+            $table->foreignUuid('responder_id')->index();
+            $table->foreignUuid('patient_id')->nullable()->index();
             $table->string('incident_number');
             $table->datetime('reported_at');
             $table->datetime('occurred_at');

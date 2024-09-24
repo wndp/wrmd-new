@@ -11,8 +11,9 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('exams', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('patient_id')->index();
+            $table->uuid('id')->primary();
+            $table->unsignedBigInteger('legacy_id')->nullable()->index();
+            $table->foreignUuid('patient_id')->index();
             $table->date('date_examined_at')->nullable();
             $table->time('time_examined_at')->nullable();
             $table->unsignedBigInteger('exam_type_id')->nullable()->index();

@@ -12,8 +12,8 @@ return new class () extends Migration {
     {
         Schema::create('forum_group_threads', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('forum_group_id')->index();
-            $table->unsignedBigInteger('thread_id')->index();
+            $table->foreignUuid('forum_group_id')->index();
+            $table->foreignUuid('thread_id')->index();
             $table->timestamps();
         });
     }

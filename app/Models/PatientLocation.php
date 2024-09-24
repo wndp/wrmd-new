@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Concerns\ValidatesOwnership;
 use App\Support\Timezone;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,6 +16,7 @@ class PatientLocation extends Model
     use HasFactory;
     use SoftDeletes;
     use ValidatesOwnership;
+    use HasVersion7Uuids;
 
     protected $fillable = [
         'moved_in_at',

@@ -11,8 +11,9 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('care_logs', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('patient_id')->index();
+            $table->uuid('id')->primary();
+            $table->unsignedBigInteger('legacy_id')->nullable()->index();
+            $table->foreignUuid('patient_id')->index();
             $table->unsignedBigInteger('user_id')->index();
             $table->datetime('date_care_at');
             $table->double('weight')->nullable();

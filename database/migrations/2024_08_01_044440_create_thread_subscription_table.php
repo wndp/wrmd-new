@@ -13,7 +13,7 @@ return new class () extends Migration {
         Schema::create('thread_subscription', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('team_id')->index();
-            $table->unsignedBigInteger('thread_id')->index();
+            $table->foreignUuid('thread_id')->index();
             $table->timestamps();
         });
     }

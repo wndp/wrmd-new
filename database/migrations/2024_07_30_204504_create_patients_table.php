@@ -11,9 +11,10 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('patients', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->unsignedBigInteger('legacy_id')->nullable()->index();
             $table->unsignedBigInteger('team_possession_id')->index();
-            $table->unsignedBigInteger('rescuer_id')->index();
+            $table->foreignUuid('rescuer_id')->index();
             $table->unsignedBigInteger('taxon_id')->nullable()->index();
             $table->boolean('is_resident')->default(0);
             $table->datetime('voided_at')->nullable();

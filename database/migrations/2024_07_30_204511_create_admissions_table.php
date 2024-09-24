@@ -15,7 +15,7 @@ return new class () extends Migration {
             $table->unsignedBigInteger('team_id');
             $table->unsignedInteger('case_year');
             $table->unsignedBigInteger('case_id');
-            $table->unsignedBigInteger('patient_id')->index();
+            $table->foreignUuid('patient_id')->index();
             $table->string('hash', 20)->nullable()->index();
             $table->timestamps();
 

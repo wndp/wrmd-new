@@ -11,8 +11,9 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('replies', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('thread_id')->index();
+            $table->uuid('id')->primary();
+            $table->unsignedBigInteger('legacy_id')->nullable()->index();
+            $table->foreignUuid('thread_id')->index();
             $table->unsignedBigInteger('team_id')->index();
             $table->unsignedBigInteger('user_id')->index()->nullable();
             $table->text('body');

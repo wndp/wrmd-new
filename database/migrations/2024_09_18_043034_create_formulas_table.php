@@ -18,7 +18,7 @@ return new class () extends Migration {
             $table->json('defaults');
             $table->timestamps();
 
-            $table->shardKey(['team_id', 'name']);
+            $table->shardKey(['team_id', 'name'])->unique(['team_id', 'name']);
         });
     }
 

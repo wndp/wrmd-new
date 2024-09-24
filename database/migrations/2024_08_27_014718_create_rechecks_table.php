@@ -11,8 +11,9 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('rechecks', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('patient_id')->index();
+            $table->uuid('id')->primary();
+            $table->unsignedBigInteger('legacy_id')->nullable()->index();
+            $table->foreignUuid('patient_id')->index();
             $table->date('recheck_start_at');
             $table->date('recheck_end_at')->nullable();
             $table->unsignedBigInteger('frequency_id')->nullable();

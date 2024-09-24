@@ -7,6 +7,7 @@ use App\Concerns\QueriesOneOfMany;
 use App\Concerns\ValidatesOwnership;
 use App\Models\Patient;
 use App\Models\Team;
+use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -20,6 +21,7 @@ class Person extends Model
     use ValidatesOwnership;
     use QueriesDateRange;
     use QueriesOneOfMany;
+    use HasVersion7Uuids;
 
     protected $fillable = [
         'team_id',

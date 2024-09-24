@@ -11,7 +11,8 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('threads', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->unsignedBigInteger('legacy_id')->nullable()->index();
             $table->unsignedBigInteger('team_id')->index();
             $table->unsignedBigInteger('user_id')->nullable()->index();
             $table->string('channel', 25)->index();

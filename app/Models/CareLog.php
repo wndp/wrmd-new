@@ -9,6 +9,7 @@ use App\Support\Wrmd;
 use App\Weighable;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -20,6 +21,7 @@ class CareLog extends Model implements Summarizable, Weighable
 {
     use HasFactory;
     use ValidatesOwnership;
+    use HasVersion7Uuids;
     use SoftDeletes;
 
     protected $fillable = [

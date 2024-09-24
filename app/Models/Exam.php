@@ -7,6 +7,7 @@ use App\Summarizable;
 use App\Support\Timezone;
 use App\Weighable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,6 +19,7 @@ class Exam extends Model implements Summarizable, Weighable
 {
     use HasFactory;
     use SoftDeletes;
+    use HasVersion7Uuids;
     use ValidatesOwnership;
 
     protected $fillable = [

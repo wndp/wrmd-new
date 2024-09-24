@@ -11,9 +11,10 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('prescriptions', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('patient_id')->index();
-            $table->unsignedBigInteger('veterinarian_id')->nullable()->index();
+            $table->uuid('id')->primary();
+            $table->unsignedBigInteger('legacy_id')->nullable()->index();
+            $table->foreignUuid('patient_id')->index();
+            $table->foreignUuid('veterinarian_id')->nullable()->index();
             $table->string('drug');
             $table->double('concentration')->nullable();
             $table->unsignedBigInteger('concentration_unit_id')->nullable();

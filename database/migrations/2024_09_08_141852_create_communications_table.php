@@ -11,8 +11,9 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('communications', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('incident_id')->index();
+            $table->uuid('id')->primary();
+            $table->unsignedBigInteger('legacy_id')->nullable()->index();
+            $table->foreignUuid('incident_id')->index();
             $table->datetime('communication_at');
             $table->text('communication_by')->nullable();
             $table->text('communication');

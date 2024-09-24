@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Channel;
 use App\Enums\ThreadStatus;
+use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,6 +17,7 @@ use Illuminate\Support\Str;
 class Thread extends Model
 {
     use HasFactory;
+    use HasVersion7Uuids;
 
     /**
      * The attributes that are mass assignable.

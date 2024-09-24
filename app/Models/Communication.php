@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\ValidatesOwnership;
+use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,6 +12,7 @@ class Communication extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use HasVersion7Uuids;
     use ValidatesOwnership;
 
     protected $fillable = [

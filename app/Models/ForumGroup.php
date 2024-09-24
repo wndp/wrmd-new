@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\HasUniqueFields;
+use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -14,6 +15,7 @@ class ForumGroup extends Model
     use HasFactory;
     use HasSlug;
     use HasUniqueFields;
+    use HasVersion7Uuids;
 
     /**
      * The attributes that are mass assignable.

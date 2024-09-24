@@ -11,7 +11,8 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('people', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id');
+            $table->unsignedBigInteger('legacy_id')->nullable()->index();
             $table->unsignedBigInteger('team_id')->index();
             $table->unsignedBigInteger('entity_id')->nullable()->index();
             $table->string('organization')->nullable();

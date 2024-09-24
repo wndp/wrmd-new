@@ -11,9 +11,9 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('forum_group_members', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('forum_group_id')->index();
-            $table->unsignedBigInteger('team_id')->index();
+            $table->uuid('id')->primary();
+            $table->foreignId('forum_group_id')->index();
+            $table->foreignId('team_id')->index();
             $table->string('role');
             $table->json('settings')->nullable();
             $table->timestamps();
