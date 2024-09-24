@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\Plan;
 use App\Repositories\OptionsStore;
 use App\Repositories\RecentPatients;
 use App\Repositories\SettingsStore;
@@ -71,12 +72,11 @@ class HandleInertiaRequests extends Middleware
                     ])
                     : null,
                 'abilities' => $abilities,
-                'team' => fn () => $team
-                    ? $team
-                    : null,
+                'team' => fn () => $team ?: null,
+                'isProPlan' => fn () => $team?->sparkPlan()?->name === Plan::PRO->value,
             ],
             'settings' => fn () => $team
-                ? Wrmd::settings()->all()//$team->settingsStore()->all()
+                ? Wrmd::settings()->all()
                 : [],
             'options' => fn () => $team
                 ? OptionsStore::all()

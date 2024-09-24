@@ -17,6 +17,7 @@ import {
     AdjustmentsVerticalIcon,
     ArrowsRightLeftIcon,
     ArrowRightOnRectangleIcon,
+    CreditCardIcon
 } from '@heroicons/vue/24/outline';
 import {__} from '@/Composables/Translate';
 import {can} from '@/Composables/Can';
@@ -217,6 +218,22 @@ export default {
                   </MenuItem>
                 </div>
                 <div v-if="can(Abilities.COMPUTED_VIEW_SETTINGS) || can(Abilities.COMPUTED_VIEW_MAINTENANCE)">
+                  <MenuItem
+                    v-if="can(Abilities.COMPUTED_VIEW_SETTINGS)"
+                    v-slot="{ active }"
+                  >
+                    <Link
+                      :href="route('spark.portal')"
+                      :class="[active ? 'bg-gray-100' : '', 'group flex items-center px-2 py-2 text-base text-gray-800']"
+                    >
+                      <CreditCardIcon
+                        :active="active"
+                        class="w-5 h-5 mr-2 text-gray-400"
+                        aria-hidden="true"
+                      />
+                      {{ __('Billing') }}
+                    </Link>
+                  </MenuItem>
                   <MenuItem
                     v-if="can(Abilities.COMPUTED_VIEW_SETTINGS)"
                     v-slot="{ active }"

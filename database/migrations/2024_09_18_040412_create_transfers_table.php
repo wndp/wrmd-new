@@ -11,7 +11,7 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('transfers', function (Blueprint $table) {
-            $table->uuid('uuid');
+            $table->uuid('id')->index();
             $table->unsignedBigInteger('patient_id')->index();
             $table->unsignedBigInteger('cloned_patient_id')->index()->nullable();
             $table->unsignedBigInteger('from_team_id')->index();
@@ -21,6 +21,8 @@ return new class () extends Migration {
             $table->boolean('is_accepted')->nullable();
             $table->datetime('responded_at')->nullable();
             $table->timestamps();
+
+            $table->shardKey(['patient_id', 'from_team_id', 'to_team_id']);
         });
     }
 

@@ -9,6 +9,9 @@ sail artisan migrate
 echo "Running seeders..."
 sail artisan db:seed
 
+echo "Creating local development user..."
+sail artisan app:create-test-user
+
 echo "Clearing cache..."
 sail artisan cache:clear
 sail artisan config:clear

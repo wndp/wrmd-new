@@ -35,8 +35,8 @@ const form = useForm({
     terms: false,
 });
 
-const mutableSubdivisions = ref(props.options.subdivisions);
-const mutableTimezones = ref(props.options.timezones);
+const mutableSubdivisions = ref(props.options.subdivisionOptions);
+const mutableTimezones = ref(props.options.timezoneOptions);
 const subdivisionLabel = ref('State');
 
 const submit = () => form.post(route('register'), {
@@ -181,7 +181,7 @@ const onCountryChange = () => axios.get('/internal-api/locale/' + form.country)
                   class="mt-1 block w-full"
                   required
                   autocomplete="country"
-                  :options="options.countries"
+                  :options="options.countryOptions"
                   @change="onCountryChange"
                 />
                 <InputError

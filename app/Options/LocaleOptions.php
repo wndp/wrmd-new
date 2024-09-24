@@ -35,9 +35,11 @@ class LocaleOptions extends Options
 
     public static function formatTimezones($timezones)
     {
-        return Collection::make($timezones)->map(fn ($timezone) => Str::headline(
-            Str::of($timezone)->explode('/')->last()
-        ))
+        return Collection::make($timezones)->mapWithKeys(fn ($timezone) => [
+            $timezone => Str::headline(
+                Str::of($timezone)->explode('/')->last()
+            )
+        ])
         ->sort()
         ->toArray();
     }

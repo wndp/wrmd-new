@@ -118,7 +118,7 @@ class FormulaController extends Controller
                     'team_id' => Auth::user()->current_team_id,
                     'type' => FormulaType::PRESCRIPTION->value,
                 ]);
-            })->ignore($formula->uuid, 'uuid')],
+            })->ignore($formula->id, 'id')],
             'drug' => 'required',
         ]);
 

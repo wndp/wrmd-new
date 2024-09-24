@@ -2,14 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Enums\Role;
 use App\Models\Media;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Silber\Bouncer\BouncerFacade;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,18 +21,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AttributeOptionSeeder::class,
             PermissionsSeeder::class,
-        ]);
-
-        $user = User::factory()->withPersonalTeam()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-
-        BouncerFacade::scope()->to($user->personalTeam()->id)->onlyRelations()->dontScopeRoleAbilities();
-        BouncerFacade::assign(Role::ADMIN->value)->to($user);
-
-        $user->personalTeam()->settingsStore()->set([
-            'timezone' => 'America/Los_Angeles'
         ]);
 
         Cache::clear();

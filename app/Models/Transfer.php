@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,12 +11,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Transfer extends Model
 {
     use HasFactory;
-    use HasUuids;
-
-    protected $primaryKey = 'uuid';
+    use HasVersion7Uuids;
 
     protected $fillable = [
-        'uuid',
         'patient_id',
         'cloned_patient_id',
         'from_team_id',

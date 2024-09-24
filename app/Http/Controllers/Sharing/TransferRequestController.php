@@ -62,6 +62,9 @@ class TransferRequestController extends Controller
     {
         $patient->validateOwnership(Auth::user()->current_team_id);
 
+        // TODO: validate that this patient does not already have an
+        // unanswered transfer request from auth::team to the chosen team
+
         $data = $request->validate([
             'transferTo' => 'required|exists:teams,id',
         ], [

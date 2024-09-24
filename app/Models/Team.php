@@ -19,9 +19,11 @@ use Laravel\Jetstream\Events\TeamDeleted;
 use Laravel\Jetstream\Events\TeamUpdated;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\Team as JetstreamTeam;
+use Spark\Billable;
 
 class Team extends JetstreamTeam
 {
+    use Billable;
     use HasFactory;
     use HasProfilePhoto;
     use HasSubAccounts;
@@ -115,14 +117,30 @@ class Team extends JetstreamTeam
 
             $address = (new Address())
                 ->withCountryCode($this->country)
-                ->withAdministrativeArea($this->subdivision)
-                ->withLocality($this->city)
-                ->withAddressLine1($this->address)
-                ->withPostalCode($this->postal_code);
+                ->withAdministrativeArea($this->subdivision ?: '')
+                ->withLocality($this->city ?: '')
+                ->withAddressLine1($this->address ?: '')
+                ->withPostalCode($this->postal_code ?: '');
 
             return $formatter->format($address, [
                 'html' => false
             ]);
         });
+    }
+
+    /**
+     * Get the name that should be associated with the Paddle customer.
+     */
+    public function paddleName(): string|null
+    {
+        return $this->name;
+    }
+
+    /**
+     * Get the email address that should be associated with the Paddle customer.
+     */
+    public function paddleEmail(): string|null
+    {
+        return $this->contact_email;
     }
 }

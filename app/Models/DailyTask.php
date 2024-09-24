@@ -6,16 +6,14 @@ use App\Summarizable;
 use App\Support\Timezone;
 use App\Support\Wrmd;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class DailyTask extends Model implements Summarizable
 {
     use HasFactory;
-    use HasUuids;
-
-    protected $primaryKey = 'uuid';
+    use HasVersion7Uuids;
 
     /**
      * The attributes that are mass assignable.

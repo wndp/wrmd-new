@@ -11,12 +11,14 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('formulas', function (Blueprint $table) {
-            $table->uuid('uuid');
+            $table->uuid('id')->index();
             $table->unsignedBigInteger('team_id')->index();
             $table->string('type')->index();
             $table->string('name');
             $table->json('defaults');
             $table->timestamps();
+
+            $table->shardKey(['team_id', 'name']);
         });
     }
 

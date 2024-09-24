@@ -57,21 +57,6 @@ class AppServiceProvider extends ServiceProvider
             return ['data' => $jobData];
         });
 
-        RateLimiter::for(
-            'auth',
-            fn (Request $request) =>
-            App::isProduction() ? [
-                Limit::perMinute(500),
-                Limit::perMinute(5)->by($request->ip()),
-                Limit::perMinute(5)->by($request->input('email')),
-            ] : Limit::none()
-        );
-
-        RateLimiter::for(
-            'api',
-            fn (Request $request) => Limit::perMinute(60)->by($request->user()?->id ?: $request->ip())
-        );
-
         Route::bind('voidedPatient', fn ($value) => Patient::onlyVoided()->findOrFail($value));
 
         foreach ([

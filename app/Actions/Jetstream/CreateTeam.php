@@ -32,6 +32,10 @@ class CreateTeam implements CreatesTeams
             'personal_team' => false,
         ]));
 
+        $team->settingsStore()->set([
+            'timezone' => $input['timezone'] ?: 'America/Los_Angeles'
+        ]);
+
         return $team;
     }
 }

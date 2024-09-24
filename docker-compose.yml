@@ -37,7 +37,6 @@ services:
             # - '${FORWARD_SINGLESTORE_API_PORT:-9000}:9000'
         volumes:
             - 'sail-singlestore:/data'
-            - './docker/singlestore/create_database.sql:/create_database.sql'
         environment:
             - SINGLESTORE_LICENSE=${SINGLESTORE_LICENSE}
             - ROOT_PASSWORD=${DB_PASSWORD}

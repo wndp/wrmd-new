@@ -3,6 +3,7 @@
 namespace App\Actions\Fortify;
 
 use App\Enums\AccountStatus;
+use App\Enums\Role;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
+use Silber\Bouncer\BouncerFacade;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -52,7 +54,7 @@ class CreateNewUser implements CreatesNewUsers
      */
     protected function createTeam(User $user, array $input): void
     {
-        $user->ownedTeams()->save(Team::forceCreate([
+        $user->ownedTeams()->save($team = Team::forceCreate([
             'user_id' => $user->id,
             'name' => $input['organization'],
             'personal_team' => true,
@@ -66,5 +68,12 @@ class CreateNewUser implements CreatesNewUsers
             'phone_number' => $input['phone_number'],
             'timezone' => $input['timezone'],
         ]));
+
+        $team->settingsStore()->set([
+            'timezone' => $input['timezone'] ?: 'America/Los_Angeles'
+        ]);
+
+        BouncerFacade::scope()->to($team->id)->onlyRelations()->dontScopeRoleAbilities();
+        BouncerFacade::assign(Role::ADMIN->value)->to($user);
     }
 }

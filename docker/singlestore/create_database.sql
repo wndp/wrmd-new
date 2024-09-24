@@ -17,3 +17,15 @@ CREATE TABLE `wildalert`.`taxa` (
     `updated_at` timestamp,
     PRIMARY KEY (id)
 );
+
+CREATE TABLE `wildalert`.`common_names` (
+
+)
+
+CREATE TABLE `wildalert`.`taxon_meta` (
+
+)
+
+CREATE TABLE `wildalert`.`classifications` (
+
+)

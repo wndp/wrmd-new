@@ -27,6 +27,8 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\SetDeviceUuid::class,
             \App\Http\Middleware\SetLocale::class,
         ]);
+
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

@@ -1,6 +1,6 @@
 <script setup>
 import {ref} from 'vue';
-import {router} from '@inertiajs/vue3';
+import {router, usePage} from '@inertiajs/vue3';
 import { ExclamationTriangleIcon, UserCircleIcon, ChatBubbleLeftRightIcon, PhotoIcon, MapIcon } from '@heroicons/vue/24/outline';
 import {__} from '@/Composables/Translate';
 import {can} from '@/Composables/Can';
@@ -17,7 +17,7 @@ const tabs = [
     { name: __('Incident'), icon: ExclamationTriangleIcon, route: 'hotline.incident.edit', can: true },
     { name: __('Reporting Party'), icon: UserCircleIcon, route: 'hotline.incident.reporting_party', can: can(Abilities.COMPUTED_VIEW_RESCUER) },
     { name: __('Communications'), icon: ChatBubbleLeftRightIcon, route: 'hotline.incident.communications.index', can: true },
-    { name: __('Attachments'), icon: PhotoIcon, route: 'hotline.incident.attachments', can: true },
+    { name: __('Attachments'), icon: PhotoIcon, route: 'hotline.incident.attachments', can: usePage().props.auth.isProPlan },
     { name: __('Map'), icon: MapIcon, route: 'hotline.incident.map', can: true }
 ].filter(tab => tab.can);
 

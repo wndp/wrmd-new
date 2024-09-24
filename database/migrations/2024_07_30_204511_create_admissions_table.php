@@ -11,7 +11,7 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('admissions', function (Blueprint $table) {
-            $table->uuid()->index();
+            $table->uuid('id')->index();
             $table->unsignedBigInteger('team_id');
             $table->unsignedInteger('case_year');
             $table->unsignedBigInteger('case_id');

@@ -1,6 +1,6 @@
 <script setup>
 import { inject } from 'vue';
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Alert from '@/Components/Alert.vue';
 import InputLabel from '@/Components/FormElements/InputLabel.vue';
@@ -12,6 +12,7 @@ import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import ClassificationTree from './Partials/ClassificationTree.vue';
 import SettingsAside from './Partials/SettingsAside.vue';
 import {__} from '@/Composables/Translate';
+import { StarIcon } from '@heroicons/vue/20/solid';
 
 const route = inject('route');
 
@@ -79,8 +80,6 @@ const updateClassifications = () => {
               <p>{{ __('The terms in each category are meant to encompass, at a baseline level, the most common situations encountered in wildlife rehabilitation. For example, the Clinical Classifications category only classifies to the body systems, not to each individual organ or body part.') }}</p>
 
               <p>{{ __('Some terms will be automatically tagged on your patients by WRMD. WRMD will read data already recorded on the patient to predict which tags best fit.') }}</p>
-
-              <p>{{ __('You may use the terms in the classification tagging fields as-is or you may also add custom terms for specific classifications that your hospital encounters. Your custom terms must be assigned to an existing root or leaf node of the terminology hierarchy. For example, you could use the Circumstances of Admission term "Cat interaction" or add the custom term "Feral cat" under Cat interaction in order to track that detail.') }}</p>
             </div>
           </template>
           <div class="col-span-4">
@@ -88,6 +87,15 @@ const updateClassifications = () => {
             <div class="mt-2">
               <Toggle v-model="form.showTags" dusk="showTags" />
             </div>
+          </div>
+          <div class="col-span-4">
+            <h4 class="text-lg leading-6 font-medium text-gray-900">
+              {{ __('Custom Classification Terms') }}
+            </h4>
+            <p class="mt-1 text-sm text-gray-500">{{ __('You may use the terms in the classification tagging fields as-is or you may also add custom terms for specific classifications that your hospital encounters. Your custom terms must be assigned to an existing root or leaf node of the terminology hierarchy. For example, you could use the Circumstances of Admission term "Cat interaction" or add the custom term "Feral cat" under Cat interaction in order to track that detail.') }}</p>
+            <p v-if="! usePage().props.auth.isProPlan" class="flex font-medium text-base leading-4 text-red-600 align-center mt-4">
+              <StarIcon class="h-3 w-3 mr-3" />{{ __('Custom classification terms is a feature only available to accounts on the WRMD Pro plan.') }}
+            </p>
           </div>
           <template #actions>
             <ActionMessage
@@ -105,7 +113,7 @@ const updateClassifications = () => {
             </PrimaryButton>
           </template>
         </FormSection>
-        <template v-if="showTags">
+        <template v-if="showTags && usePage().props.auth.isProPlan">
           <div class="mt-8">
             <Alert>
               <div class="prose max-w-none">

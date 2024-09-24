@@ -11,7 +11,7 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('daily_tasks', function (Blueprint $table) {
-            $table->uuid()->index();
+            $table->uuid('id')->index();
             $table->morphs('task');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('summary');
