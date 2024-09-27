@@ -5,26 +5,27 @@ namespace App\Console\Commands;
 use App\Enums\Role;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Laravel\Paddle\Cashier;
 use Silber\Bouncer\BouncerFacade;
 
-class CreateTestUser extends Command
+class CreateLocalDevUser extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:create-test-user';
+    protected $signature = 'app:create-local-dev-user';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Create a user that can be used in local development.';
 
     /**
      * Execute the console command.

@@ -48,15 +48,6 @@ class HeadlessChrome extends Generator
             self::OPTIONS
         ));
 
-        // $apiClient->setFilename($this->basename().'.pdf');
-
-        // $apiClient->setOptions(Arr::only(
-        //     $this->mergeOptionsWithDefaults(),
-        //     self::OPTIONS
-        // ));
-
-        // $result = $apiClient->headlessChromeFromHtml($html);
-
         Storage::put($this->filePath, file_get_contents($result->getFile()));
     }
 }

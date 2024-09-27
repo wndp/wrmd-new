@@ -2,33 +2,21 @@
 
 namespace App\Http\Controllers\Settings;
 
-use App\Domain\Accounts\Account;
-use App\Domain\Database\RecordNotOwnedResponse;
-use App\Events\AccountUpdated;
-use App\Extensions\Extension;
-use App\Extensions\ExtensionManager;
+use App\Enums\Extension;
+use App\Events\TeamUpdated;
+use App\Exceptions\RecordNotOwned;
 use App\Http\Controllers\Controller;
+use App\Models\Team;
+use App\Support\ExtensionManager;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class AccountExtensionsController extends Controller
 {
-    /**
-     * @var ExtensionManager
-     */
-    protected $extensionManager;
-
-    /**
-     * Constructor.
-     */
-    public function __construct(ExtensionManager $extensionManager)
-    {
-        $this->extensionManager = $extensionManager;
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -36,82 +24,81 @@ class AccountExtensionsController extends Controller
      */
     public function index()
     {
-        $activated = $this->extensionManager->getActivated(Auth::user()->currentAccount);
-        $extensions = $this->extensionManager
-            ->getPublic()
-            ->transform(function ($extension) use ($activated) {
-                $extension->is_activated = $activated->contains($extension);
+        $activated = ExtensionManager::getActivated(Auth::user()->currentTeam);
 
-                return $extension;
-            });
+        $extensions = Arr::map(ExtensionManager::getPublic(), fn ($extension) => [
+            ...$extension->toArray(),
+            'is_activated' => $activated->contains('extension', $extension->value)
+        ]);
 
-        return Inertia::render('Settings/Extensions', compact('extensions'));
+        $standardExtensions = Arr::where($extensions, fn ($extension) => !$extension['pro']);
+        $proExtensions = Arr::where($extensions, fn ($extension) => $extension['pro']);
+
+        return Inertia::render('Settings/Extensions', compact('standardExtensions', 'proExtensions'));
     }
 
     /**
      * Activate an extension.
      */
-    public function store(Request $request, string $namespace, Account $account = null): RedirectResponse
+    public function store(Extension $extension, Team $team = null): RedirectResponse
     {
-        if ($account instanceof Account) {
+        if ($team instanceof Team) {
             abort_unless(
-                Auth::user()->can('manageAccounts') || Auth::user()->currentAccount->hasSubAccount($account),
-                new RecordNotOwnedResponse()
+                Auth::user()->can('manageAccounts') || Auth::user()->currentTeam->hasSubAccount($team),
+                new RecordNotOwned()
             );
         }
 
-        $extension = $this->getExtension($namespace);
-        $account = $account ?: Auth::user()->currentAccount;
+        $team = $team ?: Auth::user()->currentTeam;
 
-        $this->extensionManager->activate($account, $extension->id);
+        ExtensionManager::activate($team, $extension);
 
-        event(new AccountUpdated($account));
+        event(new TeamUpdated($team));
 
         return redirect()
             ->back()
             ->with('notification.heading', 'Extension Activated!')
-            ->with('notification.text', "$extension->name is activated and ready to use.");
+            ->with('notification.text', "{$extension->label()} is activated and ready to use.");
     }
 
     /**
      * Deactivate an extension.
      */
-    public function destroy(string $namespace, Account $account = null): RedirectResponse
+    public function destroy(Extension $extension, Team $team = null): RedirectResponse
     {
-        if ($account instanceof Account) {
+        if ($team instanceof Team) {
             abort_unless(
-                Auth::user()->can('manageAccounts') || Auth::user()->currentAccount->hasSubAccount($account),
+                Auth::user()->can('manageAccounts') || Auth::user()->currentTeam->hasSubAccount($team),
                 new RecordNotOwnedResponse()
             );
         }
 
         try {
-            $extension = $this->getExtension($namespace);
-            $account = $account ?: Auth::user()->currentAccount;
+            $team = $team ?: Auth::user()->currentTeam;
 
-            $this->extensionManager->deactivate($account, $extension->id);
-            event(new AccountUpdated($account));
+            ExtensionManager::deactivate($team, $extension);
+            event(new TeamUpdated($team));
 
             return redirect()
                 ->back()
                 ->with('notification.heading', 'Extension Deactivated')
-                ->with('notification.text', "$extension->name is deactivated.");
+                ->with('notification.text', "{$extension->label()} is deactivated.");
         } catch (\DomainException $e) {
             return redirect()
                 ->back()
                 ->with('notification.heading', 'Oops!')
                 ->with('notification.text', $e->getMessage())
-                ->with('flash.style', 'danger');
+                ->with('notification.style', 'danger');
         }
     }
 
     /**
      * Get an extension or abort with a 404.
      */
-    public function getExtension(string $namespace): Extension
+    public function getExtension(string $slug): Extension
     {
         try {
-            return $this->extensionManager->findByNamespace($namespace);
+            return ExtensionManager::findBySlug($slug);
         } catch (ModelNotFoundException $e) {
             abort(404);
         }

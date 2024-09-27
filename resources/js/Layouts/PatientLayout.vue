@@ -53,14 +53,15 @@ const tabsComponent = computed(() => {
   // }[this.extensionNavigation('patient.tabs_component')] || PatientTabs;
 });
 
-const customFields = computed(() => {
-  return (usePage().props.extensions['patient.customFields'] ?? [])
-    .flat()
-    .filter(field => {
-        return field.group === 'Patient'
-            && field.panel === 'Cage Card'
-    })
-});
+const customFields = [];
+// const customFields = computed(() => {
+//   return (usePage().props.extensions['patient.customFields'] ?? [])
+//     .flat()
+//     .filter(field => {
+//         return field.group === 'Patient'
+//             && field.panel === 'Cage Card'
+//     })
+// });
 
 const handleScroll = () => {
   let tabsBottom = subject.value.getBoundingClientRect().bottom;
@@ -261,7 +262,10 @@ onBeforeUnmount(() => document.removeEventListener('scroll', handleDebouncedScro
       </div>
     </div>
     <slot name="tabs">
-      <component :is="tabsComponent" />
+      <component
+        :is="tabsComponent"
+        :patientId="$page.props.admission.patient_id"
+      />
     </slot>
     <div
       id="content"

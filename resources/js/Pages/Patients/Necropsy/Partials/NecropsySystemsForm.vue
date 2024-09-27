@@ -1,37 +1,101 @@
+<script setup>
+import {useForm} from '@inertiajs/vue3';
+import Panel from '@/Components/Panel.vue';
+import FormRow from '@/Components/FormElements/FormRow.vue';
+import TextareaAutosize from '@/Components/FormElements/TextareaAutosize.vue';
+import SelectInput from '@/Components/FormElements/SelectInput.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import {__} from '@/Composables/Translate';
+
+const props = defineProps({
+  patientId: {
+    type: String,
+    required: true
+  },
+  necropsy: {
+    type: Object,
+    required: true
+  },
+  enforceRequired: {
+    type: Boolean,
+    default: false
+  }
+});
+
+const form = useForm({
+  integument: props.necropsy.integument,
+  cavities: props.necropsy.cavities,
+  cardiovascular: props.necropsy.cardiovascular,
+  respiratory: props.necropsy.respiratory,
+  gastrointestinal: props.necropsy.gastrointestinal,
+  endocrine_reproductive: props.necropsy.endocrine_reproductive,
+  liver_gallbladder: props.necropsy.liver_gallbladder,
+  hematopoietic: props.necropsy.hematopoietic,
+  renal: props.necropsy.renal,
+  nervous: props.necropsy.nervous,
+  musculoskeletal: props.necropsy.musculoskeletal,
+  head: props.necropsy.head,
+  integument_finding: props.necropsy.integument_finding || 'Not examined',
+  cavities_finding: props.necropsy.cavities_finding || 'Not examined',
+  cardiovascular_finding: props.necropsy.cardiovascular_finding || 'Not examined',
+  respiratory_finding: props.necropsy.respiratory_finding || 'Not examined',
+  gastrointestinal_finding: props.necropsy.gastrointestinal_finding || 'Not examined',
+  endocrine_reproductive_finding: props.necropsy.endocrine_reproductive_finding || 'Not examined',
+  liver_gallbladder_finding: props.necropsy.liver_gallbladder_finding || 'Not examined',
+  hematopoietic_finding: props.necropsy.hematopoietic_finding || 'Not examined',
+  renal_finding: props.necropsy.renal_finding || 'Not examined',
+  nervous_finding: props.necropsy.nervous_finding || 'Not examined',
+  musculoskeletal_finding: props.necropsy.musculoskeletal_finding || 'Not examined',
+  head_finding: props.necropsy.head_finding || 'Not examined',
+});
+
+const save = () => {
+  form.put(route('patients.necropsy.systems.update', {
+    patient: props.patientId
+  }), {
+    preserveScroll: true,
+    //onError: () => this.stopAutoSave()
+  });
+};
+</script>
+
 <template>
   <Panel>
-    <template #heading>
+    <template #title>
       {{ __('Body Systems') }}
     </template>
-    <div class="space-y-4 md:space-y-2">
-      <div
-        v-for="bodyPart in $page.props.options.necopsyBodyParts"
+    <template #content>
+      <FormRow
+        v-for="bodyPart in $page.props.options.bodyPartOptions"
+        :id="`bodyPart_${bodyPart.value}`"
         :key="bodyPart.value"
-        class="xl:grid xl:grid-cols-6 xl:gap-x-2 xl:items-center"
+        :label="bodyPart.label"
+        class="col-span-6 xl:grid xl:grid-cols-6 xl:gap-x-2 xl:items-center"
       >
-        <Label
-          :for="bodyPart.value"
-          class="xl:text-right"
-        >{{ bodyPart.label }}</Label>
-        <div class="col-span-5 mt-1 xl:mt-0 lg:flex">
-          <Select
-            v-model="form[`${bodyPart.value}_finding`]"
-            :name="`${bodyPart.value}_finding`"
-            :options="$page.props.options.findings"
-            class="mr-2 lg:w-36"
+        <div class="col-span-5 lg:flex lg:items-center">
+          <SelectInput
+            v-model="form[`${bodyPart.value}_finding_id`]"
+            :name="`${bodyPart.value}_finding_id`"
+            :options="$page.props.options.examBodyPartFindingsOptions"
+            class="mr-2 md:!w-48"
           />
-          <Input
+          <TextareaAutosize
             v-model="form[bodyPart.value]"
             :name="bodyPart.value"
+            :autoComplete="`exams.${bodyPart.value}`"
             class="mt-2 lg:mt-0"
+            @change="updateCorrespondingBodyPartFinding(bodyPart.value)"
           />
         </div>
-      </div>
-    </div>
-    <template
-      v-if="canSubmit"
-      #footing
-    >
+        <InputError
+          :message="form.errors.treatment"
+          class="mt-2"
+        />
+      </FormRow>
+    </template>
+    <template #actions>
       <div class="flex items-center justify-end text-right">
         <ActionMessage
           :on="form.isDirty"
@@ -56,72 +120,3 @@
     </template>
   </Panel>
 </template>
-
-<script setup>
-import Panel from '@/Components/Panel.vue';
-import InputLabel from '@/Components/FormElements/InputLabel.vue';
-import TextInput from '@/Components/FormElements/TextInput.vue';
-import SelectInput from '@/Components/FormElements/SelectInput.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import autoSave from '@/Mixins/AutoSave';
-import hoistForm from '@/Mixins/HoistForm';
-</script>
-
-<script>
-  export default {
-    mixins: [autoSave, hoistForm],
-    props: {
-      necropsy: {
-        type: Object,
-        default: () => ({})
-      },
-      enforceRequired: {
-        type: Boolean,
-        default: true
-      }
-    },
-    data() {
-      return {
-        form: this.$inertia.form({
-          integument: this.necropsy?.integument,
-          cavities: this.necropsy?.cavities,
-          cardiovascular: this.necropsy?.cardiovascular,
-          respiratory: this.necropsy?.respiratory,
-          gastrointestinal: this.necropsy?.gastrointestinal,
-          endocrine_reproductive: this.necropsy?.endocrine_reproductive,
-          liver_gallbladder: this.necropsy?.liver_gallbladder,
-          hematopoietic: this.necropsy?.hematopoietic,
-          renal: this.necropsy?.renal,
-          nervous: this.necropsy?.nervous,
-          musculoskeletal: this.necropsy?.musculoskeletal,
-          head: this.necropsy?.head,
-          integument_finding: this.necropsy?.integument_finding || 'Not examined',
-          cavities_finding: this.necropsy?.cavities_finding || 'Not examined',
-          cardiovascular_finding: this.necropsy?.cardiovascular_finding || 'Not examined',
-          respiratory_finding: this.necropsy?.respiratory_finding || 'Not examined',
-          gastrointestinal_finding: this.necropsy?.gastrointestinal_finding || 'Not examined',
-          endocrine_reproductive_finding: this.necropsy?.endocrine_reproductive_finding || 'Not examined',
-          liver_gallbladder_finding: this.necropsy?.liver_gallbladder_finding || 'Not examined',
-          hematopoietic_finding: this.necropsy?.hematopoietic_finding || 'Not examined',
-          renal_finding: this.necropsy?.renal_finding || 'Not examined',
-          nervous_finding: this.necropsy?.nervous_finding || 'Not examined',
-          musculoskeletal_finding: this.necropsy?.musculoskeletal_finding || 'Not examined',
-          head_finding: this.necropsy?.head_finding || 'Not examined',
-        })
-      }
-    },
-    methods: {
-      save() {
-        if (this.canSubmit) {
-          this.form.put(this.route('patients.necropsy.systems.update', {
-            patient: this.$page.props.admission.patient
-          }), {
-            preserveScroll: true,
-            onError: () => this.stopAutoSave()
-          });
-        }
-      }
-    }
-  }
-</script>

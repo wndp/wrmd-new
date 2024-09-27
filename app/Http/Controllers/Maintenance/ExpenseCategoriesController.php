@@ -24,7 +24,7 @@ class ExpenseCategoriesController extends Controller
         $categories = Category::whereNull('parent_id')
             ->whereNull('account_id')
             ->with(['children' => function ($query) use ($request) {
-                $query->where('account_id', Auth::user()->current_account_id)
+                $query->where('account_id', Auth::user()->current_team_id)
                     ->when($request->get('search'), fn ($query, $search) => $query->search($search))
                     ->orderBy('name');
             }])
@@ -61,13 +61,13 @@ class ExpenseCategoriesController extends Controller
         $request->validate([
             'parent_category' => ['required', Rule::exists('expense_categories', 'name')->whereNull('parent_id')->whereNull('account_id')],
             'name' => ['required', Rule::unique('expense_categories')->where(function ($query) {
-                return $query->where('account_id', Auth::user()->current_account_id);
+                return $query->where('account_id', Auth::user()->current_team_id);
             })],
         ]);
 
         $childCategory = new Category($request->all('name', 'description'));
         $childCategory->parent_id = Category::where('name', $request->parent_category)->whereNull('parent_id')->whereNull('account_id')->first()->id;
-        $childCategory->account_id = Auth::user()->current_account_id;
+        $childCategory->account_id = Auth::user()->current_team_id;
         $childCategory->save();
 
         return redirect()->route('maintenance.expense_categories.index');
@@ -80,7 +80,7 @@ class ExpenseCategoriesController extends Controller
     {
         abort_if($category->isParent(), 404);
 
-        $category->validateOwnership(Auth::user()->current_account_id)->loadCount('transactions');
+        $category->validateOwnership(Auth::user()->current_team_id)->loadCount('transactions');
 
         ExtensionNavigation::emit('maintenance');
 
@@ -103,12 +103,12 @@ class ExpenseCategoriesController extends Controller
     {
         abort_if($category->isParent(), 404);
 
-        $category->validateOwnership(Auth::user()->current_account_id);
+        $category->validateOwnership(Auth::user()->current_team_id);
 
         $request->validate([
             'parent_category' => ['required', Rule::exists('expense_categories', 'name')->whereNull('parent_id')->whereNull('account_id')],
             'name' => ['required', Rule::unique('expense_categories')->where(function ($query) {
-                return $query->where('account_id', Auth::user()->current_account_id);
+                return $query->where('account_id', Auth::user()->current_team_id);
             })->ignore($category->id)],
         ]);
 
@@ -125,7 +125,7 @@ class ExpenseCategoriesController extends Controller
     {
         abort_if($category->isParent(), 404);
 
-        $category->validateOwnership(Auth::user()->current_account_id)->loadCount('transactions');
+        $category->validateOwnership(Auth::user()->current_team_id)->loadCount('transactions');
 
         if ($category->transactions_count === 0) {
             $category->delete();

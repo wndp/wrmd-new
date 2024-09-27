@@ -10,13 +10,14 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::create('team_extension', function (Blueprint $table) {
+        Schema::create('team_extensions', function (Blueprint $table) {
             $table->uuid('id');
             $table->unsignedBigInteger('team_id');
-            $table->unsignedBigInteger('extension_id');
+            $table->string('extension');
             $table->timestamps();
 
-            $table->shardKey(['team_id', 'extension_id']);
+            $table->unique(['team_id', 'extension']);
+            $table->shardKey(['team_id', 'extension']);
         });
     }
 
@@ -25,6 +26,6 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('team_extension');
+        Schema::dropIfExists('team_extensions');
     }
 };

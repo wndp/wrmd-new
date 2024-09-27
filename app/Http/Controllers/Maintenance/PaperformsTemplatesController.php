@@ -42,7 +42,7 @@ class PaperformsTemplatesController extends Controller
         array_push($paperformsTemplates, [
             'name' => $request->name,
             'slug' => Str::slug($request->name),
-            'path' => $request->template->store('report-templates/'.Auth::user()->current_account_id, 's3'),
+            'path' => $request->template->store('report-templates/'.Auth::user()->current_team_id, 's3'),
             'created_at' => Carbon::now(settings('timezone'))->toDayDateTimeString(),
         ]);
 

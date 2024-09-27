@@ -19,7 +19,7 @@ const localStorage = LocalStorage();
 
 const props = defineProps({
   patientId: {
-      type: Number,
+      type: String,
       required: true
   },
   location: {

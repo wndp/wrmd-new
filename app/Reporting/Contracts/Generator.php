@@ -116,6 +116,8 @@ abstract class Generator
      */
     public function download()
     {
+        return Storage::download($this->filePath);
+
         //$this->copyReportToStorage();
 
         if (app()->runningUnitTests()) {

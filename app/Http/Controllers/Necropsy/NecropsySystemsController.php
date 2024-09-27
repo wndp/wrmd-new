@@ -14,34 +14,120 @@ class NecropsySystemsController extends Controller
     {
         $patient->validateOwnership(Auth::user()->current_team_id);
 
+        $data = $request->validate([
+            'integument_finding_id' => [
+                'nullable',
+                'integer',
+                new AttributeOptionExistsRule(AttributeOptionName::EXAM_BODY_PART_FINDINGS),
+            ],
+            'integument' => [
+                'nullable',
+                'string',
+            ],
+            'cavities_finding_id' => [
+                'nullable',
+                'integer',
+                new AttributeOptionExistsRule(AttributeOptionName::EXAM_BODY_PART_FINDINGS),
+            ],
+            'cavities' => [
+                'nullable',
+                'string',
+            ],
+            'gastrointestinal_finding_id' => [
+                'nullable',
+                'integer',
+                new AttributeOptionExistsRule(AttributeOptionName::EXAM_BODY_PART_FINDINGS),
+            ],
+            'gastrointestinal' => [
+                'nullable',
+                'string',
+            ],
+            'liver_gallbladder_finding_id' => [
+                'nullable',
+                'integer',
+                new AttributeOptionExistsRule(AttributeOptionName::EXAM_BODY_PART_FINDINGS),
+            ],
+            'liver_gallbladder' => [
+                'nullable',
+                'string',
+            ],
+            'hematopoietic_finding_id' => [
+                'nullable',
+                'integer',
+                new AttributeOptionExistsRule(AttributeOptionName::EXAM_BODY_PART_FINDINGS),
+            ],
+            'hematopoietic' => [
+                'nullable',
+                'string',
+            ],
+            'renal_finding_id' => [
+                'nullable',
+                'integer',
+                new AttributeOptionExistsRule(AttributeOptionName::EXAM_BODY_PART_FINDINGS),
+            ],
+            'renal' => [
+                'nullable',
+                'string',
+            ],
+            'respiratory_finding_id' => [
+                'nullable',
+                'integer',
+                new AttributeOptionExistsRule(AttributeOptionName::EXAM_BODY_PART_FINDINGS),
+            ],
+            'respiratory' => [
+                'nullable',
+                'string',
+            ],
+            'cardiovascular_finding_id' => [
+                'nullable',
+                'integer',
+                new AttributeOptionExistsRule(AttributeOptionName::EXAM_BODY_PART_FINDINGS),
+            ],
+            'cardiovascular' => [
+                'nullable',
+                'string',
+            ],
+            'endocrine_reproductive_finding_id' => [
+                'nullable',
+                'integer',
+                new AttributeOptionExistsRule(AttributeOptionName::EXAM_BODY_PART_FINDINGS),
+            ],
+            'endocrine_reproductive' => [
+                'nullable',
+                'string',
+            ],
+            'nervous_finding_id' => [
+                'nullable',
+                'integer',
+                new AttributeOptionExistsRule(AttributeOptionName::EXAM_BODY_PART_FINDINGS),
+            ],
+            'nervous' => [
+                'nullable',
+                'string',
+            ],
+            'head_finding_id' => [
+                'nullable',
+                'integer',
+                new AttributeOptionExistsRule(AttributeOptionName::EXAM_BODY_PART_FINDINGS),
+            ],
+            'head' => [
+                'nullable',
+                'string',
+            ],
+            'musculoskeletal_finding_id' => [
+                'nullable',
+                'integer',
+                new AttributeOptionExistsRule(AttributeOptionName::EXAM_BODY_PART_FINDINGS),
+            ],
+            'musculoskeletal' => [
+                'nullable',
+                'string',
+            ],
+        ]);
+
         $necropsy = Necropsy::firstOrNew(['patient_id' => $patient->id]);
         $necropsy->patient_id = $patient->id;
-        $necropsy->fill($request->only([
-            'integument_finding',
-            'integument',
-            'cavities_finding',
-            'cavities',
-            'gastrointestinal_finding',
-            'gastrointestinal',
-            'liver_gallbladder_finding',
-            'liver_gallbladder',
-            'hematopoietic_finding',
-            'hematopoietic',
-            'renal_finding',
-            'renal',
-            'respiratory_finding',
-            'respiratory',
-            'cardiovascular_finding',
-            'cardiovascular',
-            'endocrine_reproductive_finding',
-            'endocrine_reproductive',
-            'nervous_finding',
-            'nervous',
-            'head_finding',
-            'head',
-            'musculoskeletal_finding',
-            'musculoskeletal',
-        ]));
+        $necropsy->fill($data);
         $necropsy->save();
 
         return back();

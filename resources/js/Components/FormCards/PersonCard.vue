@@ -61,6 +61,7 @@ const doSubmit = () => emit('submitted');
           v-model="form.entity"
           name="entity"
           :options="$page.props.options.personEntityTypesOptions"
+          hasBlankOption
         />
         <InputError
           :message="form.errors?.entity"

@@ -83,6 +83,21 @@ const doSubmit = () => emit('submitted');
             />
           </FormRow>
           <FormRow
+            id="examiner"
+            :label="__('Examiner Name')"
+            :required="enforceRequired"
+          >
+            <TextInput
+              v-model="form.examiner"
+              name="examiner"
+              autoComplete="exams.examiner"
+            />
+            <InputError
+              :message="form.errors.examiner"
+              class="mt-2"
+            />
+          </FormRow>
+          <FormRow
             id="examined_at"
             :label="__('Date')"
             :required="enforceRequired"
@@ -153,6 +168,8 @@ const doSubmit = () => emit('submitted');
               class="mt-2"
             />
           </FormRow>
+        </div>
+        <div class="space-y-4">
           <FormRow
             id="attitude_id"
             :label="__('Attitude')"
@@ -168,8 +185,6 @@ const doSubmit = () => emit('submitted');
               class="mt-2"
             />
           </FormRow>
-        </div>
-        <div class="space-y-4">
           <FormRow
             id="sex_id"
             :label="__('Sex')"
@@ -273,7 +288,7 @@ const doSubmit = () => emit('submitted');
             v-model="form[`${bodyPart.value}_finding_id`]"
             :name="`${bodyPart.value}_finding_id`"
             :options="$page.props.options.examBodyPartFindingsOptions"
-            class="mr-2 !w-36"
+            class="mr-2 md:!w-48"
           />
           <TextareaAutosize
             v-model="form[bodyPart.value]"
@@ -341,21 +356,6 @@ const doSubmit = () => emit('submitted');
         />
         <InputError
           :message="form.errors.comments"
-          class="mt-2"
-        />
-      </FormRow>
-      <FormRow
-        id="examiner"
-        :label="__('Examiner')"
-        class="col-span-3"
-      >
-        <TextInput
-          v-model="form.examiner"
-          name="examiner"
-          autoComplete="exams.examiner"
-        />
-        <InputError
-          :message="form.errors.examiner"
           class="mt-2"
         />
       </FormRow>

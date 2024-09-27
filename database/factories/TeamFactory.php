@@ -3,10 +3,12 @@
 namespace Database\Factories;
 
 use App\Enums\AccountStatus;
+use App\Enums\Plan;
 use App\Models\Customer;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Team>
@@ -36,9 +38,9 @@ class TeamFactory extends Factory
         ];
     }
 
-    public function withSubscription(string|int $priceId = null): static
+    public function withProSubscription(): static
     {
-        return $this->afterCreating(function (Team $team) use ($priceId) {
+        return $this->afterCreating(function (Team $team) {
             optional($team->customer)->update(['trial_ends_at' => null]);
 
             $subscription = $team->subscriptions()->create([
@@ -50,9 +52,11 @@ class TeamFactory extends Factory
                 'ends_at' => null,
             ]);
 
+            $proPlan = Arr::first(config('spark.billables.team.plans'), fn ($plan) => $plan['name'] === Plan::PRO->value);
+
             $subscription->items()->create([
                 'product_id' => fake()->unique()->numberBetween(1, 1000),
-                'price_id' => $priceId,
+                'price_id' => $proPlan['yearly_id'],
                 'status' => 'active',
                 'quantity' => 1,
             ]);

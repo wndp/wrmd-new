@@ -70,7 +70,8 @@ class CreateNewUser implements CreatesNewUsers
         ]));
 
         $team->settingsStore()->set([
-            'timezone' => $input['timezone'] ?: 'America/Los_Angeles'
+            'timezone' => $input['timezone'] ?: 'America/Los_Angeles',
+            'language' => config('app.fallback_locale')
         ]);
 
         BouncerFacade::scope()->to($team->id)->onlyRelations()->dontScopeRoleAbilities();

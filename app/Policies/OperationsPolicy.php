@@ -10,10 +10,13 @@ class OperationsPolicy
 {
     use HandlesAuthorization;
 
+    public function viewBilling($user)
+    {
+        return $user->isA(Role::ADMIN->value);
+    }
+
     public function viewSettings($user)
     {
-        return true;
-
         if ($user->currentTeam?->isSubAccount()) {
             if ($user->roleOn($user->currentTeam->masterAccount)->name === Role::ADMIN->value) {
                 return true;

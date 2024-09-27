@@ -45,6 +45,6 @@ class UncollaborateTransferController extends Controller
     {
         return $transfer->is_collaborative &&
             $transfer->is_accepted &&
-            in_array(Auth::user()->current_account_id, [$transfer->to_account_id, $transfer->from_account_id]);
+            in_array(Auth::user()->current_team_id, [$transfer->to_account_id, $transfer->from_account_id]);
     }
 }

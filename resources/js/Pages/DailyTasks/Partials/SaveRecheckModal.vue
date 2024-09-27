@@ -14,7 +14,7 @@ import {__} from '@/Composables/Translate';
 
 const props = defineProps({
   patientId: {
-      type: Number,
+      type: String,
       required: true
   },
   recheck: {

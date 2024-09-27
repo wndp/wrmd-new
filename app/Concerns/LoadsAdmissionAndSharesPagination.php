@@ -5,21 +5,24 @@ namespace App\Concerns;
 use App\Caches\QueryCache;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
+use App\Enums\Extension;
 use App\Exceptions\AdmissionNotFoundException;
 use App\Exceptions\PatientVoidedException;
 use App\Extensions\ExtensionNavigation;
 use App\Models\Admission;
 use App\Models\AttributeOption;
+use App\Options\Options;
 use App\Paginators\SearchResultPaginator;
 use App\Repositories\OptionsStore;
+use App\Support\DailyTasksCollection;
+use App\Support\DailyTasksFilters;
+use App\Support\ExtensionManager;
 use App\Support\Timezone;
+use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
-use App\Support\DailyTasksCollection;
-use App\Support\DailyTasksFilters;
-use Carbon\Carbon;
 
 trait LoadsAdmissionAndSharesPagination
 {
@@ -118,6 +121,13 @@ trait LoadsAdmissionAndSharesPagination
                 AttributeOptionName::DAILY_TASK_ROUTES->value,
                 AttributeOptionName::DAILY_TASK_NUTRITION_ROUTES->value,
             ]),
+            'includableOptions' => Options::arrayToSelectable(array_filter([
+                'rescuer' => __('Rescuer contact information'),
+                'location_history' => __('Location history'),
+                'rechecks' => __('Future rechecks'),
+                'intake_exam' => __('Full intake exam'),
+                'necropsy' => ExtensionManager::isActivated(Extension::NECROPSY) ? __('Necropsy Report') : false
+            ]))
         ]);
 
         [

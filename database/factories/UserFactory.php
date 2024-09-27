@@ -60,26 +60,28 @@ class UserFactory extends Factory
             return $this->state([]);
         }
 
-        // To prevent api request to Paddle
-        // https://github.com/laravel/cashier-paddle/issues/280
-        Http::fake([
-            Cashier::apiUrl().'/*' => Http::response([
-                'data' => [[
-                    'id' => Str::random(),
-                    'name' => $user->name,
-                    'email' => $user->email,
-                ]]
-            ]),
-        ]);
-
         return $this->has(
             Team::factory()
-                ->withSubscription('pri_yearly')
-                ->state(fn (array $attributes, User $user) => [
-                    'name' => $user->name.'\'s Team',
-                    'user_id' => $user->id,
-                    'personal_team' => true,
-                ])
+                ->withProSubscription()
+                ->state(function (array $attributes, User $user) {
+                    // To prevent api request to Paddle
+                    // https://github.com/laravel/cashier-paddle/issues/280
+                    Http::fake([
+                        Cashier::apiUrl().'/*' => Http::response([
+                            'data' => [[
+                                'id' => Str::random(),
+                                'name' => $user->name,
+                                'email' => $user->email,
+                            ]]
+                        ]),
+                    ]);
+
+                    return [
+                        'name' => $user->name.'\'s Team',
+                        'user_id' => $user->id,
+                        'personal_team' => true,
+                    ];
+                })
                 ->when(is_callable($callback), $callback),
             'ownedTeams'
         );

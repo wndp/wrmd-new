@@ -2,6 +2,7 @@
 
 namespace App\Reporting;
 
+use App\Models\Team;
 use App\Reporting\Contracts\Report;
 use App\Reporting\Reports\Admin\DeleteableAccounts;
 use App\Reporting\Reports\Admin\InactiveAccounts;
@@ -20,6 +21,7 @@ use App\Reporting\Reports\Overview\DailySummary;
 use App\Reporting\Reports\Overview\DatesOfFirstBabies;
 use App\Reporting\Reports\Overview\PatientsDaysInCare;
 use App\Reporting\Reports\PatientMedicalRecord;
+use App\Reporting\Reports\PatientReports\NecropsyReport;
 use App\Reporting\Reports\PatientsList;
 use App\Reporting\Reports\People\Donors;
 use App\Reporting\Reports\People\FrugalRescuers;
@@ -32,7 +34,6 @@ use App\Reporting\Reports\Prescriptions\ControlledSubstance;
 use App\Reporting\Reports\Prescriptions\PrescriptionLabels;
 use App\Reporting\Reports\Prescriptions\PrescriptionsDueByLocation;
 use App\Reporting\Reports\Prescriptions\PrescriptionsDueByPatient;
-use App\Models\Team;
 use Illuminate\Support\Collection;
 
 class ReportsCollection extends Collection
@@ -111,13 +112,19 @@ class ReportsCollection extends Collection
             ]))->setVisibility(false)
         );
 
-        collect((array) event(new RegisterReports()))
-            ->filter(function ($group) {
-                return $group instanceof ReportGroup;
-            })
-            ->each(function ($group) use ($collection) {
-                $collection->push($group);
-            });
+        $collection->push(
+            (new ReportGroup('Patient Reports', [
+                NecropsyReport::class,
+            ]))->setPatientReports(false)
+        );
+
+        // collect((array) event(new RegisterReports()))
+        //     ->filter(function ($group) {
+        //         return $group instanceof ReportGroup;
+        //     })
+        //     ->each(function ($group) use ($collection) {
+        //         $collection->push($group);
+        //     });
 
         return static::$reports = $collection->sortBy('priority')->values();
     }

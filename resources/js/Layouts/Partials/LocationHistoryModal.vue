@@ -12,7 +12,7 @@ import {Abilities} from '@/Enums/Abilities';
 
 const props = defineProps({
   patientId: {
-    type: Number,
+    type: String,
     required: true
   },
   locations: {

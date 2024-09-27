@@ -1,4 +1,5 @@
 <script setup>
+import {usePage} from '@inertiajs/vue3';
 import { Dialog, DialogOverlay, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import {
   HeartIcon,
@@ -125,11 +126,11 @@ export default {
           >
             <img
               src="../../../images/logo-48x48.png"
-              class="h-12 w-auto mr-4"
+              class="h-12 w-auto"
               :alt="$page.props.appName"
             >
-            <h4 class="text-3xl leading-6 font-medium text-gray-900">
-              WRMD
+            <h4 class="text-3xl leading-6 font-medium text-gray-900 whitespace-nowrap ml-4">
+              WRMD <span v-if="usePage().props.subscription.isProPlan">Pro</span>
             </h4>
           </Link>
           <div class="mt-5 flex-1 h-0 overflow-y-auto">
@@ -181,11 +182,11 @@ export default {
         >
           <img
             src="../../../images/logo-48x48.png"
-            class="h-12 w-auto mr-4"
+            class="h-12 w-auto"
             :alt="$page.props.appName"
           >
-          <h4 class="text-3xl leading-6 font-medium text-gray-900">
-            WRMD
+          <h4 class="text-3xl leading-6 font-medium text-gray-900 whitespace-nowrap ml-2">
+            WRMD <span v-if="usePage().props.subscription.isProPlan">Pro</span>
           </h4>
         </Link>
         <div class="mt-5 flex-grow flex flex-col">

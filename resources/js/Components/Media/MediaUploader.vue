@@ -10,7 +10,7 @@ defineProps({
     required: true
   },
   resourceId: {
-    type: Number,
+    type: String,
     required: true
   },
   postParams: {

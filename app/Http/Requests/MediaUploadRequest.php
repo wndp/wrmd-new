@@ -31,7 +31,7 @@ class MediaUploadRequest extends FormRequest
             ],
             'resource_id' => [
                 'required',
-                'integer',
+                'uuid',
             ],
             'key' => [
                 'required',

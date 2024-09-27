@@ -60,8 +60,8 @@ Route::prefix('settings')->group(function () {
 
     Route::controller(AccountExtensionsController::class)->group(function () {
         Route::get('extensions', 'index')->name('extensions.index');
-        Route::post('extensions/{namespace}/{account?}', 'store')->name('extensions.store');
-        Route::delete('extensions/{namespace}/{account?}', 'destroy')->name('extensions.destroy');
+        Route::post('extensions/{extension}/{team?}', 'store')->name('extensions.store');
+        Route::delete('extensions/{extension}/{team?}', 'destroy')->name('extensions.destroy');
     });
 
     Route::controller(ApiController::class)->group(function () {

@@ -218,7 +218,7 @@ class Exam extends Model implements Summarizable, Weighable
     {
         return Attribute::get(function () {
             if (is_null($this->time_examined_at)) {
-                return $this->date_examined_at->toFormattedDayDateString();
+                return $this->date_examined_at;
             }
             return $this->date_examined_at->setTimeFromTimeString($this->time_examined_at);
         });
@@ -236,9 +236,7 @@ class Exam extends Model implements Summarizable, Weighable
 
     public function summaryDate(): Attribute
     {
-        return Attribute::get(
-            fn () => 'examined_at'
-        );
+        return Attribute::get(fn () => 'examined_at');
     }
 
     public function summaryBody(): Attribute
@@ -279,15 +277,11 @@ class Exam extends Model implements Summarizable, Weighable
 
     public function summaryWeight(): Attribute
     {
-        return Attribute::get(
-            fn () => $this->weight
-        );
+        return Attribute::get(fn () => $this->weight);
     }
 
     public function summaryWeightUnitId(): Attribute
     {
-        return Attribute::get(
-            fn () => $this->weight_unit_id
-        );
+        return Attribute::get(fn () => $this->weight_unit_id);
     }
 }

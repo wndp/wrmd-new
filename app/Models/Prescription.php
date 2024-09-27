@@ -149,7 +149,7 @@ class Prescription extends Model implements Schedulable
         $end = $this->rx_ended_at instanceof Carbon ? $this->rx_ended_at->toFormattedDateString() : __('open');
 
         return Attribute::get(
-            fn () => 'RX: '.$this->fullPrescription.' '.__('From').' '.$this->rx_started_at->toFormattedDateString().' '.__('to').' '.$end
+            fn () => $this->fullPrescription.' '.__('From').' '.$this->rx_started_at->toFormattedDateString().' '.__('to').' '.$end
         );
     }
 

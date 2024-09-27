@@ -32,7 +32,7 @@ class Recheck extends Model implements Schedulable
     ];
 
     protected $casts = [
-        'patient_id' => 'integer',
+        'patient_id' => 'string',
         'recheck_start_at' => 'date',
         'recheck_end_at' => 'date',
         'frequency_id' => 'integer',

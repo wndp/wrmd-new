@@ -5,7 +5,7 @@
   export default {
     props: {
       patientId: {
-        type: Number,
+        type: String,
         required: true
       }
     },

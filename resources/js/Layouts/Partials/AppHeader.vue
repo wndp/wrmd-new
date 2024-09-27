@@ -217,9 +217,14 @@ export default {
                     </Link>
                   </MenuItem>
                 </div>
-                <div v-if="can(Abilities.COMPUTED_VIEW_SETTINGS) || can(Abilities.COMPUTED_VIEW_MAINTENANCE)">
+                <div
+                  v-if="
+                    can(Abilities.COMPUTED_VIEW_BILLING)
+                      || can(Abilities.COMPUTED_VIEW_SETTINGS)
+                      || can(Abilities.COMPUTED_VIEW_MAINTENANCE)"
+                >
                   <MenuItem
-                    v-if="can(Abilities.COMPUTED_VIEW_SETTINGS)"
+                    v-if="can(Abilities.COMPUTED_VIEW_BILLING)"
                     v-slot="{ active }"
                   >
                     <Link

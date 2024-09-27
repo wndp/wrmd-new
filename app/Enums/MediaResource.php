@@ -11,7 +11,7 @@ enum MediaResource: string
     case PATIENT = 'PATIENT';
     case INCIDENT = 'INCIDENT';
 
-    public function owningModelInstance(int $id): HasMedia
+    public function owningModelInstance(string $id): HasMedia
     {
         /** @var HasMedia */
         return match ($this) {

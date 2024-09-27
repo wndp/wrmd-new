@@ -72,7 +72,7 @@ return [
     |
     */
 
-    'date_format' => 'F j, Y',
+    'date_format' => 'F j, Y', // 'M j, Y'
 
     /*
     |--------------------------------------------------------------------------
@@ -94,14 +94,14 @@ return [
         'team' => [
             'model' => Team::class,
 
-            'trial_days' => 30,
+            'trial_days' => 60,
 
             'default_interval' => 'yearly',
 
             'plans' => [
                 [
                     'name' => Plan::STANDARD->value,
-                    'short_description' => 'The WRMD Standard plan is meant for all wildlife rehabilitators and will always remain free. It provides all your basic needs as well as some many features.',
+                    'short_description' => 'The WRMD Standard plan is designed for all wildlife rehabilitators and will always be FREE. It covers all your essential needs along with numerous additional features.',
                     'yearly_id' => env('SPARK_STANDARD_YEARLY_PLAN', 'pri_01j8g823pk35whp8yd274a53wa'),
                     'features' => [
                         'Hotline',
@@ -118,11 +118,11 @@ return [
                 ],
                 [
                     'name' => Plan::PRO->value,
-                    'short_description' => 'The WRMD Pro plan provides features that ',
+                    'short_description' => 'The WRMD Pro plan encompasses all Standard features along with a variety of advanced functionalities designed to enhance your record-keeping capabilities.',
                     'monthly_id' => env('SPARK_STANDARD_MONTHLY_PLAN', 'pri_01j8g8c590exjcx7n03gt1qrcc'),
                     'yearly_id' => env('SPARK_STANDARD_YEARLY_PLAN', 'pri_01j8g83vw50ff1n97avcmq5k2h'),
                     'features' => [
-                        'All of the Standard Features',
+                        'All Standard Features',
                         'File Uploads',
                         'Patient Batch Updating',
                         'Custom Classification Tags',

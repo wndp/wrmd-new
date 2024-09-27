@@ -1,17 +1,67 @@
+<script setup>
+import {computed} from 'vue';
+import {useForm} from '@inertiajs/vue3';
+import Panel from '@/Components/Panel.vue';
+import FormRow from '@/Components/FormElements/FormRow.vue';
+import TextareaInput from '@/Components/FormElements/TextareaInput.vue';
+import Checkbox from '@/Components/FormElements/Checkbox.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import {__} from '@/Composables/Translate';
+
+const props = defineProps({
+  patientId: {
+    type: String,
+    required: true
+  },
+  necropsy: {
+    type: Object,
+    required: true
+  },
+  necropsySampleOtherId: {
+    type: Number,
+    required: true
+  },
+  enforceRequired: {
+    type: Boolean,
+    default: false
+  }
+});
+
+const showOtherSample = computed(() => form.samples_collected.includes(props.necropsySampleOtherId));
+
+const form = useForm({
+  samples_collected: props.necropsy.samples_collected || [],
+  other_sample: props.necropsy.other_sample,
+  morphologic_diagnosis: props.necropsy.morphologic_diagnosis,
+  gross_summary_diagnosis: props.necropsy.gross_summary_diagnosis,
+});
+
+const save = () => {
+  form.put(route('patients.necropsy.summary.update', {
+    patient: props.patientId
+  }), {
+    preserveScroll: true,
+    //onError: () => this.stopAutoSave()
+  });
+};
+</script>
+
 <template>
   <Panel>
-    <template #heading>
+    <template #title>
       {{ __('Summary') }}
     </template>
-    <div class="space-y-4 md:space-y-2">
-      <div class="lg:grid lg:grid-cols-6 lg:gap-x-2 lg:items-center">
-        <Label
-          for="samples_collected"
-          class="lg:text-right"
-        >{{ __('Samples Collected') }}</Label>
-        <div class="col-span-5 mt-1 lg:mt-0 flex gap-4 flex-wrap">
+    <template #content>
+      <FormRow
+        id="samples_collected"
+        :label="__('Samples Collected')"
+        class="col-span-6"
+      >
+        <div class="flex flex-wrap gap-4">
           <div
-            v-for="sample in $page.props.options.samples"
+            v-for="sample in $page.props.options.necropsySamplesOptions"
             :key="sample.value"
             class="relative flex items-start"
           >
@@ -23,76 +73,49 @@
                 :value="sample.value"
               />
             </div>
-            <div class="ml-1 text-sm">
+            <div class="ml-2 text-sm">
               <label
                 :for="`samples_collected_${sample.value}`"
                 class="font-medium text-gray-700 whitespace-nowrap"
               >{{ sample.label }}</label>
             </div>
           </div>
-          <div class="relative flex items-start">
-            <div class="flex items-center h-5">
-              <Checkbox
-                id="samples_collected_Other"
-                v-model="form.samples_collected"
-                name="samples_collected_Other"
-                value="other"
-                @change="showOtherSample = !showOtherSample"
-              />
-            </div>
-            <div class="ml-1 text-sm">
-              <label
-                for="samples_collected_Other"
-                class="font-medium text-gray-700 whitespace-nowrap"
-              >{{ __('Other') }}</label>
-            </div>
-          </div>
         </div>
-      </div>
-      <div
+        <InputError :message="form.errors.samples_collected" />
+      </FormRow>
+      <FormRow
         v-if="showOtherSample"
-        class="lg:grid lg:grid-cols-6 lg:gap-x-2 lg:items-center"
+        id="other_sample"
+        :label="__('Other Sample')"
+        class="col-span-6"
       >
-        <Label
-          for="other_sample"
-          class="lg:text-right"
-        >{{ __('Other Sample') }}</Label>
-        <div class="col-span-5 mt-1 xl:mt-0 flex">
-          <Input
-            v-model="form.other_sample"
-            name="other_sample"
-          />
-        </div>
-      </div>
-      <div class="lg:grid lg:grid-cols-6 lg:gap-x-2 lg:items-center">
-        <Label
-          for="morphologic_diagnosis"
-          class="lg:text-right"
-        >{{ __('Morphologic Diagnosis') }}</Label>
-        <div class="col-span-5 mt-1 xl:mt-0 flex">
-          <Textarea
-            v-model="form.morphologic_diagnosis"
-            name="morphologic_diagnosis"
-          />
-        </div>
-      </div>
-      <div class="lg:grid lg:grid-cols-6 lg:gap-x-2 lg:items-center">
-        <Label
-          for="gross_summary_diagnosis "
-          class="lg:text-right"
-        >{{ __('Gross Summary Diagnosis') }}</Label>
-        <div class="col-span-5 mt-1 xl:mt-0 flex">
-          <Textarea
-            v-model="form.gross_summary_diagnosis"
-            name="gross_summary_diagnosis"
-          />
-        </div>
-      </div>
-    </div>
-    <template
-      v-if="canSubmit"
-      #footing
-    >
+        <TextareaInput
+          v-model="form.other_sample"
+          name="other_sample"
+        />
+      </FormRow>
+      <FormRow
+        id="morphologic_diagnosis"
+        :label="__('Morphologic Diagnosis')"
+        class="col-span-6"
+      >
+        <TextareaInput
+          v-model="form.morphologic_diagnosis"
+          name="morphologic_diagnosis"
+        />
+      </FormRow>
+      <FormRow
+        id="gross_summary_diagnosis"
+        :label="__('Gross Summary Diagnosis')"
+        class="col-span-6"
+      >
+        <TextareaInput
+          v-model="form.gross_summary_diagnosis"
+          name="gross_summary_diagnosis"
+        />
+      </FormRow>
+    </template>
+    <template #actions>
       <div class="flex items-center justify-end text-right">
         <ActionMessage
           :on="form.isDirty"
@@ -117,54 +140,3 @@
     </template>
   </Panel>
 </template>
-
-<script setup>
-import Panel from '@/Components/Panel.vue';
-import InputLabel from '@/Components/FormElements/InputLabel.vue';
-import Textarea from '@/Components/FormElements/Textarea.vue';
-import Checkbox from '@/Components/FormElements/Checkbox.vue';
-import TextInput from '@/Components/FormElements/TextInput.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import autoSave from '@/Mixins/AutoSave';
-import hoistForm from '@/Mixins/HoistForm';
-</script>
-
-<script>
-  export default {
-    mixins: [autoSave, hoistForm],
-    props: {
-      necropsy: {
-        type: Object,
-        default: () => ({})
-      },
-      enforceRequired: {
-        type: Boolean,
-        default: true
-      }
-    },
-    data() {
-      return {
-        showOtherSample: (this.necropsy?.samples_collected || []).includes('other'),
-        form: this.$inertia.form({
-          samples_collected: this.necropsy?.samples_collected || [],
-          other_sample: this.necropsy?.other_sample,
-          morphologic_diagnosis: this.necropsy?.morphologic_diagnosis,
-          gross_summary_diagnosis: this.necropsy?.gross_summary_diagnosis,
-        })
-      }
-    },
-    methods: {
-      save() {
-        if (this.canSubmit) {
-          this.form.put(this.route('patients.necropsy.summary.update', {
-            patient: this.$page.props.admission.patient
-          }), {
-            preserveScroll: true,
-            onError: () => this.stopAutoSave()
-          });
-        }
-      }
-    }
-  }
-</script>

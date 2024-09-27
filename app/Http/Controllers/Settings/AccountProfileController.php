@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
+use Laravel\Paddle\Cashier;
 
 class AccountProfileController extends Controller
 {
@@ -49,6 +50,12 @@ class AccountProfileController extends Controller
             );
         }
 
+        if ($team->wasChanged('name') && $customer = $team->customer) {
+            retry(5, fn () => Cashier::api('PATCH', "customers/{$customer->paddle_id}", [
+                'name' => $request->input('name'),
+            ]), 100);
+        }
+
         return redirect()->route('account.profile.edit')
             ->with('notification.heading', __('Success!'))
             ->with('notification.text', __('Your account profile was updated.'));
@@ -68,6 +75,12 @@ class AccountProfileController extends Controller
             'website' => 'nullable',
         ]));
 
+        if ($team->wasChanged('contact_email') && $customer = $team->customer) {
+            retry(5, fn () => Cashier::api('PATCH', "customers/{$customer->paddle_id}", [
+                'email' => $request->input('contact_email'),
+            ]), 100);
+        }
+
         return redirect()->route('account.profile.edit')
             ->with('notification.heading', __('Success!'))
             ->with('notification.text', __('Your account contact details were updated.'));
@@ -84,6 +97,12 @@ class AccountProfileController extends Controller
         ]));
 
         app()->setLocale($request->language);
+
+        if ($customer = $team->customer) {
+            retry(5, fn () => Cashier::api('PATCH', "customers/{$customer->paddle_id}", [
+                'locale' => $request->input('language'),
+            ]), 100);
+        }
 
         Cache::forget('timezone.'.Auth::id());
 

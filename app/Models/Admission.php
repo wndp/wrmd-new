@@ -26,6 +26,9 @@ class Admission extends Model
     use QueriesDateRange;
     use JoinsTablesToPatients;
 
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
         'team_id',
         'case_year',
@@ -38,7 +41,7 @@ class Admission extends Model
         'team_id' => 'integer',
         'case_year' => 'integer',
         'case_id' => 'integer',
-        'patient_id' => 'integer',
+        'patient_id' => 'string',
         'hash' => 'string',
     ];
 

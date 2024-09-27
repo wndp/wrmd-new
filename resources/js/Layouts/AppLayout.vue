@@ -9,6 +9,8 @@ import AlertAction from '@/Components/AlertAction.vue';
 import ToastNotifications from '@/Components/ToastNotifications.vue';
 import DonateHeader from '@/Layouts/Partials/DonateHeader.vue';
 import {__} from '@/Composables/Translate';
+import {can} from '@/Composables/Can';
+import {Abilities} from '@/Enums/Abilities';
 
 defineProps({
   title: String,
@@ -47,6 +49,19 @@ if (typeof window !== 'undefined' && typeof window.Beacon !== 'undefined') {
         :noSidebar="noSidebar"
         @open="sidebarOpen = true"
       />
+      <Alert
+        v-if="usePage().props.subscription.genericTrialEndsAt !== null"
+        color="yellow"
+      >
+        {{ __('Your trial period will expire on :genericTrialEndsAt. Subscribe to a FREE account to continue using WRMD.', {
+          genericTrialEndsAt: usePage().props.subscription.genericTrialEndsAt
+        }) }}
+        <AlertAction v-if="can(Abilities.COMPUTED_VIEW_BILLING)" color="yellow">
+          <Link :href="route('spark.portal')">
+            {{ __('Start a WRMD subscription') }}
+          </Link>
+        </AlertAction>
+      </Alert>
       <Alert
         v-if="differentTimeZone"
         color="red"

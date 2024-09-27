@@ -18,7 +18,7 @@ import {__} from '@/Composables/Translate';
 
 const props = defineProps({
   patientId: {
-      type: Number,
+      type: String,
       required: true
   },
   prescription: {
@@ -165,6 +165,10 @@ const update = () => {
                   min="0"
                   :units="$page.props.options.dailyTaskConcentrationUnitsOptions"
                 />
+                <InputError
+                  :message="form.errors.concentration_unit_id"
+                  class="mt-1"
+                />
               </div>
             </div>
             <div class="sm:grid sm:grid-cols-3 sm:gap-x-2 sm:items-center">
@@ -183,6 +187,10 @@ const update = () => {
                   step="any"
                   min="0"
                   :units="$page.props.options.dailyTaskDosageUnitsOptions"
+                />
+                <InputError
+                  :message="form.errors.dosage_unit_id"
+                  class="mt-1"
                 />
               </div>
             </div>
@@ -203,6 +211,10 @@ const update = () => {
                   min="0"
                   :units="$page.props.options.dailyTaskDoseUnitsOptions"
                 />
+                <InputError
+                  :message="form.errors.dose_unit_id"
+                  class="mt-1"
+                />
               </div>
             </div>
           </div>
@@ -220,6 +232,10 @@ const update = () => {
                   name="route"
                   :options="$page.props.options.dailyTaskRoutesOptions"
                 />
+                <InputError
+                  :message="form.errors.route_id"
+                  class="mt-1"
+                />
               </div>
             </div>
             <div class="sm:grid sm:grid-cols-3 sm:gap-x-2 sm:items-center">
@@ -236,7 +252,7 @@ const update = () => {
                   :options="$page.props.options.dailyTaskFrequenciesOptions"
                 />
                 <InputError
-                  :message="form.errors.frequency"
+                  :message="form.errors.frequency_id"
                   class="mt-1"
                 />
               </div>
@@ -294,6 +310,10 @@ const update = () => {
                 step="any"
                 min="0"
                 :units="$page.props.options.dailyTaskDoseUnitsOptions"
+              />
+              <InputError
+                :message="form.errors.loading_dose_unit_id"
+                class="mt-1"
               />
             </div>
             <div class="col-start-5 col-span-2 mt-4 sm:mt-0">

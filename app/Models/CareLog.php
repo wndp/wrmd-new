@@ -66,7 +66,7 @@ class CareLog extends Model implements Summarizable, Weighable
         return $this->belongsTo(AttributeOption::class, 'temperature_id');
     }
 
-    public static function store(int $patientId, Collection $data, User $user): static
+    public static function store($patientId, Collection $data, User $user): static
     {
         if ($data->get('date_care_at') instanceof Carbon) {
             $dateCareAt = $data->get('date_care_at');

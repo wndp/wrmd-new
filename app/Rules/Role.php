@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use App\Enums\Role as RoleEnum;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 
@@ -14,7 +15,7 @@ class Role implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (! in_array($value, UserOptions::$roles)) {
+        if (is_null(RoleEnum::tryFrom($value))) {
             $fail(__('The :attribute must be a valid role.'));
         }
     }

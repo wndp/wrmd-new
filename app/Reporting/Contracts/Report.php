@@ -3,6 +3,7 @@
 namespace App\Reporting\Contracts;
 
 use App\Jobs\QueuedReportGeneration;
+use App\Models\Patient;
 use App\Models\Team;
 use App\Reporting\ApplyFilter;
 use App\Reporting\Filters\TeamFilter;

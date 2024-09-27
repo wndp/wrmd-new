@@ -36,9 +36,13 @@
 
     @include('reports.medical-record.outcome')
 
-    @foreach($shareOptions as $option)
+    @if(in_array('necropsy', $shareOptions))
+        @include('reports.medical-record.necropsy')
+    @endif
+
+    {{-- @foreach($shareOptions as $option)
         {!! \Illuminate\Support\Arr::first(event("report.admission.$option", [$admission])) !!}
-    @endforeach
+    @endforeach --}}
 @endforeach
 
 @stop

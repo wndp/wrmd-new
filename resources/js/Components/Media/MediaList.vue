@@ -1,3 +1,58 @@
+<script setup>
+import { inject, ref, reactive, watch } from 'vue';
+import MediaDetails from './MediaDetails.vue';
+import Draggable from 'vuedraggable';
+
+const route = inject('route');
+
+const props = defineProps({
+  media: {
+    type: Array,
+    required: true
+  },
+  resource: {
+    type: String,
+    required: true
+  },
+  resourceId: {
+    type: String,
+    required: true
+  }
+});
+
+const componentKey = ref(0);
+let showMediaDetails = ref(false);
+let mediaToDetail = reactive({});
+const mediaList = ref(props.media);
+
+watch(() => props.media, media => mediaList.value = media)
+
+let showDetailsFor = (media) => {
+  componentKey.value += 1;
+  mediaToDetail = media;
+  showMediaDetails.value = true;
+};
+
+let detailNext = () => {
+  let idx = props.media.findIndex(media => media.id === mediaToDetail.id);
+  let nextIdx = idx === props.media.length-1 ? idx : idx+1;
+  showDetailsFor(props.media[nextIdx]);
+}
+
+let detailPrevious = () => {
+  let idx = props.media.findIndex(media => media.id === mediaToDetail.id);
+  let nextIdx = idx === 0 ? idx : idx-1;
+  showDetailsFor(props.media[nextIdx]);
+}
+
+const onChange = () => {
+  let mediaIds = mediaList.value.map(media => media.id);
+  window.axios.post(route('media.order'), {
+    media: mediaIds
+  })
+}
+</script>
+
 <template>
   <div>
     <Draggable
@@ -46,58 +101,3 @@
     />
   </div>
 </template>
-
-<script setup>
-import { inject, ref, reactive, watch } from 'vue';
-import MediaDetails from './MediaDetails.vue';
-import Draggable from 'vuedraggable';
-
-const route = inject('route');
-
-const props = defineProps({
-  media: {
-    type: Array,
-    required: true
-  },
-  resource: {
-    type: String,
-    required: true
-  },
-  resourceId: {
-    type: Number,
-    required: true
-  }
-});
-
-const componentKey = ref(0);
-let showMediaDetails = ref(false);
-let mediaToDetail = reactive({});
-const mediaList = ref(props.media);
-
-watch(() => props.media, media => mediaList.value = media)
-
-let showDetailsFor = (media) => {
-  componentKey.value += 1;
-  mediaToDetail = media;
-  showMediaDetails.value = true;
-};
-
-let detailNext = () => {
-  let idx = props.media.findIndex(media => media.id === mediaToDetail.id);
-  let nextIdx = idx === props.media.length-1 ? idx : idx+1;
-  showDetailsFor(props.media[nextIdx]);
-}
-
-let detailPrevious = () => {
-  let idx = props.media.findIndex(media => media.id === mediaToDetail.id);
-  let nextIdx = idx === 0 ? idx : idx-1;
-  showDetailsFor(props.media[nextIdx]);
-}
-
-const onChange = () => {
-  let mediaIds = mediaList.value.map(media => media.id);
-  window.axios.post(route('media.order'), {
-    media: mediaIds
-  })
-}
-</script>

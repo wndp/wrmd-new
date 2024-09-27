@@ -51,6 +51,8 @@ class ReportGeneratorController extends Controller
             $request->report($key)->fromDevice($request->cookie('device-uuid')),
             $request->format
         );
+
+        return response()->noContent();
     }
 
     /**

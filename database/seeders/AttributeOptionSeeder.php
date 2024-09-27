@@ -679,6 +679,33 @@ class AttributeOptionSeeder extends Seeder
             __('Force feed'),
             __('Gavage'),
         ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::NECROPSY_CARCASS_CONDITIONS, [
+            __('Fresh'),
+            __('Fair (decomposed, organs intact)'),
+            __('Poor (advanced decomposition)'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::NECROPSY_SAMPLES, [
+            __('Liver'),
+            __('Spleen'),
+            __('Kidney'),
+            __('Bursa'),
+            __('GI Tract'),
+            __('Heart'),
+            __('Lung'),
+            __('Fat'),
+            __('Skin'),
+            __('Muscle'),
+            __('Bone'),
+            __('Brain'),
+            __('Other'),
+        ]);
+        $this->createOrUpdateAttributeOptionUiBehaviors(
+            AttributeOptionName::NECROPSY_SAMPLES,
+            __('Other'),
+            AttributeOptionUiBehavior::NECROPSY_SAMPLES_IS_OTHER,
+        );
     }
 
     private function createOrUpdateAttributes(AttributeOptionName $attributeName, array $values): void

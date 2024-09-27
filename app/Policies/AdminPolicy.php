@@ -33,22 +33,9 @@ class AdminPolicy
         return in_array($user->id, []);
     }
 
-    public function manageTaxa($user)
-    {
-        return in_array($user->id, []);
-    }
-
     public function manageAuthorizations($user)
     {
         return in_array($user->id, []);
-    }
-
-    public function manageClassificationTraining($user)
-    {
-        return in_array($user->id, [
-            WrmdStaff::TERRA->value,
-            WrmdStaff::PRANAV->value,
-        ]);
     }
 
     public function viewRevisions($user)
@@ -56,7 +43,7 @@ class AdminPolicy
         return in_array($user->id, []);
     }
 
-    public function import($user)
+    public function importPatients($user)
     {
         return in_array($user->id, []);
     }

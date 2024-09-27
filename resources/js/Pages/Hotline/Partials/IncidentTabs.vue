@@ -17,7 +17,7 @@ const tabs = [
     { name: __('Incident'), icon: ExclamationTriangleIcon, route: 'hotline.incident.edit', can: true },
     { name: __('Reporting Party'), icon: UserCircleIcon, route: 'hotline.incident.reporting_party', can: can(Abilities.COMPUTED_VIEW_RESCUER) },
     { name: __('Communications'), icon: ChatBubbleLeftRightIcon, route: 'hotline.incident.communications.index', can: true },
-    { name: __('Attachments'), icon: PhotoIcon, route: 'hotline.incident.attachments', can: usePage().props.auth.isProPlan },
+    { name: __('Attachments'), icon: PhotoIcon, route: 'hotline.incident.attachments', can: usePage().props.subscription.isProPlan },
     { name: __('Map'), icon: MapIcon, route: 'hotline.incident.map', can: true }
 ].filter(tab => tab.can);
 

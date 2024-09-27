@@ -9,10 +9,10 @@ import {__} from '@/Composables/Translate';
 
 const props = defineProps({
   show: Boolean,
-  patient: {
-      type: Object,
-      default: () => ({})
-  }
+  patientId: {
+      type: String,
+      required: true
+  },
 });
 
 const emit = defineEmits(['close']);
@@ -24,7 +24,7 @@ const form = useForm({
 const close = () => emit('close');
 
 const printPatients = () => form.post(route('share.print.store', {
-  patient: props.patient?.id
+  patient: props.patientId
 }), {
   preserveScroll: true,
   onStart: () => {

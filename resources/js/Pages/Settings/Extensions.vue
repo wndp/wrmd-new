@@ -1,3 +1,21 @@
+<script setup>
+import AppLayout from '@/Layouts/AppLayout.vue';
+import SettingsAside from './Partials/SettingsAside.vue';
+import ExtensionToggler from '@/Components/ExtensionToggler.vue';
+import {__} from '@/Composables/Translate';
+
+defineProps({
+  standardExtensions: {
+    type: Array,
+    required: true
+  },
+  proExtensions: {
+    type: Array,
+    required: true
+  }
+});
+</script>
+
 <template>
   <AppLayout title="Extensions">
     <div class="lg:grid grid-cols-8 gap-8 mt-4">
@@ -13,12 +31,38 @@
             </p>
           </div>
         </section>
+
+        <template v-if="$page.props.subscription.isProPlan">
+          <h3 class="text-lg leading-6 font-medium text-gray-700 mt-8">
+            Pro Extensions
+          </h3>
+          <p class="mt-1 text-sm text-gray-500 border-b border-gray-300 pb-2">
+            {{ __('Extensions available to WRMD Pro accounts.') }}
+          </p>
+          <ul
+            role="list"
+            class="grid grid-cols-1 gap-6 md:grid-cols-2 mt-2"
+          >
+            <ExtensionToggler
+              v-for="extension in proExtensions"
+              :key="extension.namespace"
+              :extension="extension"
+            />
+          </ul>
+        </template>
+
+        <h3 class="text-lg leading-6 font-medium text-gray-900 mt-8">
+          Standard Extensions
+        </h3>
+        <p class="mt-1 text-sm text-gray-500 border-b border-gray-300 pb-2">
+          {{ __('Extensions available to all accounts.') }}
+        </p>
         <ul
           role="list"
-          class="grid grid-cols-1 gap-6 md:grid-cols-2 mt-8"
+          class="grid grid-cols-1 gap-6 md:grid-cols-2 mt-2"
         >
           <ExtensionToggler
-            v-for="extension in extensions"
+            v-for="extension in standardExtensions"
             :key="extension.namespace"
             :extension="extension"
           />
@@ -27,16 +71,3 @@
     </div>
   </AppLayout>
 </template>
-
-<script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import SettingsAside from './Partials/SettingsAside.vue';
-import ExtensionToggler from '@/Components/ExtensionToggler.vue';
-
-defineProps({
-  extensions: {
-    type: Array,
-    required: true
-  }
-});
-</script>

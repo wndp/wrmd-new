@@ -13,7 +13,7 @@ class SaveNewRecheck
 {
     use AsAction;
 
-    public function handle(int $patientId, array $data)
+    public function handle(string $patientId, array $data)
     {
         $recheck = new Recheck([
             'recheck_start_at' => Carbon::parse($data['recheck_start_at']),

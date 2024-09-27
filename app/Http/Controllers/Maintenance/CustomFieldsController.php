@@ -29,7 +29,7 @@ class CustomFieldsController extends Controller
 
         OptionsStore::merge($options);
 
-        $fields = CustomFieldsRepository::getCustomFields(Auth::user()->current_account_id)
+        $fields = CustomFieldsRepository::getCustomFields(Auth::user()->current_team_id)
             ->groupBy('group')
             ->values();
 
@@ -47,7 +47,7 @@ class CustomFieldsController extends Controller
 
         OptionsStore::merge($options);
 
-        $fieldsCount = CustomFieldsRepository::getCustomFields(Auth::user()->current_account_id)->count();
+        $fieldsCount = CustomFieldsRepository::getCustomFields(Auth::user()->current_team_id)->count();
 
         if ($fieldsCount === CustomFieldBuilder::NUMBER_OF_ALLOWED_FIELDS) {
             return redirect()->route('maintenance.custom_fields.index')
@@ -94,7 +94,7 @@ class CustomFieldsController extends Controller
      */
     public function edit(CustomFieldOptions $options, CustomField $customField)
     {
-        $customField->validateOwnership(Auth::user()->current_account_id);
+        $customField->validateOwnership(Auth::user()->current_team_id);
 
         ExtensionNavigation::emit('maintenance');
 
@@ -110,7 +110,7 @@ class CustomFieldsController extends Controller
      */
     public function update(Request $request, CustomField $customField)
     {
-        $customField->validateOwnership(Auth::user()->current_account_id);
+        $customField->validateOwnership(Auth::user()->current_team_id);
 
         $request->validate([
             'label' => 'required',
@@ -139,7 +139,7 @@ class CustomFieldsController extends Controller
      */
     public function destroy(CustomField $customField)
     {
-        $customField->validateOwnership(Auth::user()->current_account_id);
+        $customField->validateOwnership(Auth::user()->current_team_id);
 
         CustomFieldsRepository::flushCustomValues($customField);
 

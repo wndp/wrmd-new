@@ -14,7 +14,6 @@ use App\Http\Controllers\InitialCareController;
 use App\Http\Controllers\IntakeController;
 use App\Http\Controllers\IntakeExamController;
 use App\Http\Controllers\Labs\LabsController;
-use App\Http\Controllers\Necropsy\NecropsyCarcassController;
 use App\Http\Controllers\Necropsy\NecropsyController;
 use App\Http\Controllers\Necropsy\NecropsyMorphometricsController;
 use App\Http\Controllers\Necropsy\NecropsySummaryController;
@@ -134,7 +133,6 @@ Route::prefix('patients')->name('patients.')->group(function () {
     Route::get('/necropsy', [NecropsyController::class, 'edit'])->name('necropsy.edit');
     Route::name('necropsy.')->middleware(Authorize::using(Ability::UPDATE_NECROPSY->value))->group(function () {
         Route::put('/{patient}/necropsy', [NecropsyController::class, 'update'])->name('update');
-        Route::put('/{patient}/necropsy/carcass', NecropsyCarcassController::class)->name('carcass.update');
         Route::put('/{patient}/necropsy/morphometrics', NecropsyMorphometricsController::class)->name('morphometrics.update');
         Route::put('/{patient}/necropsy/systems', NecropsySystemsController::class)->name('systems.update');
         Route::put('/{patient}/necropsy/summary', NecropsySummaryController::class)->name('summary.update');
@@ -148,7 +146,7 @@ Route::prefix('patients')->name('patients.')->group(function () {
         Route::put('/{patient}/morphometrics', MorphometricsController::class)->name('morphometrics.update');
     });
 
-    Route::get('/attachments', AttachmentsController::class)->name('attachments.edit');
+    Route::get('/attachments', AttachmentsController::class)->middleware('pro')->name('attachments.edit');
 
     Route::name('lab.')->middleware(Authorize::using(Ability::MANAGE_LABS->value))->group(function () {
         Route::get('/lab', LabsController::class)->name('index');
@@ -163,7 +161,10 @@ Route::prefix('patients')->name('patients.')->group(function () {
         });
     });
 
-    Route::controller(BatchUpdateController::class)->middleware(Authorize::using(Ability::BATCH_UPDATE->value))->group(function () {
+    Route::controller(BatchUpdateController::class)->middleware([
+        'pro',
+        Authorize::using(Ability::BATCH_UPDATE->value)
+    ])->group(function () {
         Route::get('batch', 'edit')->name('batch.edit');
         Route::put('batch', 'update')->name('batch.update');
         //Route::put('batch/api', [BatchUpdateApiController::class, 'update']);

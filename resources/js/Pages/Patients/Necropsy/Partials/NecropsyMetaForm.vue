@@ -1,79 +1,154 @@
+<script setup>
+import {useForm} from '@inertiajs/vue3';
+import Panel from '@/Components/Panel.vue';
+import FormRow from '@/Components/FormElements/FormRow.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import Toggle from '@/Components/FormElements/Toggle.vue';
+import DatePicker from '@/Components/FormElements/DatePicker.vue';
+import SelectInput from '@/Components/FormElements/SelectInput.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import {__} from '@/Composables/Translate';
+
+const props = defineProps({
+  patientId: {
+    type: String,
+    required: true
+  },
+  necropsy: {
+    type: Object,
+    required: true
+  },
+  enforceRequired: {
+    type: Boolean,
+    default: false
+  }
+});
+
+const form = useForm({
+  necropsied_at: props.necropsy.necropsied_at,
+  prosector: props.necropsy.prosector,
+  carcass_condition: props.necropsy.carcass_condition,
+  is_photos_collected: props.necropsy.is_photos_collected,
+  is_carcass_radiographed: props.necropsy.is_carcass_radiographed,
+  is_previously_frozen: props.necropsy.is_previously_frozen,
+  is_scavenged: props.necropsy.is_scavenged,
+  is_discarded: props.necropsy.is_discarded,
+});
+
+const save = () => {
+  form.put(route('patients.necropsy.update', {
+    patient: props.patientId
+  }), {
+    preserveScroll: true,
+    //onError: () => this.stopAutoSave()
+  });
+};
+</script>
+
 <template>
   <Panel>
-    <template #heading>
+    <template #title>
       {{ __('Necropsy') }}
     </template>
-    <div class="space-y-4 sm:space-y-2">
-      <div class="sm:grid sm:grid-cols-6 sm:gap-2 md:items-center space-y-2">
-        <div class="col-span-3">
-          <div class="space-y-2">
-            <div class="md:grid md:grid-cols-3 md:gap-x-2 md:items-center">
-              <Label
-                for="necropsied_at"
-                class="md:text-right"
-              >
-                {{ __('Date') }}
-                <RequiredInput v-if="enforceRequired" />
-              </Label>
-              <div class="col-span-2 mt-1 md:mt-0">
-                <DatePicker
-                  id="necropsied_at"
-                  v-model="form.necropsied_at"
-                  time
-                  :required="enforceRequired"
-                />
-                <InputError :message="form.errors.necropsied_at" />
-              </div>
-            </div>
-            <div class="md:grid md:grid-cols-3 md:gap-x-2 md:items-center">
-              <Label
-                for="prosector"
-                class="md:text-right"
-              >
-                {{ __('Prosector') }}
-                <RequiredInput v-if="enforceRequired" />
-              </Label>
-              <div class="col-span-2 mt-1 md:mt-0">
-                <Input
-                  v-model="form.prosector"
-                  name="prosector"
-                  :required="enforceRequired"
-                />
-                <InputError :message="form.errors.prosector" />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-span-3">
-          <div class="space-y-2">
-            <div class="md:grid md:grid-cols-3 md:gap-x-2 md:items-center">
-              <div class="col-start-2 col-span-2 mt-1 md:mt-0">
-                <Toggle
-                  v-model="form.is_photos_collected"
-                  dusk="is_photos_collected"
-                >
-                  {{ __('Photos Collected?') }}
-                </Toggle>
-              </div>
-            </div>
-            <div class="md:grid md:grid-cols-3 md:gap-x-2 md:items-center">
-              <div class="col-start-2 col-span-2 mt-1 md:mt-0">
-                <Toggle
-                  v-model="form.is_carcass_radiographed"
-                  dusk="is_carcass_radiographed"
-                >
-                  {{ __('Radiographed?') }}
-                </Toggle>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <template
-      v-if="canSubmit"
-      #footing
-    >
+    <template #content>
+      <FormRow
+        id="necropsied_at"
+        :label="__('Date')"
+        :required="enforceRequired"
+        class="col-span-6 md:col-span-2"
+      >
+        <DatePicker
+          id="necropsied_at"
+          v-model="form.necropsied_at"
+          time
+          :required="enforceRequired"
+        />
+        <InputError :message="form.errors.necropsied_at" />
+      </FormRow>
+      <FormRow
+        id="prosector"
+        :label="__('Prosector')"
+        :required="enforceRequired"
+        class="col-span-6 md:col-span-2"
+      >
+        <TextInput
+          v-model="form.prosector"
+          name="prosector"
+          :required="enforceRequired"
+        />
+        <InputError :message="form.errors.prosector" />
+      </FormRow>
+      <FormRow
+        id="carcass_condition_id"
+        :label="__('Carcass Condition')"
+        class="col-span-6 md:col-span-2"
+      >
+        <SelectInput
+          v-model="form.carcass_condition_id"
+          name="carcass_condition_id"
+          :options="$page.props.options.necropsyCarcassConditionsOptions"
+        />
+        <InputError :message="form.errors.carcass_condition_id" />
+      </FormRow>
+      <FormRow
+        id="is_photos_collected"
+        class="col-span-6 md:col-span-2 mt-4"
+      >
+        <Toggle
+          v-model="form.is_photos_collected"
+          dusk="is_photos_collected"
+        >
+          {{ __('Photos Collected?') }}
+        </Toggle>
+      </FormRow>
+      <FormRow
+        id="is_carcass_radiographed"
+        class="col-span-6 md:col-span-2 mt-4"
+      >
+        <Toggle
+          v-model="form.is_carcass_radiographed"
+          dusk="is_carcass_radiographed"
+        >
+          {{ __('Carcass Radiographed?') }}
+        </Toggle>
+      </FormRow>
+      <FormRow
+        id="is_previously_frozen"
+        class="col-span-6 md:col-span-2 mt-4"
+      >
+        <Toggle
+          v-model="form.is_previously_frozen"
+          dusk="is_previously_frozen"
+        >
+          {{ __('Carcass Frozen?') }}
+        </Toggle>
+      </FormRow>
+      <FormRow
+        id="is_scavenged"
+        class="col-span-6 md:col-span-2 mt-4"
+      >
+        <Toggle
+          v-model="form.is_scavenged"
+          dusk="is_scavenged"
+        >
+          {{ __('Carcass Scavenged?') }}
+        </Toggle>
+      </FormRow>
+      <FormRow
+        id="is_scavenged"
+        class="col-span-6 md:col-span-2 mt-4"
+      >
+        <Toggle
+          v-model="form.is_discarded"
+          dusk="is_discarded"
+        >
+          {{ __('Carcass Discarded After Necropsy?') }}
+        </Toggle>
+      </FormRow>
+    </template>
+    <template #actions>
       <div class="flex items-center justify-end text-right">
         <ActionMessage
           :on="form.isDirty"
@@ -98,55 +173,3 @@
     </template>
   </Panel>
 </template>
-
-<script setup>
-import Panel from '@/Components/Panel.vue';
-import InputLabel from '@/Components/FormElements/InputLabel.vue';
-import TextInput from '@/Components/FormElements/TextInput.vue';
-import Toggle from '@/Components/FormElements/Toggle.vue';
-import DatePicker from '@/Components/FormElements/DatePicker.vue';
-import InputError from '@/Components/FormElements/InputError.vue';
-import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import autoSave from '@/Mixins/AutoSave';
-import hoistForm from '@/Mixins/HoistForm';
-</script>
-
-<script>
-  export default {
-    mixins: [autoSave, hoistForm],
-    props: {
-      necropsy: {
-        type: Object,
-        default: () => ({})
-      },
-      enforceRequired: {
-        type: Boolean,
-        default: true
-      }
-    },
-    data() {
-      return {
-        form: this.$inertia.form({
-          necropsied_at: this.necropsy?.necropsied_at,
-          prosector: this.necropsy?.prosector,
-          is_photos_collected: this.necropsy?.is_photos_collected,
-          is_carcass_radiographed: this.necropsy?.is_carcass_radiographed
-        })
-      }
-    },
-    methods: {
-      save() {
-        if (this.canSubmit) {
-          this.form.put(this.route('patients.necropsy.update', {
-            patient: this.$page.props.admission.patient
-          }), {
-            preserveScroll: true,
-            onError: () => this.stopAutoSave()
-          });
-        }
-      }
-    }
-  }
-</script>

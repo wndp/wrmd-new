@@ -4,6 +4,7 @@ import {useForm} from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import PublicLayout from '@/Layouts/PublicLayout.vue';
 import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
 import TextInput from '@/Components/FormElements/TextInput.vue';
 import SelectInput from '@/Components/FormElements/SelectInput.vue';
 import Checkbox from '@/Components/FormElements/Checkbox.vue';
@@ -69,10 +70,10 @@ const onCountryChange = () => axios.get('/internal-api/locale/' + form.country)
           <div class="space-y-4 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-8">
             <div class="space-y-4">
               <div>
-                <InputLabel
-                  for="organization"
-                  value="Organization"
-                />
+                <InputLabel for="organization">
+                  Organization
+                  <RequiredInput />
+                </InputLabel>
                 <TextInput
                   v-model="form.organization"
                   name="organization"
@@ -87,10 +88,10 @@ const onCountryChange = () => axios.get('/internal-api/locale/' + form.country)
                 />
               </div>
               <div>
-                <InputLabel
-                  for="name"
-                  value="Your Name"
-                />
+                <InputLabel for="name">
+                  Your Name
+                  <RequiredInput />
+                </InputLabel>
                 <TextInput
                   v-model="form.name"
                   name="name"
@@ -105,10 +106,10 @@ const onCountryChange = () => axios.get('/internal-api/locale/' + form.country)
                 />
               </div>
               <div>
-                <InputLabel
-                  for="email"
-                  value="Email"
-                />
+                <InputLabel for="email">
+                  Email
+                  <RequiredInput />
+                </InputLabel>
                 <TextInput
                   v-model="form.email"
                   name="email"
@@ -123,10 +124,10 @@ const onCountryChange = () => axios.get('/internal-api/locale/' + form.country)
                 />
               </div>
               <div>
-                <InputLabel
-                  for="email_confirmation"
-                  value="Confirm Email"
-                />
+                <InputLabel for="email_confirmation">
+                  Confirm Email
+                  <RequiredInput />
+                </InputLabel>
                 <TextInput
                   v-model="form.email_confirmation"
                   name="email_confirmation"
@@ -137,10 +138,10 @@ const onCountryChange = () => axios.get('/internal-api/locale/' + form.country)
                 />
               </div>
               <div>
-                <InputLabel
-                  for="password"
-                  value="Password"
-                />
+                <InputLabel for="password">
+                  Password
+                  <RequiredInput />
+                </InputLabel>
                 <TextInput
                   v-model="form.password"
                   name="password"
@@ -155,10 +156,10 @@ const onCountryChange = () => axios.get('/internal-api/locale/' + form.country)
                 />
               </div>
               <div>
-                <InputLabel
-                  for="password_confirmation"
-                  value="Confirm Password"
-                />
+                <InputLabel for="password_confirmation">
+                  Confirm Password
+                  <RequiredInput />
+                </InputLabel>
                 <TextInput
                   v-model="form.password_confirmation"
                   name="password_confirmation"
@@ -171,10 +172,10 @@ const onCountryChange = () => axios.get('/internal-api/locale/' + form.country)
             </div>
             <div class="space-y-4">
               <div>
-                <InputLabel
-                  for="country"
-                  value="Country"
-                />
+                <InputLabel for="country">
+                  Country
+                  <RequiredInput />
+                </InputLabel>
                 <SelectInput
                   v-model="form.country"
                   name="country"
@@ -190,10 +191,10 @@ const onCountryChange = () => axios.get('/internal-api/locale/' + form.country)
                 />
               </div>
               <div>
-                <InputLabel
-                  for="address"
-                  value="Street Address"
-                />
+                <InputLabel for="address">
+                  Street Address
+                  <RequiredInput />
+                </InputLabel>
                 <TextInput
                   v-model="form.address"
                   name="address"
@@ -207,10 +208,10 @@ const onCountryChange = () => axios.get('/internal-api/locale/' + form.country)
                 />
               </div>
               <div>
-                <InputLabel
-                  for="city"
-                  value="City"
-                />
+                <InputLabel for="city">
+                  City
+                  <RequiredInput />
+                </InputLabel>
                 <TextInput
                   v-model="form.city"
                   name="city"
@@ -224,10 +225,10 @@ const onCountryChange = () => axios.get('/internal-api/locale/' + form.country)
                 />
               </div>
               <div>
-                <InputLabel
-                  for="subdivision"
-                  :value="subdivisionLabel"
-                />
+                <InputLabel for="subdivision">
+                  {{ subdivisionLabel }}
+                  <RequiredInput />
+                </InputLabel>
                 <SelectInput
                   v-model="form.subdivision"
                   name="subdivision"
@@ -259,10 +260,10 @@ const onCountryChange = () => axios.get('/internal-api/locale/' + form.country)
                 />
               </div>
               <div>
-                <InputLabel
-                  for="phone_number"
-                  value="Phone Number"
-                />
+                <InputLabel for="phone_number">
+                  Phone Number
+                  <RequiredInput />
+                </InputLabel>
                 <TextInput
                   v-model="form.phone_number"
                   name="phone_number"
@@ -276,10 +277,10 @@ const onCountryChange = () => axios.get('/internal-api/locale/' + form.country)
                 />
               </div>
               <div>
-                <InputLabel
-                  for="timezone"
-                  value="Time Zone"
-                />
+                <InputLabel for="timezone">
+                  Time Zone
+                  <RequiredInput />
+                </InputLabel>
                 <SelectInput
                   v-model="form.timezone"
                   name="timezone"
@@ -298,22 +299,22 @@ const onCountryChange = () => axios.get('/internal-api/locale/' + form.country)
               <div class="flex items-start mr-4">
                 <div class="flex items-center h-5">
                   <Checkbox
+                    id="terms"
                     v-model="form.terms"
                     name="terms"
                   />
                 </div>
                 <div class="ml-3 text-sm">
-                  <InputLabel
-                    for="terms"
-                  >I agree to the <a
-                    :href="route('about.terms')"
-                    target="_blank"
-                    class="text-blue-600"
-                  >Terms and Conditions</a> and <a
-                    :href="route('about.privacy')"
-                    target="_blank"
-                    class="text-blue-600"
-                  >Privacy Policy</a>.
+                  <InputLabel for="terms">
+                    I agree to the <a
+                      :href="route('about.terms')"
+                      target="_blank"
+                      class="text-blue-600"
+                    >Terms and Conditions</a> and <a
+                      :href="route('about.privacy')"
+                      target="_blank"
+                      class="text-blue-600"
+                    >Privacy Policy</a>. <RequiredInput />
                   </InputLabel>
                 </div>
               </div>

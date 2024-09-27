@@ -28,11 +28,6 @@ class Team extends JetstreamTeam
     use HasProfilePhoto;
     use HasSubAccounts;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'personal_team',
@@ -58,22 +53,12 @@ class Team extends JetstreamTeam
         'formatted_inline_address',
     ];
 
-    /**
-     * The event map for the model.
-     *
-     * @var array<string, class-string>
-     */
     protected $dispatchesEvents = [
         'created' => TeamCreated::class,
         'updated' => TeamUpdated::class,
         'deleted' => TeamDeleted::class,
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -82,25 +67,16 @@ class Team extends JetstreamTeam
         ];
     }
 
-    /**
-     * An account has many extensions.
-     */
-    public function extensions(): BelongsToMany
+    public function extensions(): HasMany
     {
-        return $this->belongsToMany(Extension::class, 'team_extension', 'team_id', 'extension_id')->withTimestamps();
+        return $this->hasMany(TeamExtension::class);
     }
 
-    /**
-     * Get the accounts settings.
-     */
     public function settings(): HasMany
     {
         return $this->hasMany(Setting::class);
     }
 
-    /**
-     * Return the accounts SettingsStore.
-     */
     public function settingsStore(): SettingsStore
     {
         return new SettingsStore($this);

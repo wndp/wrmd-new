@@ -29,7 +29,7 @@ defineProps({
         {{ usePage().props.auth.user.current_team.name }}
       </h1>
     </template>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
       <div class="shadow overflow-hidden border-b border-gray-300 bg-white sm:rounded-lg">
         <div class="bg-gray-200 px-4 py-4 border-b border-gray-300 sm:px-6">
           <h3 class="text-lg leading-6 font-medium text-gray-900">
@@ -150,7 +150,7 @@ defineProps({
         </div>
       </div>
     </div>
-    <div class="mt-5 grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="mt-5 grid grid-cols-2 lg:grid-cols-4 gap-4">
       <AnalyticNumber
         id="patients-admitted"
         :title="__('Patients This Year')"

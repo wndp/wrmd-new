@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\InteractsWithMedia;
 use App\Concerns\QueriesDateRange;
 use App\Concerns\ValidatesOwnership;
 use App\Enums\AttributeOptionName;
@@ -22,14 +23,19 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Arr;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
+use Spatie\MediaLibrary\HasMedia;
 
-class Patient extends Model
+class Patient extends Model implements HasMedia
 {
     use HasFactory;
     use HasSpatial;
     use ValidatesOwnership;
     use QueriesDateRange;
     use HasVersion7Uuids;
+    use InteractsWithMedia;
+
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     /**
      * The "booted" method of the model.
@@ -170,6 +176,11 @@ class Patient extends Model
         return $this->belongsTo(Taxon::class);
     }
 
+    public function necropsy(): HasOne
+    {
+        return $this->hasOne(Necropsy::class);
+    }
+
     public function morph(): BelongsTo
     {
         return $this->belongsTo(AttributeOption::class, 'morph_id');
@@ -204,9 +215,10 @@ class Patient extends Model
     {
         return Attribute::get(function () {
             if (is_null($this->time_admitted_at)) {
-                return $this->date_admitted_at->toFormattedDayDateString();
+                return $this->date_admitted_at->translatedFormat(config('wrmd.date_format'));
             }
-            return Timezone::convertFromUtcToLocal($this->date_admitted_at->setTimeFromTimeString($this->time_admitted_at))?->toDayDateTimeString();
+            return Timezone::convertFromUtcToLocal($this->date_admitted_at->setTimeFromTimeString($this->time_admitted_at))
+                ?->translatedFormat(config('wrmd.day_date_time_format'));
         });
     }
 

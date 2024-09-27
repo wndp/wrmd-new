@@ -2,7 +2,9 @@
 
 namespace App\Support;
 
-use App\Models\Extension;
+use App\Enums\Extension;
+use App\Models\Team;
+use Carbon\Carbon;
 use ErrorException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -15,55 +17,30 @@ use League\CommonMark\CommonMarkConverter;
 class ExtensionManager
 {
     /**
-     * Find an extension by its namespace.
-     */
-    public function findByNamespace(string $namespace): Extension
-    {
-        return Extension::whereNamespace(Str::studly($namespace))->firstOrFail();
-    }
-
-    /**
-     * Get an extensions markdown details.
-     */
-    public function getDetails(string $namespace): string
-    {
-        $readme = app_path('/Extensions/'.Str::studly($namespace).'/Foundation/readme.md');
-
-        if (! file_exists($readme)) {
-            return '';
-        }
-
-        $converter = new CommonMarkConverter([
-            'allow_unsafe_links' => false,
-        ]);
-
-        return new HtmlString($converter->convertToHtml(file_get_contents($readme)));
-    }
-
-    /**
      * Get all the extensions.
      */
-    public function getAll(): Collection
-    {
-        return Cache::remember('allExtensions', 1440, function () {
-            return Extension::orderBy('name')->get();
-        });
-    }
+    // public static function getAll(): Collection
+    // {
+    //     return Cache::remember('allExtensions', 1440, function () {
+    //         return Extension::orderBy('name')->get();
+    //     });
+    // }
 
     /**
      * Get all the public extensions.
      */
-    public function getPublic(): Collection
+    public static function getPublic(): array
     {
-        return Cache::remember('publicExtensions', 1440, function () {
-            return Extension::where('is_private', false)->orderBy('name')->get();
-        });
+        return Arr::where(Extension::cases(), fn ($extension) => $extension->public());
+        // return Cache::remember('publicExtensions', 1440, function () {
+        //     return Extension::where('is_private', false)->orderBy('name')->get();
+        // });
     }
 
     /**
      * Get the 4 most popular extensions.
      */
-    public function getMostPopular(): Collection
+    public static function getMostPopular(): Collection
     {
         return Extension::select('extensions.*')
             ->join('account_extension', 'extensions.id', '=', 'account_extension.extension_id')
@@ -77,25 +54,29 @@ class ExtensionManager
     /**
      * Get an accounts activated extensions.
      */
-    public function getActivated(Team $team): Collection
+    public static function getActivated(Team $team): Collection
     {
-        return Cache::remember('activatedExtensions.'.$team->id, 30, function () use ($team) {
-            return $team->extensions()->orderBy('name')->get();
-        });
+        return Cache::remember(
+            'activatedExtensions.'.$team->id,
+            Carbon::now()->addMinutes(30),
+            fn () => $team->extensions
+        );
     }
 
     /**
      * Activate an extension.
      */
-    public function activate(Team $team, int $extensionId): void
+    public static function activate(Team $team, Extension $extension): void
     {
-        if (! $this->isActivated(Extension::findOrFail($extensionId)->namespace, $team)) {
-            $team->extensions()->attach($extensionId);
+        if (! static::isActivated($extension, $team)) {
+            $team->extensions()->create([
+                'extension' => $extension->value,
+            ]);
         }
 
         Cache::clear('activatedExtensions.'.$team->id);
 
-        $this->activateDependents($team, $extensionId);
+        static::activateDependents($team, $extension);
     }
 
     /**
@@ -104,90 +85,63 @@ class ExtensionManager
      *
      * @throws \DomainException
      */
-    public function deactivate(Team $team, int $extensionId): void
+    public static function deactivate(Team $team, Extension $extension): void
     {
-        $activatedParents = Extension::whereJsonContains('dependents', $extensionId)
-            ->get()
-            ->filter(function ($extension) use ($team) {
-                return $this->isActivated($extension->namespace, $team);
-            });
+        $activatedParents = Collection::make($extension->dependencies())
+            ->filter(fn ($extension) => static::isActivated($extension, $team));
 
         throw_if(
             $activatedParents->isNotEmpty(),
             \DomainException::class,
-            'Can not deactivate extension because of active parent: '.$activatedParents->pluck('name')->implode(', ')
+            'Can not deactivate extension because of active parent: '.$activatedParents->pluck('label')->implode(', ')
         );
 
-        $team->extensions()->detach($extensionId);
+        $team->extensions()->where('extension', $extension->value)->delete();
 
         Cache::forget('activatedExtensions.'.$team->id);
 
-        $this->deactivateDependents($team, $extensionId);
+        static::deactivateDependents($team, $extension);
     }
 
     /**
      * Deactivate all extensions.
      */
-    public function deactivateAll(Team $team): void
-    {
-        $team->extensions()->detach();
-    }
+    // public static function deactivateAll(Team $team): void
+    // {
+    //     $team->extensions()->detach();
+    // }
 
     /**
-     * Determine if the provided extension namespace is activated by the provided account.
+     * Determine if the provided extension slug is activated by the provided account.
      */
-    public function isActivated(string $namespace, Team $team = null): bool
+    public static function isActivated(Extension $extension, Team $team = null): bool
     {
         try {
-            $team = $team instanceof Account ? $team : Auth::user()->currentAccount;
+            $team = $team instanceof Team ? $team : Auth::user()->currentTeam;
         } catch (ErrorException $e) {
             return false;
         }
 
-        return $this->getActivated($team)->contains('namespace', $namespace);
+        return static::getActivated($team)->contains('extension', $extension->value);
     }
 
     /**
      * Activate an extensions dependencies.
      */
-    private function activateDependents(Team $team, int $parentExtensionId): void
+    private static function activateDependents(Team $team, Extension $parentExtension): void
     {
-        foreach (Arr::wrap(Extension::findOrFail($parentExtensionId)->dependents) as $extensionId) {
-            $this->activate($team, $extensionId);
+        foreach ($parentExtension->dependencies() as $extension) {
+            static::activate($team, $extension);
         }
     }
 
     /**
      * Deactivate an extensions dependencies.
      */
-    private function deactivateDependents(Team $team, int $parentExtensionId): void
+    private static function deactivateDependents(Team $team, Extension $parentExtension): void
     {
-        foreach (Arr::wrap(Extension::findOrFail($parentExtensionId)->dependents) as $extensionId) {
-            $this->deactivate($team, $extensionId);
+        foreach ($parentExtension->dependencies() as $extension) {
+            static::deactivate($team, $extensionId);
         }
-    }
-
-    /**
-     * Bootstrap all the extensions.
-     */
-    public static function bootstrapAll(): void
-    {
-        app(self::class)->getAll()->each->register();
-    }
-
-    /**
-     * Bootstrap all the public extensions.
-     */
-    public static function bootstrapPublic(): void
-    {
-        app(self::class)->getPublic()->each->register();
-    }
-
-    /**
-     * Bootstrap an accounts activated extensions.
-     */
-    public static function bootstrap(Team $team): void
-    {
-        app(self::class)->getActivated($team)->each->register();
     }
 }

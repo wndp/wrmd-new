@@ -29,7 +29,7 @@ class MediaController extends Controller
     {
         $mediaResource = $request->enum('resource', MediaResource::class);
 
-        $owningModel = $mediaResource->owningModelInstance($request->integer('resource_id'))
+        $owningModel = $mediaResource->owningModelInstance($request->string('resource_id'))
             ->validateOwnership(Auth::user()->current_team_id);
 
         $mediaCollection = $request->enum('collection', MediaCollection::class);
@@ -106,7 +106,7 @@ class MediaController extends Controller
 
         $mediaResource = $request->enum('resource', MediaResource::class);
 
-        $owningModel = $mediaResource->owningModelInstance($request->integer('resource_id'))
+        $owningModel = $mediaResource->owningModelInstance($request->string('resource_id'))
             ->validateOwnership(Auth::user()->current_team_id);
 
         abort_unless($owningModel->media->contains($media->id), new RecordNotOwned());
@@ -141,7 +141,7 @@ class MediaController extends Controller
 
         $mediaResource = $request->enum('resource', MediaResource::class);
 
-        $owningModel = $mediaResource->owningModelInstance($request->integer('resource_id'))
+        $owningModel = $mediaResource->owningModelInstance($request->string('resource_id'))
             ->validateOwnership(Auth::user()->current_team_id);
 
         abort_unless($owningModel->media->contains($media->id), new RecordNotOwned());

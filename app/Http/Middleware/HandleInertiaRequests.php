@@ -3,13 +3,17 @@
 namespace App\Http\Middleware;
 
 use App\Enums\Plan;
+use App\Models\Team;
 use App\Repositories\OptionsStore;
 use App\Repositories\RecentPatients;
 use App\Repositories\SettingsStore;
-use App\Support\ExtensionNavigation;
+use App\Support\ExtensionManager;
 use App\Support\Wrmd;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Inertia\Middleware;
 
@@ -43,65 +47,63 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $abilities = $request->user() ? collect(
-            app(Gate::class)->forUser($request->user())->abilities()
-        )
-            ->keys()
-            ->filter(fn ($ability) => $request->user()->can($ability))
-            ->map(fn ($ability) => 'COMPUTED_'.Str::of($ability)->snake()->upper())
-            ->when($request->user()->can('ANYTHING'), fn ($abilities) => $abilities->push('ANYTHING'))
-            ->merge($request->user()->getAbilities()->pluck('name'))
-            ->sort()
-            ->values()
-            : [];
+        $parentShare = parent::share($request);
 
-        $team = $request->user()?->current_team_id
-            ? $request->user()->currentTeam
-            : null;
+        $parentShare['environment'] = App::environment();
+        $parentShare['appName'] = config('app.name');
+        $parentShare['showDonateHeader'] = config('wrmd.donateHeader');
 
-        return [
-            ... parent::share($request),
-            'appName' => config('app.name'),
-            'showDonateHeader' => config('wrmd.donateHeader'),
-            'auth' => [
-                'user' => fn () => $request->user()
-                    ? array_merge($request->user()->only('id', 'name', 'email'), [
-                        'two_factor_enabled' => ! is_null($request->user()?->two_factor_secret),
-                        'all_teams' => $request->user()->allTeams()->values(),
-                        'current_team' => $request->user()->currentTeam
-                    ])
-                    : null,
+        if (!Auth::guest()) {
+            $user = $request->user();
+            $team = $user->current_team_id ? $user->currentTeam : null;
+
+            $abilities = Collection::make(app(Gate::class)->forUser($user)->abilities())
+                ->keys()
+                // Abilities computed from methods in App\Policies\*
+                ->filter(fn ($ability) => $user->can($ability))
+                ->map(fn ($ability) => 'COMPUTED_'.Str::of($ability)->snake()->upper())
+                // Abilities assigned through Bouncer
+                ->merge($user->getAbilities()->pluck('name'))
+                ->sort()
+                ->values();
+
+            $parentShare['auth'] = [
+                'user' => fn () => array_merge($user->only('id', 'name', 'email'), [
+                    'two_factor_enabled' => ! is_null($user->two_factor_secret),
+                    'all_teams' => $user->allTeams()->values(),
+                    'current_team' => $user->currentTeam
+                ]),
                 'abilities' => $abilities,
-                'team' => fn () => $team ?: null,
-                'isProPlan' => fn () => $team?->sparkPlan()?->name === Plan::PRO->value,
-            ],
-            'settings' => fn () => $team
-                ? Wrmd::settings()->all()
-                : [],
-            'options' => fn () => $team
-                ? OptionsStore::all()
-                : [],
-            'extensions' => fn () => $team
-                ? ExtensionNavigation::all()
-                : [],
-            'recentUpdatedPatients' => fn () => $team
-                ? RecentPatients::updated($team)
-                : [],
-            'recentAdmittedPatients' => fn () => $team
-                ? RecentPatients::admitted($team)
-                : [],
-            'notification' => [
+                'team' => $team,
+            ];
+
+            $parentShare['notification'] = [
                 'heading' => fn () => $request->session()->get('notification.heading'),
                 'text' => fn () => $request->session()->get('notification.text'),
                 'style' => fn () => $request->session()->get('notification.style'),
-            ],
-            'unreadNotifications' => []
-            // fn () => $team
-            //     ? $team->unreadNotifications->transform(function ($notification) {
-            //         $notification->created_at_for_humans = $notification->created_at->diffForHumans();
-            //         return $notification;
-            //     })
-            //     : [],
-        ];
+            ];
+
+            $parentShare['unreadNotifications'] = $user->unreadNotifications->transform(fn ($notification) => [
+                ...$notification->toArray(),
+                'created_at_diff' => $notification->created_at->diffForHumans()
+            ]);
+
+            if ($team instanceof Team) {
+                $parentShare['subscription'] = [
+                    'isProPlan' => is_null($team->onGenericTrial()) ? false : $team->sparkPlan()?->name === Plan::PRO->value,
+                    'genericTrialEndsAt' => $team->onGenericTrial()
+                        ? $team->customer->trial_ends_at->translatedFormat(config('wrmd.date_format'))
+                        : null,
+                ];
+
+                $parentShare['settings'] = fn () => Wrmd::settings()->all();
+                $parentShare['options'] = fn () => OptionsStore::all();
+                $parentShare['activatedExtensions'] = fn () => ExtensionManager::getActivated($team)->pluck('extension');
+                $parentShare['recentUpdatedPatients'] = fn () => RecentPatients::updated($team);
+                $parentShare['recentAdmittedPatients'] = fn () => RecentPatients::admitted($team);
+            }
+        }
+
+        return $parentShare;
     }
 }

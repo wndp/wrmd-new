@@ -1,143 +1,193 @@
+<script setup>
+import {useForm} from '@inertiajs/vue3';
+import Panel from '@/Components/Panel.vue';
+import FormRow from '@/Components/FormElements/FormRow.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import InputWithUnit from '@/Components/FormElements/InputWithUnit.vue';
+import SelectInput from '@/Components/FormElements/SelectInput.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import {__} from '@/Composables/Translate';
+
+const props = defineProps({
+  patientId: {
+    type: String,
+    required: true
+  },
+  necropsy: {
+    type: Object,
+    required: true
+  },
+  enforceRequired: {
+    type: Boolean,
+    default: false
+  }
+});
+
+const form = useForm({
+  weight: props.necropsy.weight,
+  weight_unit: props.necropsy.weight_unit,
+  age: props.necropsy.age,
+  age_unit: props.necropsy.age_unit,
+  sex: props.necropsy.sex,
+  bcs: props.necropsy.bcs,
+  wing: props.necropsy.wing,
+  tarsus: props.necropsy.tarsus,
+  culmen: props.necropsy.culmen,
+  exposed_culmen: props.necropsy.exposed_culmen,
+  bill_depth: props.necropsy.bill_depth,
+});
+
+const save = () => {
+  form.put(route('patients.necropsy.morphometrics.update', {
+    patient: props.patientId
+  }), {
+    preserveScroll: true,
+    //onError: () => this.stopAutoSave()
+  });
+};
+</script>
+
 <template>
   <Panel>
-    <template #heading>
+    <template #title>
       {{ __('Morphometrics') }}
     </template>
-    <div class="space-y-4 md:space-y-2">
-      <div class="grid lg:grid-cols-6 gap-2 md:items-center mb-6">
-        <div class="col-span-3 md:grid md:grid-cols-3 md:gap-x-2 md:items-center">
-          <Label
-            for="weight"
-            class="md:text-right"
-          >{{ __('Weight') }}</Label>
-          <div class="col-span-2 mt-1 md:mt-0">
-            <InputWithUnit
-              v-model:text="form.weight"
-              v-model:unit="form.weight_unit"
-              name="weight"
-              type="number"
-              step="any"
-              min="0"
-              :units="$page.props.options.weightUnits"
-            />
-          </div>
+    <template #content>
+      <FormRow
+        id="weight"
+        :label="__('Weight')"
+        class="col-span-6 md:col-span-2"
+      >
+        <InputWithUnit
+          v-model:text="form.weight"
+          v-model:unit="form.weight_unit_id"
+          name="weight"
+          type="number"
+          step="any"
+          min="0"
+          :units="$page.props.options.examWeightUnitsOptions"
+        />
+        <InputError :message="form.errors.weight_unit_id" />
+      </FormRow>
+      <FormRow
+        id="age"
+        :label="__('Age')"
+        class="col-span-6 md:col-span-2"
+      >
+        <InputWithUnit
+          v-model:text="form.age"
+          v-model:unit="form.age_unit_id"
+          name="age"
+          type="number"
+          step="any"
+          min="0"
+          :units="[]"
+        />
+        <InputError :message="form.errors.age_unit_id" />
+      </FormRow>
+      <FormRow
+        id="sex"
+        :label="__('Sex')"
+        class="col-span-6 md:col-span-2"
+      >
+        <SelectInput
+          v-model="form.sex_id"
+          name="sex_id"
+          :options="$page.props.options.examSexesOptions"
+        />
+        <InputError :message="form.errors.sex_id" />
+      </FormRow>
+      <FormRow
+        id="body_condition_id"
+        :label="__('Body Condition')"
+        class="col-span-6 md:col-span-2"
+      >
+        <SelectInput
+          v-model="form.body_condition_id"
+          name="body_condition_id"
+          :options="$page.props.options.examBodyConditionsOptions"
+        />
+        <InputError :message="form.errors.body_condition_id" />
+      </FormRow>
+      <FormRow
+        id="wing"
+        :label="__('Unflat Wing')"
+        class="col-span-6 md:col-span-2"
+      >
+        <div class="flex">
+          <TextInput
+            v-model="form.wing"
+            name="wing"
+            type="number"
+          />
+          <span class="text-gray-600 text-sm ml-2">(mm)</span>
         </div>
-        <div class="col-span-3 md:grid md:grid-cols-3 md:gap-x-2 md:items-center">
-          <Label
-            for="age"
-            class="md:text-right"
-          >{{ __('Age') }}</Label>
-          <div class="col-span-2 mt-1 md:mt-0">
-            <InputWithUnit
-              v-model:text="form.age"
-              v-model:unit="form.age_unit"
-              name="age"
-              :units="$page.props.options.ageUnits"
-            />
-          </div>
+        <InputError :message="form.errors.wing" />
+      </FormRow>
+      <FormRow
+        id="tarsus"
+        :label="__('Tarsus')"
+        class="col-span-6 md:col-span-2"
+      >
+        <div class="flex">
+          <TextInput
+            v-model="form.tarsus"
+            name="tarsus"
+            type="number"
+          />
+          <span class="text-gray-600 text-sm ml-2">(mm)</span>
         </div>
-        <div class="col-span-3 md:grid md:grid-cols-3 md:gap-x-2 md:items-center">
-          <Label
-            for="sex"
-            class="md:text-right"
-          >{{ __('Sex') }}</Label>
-          <div class="col-span-2 mt-1 md:mt-0">
-            <Select
-              v-model="form.sex"
-              name="sex"
-              :options="$page.props.options.sexes"
-            />
-          </div>
+        <InputError :message="form.errors.tarsus" />
+      </FormRow>
+      <FormRow
+        id="culmen"
+        :label="__('Culmen')"
+        class="col-span-6 md:col-span-2"
+      >
+        <div class="flex">
+          <TextInput
+            v-model="form.culmen"
+            name="culmen"
+            type="number"
+          />
+          <span class="text-gray-600 text-sm ml-2">(mm)</span>
         </div>
-        <div class="col-span-3 md:grid md:grid-cols-3 md:gap-x-2 md:items-center">
-          <Label
-            for="bcs"
-            class="md:text-right"
-          >{{ __('Body Condition') }}</Label>
-          <div class="col-span-2 mt-1 md:mt-0">
-            <Select
-              v-model="form.bcs"
-              name="bcs"
-              :options="$page.props.options.bodyConditions"
-            />
-          </div>
+        <InputError :message="form.errors.culmen" />
+      </FormRow>
+      <FormRow
+        id="exposed_culmen"
+        :label="__('Exposed Culmen')"
+        class="col-span-6 md:col-span-2"
+      >
+        <div class="flex">
+          <TextInput
+            v-model="form.exposed_culmen"
+            name="exposed_culmen"
+            type="number"
+          />
+          <span class="text-gray-600 text-sm ml-2">(mm)</span>
         </div>
-        <div class="col-span-3 md:grid md:grid-cols-3 md:gap-x-2 md:items-center">
-          <Label
-            for="wing"
-            class="md:text-right"
-          >{{ __('Unflat Wing') }}</Label>
-          <div class="col-span-2 mt-1 md:mt-0 flex items-center">
-            <Input
-              v-model="form.wing"
-              name="wing"
-              type="number"
-            />
-            <span class="text-gray-600 text-sm ml-2">(mm)</span>
-          </div>
+        <InputError :message="form.errors.exposed_culmen" />
+      </FormRow>
+      <FormRow
+        id="bill_depth"
+        :label="__('Bill Depth')"
+        class="col-span-6 md:col-span-2"
+      >
+        <div class="flex">
+          <TextInput
+            v-model="form.bill_depth"
+            name="bill_depth"
+            type="number"
+          />
+          <span class="text-gray-600 text-sm ml-2">(mm)</span>
         </div>
-        <div class="col-span-3 md:grid md:grid-cols-3 md:gap-x-2 md:items-center">
-          <Label
-            for="tarsus"
-            class="md:text-right"
-          >{{ __('Tarsus') }}</Label>
-          <div class="col-span-2 mt-1 md:mt-0 flex items-center">
-            <Input
-              v-model="form.tarsus"
-              name="tarsus"
-              type="number"
-            />
-            <span class="text-gray-600 text-sm ml-2">(mm)</span>
-          </div>
-        </div>
-        <div class="col-span-3 md:grid md:grid-cols-3 md:gap-x-2 md:items-center">
-          <Label
-            for="culmen"
-            class="md:text-right"
-          >{{ __('Culmen') }}</Label>
-          <div class="col-span-2 mt-1 md:mt-0 flex items-center">
-            <Input
-              v-model="form.culmen"
-              name="culmen"
-              type="number"
-            />
-            <span class="text-gray-600 text-sm ml-2">(mm)</span>
-          </div>
-        </div>
-        <div class="col-span-3 md:grid md:grid-cols-3 md:gap-x-2 md:items-center">
-          <Label
-            for="exposed_culmen"
-            class="md:text-right"
-          >{{ __('Exposed Culmen') }}</Label>
-          <div class="col-span-2 mt-1 md:mt-0 flex items-center">
-            <Input
-              v-model="form.exposed_culmen"
-              name="exposed_culmen"
-              type="number"
-            />
-            <span class="text-gray-600 text-sm ml-2">(mm)</span>
-          </div>
-        </div>
-        <div class="col-span-3 md:grid md:grid-cols-3 md:gap-x-2 md:items-center">
-          <Label
-            for="bill_depth"
-            class="md:text-right"
-          >{{ __('Bill Depth') }}</Label>
-          <div class="col-span-2 mt-1 md:mt-0 flex items-center">
-            <Input
-              v-model="form.bill_depth"
-              name="bill_depth"
-              type="number"
-            />
-            <span class="text-gray-600 text-sm ml-2">(mm)</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <template
-      v-if="canSubmit"
-      #footing
-    >
+        <InputError :message="form.errors.bill_depth" />
+      </FormRow>
+    </template>
+    <template #actions>
       <div class="flex items-center justify-end text-right">
         <ActionMessage
           :on="form.isDirty"
@@ -162,60 +212,3 @@
     </template>
   </Panel>
 </template>
-
-<script setup>
-import Panel from '@/Components/Panel.vue';
-import InputLabel from '@/Components/FormElements/InputLabel.vue';
-import TextInput from '@/Components/FormElements/TextInput.vue';
-import InputWithUnit from '@/Components/FormElements/InputWithUnit.vue';
-import SelectInput from '@/Components/FormElements/SelectInput.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import autoSave from '@/Mixins/AutoSave';
-import hoistForm from '@/Mixins/HoistForm';
-</script>
-
-<script>
-  export default {
-    mixins: [autoSave, hoistForm],
-    props: {
-      necropsy: {
-        type: Object,
-        default: () => ({})
-      },
-      enforceRequired: {
-        type: Boolean,
-        default: true
-      }
-    },
-    data() {
-      return {
-        form: this.$inertia.form({
-          weight: this.necropsy?.weight,
-          weight_unit: this.necropsy?.weight_unit,
-          age: this.necropsy?.age,
-          age_unit: this.necropsy?.age_unit,
-          sex: this.necropsy?.sex,
-          bcs: this.necropsy?.bcs,
-          wing: this.necropsy?.wing,
-          tarsus: this.necropsy?.tarsus,
-          culmen: this.necropsy?.culmen,
-          exposed_culmen: this.necropsy?.exposed_culmen,
-          bill_depth: this.necropsy?.bill_depth,
-        })
-      }
-    },
-    methods: {
-      save() {
-        if (this.canSubmit) {
-          this.form.put(this.route('patients.necropsy.morphometrics.update', {
-            patient: this.$page.props.admission.patient
-          }), {
-            preserveScroll: true,
-            onError: () => this.stopAutoSave()
-          });
-        }
-      }
-    }
-  }
-</script>

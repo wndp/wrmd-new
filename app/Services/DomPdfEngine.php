@@ -88,7 +88,7 @@ class DomPdfEngine implements Api2PdfInterface
 
     private function response($dompdf)
     {
-        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->setPaper('8.5x11', 'portrait');
         $dompdf->render();
 
         return new class ($dompdf->output(), $this->filename) {
@@ -105,10 +105,6 @@ class DomPdfEngine implements Api2PdfInterface
 
                 return storage_path("app/testing/{$this->filename}");
             }
-
-            // public function __destruct() {
-            //     unlink($this->tmpfname);
-            // }
         };
     }
 }
