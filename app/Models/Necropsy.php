@@ -176,7 +176,7 @@ class Necropsy extends Model implements Summarizable, Weighable
                 return $this->date_necropsied_at->translatedFormat(config('wrmd.date_format'));
             }
             return Timezone::convertFromUtcToLocal($this->date_necropsied_at->setTimeFromTimeString($this->time_necropsied_at))
-                ?->translatedFormat(config('wrmd.day_date_time_format'));
+                ?->translatedFormat(config('wrmd.date_time_format'));
         });
     }
 }

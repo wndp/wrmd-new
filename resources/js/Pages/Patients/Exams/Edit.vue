@@ -1,3 +1,34 @@
+<script setup>
+import { ref, computed } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+import PatientLayout from '@/Layouts/PatientLayout.vue';
+import ExamCard from '@/Components/FormCards/ExamCard.vue';
+import FormSection from '@/Components/FormElements/FormSection.vue';
+import DangerButton from '@/Components/FormElements/DangerButton.vue';
+import { ArrowLongLeftIcon } from '@heroicons/vue/24/outline';
+import DeleteExamModal from './Partials/DeleteExamModal.vue';
+import {__} from '@/Composables/Translate';
+import {can} from '@/Composables/Can';
+import {Abilities} from '@/Enums/Abilities';
+
+defineProps({
+  exam: {
+    type: Object,
+    required: true
+  }
+});
+
+let confirmingExamDeletion = ref(false);
+
+let patient = computed(() => usePage().props.admission.patient);
+let caseQueryString = computed(() => {
+  return {
+    y: usePage().props.admission.case_year,
+    c: usePage().props.admission.case_id,
+  }
+})
+</script>
+
 <template>
   <PatientLayout title="Exams">
     <div class="mt-4 sm:flex sm:items-center sm:justify-between">
@@ -14,7 +45,7 @@
         </Link>
       </div>
     </div>
-    <ExamForm
+    <ExamCard
       class="mt-8"
       :patient="patient"
       :exam="exam"
@@ -50,34 +81,3 @@
     />
   </PatientLayout>
 </template>
-
-<script setup>
-import { ref, computed } from 'vue';
-import { usePage } from '@inertiajs/vue3';
-import PatientLayout from '@/Layouts/PatientLayout.vue';
-import ExamForm from '@/Components/Forms/ExamForm.vue';
-import FormSection from '@/Components/FormElements/FormSection.vue';
-import DangerButton from '@/Components/FormElements/DangerButton.vue';
-import { ArrowLongLeftIcon } from '@heroicons/vue/24/outline';
-import DeleteExamModal from './Partials/DeleteExamModal.vue';
-import {__} from '@/Composables/Translate';
-import {can} from '@/Composables/Can';
-import {Abilities} from '@/Enums/Abilities';
-
-defineProps({
-  exam: {
-    type: Object,
-    required: true
-  }
-});
-
-let confirmingExamDeletion = ref(false);
-
-let patient = computed(() => usePage().props.admission.patient);
-let caseQueryString = computed(() => {
-  return {
-    y: usePage().props.admission.case_year,
-    c: usePage().props.admission.case_id,
-  }
-})
-</script>

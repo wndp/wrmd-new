@@ -1,3 +1,52 @@
+<script setup>
+import Panel from '@/Components/Panel.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import DatePicker from '@/Components/FormElements/DatePicker.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import SelectInput from '@/Components/FormElements/SelectInput.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+</script>
+
+<script>
+  export default {
+    mixins: [autoSave, hoistForm],
+    props: {
+      banding: {
+        type: Object,
+        default: () => ({})
+      },
+      enforceRequired: {
+        type: Boolean,
+        default: true
+      }
+    },
+    data() {
+      return {
+        form: this.$inertia.form({
+          recaptured_at: this.banding?.recaptured_at,
+          recapture_disposition: this.banding?.recapture_disposition,
+          present_condition: this.banding?.present_condition,
+          how_present_condition: this.banding?.how_present_condition,
+        })
+      }
+    },
+    methods: {
+      save() {
+        if (this.canSubmit) {
+          this.form.put(this.route('patients.research.recapture.update', {
+            patient: this.$page.props.admission.patient
+          }), {
+            preserveScroll: true,
+            onError: () => this.stopAutoSave()
+          });
+        }
+      }
+    }
+  }
+</script>
+
 <template>
   <Panel>
     <template #heading>
@@ -100,54 +149,3 @@
     </template>
   </Panel>
 </template>
-
-<script setup>
-import Panel from '@/Components/Panel.vue';
-import InputLabel from '@/Components/FormElements/InputLabel.vue';
-import DatePicker from '@/Components/FormElements/DatePicker.vue';
-import TextInput from '@/Components/FormElements/TextInput.vue';
-import SelectInput from '@/Components/FormElements/SelectInput.vue';
-import InputError from '@/Components/FormElements/InputError.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import autoSave from '@/Mixins/AutoSave';
-import hoistForm from '@/Mixins/HoistForm';
-</script>
-
-<script>
-  export default {
-    mixins: [autoSave, hoistForm],
-    props: {
-      banding: {
-        type: Object,
-        default: () => ({})
-      },
-      enforceRequired: {
-        type: Boolean,
-        default: true
-      }
-    },
-    data() {
-      return {
-        form: this.$inertia.form({
-          recaptured_at: this.banding?.recaptured_at,
-          recapture_disposition: this.banding?.recapture_disposition,
-          present_condition: this.banding?.present_condition,
-          how_present_condition: this.banding?.how_present_condition,
-        })
-      }
-    },
-    methods: {
-      save() {
-        if (this.canSubmit) {
-          this.form.put(this.route('patients.research.recapture.update', {
-            patient: this.$page.props.admission.patient
-          }), {
-            preserveScroll: true,
-            onError: () => this.stopAutoSave()
-          });
-        }
-      }
-    }
-  }
-</script>

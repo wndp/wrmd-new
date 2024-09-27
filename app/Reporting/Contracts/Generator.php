@@ -49,7 +49,7 @@ abstract class Generator
      */
     protected function dirname()
     {
-        return "reports/{$this->report->team->id}/".Carbon::now()->toIso8601ZuluString('millisecond').'/';
+        return "reports/{$this->report->team->id}/".Carbon::now()->format('Y_m_d_H_i_s_u').'/';
     }
 
     /**

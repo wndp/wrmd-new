@@ -1,3 +1,63 @@
+<script setup>
+import Panel from '@/Components/Panel.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import SelectInput from '@/Components/FormElements/SelectInput.vue';
+import DatePicker from '@/Components/FormElements/DatePicker.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+</script>
+
+<script>
+  export default {
+    mixins: [autoSave, hoistForm],
+    props: {
+      banding: {
+        type: Object,
+        default: () => ({})
+      },
+      enforceRequired: {
+        type: Boolean,
+        default: true
+      }
+    },
+    data() {
+      return {
+        form: this.$inertia.form({
+          band_number: this.banding?.band_number,
+          banded_at: this.banding?.banded_at,
+          age_code: this.banding?.age_code,
+          how_aged: this.banding?.how_aged,
+          sex_code: this.banding?.sex_code,
+          how_sexed: this.banding?.how_sexed,
+          status_code: this.banding?.status_code,
+          additional_status_code: this.banding?.additional_status_code,
+          band_size: this.banding?.band_size,
+          master_bander_id: this.banding?.master_bander_id,
+          banded_by: this.banding?.banded_by,
+          location_id: this.banding?.location_id,
+          band_disposition: this.banding?.band_disposition,
+          remarks: this.banding?.remarks,
+        })
+      }
+    },
+    methods: {
+      save() {
+        if (this.canSubmit) {
+          this.form.put(this.route('patients.research.banding.update', {
+            patient: this.$page.props.admission.patient
+          }), {
+            preserveScroll: true,
+            onError: () => this.stopAutoSave()
+          });
+        }
+      }
+    }
+  }
+</script>
+
 <template>
   <Panel>
     <template #heading>
@@ -249,65 +309,3 @@
     </template>
   </Panel>
 </template>
-
-<script setup>
-import Panel from '@/Components/Panel.vue';
-import InputLabel from '@/Components/FormElements/InputLabel.vue';
-import TextInput from '@/Components/FormElements/TextInput.vue';
-import SelectInput from '@/Components/FormElements/SelectInput.vue';
-import DatePicker from '@/Components/FormElements/DatePicker.vue';
-import InputError from '@/Components/FormElements/InputError.vue';
-import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import autoSave from '@/Mixins/AutoSave';
-import hoistForm from '@/Mixins/HoistForm';
-</script>
-
-<script>
-  export default {
-    mixins: [autoSave, hoistForm],
-    props: {
-      banding: {
-        type: Object,
-        default: () => ({})
-      },
-      enforceRequired: {
-        type: Boolean,
-        default: true
-      }
-    },
-    data() {
-      return {
-        form: this.$inertia.form({
-          band_number: this.banding?.band_number,
-          banded_at: this.banding?.banded_at,
-          age_code: this.banding?.age_code,
-          how_aged: this.banding?.how_aged,
-          sex_code: this.banding?.sex_code,
-          how_sexed: this.banding?.how_sexed,
-          status_code: this.banding?.status_code,
-          additional_status_code: this.banding?.additional_status_code,
-          band_size: this.banding?.band_size,
-          master_bander_id: this.banding?.master_bander_id,
-          banded_by: this.banding?.banded_by,
-          location_id: this.banding?.location_id,
-          band_disposition: this.banding?.band_disposition,
-          remarks: this.banding?.remarks,
-        })
-      }
-    },
-    methods: {
-      save() {
-        if (this.canSubmit) {
-          this.form.put(this.route('patients.research.banding.update', {
-            patient: this.$page.props.admission.patient
-          }), {
-            preserveScroll: true,
-            onError: () => this.stopAutoSave()
-          });
-        }
-      }
-    }
-  }
-</script>

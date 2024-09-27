@@ -2,23 +2,22 @@
 
 return [
 
-    'donateHeader' => env('DONATE_HEADER', false),
+    'show_donate_header' => env('DONATE_HEADER', false),
 
     // Date formats
     'date_format' => 'D, M j, Y',
     'date_time_format' => 'M j, Y g:i a',
-    'day_date_time_format' => 'D, M j, Y g:i A',
 
     /*
      * Fields to always select for a list view.
      */
-    'alwaysListFields' => [
-        'admissions.case_id',
-        'admissions.case_year',
-        'patients.common_name',
-        'patients.admitted_at',
-        'patients.rescuer_id',
-    ],
+    // 'always_list_fields' => [
+    //     'admissions.case_id',
+    //     'admissions.case_year',
+    //     'patients.common_name',
+    //     'patients.admitted_at',
+    //     'patients.rescuer_id',
+    // ],
 
     /*
      * Default fields to select for a list view.

@@ -2,8 +2,8 @@
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import ActionSection from '@/Components/FormElements/ActionSection.vue';
-import Checkbox from '@/Components/Checkbox.vue';
+import ActionSection from '@/Components/Jetstream/ActionSection.vue';
+import Checkbox from '@/Components/FormElements/Checkbox.vue';
 import ConfirmationModal from '@/Components/ConfirmationModal.vue';
 import DangerButton from '@/Components/FormElements/DangerButton.vue';
 import DialogModal from '@/Components/DialogModal.vue';
@@ -12,7 +12,7 @@ import InputError from '@/Components/FormElements/InputError.vue';
 import InputLabel from '@/Components/FormElements/InputLabel.vue';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import SecondaryButton from '@/Components/FormElements/SecondaryButton.vue';
-import SectionBorder from '@/Components/SectionBorder.vue';
+import SectionBorder from '@/Components/Jetstream/SectionBorder.vue';
 import TextInput from '@/Components/FormElements/TextInput.vue';
 
 const props = defineProps({

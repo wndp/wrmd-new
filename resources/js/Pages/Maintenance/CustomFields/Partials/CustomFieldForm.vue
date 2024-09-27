@@ -1,3 +1,63 @@
+<script setup>
+import Alert from '@/Components/Alert.vue';
+import Panel from '@/Components/Panel.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import SelectInput from '@/Components/FormElements/SelectInput.vue';
+import TextareaInput from '@/Components/FormElements/TextareaInput.vue';
+import Toggle from '@/Components/FormElements/Toggle.vue';
+import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+</script>
+
+<script>
+  export default {
+    mixins: [hoistForm],
+    props: {
+      title: {
+        type: String,
+        required: true
+      },
+      action: {
+        type: String,
+        required: true
+      },
+      customField: {
+        type: Object,
+        default: () => ({})
+      },
+    },
+    emits: ['saved'],
+    data() {
+      return {
+        form: this.$inertia.form({
+          group: this.customField.id ? this.customField.group : '',
+          panel: this.customField.id ? this.customField.panel : '',
+          location: this.customField.id ? this.customField.location : '',
+          type: this.customField.id ? this.customField.type : '',
+          label: this.customField.id ? this.customField.label : '',
+          options: this.customField.id ? this.customField.options : '',
+          is_required: this.customField.id ? this.customField.is_required : false,
+        })
+      };
+    },
+    computed: {
+      isUpdating() {
+        return this.customField.id !== undefined;
+      }
+    },
+    methods: {
+      onGroupChange() {
+        if (this.form.group !== 'Patient') {
+          this.form.panel = null;
+        }
+      }
+    }
+  };
+</script>
+
 <template>
   <Panel class="mt-4">
     <template #heading>
@@ -148,64 +208,3 @@
     </template>
   </Panel>
 </template>
-
-<script setup>
-import Alert from '@/Components/Alert.vue';
-import Panel from '@/Components/Panel.vue';
-import Label from '@/Components/FormElements/Label.vue';
-import Input from '@/Components/FormElements/Input.vue';
-import Select from '@/Components/FormElements/Select.vue';
-import Textarea from '@/Components/FormElements/Textarea.vue';
-import Toggle from '@/Components/FormElements/Toggle.vue';
-import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
-import InputError from '@/Components/FormElements/InputError.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import hoistForm from '@/Mixins/HoistForm';
-</script>
-
-<script>
-  export default {
-    mixins: [hoistForm],
-    props: {
-      title: {
-        type: String,
-        required: true
-      },
-      action: {
-        type: String,
-        required: true
-      },
-      customField: {
-        type: Object,
-        default: () => ({})
-      },
-    },
-    emits: ['saved'],
-    data() {
-      return {
-        form: this.$inertia.form({
-          group: this.customField.id ? this.customField.group : '',
-          panel: this.customField.id ? this.customField.panel : '',
-          location: this.customField.id ? this.customField.location : '',
-          type: this.customField.id ? this.customField.type : '',
-          label: this.customField.id ? this.customField.label : '',
-          options: this.customField.id ? this.customField.options : '',
-          is_required: this.customField.id ? this.customField.is_required : false,
-        })
-      };
-    },
-    computed: {
-      isUpdating() {
-        return this.customField.id !== undefined;
-      }
-    },
-    methods: {
-      onGroupChange() {
-        if (this.form.group !== 'Patient') {
-          this.form.panel = null;
-        }
-      }
-    }
-  };
-</script>

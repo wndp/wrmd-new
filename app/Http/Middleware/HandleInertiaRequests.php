@@ -51,7 +51,7 @@ class HandleInertiaRequests extends Middleware
 
         $parentShare['environment'] = App::environment();
         $parentShare['appName'] = config('app.name');
-        $parentShare['showDonateHeader'] = config('wrmd.donateHeader');
+        $parentShare['showDonateHeader'] = config('wrmd.show_donate_header');
 
         if (!Auth::guest()) {
             $user = $request->user();

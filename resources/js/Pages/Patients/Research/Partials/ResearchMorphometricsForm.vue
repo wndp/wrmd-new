@@ -1,3 +1,66 @@
+<script setup>
+import Panel from '@/Components/Panel.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import Checkbox from '@/Components/FormElements/Checkbox.vue';
+import DatePicker from '@/Components/FormElements/DatePicker.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+</script>
+
+<script>
+  export default {
+    mixins: [autoSave, hoistForm],
+    props: {
+      morphometric: {
+        type: Object,
+        default: () => ({})
+      },
+      enforceRequired: {
+        type: Boolean,
+        default: true
+      }
+    },
+    data() {
+      return {
+        form: this.$inertia.form({
+          measured_at: this.morphometric?.measured_at,
+          bill_length: this.morphometric?.bill_length,
+          bill_width: this.morphometric?.bill_width,
+          bill_depth: this.morphometric?.bill_depth,
+          head_bill_length: this.morphometric?.head_bill_length,
+          culmen: this.morphometric?.culmen,
+          exposed_culmen: this.morphometric?.exposed_culmen,
+          wing_chord: this.morphometric?.wing_chord,
+          flat_wing: this.morphometric?.flat_wing,
+          tarsus_length: this.morphometric?.tarsus_length,
+          middle_toe_length: this.morphometric?.middle_toe_length,
+          toe_pad_length: this.morphometric?.toe_pad_length,
+          hallux_length: this.morphometric?.hallux_length,
+          tail_length: this.morphometric?.tail_length,
+          weight: this.morphometric?.weight,
+          samples_collected: this.morphometric?.samples_collected || [],
+          remarks: this.morphometric?.remarks,
+        })
+      }
+    },
+    methods: {
+      save() {
+        if (this.canSubmit) {
+          this.form.put(this.route('patients.research.morphometrics.update', {
+            patient: this.$page.props.admission.patient
+          }), {
+            preserveScroll: true,
+            onError: () => this.stopAutoSave()
+          });
+        }
+      }
+    }
+  }
+</script>
+
 <template>
   <Panel>
     <template #heading>
@@ -351,68 +414,3 @@
     </template>
   </Panel>
 </template>
-
-<script setup>
-import Panel from '@/Components/Panel.vue';
-import InputLabel from '@/Components/FormElements/InputLabel.vue';
-import TextInput from '@/Components/FormElements/TextInput.vue';
-import Checkbox from '@/Components/FormElements/Checkbox.vue';
-import DatePicker from '@/Components/FormElements/DatePicker.vue';
-import InputError from '@/Components/FormElements/InputError.vue';
-import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import autoSave from '@/Mixins/AutoSave';
-import hoistForm from '@/Mixins/HoistForm';
-</script>
-
-<script>
-  export default {
-    mixins: [autoSave, hoistForm],
-    props: {
-      morphometric: {
-        type: Object,
-        default: () => ({})
-      },
-      enforceRequired: {
-        type: Boolean,
-        default: true
-      }
-    },
-    data() {
-      return {
-        form: this.$inertia.form({
-          measured_at: this.morphometric?.measured_at,
-          bill_length: this.morphometric?.bill_length,
-          bill_width: this.morphometric?.bill_width,
-          bill_depth: this.morphometric?.bill_depth,
-          head_bill_length: this.morphometric?.head_bill_length,
-          culmen: this.morphometric?.culmen,
-          exposed_culmen: this.morphometric?.exposed_culmen,
-          wing_chord: this.morphometric?.wing_chord,
-          flat_wing: this.morphometric?.flat_wing,
-          tarsus_length: this.morphometric?.tarsus_length,
-          middle_toe_length: this.morphometric?.middle_toe_length,
-          toe_pad_length: this.morphometric?.toe_pad_length,
-          hallux_length: this.morphometric?.hallux_length,
-          tail_length: this.morphometric?.tail_length,
-          weight: this.morphometric?.weight,
-          samples_collected: this.morphometric?.samples_collected || [],
-          remarks: this.morphometric?.remarks,
-        })
-      }
-    },
-    methods: {
-      save() {
-        if (this.canSubmit) {
-          this.form.put(this.route('patients.research.morphometrics.update', {
-            patient: this.$page.props.admission.patient
-          }), {
-            preserveScroll: true,
-            onError: () => this.stopAutoSave()
-          });
-        }
-      }
-    }
-  }
-</script>

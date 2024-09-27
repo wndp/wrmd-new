@@ -1,3 +1,88 @@
+<script setup>
+import AppLayout from '@/Layouts/AppLayout.vue';
+import Alert from '@/Components/Alert.vue';
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
+import Panel from '@/Components/Panel.vue';
+import SelectInput from '@/Components/FormElements/SelectInput.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import PersonCard from '@/Components/FormCards/PersonCard.vue';
+import IntakeCard from '@/Components/FormCards/IntakeCard.vue';
+import ExamCard from '@/Components/FormCards/ExamCard.vue';
+import DiagnosisCard from '@/Components/FormCards/DiagnosisCard.vue';
+import OutcomeCard from '@/Components/FormCards/OutcomeCard.vue';
+import CageCardCard from '@/Components/FormCards/CageCardCard.vue';
+import { markRaw } from 'vue';
+import mapValues from 'lodash/mapValues';
+import isObject from 'lodash/isObject';
+import isNil from 'lodash/isNil';
+import omitBy from 'lodash/omitBy';
+</script>
+
+<script>
+export default {
+    props: {
+      caseNumbers: {
+        type: Array,
+        required: true
+      }
+    },
+    data() {
+      return {
+        howShouldTextValuesBeUpdated: [
+          {
+            value: null,
+            label: ''
+          },
+          {
+            value: 0,
+            label: this.__('Delete existing text field values and write my new values in their place.')
+          },
+          {
+            value: 1,
+            label: this.__('Keep existing text field values and add my new values by comma separation.')
+          }
+        ],
+        tabs: [
+            // {title: 'Admission', components: [
+            //     {component: markRaw(PersonCard), model: 'people', props: {affiliation: 'Rescuer'}},
+            //     {component: markRaw(IntakeCard), model: 'intake', props: {}}
+            // ]},
+            // {title: 'Patient', components: [
+            //     {component: markRaw(CageCardForm), model: 'cage_card', props: {}},
+            //     {component: markRaw(ExamCard), model: 'exams', props: {}},
+            //     {component: markRaw(DiagnosisCard), model: 'diagnosis', props: {}},
+            //     {component: markRaw(OutcomeCard), model: 'outcome', props: {}}
+            // ]},
+            // {title: 'Treatment Log', components: [
+            //     //{component: markRaw(TreatmentLog), model: 'treatment_log', props: {}},
+            // ]},
+            // {title: 'Location', components: [
+            //     //{component: markRaw(CurrentLocation), model: 'current_location', props: {}},
+            // ]}
+        ],
+        form: this.$inertia.form({
+          how_should_text_values_be_updated: '',
+          people: {},
+          intake: {},
+          cage_card: {},
+          exams: {},
+          diagnosis: {},
+          outcome: {}
+        })
+      }
+    },
+    methods: {
+      doBatchUpdate() {
+        this.form.transform(data => {
+          // remove empty values so that the post size is reduced
+          return mapValues(data, val => isObject(val) ? omitBy(val, isNil) : val)
+        }).put(this.route('patients.batch.update'))
+      }
+    }
+};
+</script>
+
 <template>
   <AppLayout title="Batch Update">
     <template #header>
@@ -90,88 +175,3 @@
     </Panel>
   </AppLayout>
 </template>
-
-<script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import Alert from '@/Components/Alert.vue';
-import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
-import Panel from '@/Components/Panel.vue';
-import SelectInput from '@/Components/FormElements/SelectInput.vue';
-import InputError from '@/Components/FormElements/InputError.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import PersonCard from '@/Components/FormCards/PersonCard.vue';
-import IntakeCard from '@/Components/FormCards/IntakeCard.vue';
-import ExamCard from '@/Components/FormCards/ExamCard.vue';
-import DiagnosisCard from '@/Components/FormCards/DiagnosisCard.vue';
-import OutcomeCard from '@/Components/FormCards/OutcomeCard.vue';
-import CageCardForm from '@/Components/FormCards/CageCardForm.vue';
-import { markRaw } from 'vue';
-import mapValues from 'lodash/mapValues';
-import isObject from 'lodash/isObject';
-import isNil from 'lodash/isNil';
-import omitBy from 'lodash/omitBy';
-</script>
-
-<script>
-export default {
-    props: {
-      caseNumbers: {
-        type: Array,
-        required: true
-      }
-    },
-    data() {
-      return {
-        howShouldTextValuesBeUpdated: [
-          {
-            value: null,
-            label: ''
-          },
-          {
-            value: 0,
-            label: this.__('Delete existing text field values and write my new values in their place.')
-          },
-          {
-            value: 1,
-            label: this.__('Keep existing text field values and add my new values by comma separation.')
-          }
-        ],
-        tabs: [
-            // {title: 'Admission', components: [
-            //     {component: markRaw(PersonCard), model: 'people', props: {affiliation: 'Rescuer'}},
-            //     {component: markRaw(IntakeCard), model: 'intake', props: {}}
-            // ]},
-            // {title: 'Patient', components: [
-            //     {component: markRaw(CageCardForm), model: 'cage_card', props: {}},
-            //     {component: markRaw(ExamCard), model: 'exams', props: {}},
-            //     {component: markRaw(DiagnosisCard), model: 'diagnosis', props: {}},
-            //     {component: markRaw(OutcomeCard), model: 'outcome', props: {}}
-            // ]},
-            // {title: 'Treatment Log', components: [
-            //     //{component: markRaw(TreatmentLog), model: 'treatment_log', props: {}},
-            // ]},
-            // {title: 'Location', components: [
-            //     //{component: markRaw(CurrentLocation), model: 'current_location', props: {}},
-            // ]}
-        ],
-        form: this.$inertia.form({
-          how_should_text_values_be_updated: '',
-          people: {},
-          intake: {},
-          cage_card: {},
-          exams: {},
-          diagnosis: {},
-          outcome: {}
-        })
-      }
-    },
-    methods: {
-      doBatchUpdate() {
-        this.form.transform(data => {
-          // remove empty values so that the post size is reduced
-          return mapValues(data, val => isObject(val) ? omitBy(val, isNil) : val)
-        }).put(this.route('patients.batch.update'))
-      }
-    }
-};
-</script>

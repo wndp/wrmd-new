@@ -17,5 +17,5 @@ Broadcast::channel('device.{uuid}', function ($user, $uuid) {
 });
 
 Broadcast::channel('patient.{patientId}', function ($user, $patientId) {
-    return Patient::find($patientId)->isOwnedBy($user->current_account_id);
+    return Patient::find($patientId)->isOwnedBy($user->current_team_id);
 });

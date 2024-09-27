@@ -218,7 +218,7 @@ class Patient extends Model implements HasMedia
                 return $this->date_admitted_at->translatedFormat(config('wrmd.date_format'));
             }
             return Timezone::convertFromUtcToLocal($this->date_admitted_at->setTimeFromTimeString($this->time_admitted_at))
-                ?->translatedFormat(config('wrmd.day_date_time_format'));
+                ?->translatedFormat(config('wrmd.date_time_format'));
         });
     }
 

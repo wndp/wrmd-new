@@ -1,3 +1,38 @@
+<script setup>
+import { inject } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import MaintenanceAside from './Partials/MaintenanceAside.vue';
+import FormSection from '@/Components/FormElements/FormSection.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import Checkbox from '@/Components/FormElements/Checkbox.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+
+const route = inject('route');
+
+const props = defineProps({
+  users: {
+    type: Array,
+    required: true
+  },
+  notifyOfIoa: {
+    type: Array,
+    required: true
+  }
+});
+
+const form = useForm({
+  notifyOfIoa: props.notifyOfIoa
+})
+
+const updatePrivacy = () => {
+  form.put(route('maintenance.owcn_ioa.update'), {
+    preserveScroll: true
+  });
+};
+</script>
+
 <template>
   <AppLayout title="Maintenance">
     <template #header>
@@ -56,38 +91,3 @@
     </div>
   </AppLayout>
 </template>
-
-<script setup>
-import { inject } from 'vue';
-import { useForm } from '@inertiajs/vue3';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import MaintenanceAside from './Partials/MaintenanceAside.vue';
-import FormSection from '@/Components/FormElements/FormSection.vue';
-import Label from '@/Components/FormElements/Label.vue';
-import Checkbox from '@/Components/FormElements/Checkbox.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-
-const route = inject('route');
-
-const props = defineProps({
-  users: {
-    type: Array,
-    required: true
-  },
-  notifyOfIoa: {
-    type: Array,
-    required: true
-  }
-});
-
-const form = useForm({
-  notifyOfIoa: props.notifyOfIoa
-})
-
-const updatePrivacy = () => {
-  form.put(route('maintenance.owcn_ioa.update'), {
-    preserveScroll: true
-  });
-};
-</script>

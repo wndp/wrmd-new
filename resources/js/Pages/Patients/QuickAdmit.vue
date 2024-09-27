@@ -1,3 +1,109 @@
+<script setup>
+import { inject, ref, computed } from 'vue';
+import { useForm, usePage } from '@inertiajs/vue3'
+import AppLayout from '@/Layouts/AppLayout.vue';
+import CreatePatientIdentifiers from './Partials/CreatePatientIdentifiers.vue';
+import Panel from '@/Components/Panel.vue';
+import Alert from '@/Components/Alert.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import InputWithUnit from '@/Components/FormElements/InputWithUnit.vue';
+import SelectInput from '@/Components/FormElements/SelectInput.vue';
+import DatePicker from '@/Components/FormElements/DatePicker.vue';
+import AlertAction from '@/Components/AlertAction.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import DangerButton from '@/Components/FormElements/DangerButton.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import ValidationErrors from '@/Components/FormElements/ValidationErrors.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
+import OutcomeCard from '@/Components/FormCards/OutcomeCard.vue';
+import { formatISO9075 } from 'date-fns';
+
+let route = inject('route');
+
+let formatCaseNumber = (year, id) => {
+  year = year.toString().substring(year.toString().length-2);
+  return `${year}-${id}`;
+};
+
+let nextCaseNumber = ref(formatCaseNumber(usePage().props.lastCaseId.year, usePage().props.lastCaseId.id+1));
+
+let getNextCaseNumber = (caseYear) => {
+  window.axios.get(route('admissions.year',{year: caseYear})).then(response => {
+    nextCaseNumber.value = formatCaseNumber(
+      response.data.year,
+      response.data.last_case_id + 1
+    );
+  });
+};
+
+let store = () => {
+  form.transform(data => {
+    return _.chain(data)
+      .merge(data.identifiers, data.outcome)
+      .omit(['identifiers', 'outcome']);
+  }).post(route('patients.quick_admit.store'), {
+    onSuccess: () => {
+      let year = form.identifiers.case_year;
+      form.reset();
+      form.identifiers.case_year = year;
+      getNextCaseNumber(year);
+    }
+  });
+}
+
+let form = useForm({
+  identifiers: {
+    case_year: usePage().props.lastCaseId.year,
+    admitted_at: formatISO9075(new Date()),
+    common_name: '',
+    morph: '',
+    cases_to_create: 1,
+    reference_number: '',
+    microchip_number: '',
+  },
+  transported_by: '',
+  admitted_by: '',
+  found_at: '',
+  address_found: '',
+  city_found: '',
+  subdivision_found: '',
+  reasons_for_admission: '',
+  care_by_rescuer: '',
+  notes_about_rescue: '',
+  weight: '',
+  weight_unit: '',
+  age: '',
+  age_unit: '',
+  sex: '',
+  attitude: '',
+  outcome: {
+    disposition: 'Pending',
+    dispositioned_at: '',
+    release_type: '',
+    transfer_type: '',
+    disposition_address: '',
+    disposition_city: '',
+    disposition_subdivision: '',
+    disposition_postal_code: '',
+    disposition_lat: '',
+    disposition_lng: '',
+    reason_for_disposition: '',
+    dispositioned_by: '',
+    carcass_saved: false
+  }
+});
+
+let currentYear = computed(() => new Date().getFullYear());
+let notCurrentYear = computed(() => parseInt(form.identifiers.case_year) !== currentYear.value);
+let settings = computed(() => usePage().props.settings);
+let weightUnits = computed(() => usePage().props.options.weightUnits);
+let ageUnits = computed(() => usePage().props.options.ageUnits);
+let attitudes = computed(() => usePage().props.options.attitudes);
+let sexes = computed(() => usePage().props.options.sexes);
+</script>
+
 <template>
   <AppLayout title="Admissions">
     <template #header>
@@ -281,7 +387,7 @@
           </div>
         </div>
       </Panel>
-      <OutcomeForm
+      <OutcomeCard
         v-bind="$props"
         v-model="form.outcome"
         :can-submit="false"
@@ -314,109 +420,3 @@
     </form>
   </AppLayout>
 </template>
-
-<script setup>
-import { inject, ref, computed } from 'vue';
-import { useForm, usePage } from '@inertiajs/vue3'
-import AppLayout from '@/Layouts/AppLayout.vue';
-import CreatePatientIdentifiers from './Partials/CreatePatientIdentifiers.vue';
-import Panel from '@/Components/Panel.vue';
-import Alert from '@/Components/Alert.vue';
-import InputLabel from '@/Components/FormElements/InputLabel.vue';
-import TextInput from '@/Components/FormElements/TextInput.vue';
-import InputWithUnit from '@/Components/FormElements/InputWithUnit.vue';
-import SelectInput from '@/Components/FormElements/SelectInput.vue';
-import DatePicker from '@/Components/FormElements/DatePicker.vue';
-import AlertAction from '@/Components/AlertAction.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import DangerButton from '@/Components/FormElements/DangerButton.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import ValidationErrors from '@/Components/FormElements/ValidationErrors.vue';
-import InputError from '@/Components/FormElements/InputError.vue';
-import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
-import OutcomeForm from '@/Components/Forms/OutcomeForm.vue';
-import { formatISO9075 } from 'date-fns';
-
-let route = inject('route');
-
-let formatCaseNumber = (year, id) => {
-  year = year.toString().substring(year.toString().length-2);
-  return `${year}-${id}`;
-};
-
-let nextCaseNumber = ref(formatCaseNumber(usePage().props.lastCaseId.year, usePage().props.lastCaseId.id+1));
-
-let getNextCaseNumber = (caseYear) => {
-  window.axios.get(route('admissions.year',{year: caseYear})).then(response => {
-    nextCaseNumber.value = formatCaseNumber(
-      response.data.year,
-      response.data.last_case_id + 1
-    );
-  });
-};
-
-let store = () => {
-  form.transform(data => {
-    return _.chain(data)
-      .merge(data.identifiers, data.outcome)
-      .omit(['identifiers', 'outcome']);
-  }).post(route('patients.quick_admit.store'), {
-    onSuccess: () => {
-      let year = form.identifiers.case_year;
-      form.reset();
-      form.identifiers.case_year = year;
-      getNextCaseNumber(year);
-    }
-  });
-}
-
-let form = useForm({
-  identifiers: {
-    case_year: usePage().props.lastCaseId.year,
-    admitted_at: formatISO9075(new Date()),
-    common_name: '',
-    morph: '',
-    cases_to_create: 1,
-    reference_number: '',
-    microchip_number: '',
-  },
-  transported_by: '',
-  admitted_by: '',
-  found_at: '',
-  address_found: '',
-  city_found: '',
-  subdivision_found: '',
-  reasons_for_admission: '',
-  care_by_rescuer: '',
-  notes_about_rescue: '',
-  weight: '',
-  weight_unit: '',
-  age: '',
-  age_unit: '',
-  sex: '',
-  attitude: '',
-  outcome: {
-    disposition: 'Pending',
-    dispositioned_at: '',
-    release_type: '',
-    transfer_type: '',
-    disposition_address: '',
-    disposition_city: '',
-    disposition_subdivision: '',
-    disposition_postal_code: '',
-    disposition_lat: '',
-    disposition_lng: '',
-    reason_for_disposition: '',
-    dispositioned_by: '',
-    carcass_saved: false
-  }
-});
-
-let currentYear = computed(() => new Date().getFullYear());
-let notCurrentYear = computed(() => parseInt(form.identifiers.case_year) !== currentYear.value);
-let settings = computed(() => usePage().props.settings);
-let weightUnits = computed(() => usePage().props.options.weightUnits);
-let ageUnits = computed(() => usePage().props.options.ageUnits);
-let attitudes = computed(() => usePage().props.options.attitudes);
-let sexes = computed(() => usePage().props.options.sexes);
-</script>

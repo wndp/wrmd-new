@@ -1,3 +1,47 @@
+<script setup>
+import { computed } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+import Panel from '@/Components/Panel.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import SelectInput from '@/Components/FormElements/SelectInput.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+
+let parentCategories = computed(() => usePage().props.options.parentCategories);
+</script>
+
+<script>
+  export default {
+    mixins: [hoistForm],
+    props: {
+      title: {
+        type: String,
+        required: true
+      },
+      action: {
+        type: String,
+        required: true
+      },
+      category: {
+        type: Object,
+        default: () => ({})
+      },
+    },
+    emits: ['saved'],
+    data() {
+      return {
+        form: this.$inertia.form({
+          parent_category: this.category.id ? this.category.parent.name : '',
+          name: this.category.id ? this.category.name : '',
+          description: this.category.id ? this.category.description : '',
+        })
+      };
+    }
+  };
+</script>
+
 <template>
   <Panel class="mt-4">
     <template #heading>
@@ -75,48 +119,3 @@
     </template>
   </Panel>
 </template>
-
-<script setup>
-import { computed } from 'vue';
-import { usePage } from '@inertiajs/vue3';
-import Panel from '@/Components/Panel.vue';
-import Label from '@/Components/FormElements/Label.vue';
-import Input from '@/Components/FormElements/Input.vue';
-import Select from '@/Components/FormElements/Select.vue';
-import InputError from '@/Components/FormElements/InputError.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import hoistForm from '@/Mixins/HoistForm';
-
-let parentCategories = computed(() => usePage().props.options.parentCategories);
-</script>
-
-<script>
-  export default {
-    mixins: [hoistForm],
-    props: {
-      title: {
-        type: String,
-        required: true
-      },
-      action: {
-        type: String,
-        required: true
-      },
-      category: {
-        type: Object,
-        default: () => ({})
-      },
-    },
-    emits: ['saved'],
-    data() {
-      return {
-        form: this.$inertia.form({
-          parent_category: this.category.id ? this.category.parent.name : '',
-          name: this.category.id ? this.category.name : '',
-          description: this.category.id ? this.category.description : '',
-        })
-      };
-    }
-  };
-</script>

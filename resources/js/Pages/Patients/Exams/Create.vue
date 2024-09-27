@@ -1,3 +1,22 @@
+<script setup>
+import { computed } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+import PatientLayout from '@/Layouts/PatientLayout.vue';
+import ExamCard from '@/Components/FormCards/ExamCard.vue';
+import { ArrowLongLeftIcon } from '@heroicons/vue/24/outline';
+import {__} from '@/Composables/Translate';
+import {can} from '@/Composables/Can';
+import {Abilities} from '@/Enums/Abilities';
+
+let patient = computed(() => usePage().props.admission.patient);
+let caseQueryString = computed(() => {
+  return {
+    y: usePage().props.admission.case_year,
+    c: usePage().props.admission.case_id,
+  }
+})
+</script>
+
 <template>
   <PatientLayout title="Exams">
     <div class="mt-4 sm:flex sm:items-center sm:justify-between">
@@ -14,7 +33,7 @@
         </Link>
       </div>
     </div>
-    <ExamForm
+    <ExamCard
       class="mt-8"
       :patient="patient"
       :can-submit="can(Abilities.MANAGE_EXAMS) && patient.locked_at === null"
@@ -25,22 +44,3 @@
     />
   </PatientLayout>
 </template>
-
-<script setup>
-import { computed } from 'vue';
-import { usePage } from '@inertiajs/vue3';
-import PatientLayout from '@/Layouts/PatientLayout.vue';
-import ExamForm from '@/Components/Forms/ExamForm.vue';
-import { ArrowLongLeftIcon } from '@heroicons/vue/24/outline';
-import {__} from '@/Composables/Translate';
-import {can} from '@/Composables/Can';
-import {Abilities} from '@/Enums/Abilities';
-
-let patient = computed(() => usePage().props.admission.patient);
-let caseQueryString = computed(() => {
-  return {
-    y: usePage().props.admission.case_year,
-    c: usePage().props.admission.case_id,
-  }
-})
-</script>

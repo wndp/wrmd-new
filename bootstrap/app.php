@@ -32,6 +32,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'pro' => \App\Http\Middleware\EnsureTeamIsOnProPlan::class
         ]);
 
+        $middleware->encryptCookies(except: [
+            'device-uuid',
+        ]);
+
         $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions) {

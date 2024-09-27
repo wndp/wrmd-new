@@ -1,3 +1,45 @@
+<script setup>
+import { inject, computed } from 'vue';
+import { useForm, usePage } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import MaintenanceAside from '../Partials/MaintenanceAside.vue';
+// import Panel from '@/Components/Panel.vue';
+// import InputLabel from '@/Components/FormElements/InputLabel.vue';
+// import FileInput from '@/Components/FormElements/FileInput.vue';
+import TextareaAutosize from '@/Components/FormElements/TextareaAutosize.vue';
+import SelectInput from '@/Components/FormElements/SelectInput.vue';
+import ValidationErrors from '@/Components/FormElements/ValidationErrors.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import { PlusIcon } from '@heroicons/vue/24/outline';
+import AutocompleteRow from './Partials/AutocompleteRow.vue';
+
+const route = inject('route');
+
+const props = defineProps({
+  autocompletes: {
+    type: Array,
+    required: true
+  }
+});
+
+let form = useForm({
+  field: '',
+  values: '',
+});
+
+let autocompleteOptions = props.autocompletes.map(option => option.field);
+
+let autoCompleteAble = computed(
+  () => usePage().props.options.autoCompleteAble.filter(option => ! autocompleteOptions.includes(option.value))
+);
+
+let store = () => {
+  form.post(route('maintenance.autocomplete.store'), {
+    preserveState: false
+  });
+}
+</script>
+
 <template>
   <AppLayout title="Autocomplete">
     <div class="lg:grid grid-cols-8 gap-8 mt-4">
@@ -44,7 +86,7 @@
                   <tbody class="bg-white divide-y divide-gray-200">
                     <tr>
                       <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
-                        <Select
+                        <SelectInput
                           v-model="form.field"
                           name="new_field"
                           :options="autoCompleteAble"
@@ -97,45 +139,3 @@
     </div>
   </AppLayout>
 </template>
-
-<script setup>
-import { inject, computed } from 'vue';
-import { useForm, usePage } from '@inertiajs/vue3';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import MaintenanceAside from '../Partials/MaintenanceAside.vue';
-// import Panel from '@/Components/Panel.vue';
-// import Label from '@/Components/FormElements/Label.vue';
-// import FileInput from '@/Components/FormElements/FileInput.vue';
-import TextareaAutosize from '@/Components/FormElements/TextareaAutosize.vue';
-import Select from '@/Components/FormElements/Select.vue';
-import ValidationErrors from '@/Components/FormElements/ValidationErrors.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import { PlusIcon } from '@heroicons/vue/24/outline';
-import AutocompleteRow from './Partials/AutocompleteRow.vue';
-
-const route = inject('route');
-
-const props = defineProps({
-  autocompletes: {
-    type: Array,
-    required: true
-  }
-});
-
-let form = useForm({
-  field: '',
-  values: '',
-});
-
-let autocompleteOptions = props.autocompletes.map(option => option.field);
-
-let autoCompleteAble = computed(
-  () => usePage().props.options.autoCompleteAble.filter(option => ! autocompleteOptions.includes(option.value))
-);
-
-let store = () => {
-  form.post(route('maintenance.autocomplete.store'), {
-    preserveState: false
-  });
-}
-</script>

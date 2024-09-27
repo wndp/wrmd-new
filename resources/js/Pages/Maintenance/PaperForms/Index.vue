@@ -1,3 +1,38 @@
+<script setup>
+import { inject } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import MaintenanceAside from '../Partials/MaintenanceAside.vue';
+import Panel from '@/Components/Panel.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import FileInput from '@/Components/FormElements/FileInput.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import TemplateRow from './Partials/TemplateRow.vue';
+
+const route = inject('route');
+
+defineProps({
+  templates: {
+    type: Array,
+    required: true
+  }
+});
+
+let form = useForm({
+  template: '',
+  name: ''
+});
+
+let storeNewTemplate = () => {
+  form.post(route('maintenance.paper_forms.store'), {
+    onSuccess: () => form.reset()
+  });
+}
+</script>
+
 <template>
   <AppLayout title="Paper Form Templates">
     <div class="lg:grid grid-cols-8 gap-8 mt-4">
@@ -103,38 +138,3 @@
     </div>
   </AppLayout>
 </template>
-
-<script setup>
-import { inject } from 'vue';
-import { useForm } from '@inertiajs/vue3';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import MaintenanceAside from '../Partials/MaintenanceAside.vue';
-import Panel from '@/Components/Panel.vue';
-import Label from '@/Components/FormElements/Label.vue';
-import FileInput from '@/Components/FormElements/FileInput.vue';
-import Input from '@/Components/FormElements/Input.vue';
-import InputError from '@/Components/FormElements/InputError.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import TemplateRow from './Partials/TemplateRow.vue';
-
-const route = inject('route');
-
-defineProps({
-  templates: {
-    type: Array,
-    required: true
-  }
-});
-
-let form = useForm({
-  template: '',
-  name: ''
-});
-
-let storeNewTemplate = () => {
-  form.post(route('maintenance.paper_forms.store'), {
-    onSuccess: () => form.reset()
-  });
-}
-</script>

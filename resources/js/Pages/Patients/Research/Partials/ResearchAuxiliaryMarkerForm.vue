@@ -1,3 +1,54 @@
+<script setup>
+import Panel from '@/Components/Panel.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import SelectInput from '@/Components/FormElements/SelectInput.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+</script>
+
+<script>
+  export default {
+    mixins: [autoSave, hoistForm],
+    props: {
+      banding: {
+        type: Object,
+        default: () => ({})
+      },
+      enforceRequired: {
+        type: Boolean,
+        default: true
+      }
+    },
+    data() {
+      return {
+        form: this.$inertia.form({
+          auxiliary_marker: this.banding?.auxiliary_marker,
+          auxiliary_marker_color: this.banding?.auxiliary_marker_color,
+          auxiliary_side_of_bird: this.banding?.auxiliary_side_of_bird,
+          auxiliary_marker_type: this.banding?.auxiliary_marker_type,
+          auxiliary_marker_code_color: this.banding?.auxiliary_marker_code_color,
+          auxiliary_placement_on_leg: this.banding?.auxiliary_placement_on_leg,
+        })
+      }
+    },
+    methods: {
+      save() {
+        if (this.canSubmit) {
+          this.form.put(this.route('patients.research.auxiliary_marker.update', {
+            patient: this.$page.props.admission.patient
+          }), {
+            preserveScroll: true,
+            onError: () => this.stopAutoSave()
+          });
+        }
+      }
+    }
+  }
+</script>
+
 <template>
   <Panel>
     <template #heading>
@@ -129,56 +180,3 @@
     </template>
   </Panel>
 </template>
-
-<script setup>
-import Panel from '@/Components/Panel.vue';
-import InputLabel from '@/Components/FormElements/InputLabel.vue';
-import TextInput from '@/Components/FormElements/TextInput.vue';
-import SelectInput from '@/Components/FormElements/SelectInput.vue';
-import InputError from '@/Components/FormElements/InputError.vue';
-import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import autoSave from '@/Mixins/AutoSave';
-import hoistForm from '@/Mixins/HoistForm';
-</script>
-
-<script>
-  export default {
-    mixins: [autoSave, hoistForm],
-    props: {
-      banding: {
-        type: Object,
-        default: () => ({})
-      },
-      enforceRequired: {
-        type: Boolean,
-        default: true
-      }
-    },
-    data() {
-      return {
-        form: this.$inertia.form({
-          auxiliary_marker: this.banding?.auxiliary_marker,
-          auxiliary_marker_color: this.banding?.auxiliary_marker_color,
-          auxiliary_side_of_bird: this.banding?.auxiliary_side_of_bird,
-          auxiliary_marker_type: this.banding?.auxiliary_marker_type,
-          auxiliary_marker_code_color: this.banding?.auxiliary_marker_code_color,
-          auxiliary_placement_on_leg: this.banding?.auxiliary_placement_on_leg,
-        })
-      }
-    },
-    methods: {
-      save() {
-        if (this.canSubmit) {
-          this.form.put(this.route('patients.research.auxiliary_marker.update', {
-            patient: this.$page.props.admission.patient
-          }), {
-            preserveScroll: true,
-            onError: () => this.stopAutoSave()
-          });
-        }
-      }
-    }
-  }
-</script>

@@ -41,7 +41,7 @@ class GeneralSettingsController extends Controller
 
         // $klist = array_flip(Wrmd::settings('listFields', config('wrmd.defaultListFields')));
         // $fields = fields()->filterOut('selectable')->getLabels()->diffKeys(
-        //     array_flip(config('wrmd.alwaysListFields'))
+        //     array_flip(config('wrmd.always_list_fields'))
         // );
 
         // $listedFields = collect(array_replace($klist, $fields->toArray()))

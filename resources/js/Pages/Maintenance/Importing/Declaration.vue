@@ -1,3 +1,40 @@
+<script setup>
+import AppLayout from '@/Layouts/AppLayout.vue';
+import MaintenanceAside from '../Partials/MaintenanceAside.vue';
+import Panel from '@/Components/Panel.vue';
+import FormSection from '@/Components/FormElements/FormSection.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import SelectInput from '@/Components/FormElements/SelectInput.vue';
+import Toggle from '@/Components/FormElements/Toggle.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import { ArrowLongRightIcon } from '@heroicons/vue/24/outline';
+</script>
+
+<script>
+export default {
+    props: {
+        whatImporting: {
+          type: Array,
+          required: true
+        }
+    },
+    data() {
+        return {
+            form: this.$inertia.form({
+
+            })
+        };
+    },
+    methods: {
+      nextStep() {
+
+      }
+    }
+};
+</script>
+
 <template>
   <AppLayout title="Importing">
     <div class="lg:grid grid-cols-8 gap-8 mt-4">
@@ -78,40 +115,3 @@
     </div>
   </AppLayout>
 </template>
-
-<script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import MaintenanceAside from '../Partials/MaintenanceAside.vue';
-import Panel from '@/Components/Panel.vue';
-import FormSection from '@/Components/FormElements/FormSection.vue';
-import Label from '@/Components/FormElements/Label.vue';
-import Input from '@/Components/FormElements/Input.vue';
-import Select from '@/Components/FormElements/Select.vue';
-import Toggle from '@/Components/FormElements/Toggle.vue';
-import InputError from '@/Components/FormElements/InputError.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import { ArrowLongRightIcon } from '@heroicons/vue/24/outline';
-</script>
-
-<script>
-export default {
-    props: {
-        whatImporting: {
-          type: Array,
-          required: true
-        }
-    },
-    data() {
-        return {
-            form: this.$inertia.form({
-
-            })
-        };
-    },
-    methods: {
-      nextStep() {
-
-      }
-    }
-};
-</script>

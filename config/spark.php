@@ -130,12 +130,6 @@ return [
                         'Sub Accounts',
                     ],
                     'archived' => false,
-                    'options' => [
-                        'file_uploads' => true,
-                        'custom_classification_tags' => true,
-                        'custom_fields' => true,
-                        'sub_accounts' => true,
-                    ],
                 ],
             ],
 

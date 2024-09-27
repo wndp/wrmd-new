@@ -1,3 +1,44 @@
+<script setup>
+import AppLayout from '@/Layouts/AppLayout.vue';
+import MaintenanceAside from './Partials/MaintenanceAside.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import SelectInput from '@/Components/FormElements/SelectInput.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import DangerButton from '@/Components/FormElements/DangerButton.vue';
+</script>
+
+<script>
+export default {
+    props: {
+        yearsInAccount: Array
+    },
+    data() {
+        return {
+            form: this.$inertia.form({
+                year: '',
+                password: '',
+                password_confirmation: '',
+            }),
+        };
+    },
+    methods: {
+        deletePatient() {
+            this.form.delete(this.route('patient.delete.destroy'), {
+                preserveScroll: true,
+                onSuccess: () => this.form.reset(),
+                onError: () => {
+                    if (this.form.errors.password) {
+                        this.form.reset('password', 'password_confirmation');
+                        this.$refs.password.focus();
+                    }
+                }
+            });
+        },
+    },
+};
+</script>
+
 <template>
   <AppLayout title="Maintenance">
     <div class="lg:grid grid-cols-8 gap-8 mt-4">
@@ -96,44 +137,3 @@
     </div>
   </AppLayout>
 </template>
-
-<script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import MaintenanceAside from './Partials/MaintenanceAside.vue';
-import Label from '@/Components/FormElements/Label.vue';
-import Select from '@/Components/FormElements/Select.vue';
-import Input from '@/Components/FormElements/Input.vue';
-import InputError from '@/Components/FormElements/InputError.vue';
-import DangerButton from '@/Components/FormElements/DangerButton.vue';
-</script>
-
-<script>
-export default {
-    props: {
-        yearsInAccount: Array
-    },
-    data() {
-        return {
-            form: this.$inertia.form({
-                year: '',
-                password: '',
-                password_confirmation: '',
-            }),
-        };
-    },
-    methods: {
-        deletePatient() {
-            this.form.delete(this.route('patient.delete.destroy'), {
-                preserveScroll: true,
-                onSuccess: () => this.form.reset(),
-                onError: () => {
-                    if (this.form.errors.password) {
-                        this.form.reset('password', 'password_confirmation');
-                        this.$refs.password.focus();
-                    }
-                }
-            });
-        },
-    },
-};
-</script>
