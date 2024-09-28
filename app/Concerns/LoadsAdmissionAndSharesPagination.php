@@ -126,7 +126,8 @@ trait LoadsAdmissionAndSharesPagination
                 'location_history' => __('Location history'),
                 'rechecks' => __('Future rechecks'),
                 'intake_exam' => __('Full intake exam'),
-                'necropsy' => ExtensionManager::isActivated(Extension::NECROPSY) ? __('Necropsy Report') : false
+                'necropsy' => ExtensionManager::isActivated(Extension::NECROPSY) ? __('Necropsy Report') : false,
+                'banding_morphometrics' => ExtensionManager::isActivated(Extension::BANDING_MORPHOMETRICS) ? __('Banding and Morphometrics') : false
             ]))
         ]);
 

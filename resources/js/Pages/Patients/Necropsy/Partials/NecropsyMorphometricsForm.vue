@@ -116,7 +116,7 @@ const save = () => {
         :label="__('Unflat Wing')"
         class="col-span-6 md:col-span-2"
       >
-        <div class="flex">
+        <div class="flex items-center">
           <TextInput
             v-model="form.wing"
             name="wing"
@@ -131,7 +131,7 @@ const save = () => {
         :label="__('Tarsus')"
         class="col-span-6 md:col-span-2"
       >
-        <div class="flex">
+        <div class="flex items-center">
           <TextInput
             v-model="form.tarsus"
             name="tarsus"
@@ -146,7 +146,7 @@ const save = () => {
         :label="__('Culmen')"
         class="col-span-6 md:col-span-2"
       >
-        <div class="flex">
+        <div class="flex items-center">
           <TextInput
             v-model="form.culmen"
             name="culmen"
@@ -161,7 +161,7 @@ const save = () => {
         :label="__('Exposed Culmen')"
         class="col-span-6 md:col-span-2"
       >
-        <div class="flex">
+        <div class="flex items-center">
           <TextInput
             v-model="form.exposed_culmen"
             name="exposed_culmen"
@@ -176,7 +176,7 @@ const save = () => {
         :label="__('Bill Depth')"
         class="col-span-6 md:col-span-2"
       >
-        <div class="flex">
+        <div class="flex items-center">
           <TextInput
             v-model="form.bill_depth"
             name="bill_depth"

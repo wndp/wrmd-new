@@ -181,6 +181,16 @@ class Patient extends Model implements HasMedia
         return $this->hasOne(Necropsy::class);
     }
 
+    public function banding(): HasOne
+    {
+        return $this->hasOne(Banding::class);
+    }
+
+    public function morphometric(): HasOne
+    {
+        return $this->hasOne(Morphometric::class);
+    }
+
     public function morph(): BelongsTo
     {
         return $this->belongsTo(AttributeOption::class, 'morph_id');

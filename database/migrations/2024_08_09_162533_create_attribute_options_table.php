@@ -15,6 +15,7 @@ return new class () extends Migration {
             $table->string('name')->index();
             $table->text('value');
             $table->string('value_lowercase');
+            $table->string('code', 20)->nullable();
             $table->unsignedBigInteger('sort_order')->nullable();
             $table->timestamps();
             $table->softDeletes();

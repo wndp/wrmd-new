@@ -1,21 +1,20 @@
-
 <p style="page-break-before: always">
-<h1>Banding and Morphometrics</h1>
+<h1>{{ __('Banding and Morphometrics') }}</h1>
 
-<h2>Banding</h2>
+<h2>{{ __('Banding') }}</h2>
 <div class="row">
     <div class="col-md-6">
-        <strong>Date:</strong>
+        <strong>{{ __('Date') }}</strong>
         {{ $bandings->banded_at_for_humans }}
     </div>
     <div class="col-md-6">
-        <strong>Status Code:</strong>
+        <strong>{{ __('Status Code') }}</strong>
         {{ $statusCodes[$bandings->status_code] ?? '' }}
     </div>
 </div>
 <div class="row">
     <div class="col-md-6">
-        <strong>Band Number:</strong>
+        <strong>{{ __('Band Number') }}</strong>
         {{ $bandings->band_number }}
     </div>
     <div class="col-md-6">

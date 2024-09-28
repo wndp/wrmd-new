@@ -2,10 +2,14 @@
 
 namespace App\Reporting;
 
+use App\Enums\Extension;
 use App\Models\Team;
 use App\Reporting\Contracts\Report;
 use App\Reporting\Reports\Admin\DeleteableAccounts;
 use App\Reporting\Reports\Admin\InactiveAccounts;
+use App\Reporting\Reports\BandingMorphometrics\BanditAuxiliary;
+use App\Reporting\Reports\BandingMorphometrics\BanditBands;
+use App\Reporting\Reports\BandingMorphometrics\BanditRecapture;
 use App\Reporting\Reports\DailyTasks;
 use App\Reporting\Reports\Disposition\DispositionsByDate;
 use App\Reporting\Reports\Disposition\ReleaseTypesBySpecies;
@@ -34,6 +38,7 @@ use App\Reporting\Reports\Prescriptions\ControlledSubstance;
 use App\Reporting\Reports\Prescriptions\PrescriptionLabels;
 use App\Reporting\Reports\Prescriptions\PrescriptionsDueByLocation;
 use App\Reporting\Reports\Prescriptions\PrescriptionsDueByPatient;
+use App\Support\ExtensionManager;
 use Illuminate\Support\Collection;
 
 class ReportsCollection extends Collection
@@ -87,6 +92,15 @@ class ReportsCollection extends Collection
                 PrescriptionLabels::class,
             ]))->setVisibility(false)
         );
+
+        if (ExtensionManager::isActivated(Extension::BANDING_MORPHOMETRICS)) {
+            $collection->push(new ReportGroup('Banding and Morphometrics', [
+                BanditBands::class,
+                BanditAuxiliary::class,
+            ], [
+                BanditRecapture::class,
+            ]));
+        }
 
         $collection->push(new ReportGroup(__('Homecare'), [
             HomecareHoursByCaregiver::class,

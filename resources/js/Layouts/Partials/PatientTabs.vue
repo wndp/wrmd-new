@@ -18,6 +18,7 @@ import {
   CakeIcon,
   PhotoIcon,
   ScissorsIcon,
+  SwatchIcon,
   DocumentDuplicateIcon,
   ChartBarIcon,
   FolderIcon,
@@ -76,6 +77,7 @@ const moreOptionGroups = ref([
     [
       { name: __('Attachments'), icon: PhotoIcon, route: 'patients.attachments.edit', can: usePage().props.subscription.isProPlan && active(Extension.ATTACHMENTS) },
       { name: __('Necropsy'), icon: ScissorsIcon, route: 'patients.necropsy.edit', can: active(Extension.NECROPSY) },
+      { name: __('Banding and Morphometrics'), icon: SwatchIcon, route: 'patients.banding_morphometrics.edit', can: active(Extension.BANDING_MORPHOMETRICS) },
     ].filter(o => o.can),
     [
       { name: __('Duplicate Patient'), icon: DocumentDuplicateIcon, route: 'patients.duplicate.create', can: can(Abilities.CREATE_PATIENTS) },

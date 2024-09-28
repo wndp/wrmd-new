@@ -31,11 +31,11 @@ use App\Http\Controllers\PatientsQuickAdmitController;
 use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\RecheckController;
 use App\Http\Controllers\RescuerController;
-use App\Http\Controllers\Research\AuxiliaryMarkerController;
-use App\Http\Controllers\Research\BandingController;
-use App\Http\Controllers\Research\MorphometricsController;
-use App\Http\Controllers\Research\RecaptureController;
-use App\Http\Controllers\Research\ResearchController;
+use App\Http\Controllers\BandingMorphometrics\AuxiliaryMarkerController;
+use App\Http\Controllers\BandingMorphometrics\BandingController;
+use App\Http\Controllers\BandingMorphometrics\MorphometricsController;
+use App\Http\Controllers\BandingMorphometrics\RecaptureController;
+use App\Http\Controllers\BandingMorphometrics\BandingMorphometricsController;
 use App\Http\Controllers\CareLogController;
 use App\Http\Controllers\VitalsController;
 use Illuminate\Auth\Middleware\Authorize;
@@ -138,8 +138,8 @@ Route::prefix('patients')->name('patients.')->group(function () {
         Route::put('/{patient}/necropsy/summary', NecropsySummaryController::class)->name('summary.update');
     });
 
-    Route::get('/research', ResearchController::class)->name('research.edit');
-    Route::name('research.')->middleware(Authorize::using(Ability::UPDATE_BANDING_AND_MORPHOMETRICS->value))->group(function () {
+    Route::get('/banding-morphometrics', BandingMorphometricsController::class)->name('banding_morphometrics.edit');
+    Route::name('banding-morphometrics.')->middleware(Authorize::using(Ability::UPDATE_BANDING_AND_MORPHOMETRICS->value))->group(function () {
         Route::put('/{patient}/banding', BandingController::class)->name('banding.update');
         Route::put('/{patient}/auxiliary-marker', AuxiliaryMarkerController::class)->name('auxiliary_marker.update');
         Route::put('/{patient}/recapture', RecaptureController::class)->name('recapture.update');

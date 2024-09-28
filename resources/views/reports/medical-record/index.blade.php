@@ -40,6 +40,10 @@
         @include('reports.medical-record.necropsy')
     @endif
 
+    @if(in_array('banding_morphometrics', $shareOptions))
+        @include('reports.medical-record.banding-morphometrics')
+    @endif
+
     {{-- @foreach($shareOptions as $option)
         {!! \Illuminate\Support\Arr::first(event("report.admission.$option", [$admission])) !!}
     @endforeach --}}
