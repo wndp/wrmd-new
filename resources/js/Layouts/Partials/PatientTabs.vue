@@ -17,6 +17,7 @@ import {
   TagIcon,
   CakeIcon,
   PhotoIcon,
+  ClipboardDocumentListIcon,
   ScissorsIcon,
   SwatchIcon,
   DocumentDuplicateIcon,
@@ -76,6 +77,7 @@ const dailyTasksOptionGroups = ref([
 const moreOptionGroups = ref([
     [
       { name: __('Attachments'), icon: PhotoIcon, route: 'patients.attachments.edit', can: usePage().props.subscription.isProPlan && active(Extension.ATTACHMENTS) },
+      { name: __('Daily Exams'), icon: ClipboardDocumentListIcon, route: 'patients.exam.index', can: active(Extension.DAILY_EXAM) },
       { name: __('Necropsy'), icon: ScissorsIcon, route: 'patients.necropsy.edit', can: active(Extension.NECROPSY) },
       { name: __('Banding and Morphometrics'), icon: SwatchIcon, route: 'patients.banding_morphometrics.edit', can: active(Extension.BANDING_MORPHOMETRICS) },
     ].filter(o => o.can),

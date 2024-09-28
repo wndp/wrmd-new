@@ -21,11 +21,23 @@ class ExamRequest extends FormRequest
         $patient = $this->route('patient')->validateOwnership($this->user()->current_team_id);
         $admittedAt = $patient->admitted_at->setTimezone(Wrmd::settings('timezone'))->startOfDay();
 
+        [$examTypeCanOnlyOccurOnceIds] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
+            AttributeOptionName::EXAM_TYPES->value,
+            AttributeOptionUiBehavior::EXAM_TYPE_CAN_ONLY_OCCUR_ONCE->value
+        ]);
+
         return [
             'exam_type_id' => [
                 'required',
                 'integer',
                 new AttributeOptionExistsRule(AttributeOptionName::EXAM_TYPES),
+                Rule::when(
+                    in_array($request->type_id, $examTypeCanOnlyOccurOnceIds),
+                    Rule::unique('exams')
+                        ->where('patient_id', $patient->id)
+                        ->where('type_id', $request->type_id)
+                        ->ignore($this->route('exam') ?? 'NULL')
+                )
             ],
             'examined_at' => 'required|date|after_or_equal:'.$admittedAt,
             'sex_id' => [

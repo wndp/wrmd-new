@@ -27,7 +27,7 @@ class InitialCareController extends Controller
             $admission->load('patient.possession');
         }
 
-        $patientTaxaClassAgeUnits = match ('Aves') {
+        $patientTaxaClassAgeUnits = match ($admission->patient->taxon?->class) {
             'Mammalia' => AttributeOptionName::EXAM_MAMMALIA_AGE_UNITS->value,
             'Amphibia' => AttributeOptionName::EXAM_AMPHIBIA_AGE_UNITS->value,
             'Reptilia' => AttributeOptionName::EXAM_REPTILIA_AGE_UNITS->value,

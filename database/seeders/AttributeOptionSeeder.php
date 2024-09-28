@@ -208,6 +208,14 @@ class AttributeOptionSeeder extends Seeder
             __('Release'),
             AttributeOptionUiBehavior::EXAM_TYPE_IS_RELEASE,
         );
+        $this->createOrUpdateAttributeOptionUiBehaviors(
+            AttributeOptionName::EXAM_TYPES,
+            [
+                __('Intake'),
+                __('Release'),
+            ],
+            AttributeOptionUiBehavior::EXAM_TYPE_CAN_ONLY_OCCUR_ONCE,
+        );
 
         $this->createOrUpdateAttributes(AttributeOptionName::EXAM_AVES_AGE_UNITS, [
             __('Egg'),

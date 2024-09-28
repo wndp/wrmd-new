@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class AttributeOptionsCollection extends Collection
 {
-    public function optionsToSelectable()
+    public function optionsToSelectable(): array
     {
         return $this->mapWithKeys(fn ($array, $key) => [
             Str::of($key)->lower()->camel()->toString() . 'Options' => Options::arrayToSelectable($array)
