@@ -25,6 +25,8 @@ import {__} from '@/Composables/Translate';
 import {can} from '@/Composables/Can';
 import {Abilities} from '@/Enums/Abilities';
 import axios from 'axios';
+import {active} from '@/Composables/Extensions';
+import {Extension} from '@/Enums/Extension';
 
 const props = defineProps({
   incident: {
@@ -131,6 +133,13 @@ const nextCaseNumber = ref(formatCaseNumber(usePage().props.lastCaseId.year, use
         <h1 class="text-2xl font-semibold text-gray-900 mb-2">
           {{ __('Admit New Patient') }}
         </h1>
+        <Link
+          v-if="active(Extension.QUICK_ADMIT)"
+          :hre="route('patients.quick_admit.create')"
+          class="inline-flex items-center text-base leading-5 text-blue-600 hover:text-blue-700 focus:outline-none focus:text-blue-700 transition ease-in-out duration-150 mt-2"
+        >
+          {{ __('Go To Quick Admit') }}
+        </Link>
         <!-- <div v-html="extensionNavigation('patient.create.header')" /> -->
       </div>
       <h2

@@ -2,22 +2,42 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AttributeOptionName;
+use App\Enums\AttributeOptionUiBehavior;
+use App\Http\Requests\StoreQuickAdmitRequest;
+use App\Models\Exam;
+use App\Support\Timezone;
 use Illuminate\Http\Request;
 
 class PatientsQuickAdmitController extends Controller
 {
-    public function create(
-        TaxonomyOptions $taxonomyOptions,
-        LocaleOptions $localeOptions,
-        ExamOptions $examOptions
-    ) {
-        OptionsStore::merge($taxonomyOptions);
-        OptionsStore::merge($localeOptions);
-        OptionsStore::merge($examOptions);
-        OptionsStore::merge([
+    public function create()
+    {
+        OptionsStore::add([
+            new LocaleOptions(),
+            'actionsAfterStore' => Options::arrayToSelectable([
+                'return' => __('I want to admit another patient'),
+                'view' => __("I want to view this patient's record"),
+                'batch' => __('I want to batch update all the admitted patients'),
+            ]),
             'availableYears' => Options::arrayToSelectable(
-                AdmitPatient::availableYears(Auth::user()->currentAccount)->toArray()
+                AdmitPatient::availableYears(Auth::user()->currentTeam)->toArray()
             ),
+            AttributeOption::getDropdownOptions([
+                AttributeOptionName::TAXA_MORPHS->value,
+                AttributeOptionName::EXAM_SEXES->value,
+                AttributeOptionName::EXAM_WEIGHT_UNITS->value,
+                AttributeOptionName::EXAM_TEMPERATURE_UNITS->value,
+                AttributeOptionName::EXAM_ATTITUDES->value,
+                AttributeOptionName::EXAM_MAMMALIA_AGE_UNITS->value,
+                AttributeOptionName::EXAM_AMPHIBIA_AGE_UNITS->value,
+                AttributeOptionName::EXAM_REPTILIA_AGE_UNITS->value,
+                AttributeOptionName::EXAM_CHRONOLOGICAL_AGE_UNITS->value,
+                AttributeOptionName::EXAM_AVES_AGE_UNITS->value,
+                AttributeOptionName::PATIENT_DISPOSITIONS->value,
+                AttributeOptionName::PATIENT_RELEASE_TYPES->value,
+                AttributeOptionName::PATIENT_TRANSFER_TYPES->value,
+            ])
         ]);
 
         $this->shareLastCaseId();
@@ -25,89 +45,42 @@ class PatientsQuickAdmitController extends Controller
         return Inertia::render('Patients/QuickAdmit');
     }
 
-    public function store(Request $request)
+    public function store(StoreQuickAdmitRequest $request)
     {
-        $this->validate($request, [
-            'case_year' => 'required|in:'.AdmitPatient::availableYears(Auth::user()->currentAccount)->implode(','),
-            'common_name' => 'required',
-            'admitted_at' => 'required|date',
-            'admitted_by' => 'required',
-            'address_found' => 'required',
-            'city_found' => 'required',
-            'subdivision_found' => 'required',
-            'found_at' => 'required|date',
-            'reasons_for_admission' => 'required',
-        ], [
-            'admitted_at.required' => __('The date admitted field is required.'),
-            'admitted_at.date' => __('The date admitted is not a valid date.'),
-            'found_at.required' => __('The date found field is required.'),
-            'found_at.date' => __('The date found is not a valid date.'),
-        ]);
-
         $admissions = AdmitPatient::run(
-            Auth::user()->currentAccount,
-            $request->case_year,
+            Auth::user()->currentTeam,
+            $request->input('case_year'),
             [],
             $request->all(),
             $request->get('cases_to_create', 1)
         )->each(function ($admission) use ($request) {
-            $admission->patientPromise()->update([
+            $admission->patient->update([
                 'disposition' => $request->disposition,
             ]);
 
-            Exam::getIntakeExam($admission->patient_id)->fill(array_merge([
-                'examiner' => request('admitted_by'),
-                'examined_at' => $request->convertDateFromLocal('admitted_at'),
-            ], $request->only([
-                'sex',
-                'weight',
-                'weight_unit',
-                'age',
-                'age_unit',
-                'attitude',
-            ])))->save();
+            [$intakeExamTypeId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
+                AttributeOptionName::EXAM_TYPES->value,
+                AttributeOptionUiBehavior::EXAM_TYPE_IS_INTAKE->value,
+            ]);
+
+            $admittedAt = Timezone::convertFromLocalToUtc($request->input('admitted_at'));
+
+            Exam::updateOrCreate(
+                ['patient_id' => $admission->patient_id, 'exam_type_id' => $intakeExamTypeId],
+                [
+                    'date_examined_at' => $admittedAt->toDateString(),
+                    'time_examined_at' => $admittedAt->toTimeString(),
+                    ...$request->only([
+                        'sex_id',
+                        'weight',
+                        'weight_unit_id',
+                        'age',
+                        'age_unit_id',
+                        'attitude_id',
+                    ])
+                ]
+            );
         });
-
-        // $patientData = array_merge($request->all([
-        //     'admitted_at',
-        //     'admitted_by',
-        //     'found_at',
-        //     'microchip_number',
-        //     'reference_number',
-        //     'reasons_for_admission',
-        //     'care_by_rescuer',
-        //     'notes_about_rescue',
-        //     'disposition_location',
-        //     'disposition_subdivision',
-        //     'transfer_type',
-        //     'release_type',
-        //     'reason_for_disposition',
-        //     'dispositioned_by',
-        // ]), [
-        //     'common_name' => $request->commonName,
-        //     'address_found' => $request->has('dispositionToLocation') ? $request->disposition_location : null,
-        //     'subdivision_found' => $request->has('dispositionToLocation') ? $request->disposition_subdivision : null,
-        //     'dispositioned_at' => format_date($request->dispositioned_at, 'Y-m-d'),
-        //     'criminal_activity' => $request->input('criminal_activity', false),
-        //     'carcass_saved' => $request->input('carcass_saved', false),
-        // ]);
-
-        // $admissions = AdmitPatient::casesToCreate(request('cases_to_create', 1))->process(
-        //     auth()->user()->currentAccount,
-        //     $request->case_year,
-        //     [],
-        //     $patientData
-        // )
-        //     ->each(function ($admission) use ($request) {
-        //         $admission->patientPromise()->update($request->all('disposition'));
-
-        //         if (is_array($request->exams) && array_filter($request->exams)) {
-        //             Exam::getIntakeExam($admission->patient_id)->fill(array_merge($request->exams, [
-        //                 'examined_at' => $request->admitted_at,
-        //                 'examiner' => request('admitted_by'),
-        //             ]))->save();
-        //         }
-        //     });
 
         $firstAdmission = $admissions->first();
         $message = $admissions->count() > 1
@@ -117,13 +90,5 @@ class PatientsQuickAdmitController extends Controller
         return redirect()->route('patients.quick_admit.create')
             ->with('flash.notificationHeading', 'Success!')
             ->with('flash.notification', $message);
-
-        // $message = $admissions->count() > 1
-        //     ? "Records #{$admissions->first()->case_number} through #{$admissions->last()->case_number} created."
-        //     : "Record #{$admissions->first()->case_number} created.";
-
-        // flash()->success($message);
-
-        //return redirect()->route('quickadmit.create');
     }
 }

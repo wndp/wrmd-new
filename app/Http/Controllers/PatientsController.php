@@ -49,8 +49,6 @@ class PatientsController extends Controller
      */
     public function create(Request $request)
     {
-        //ExtensionNavigation::emit('patient');
-
         OptionsStore::add([
             new LocaleOptions(),
             'actionsAfterStore' => Options::arrayToSelectable([
