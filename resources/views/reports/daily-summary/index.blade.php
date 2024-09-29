@@ -132,6 +132,8 @@
     </tfoot>
 </table>
 
-<?php echo implode('', event('report.daily-summary', [$team, $date])) ?>
+@if(true)
+    @include('reports.daily-summary.expenses')
+@endif
 
 @stop

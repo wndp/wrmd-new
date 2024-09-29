@@ -102,6 +102,13 @@ class ReportsCollection extends Collection
             ]));
         }
 
+        if (ExtensionManager::isActivated(Extension::EXPENSES)) {
+            $collection->push(new ReportGroup('Expenses', [
+                ExpensesByCategorySummary::class,
+                ExpensesByCategoryDetail::class,
+            ], []));
+        }
+
         $collection->push(new ReportGroup(__('Homecare'), [
             HomecareHoursByCaregiver::class,
             PatientsSentToHomecare::class,
@@ -129,6 +136,7 @@ class ReportsCollection extends Collection
         $collection->push(
             (new ReportGroup('Patient Reports', [
                 NecropsyReport::class,
+                ExpenseStatement::class,
             ]))->setPatientReports(false)
         );
 

@@ -3,7 +3,15 @@
 namespace App\Http\Controllers\Expenses;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SaveExpenseTransactionRequest;
+use App\Models\Admission;
+use App\Models\ExpenseCategory;
+use App\Models\ExpenseTransaction;
+use App\Models\Patient;
+use App\Repositories\OptionsStore;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class ExpensesController extends Controller
 {
@@ -14,13 +22,15 @@ class ExpensesController extends Controller
     {
         $admission = $this->loadAdmissionAndSharePagination();
         $transactions = $admission->patient->expenses;
+
         $expenseTotals = [
             'totalDebits' => $transactions->totalDebits(true),
             'totalCredits' => $transactions->totalCredits(true),
             'costOfCare' => $transactions->costOfCare(true),
         ];
-        $categories = Category::whereNull('parent_id')->whereNull('account_id')->with(['children' => function ($query) {
-            $query->where('account_id', Auth::user()->current_team_id)->orderBy('name');
+
+        $expenseCategories = ExpenseCategory::whereNull('parent_id')->whereNull('team_id')->with(['children' => function ($query) {
+            $query->where('team_id', Auth::user()->current_team_id)->orderBy('name');
         }])
             ->orderBy('name')
             ->get()
@@ -44,25 +54,23 @@ class ExpensesController extends Controller
             })
             ->toArray();
 
-        OptionsStore::merge(compact('categories'));
-        ExtensionNavigation::emit('patient', $admission);
+        OptionsStore::add(compact('expenseCategories'));
 
-        return Inertia::render('Patients/Expenses/Index', compact('transactions', 'expenseTotals'));
+        return Inertia::render('Patients/Expenses/Index', [
+            'patient' => $admission->patient,
+            'expenseTransactions' => $admission->patient->expenseTransactions,
+            'expenseTotals' => $expenseTotals
+        ]);
     }
 
-    public function store(Request $request, Patient $patient)
+    public function store(SaveExpenseTransactionRequest $request, Patient $patient)
     {
-        $patient->validateOwnership(Auth::user()->current_team_id);
+        $transaction = new ExpenseTransaction($request->only(['transacted_at', 'debit', 'credit', 'memo']));
+        $transaction->patient_id = $patient->id;
+        $transaction->category_id = ExpenseCategory::findByName($request->input('category'), Auth::user()->currentTeam)->id;
+        $transaction->save();
 
-        $this->validateTransactionRequest($request, Auth::user()->current_team_id);
-
-        tap(new Transaction($request->only(['transacted_at', 'debit', 'credit', 'memo'])), function ($transaction) use ($patient, $request) {
-            $transaction->patient_id = $patient->id;
-            $transaction->category_id = Category::findByName($request->input('category'), Auth::user()->currentAccount)->id;
-            $transaction->save();
-        });
-
-        $admission = Admission::custody(Auth::user()->currentAccount, $patient);
+        $admission = Admission::custody(Auth::user()->currentTeam, $patient);
 
         return redirect()
             ->route('patients.expenses.index', [
@@ -71,18 +79,16 @@ class ExpensesController extends Controller
             ], 303);
     }
 
-    public function update(Request $request, Patient $patient, Transaction $transaction)
+    public function update(SaveExpenseTransactionRequest $request, Patient $patient, ExpenseTransaction $transaction)
     {
-        $transaction->validateOwnership(Auth::user()->current_team_id);
-
-        $this->validateTransactionRequest($request, Auth::user()->current_team_id);
+        $transaction->validateOwnership(Auth::user()->current_team_id)
+            ->validateRelationshipWithPatient($patient);
 
         $transaction->update($request->only(['transacted_at', 'debit', 'credit', 'memo']));
-
-        $transaction->category_id = Category::findByName($request->input('category'), Auth::user()->currentAccount)->id;
+        $transaction->category_id = ExpenseCategory::findByName($request->input('category'), Auth::user()->currentTeam)->id;
         $transaction->save();
 
-        $admission = Admission::custody(Auth::user()->currentAccount, $patient);
+        $admission = Admission::custody(Auth::user()->currentTeam, $patient);
 
         return redirect()
             ->route('patients.expenses.index', [
@@ -93,16 +99,21 @@ class ExpensesController extends Controller
 
     public function destroy(Request $request, Patient $patient, Transaction $transaction)
     {
-        $transaction->validateOwnership(Auth::user()->current_team_id)->delete();
+        $transaction->validateOwnership(Auth::user()->current_team_id)
+            ->validateRelationshipWithPatient($patient)
+            ->delete();
 
-        $admission = Admission::custody(Auth::user()->currentAccount, $patient);
+        $admission = Admission::custody(Auth::user()->currentTeam, $patient);
 
         return redirect()
             ->route('patients.expenses.index', [
                 'y' => $admission->case_year,
                 'c' => $admission->case_id,
             ], 303)
-            ->with('flash.notificationHeading', 'Transaction Deleted')
-            ->with('flash.notification', "{$transaction->category->name} transaction on $transaction->transacted_at_for_humans was deleted.");
+            ->with('notification.heading', __('Transaction Deleted'))
+            ->with('notification.text', __(':categoryName transaction on :transactionDate was deleted.', [
+                'categoryName' => $transaction->category->name,
+                'transactionDate' => $transaction->transacted_at_for_humans
+            ]));
     }
 }

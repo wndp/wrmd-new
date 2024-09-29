@@ -20,6 +20,7 @@ import {
   ClipboardDocumentListIcon,
   ScissorsIcon,
   SwatchIcon,
+  BanknotesIcon,
   DocumentDuplicateIcon,
   ChartBarIcon,
   FolderIcon,
@@ -80,6 +81,7 @@ const moreOptionGroups = ref([
       { name: __('Daily Exams'), icon: ClipboardDocumentListIcon, route: 'patients.exam.index', can: active(Extension.DAILY_EXAM) },
       { name: __('Necropsy'), icon: ScissorsIcon, route: 'patients.necropsy.edit', can: active(Extension.NECROPSY) },
       { name: __('Banding and Morphometrics'), icon: SwatchIcon, route: 'patients.banding_morphometrics.edit', can: active(Extension.BANDING_MORPHOMETRICS) },
+      { name: __('Expenses'), icon: BanknotesIcon, route: 'patients.expenses.index', can: active(Extension.EXPENSES) },
     ].filter(o => o.can),
     [
       { name: __('Duplicate Patient'), icon: DocumentDuplicateIcon, route: 'patients.duplicate.create', can: can(Abilities.CREATE_PATIENTS) },
@@ -103,6 +105,11 @@ const share = ref([
       format: 'pdf',
       patientId: props.patientId
     }), can: active(Extension.NECROPSY) },
+    { name: __('Print Expense Statement'), icon: BanknotesIcon, action: route('reports.generate', {
+      report: 'expense-statement',
+      format: 'pdf',
+      patientId: props.patientId
+    }), can: active(Extension.EXPENSES) },
   ].filter(o => o.can),
   //.concat(extension.navigation('patient.tabs.share')) : [],
   //[extension.navigation('patient.tabs.share.group').flat(1)].flat(),

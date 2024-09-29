@@ -1,3 +1,30 @@
+<script setup>
+import {useForm} from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import MaintenanceAside from '../Partials/MaintenanceAside.vue';
+import CategoryForm from './Partials/CategoryForm.vue';
+import { ArrowLongLeftIcon } from '@heroicons/vue/24/outline';
+
+const props = defineProps({
+  category: {
+    type: Object,
+    required: true
+  }
+});
+
+const form = useForm({
+  category: {}
+});
+
+const storeCategory = () => {
+  form.transform(data => ({
+    ...data.category
+  })).post(route('maintenance.expense_categories.store'), {
+    preserveScroll: true
+  });
+};
+</script>
+
 <template>
   <AppLayout title="Expense Categories">
     <div class="lg:grid grid-cols-8 gap-8 mt-4">
@@ -15,38 +42,9 @@
           :title="__('New Expense Category')"
           :action="__('Create New Expense Category')"
           :can-submit="false"
-          @saved="storeFormula"
+          @saved="storeCategory"
         />
       </div>
     </div>
   </AppLayout>
 </template>
-
-<script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import MaintenanceAside from '../Partials/MaintenanceAside.vue';
-import CategoryForm from './Partials/CategoryForm.vue';
-import { ArrowLongLeftIcon } from '@heroicons/vue/24/outline';
-</script>
-
-<script>
-  export default {
-    data() {
-      return {
-        form: this.$inertia.form({
-          category: {}
-        })
-      };
-    },
-    methods: {
-      storeFormula() {
-        this.form.transform(data => ({
-          ...data.category
-        })).post(this.route('maintenance.expense_categories.store'), {
-          preserveScroll: true
-        });
-      }
-    },
-  };
-</script>
-

@@ -1,16 +1,28 @@
 <script setup>
 import {ref} from 'vue';
 import {router} from '@inertiajs/vue3';
-import { QuestionMarkCircleIcon, ShareIcon, BookOpenIcon, QueueListIcon, InboxArrowDownIcon, XMarkIcon, TrashIcon } from '@heroicons/vue/24/outline';
+import {
+  QuestionMarkCircleIcon,
+  ShareIcon,
+  BookOpenIcon,
+  QueueListIcon,
+  BanknotesIcon,
+  InboxArrowDownIcon,
+  XMarkIcon,
+  TrashIcon
+} from '@heroicons/vue/24/outline';
 import {__} from '@/Composables/Translate';
 import {can} from '@/Composables/Can';
 import {Abilities} from '@/Enums/Abilities';
+import {active} from '@/Composables/Extensions';
+import {Extension} from '@/Enums/Extension';
 
 const tabs = [
-    { name: __('Unrecognized Patients'), route: 'maintenance.unrecognized-patients', icon: QuestionMarkCircleIcon, },
-    { name: __('Patient Transfers'), route: 'maintenance.transfers', icon: ShareIcon, },
-    { name: __('Prescription Formulary'), route: 'maintenance.formulas.index', icon: BookOpenIcon, },
-    { name: __('Autocomplete'), route: 'maintenance.autocomplete.index', icon: QueueListIcon, },
+    { name: __('Unrecognized Patients'), route: 'maintenance.unrecognized-patients', icon: QuestionMarkCircleIcon, can: true },
+    { name: __('Patient Transfers'), route: 'maintenance.transfers', icon: ShareIcon, can: true },
+    { name: __('Prescription Formulary'), route: 'maintenance.formulas.index', icon: BookOpenIcon, can: true },
+    { name: __('Autocomplete'), route: 'maintenance.autocomplete.index', icon: QueueListIcon, can: true },
+    { name: __('Expenses'), route: 'maintenance.expense_categories.index', icon: BanknotesIcon, can: active(Extension.EXPENSES) },
     { name: __('Import'), route: 'import.declaration.index', icon: InboxArrowDownIcon, can: can(Abilities.IMPORT) },
 ].filter(Boolean);
 

@@ -1,3 +1,55 @@
+<script setup>
+import { inject, computed } from 'vue';
+import { usePage, useForm } from '@inertiajs/vue3';
+import PatientLayout from '@/Layouts/PatientLayout.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import DatePicker from '@/Components/FormElements/DatePicker.vue';
+import SelectInput from '@/Components/FormElements/SelectInput.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import ValidationErrors from '@/Components/FormElements/ValidationErrors.vue';
+import TransactionRow from './Partials/TransactionRow.vue';
+import { PlusIcon } from '@heroicons/vue/24/outline';
+import {__} from '@/Composables/Translate';
+import {can} from '@/Composables/Can';
+import {Abilities} from '@/Enums/Abilities';
+
+const route = inject('route');
+
+defineProps({
+  patient: {
+    type: Object,
+    required: true
+  },
+  expenseTransactions: {
+    type: Array,
+    required: true
+  },
+  expenseTotals: {
+    type: Object,
+    required: true
+  }
+})
+
+let expenseCategories = computed(() => usePage().props.options.expenseCategories);
+
+let form = useForm({
+  transacted_at: null,
+  category: null,
+  debit: null,
+  credit: null,
+  memo: null
+});
+
+const store = () => {
+  form.post(route('patients.expenses.store', {
+    patient: patient.value.id
+  }), {
+    onSuccess: () => form.reset()
+  });
+};
+</script>
+
 <template>
   <PatientLayout title="Expenses">
     <div class="flex flex-col">
@@ -42,9 +94,8 @@
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                <tr
-                  is="vue:TransactionRow"
-                  v-for="transaction in transactions"
+                <TransactionRow
+                  v-for="transaction in expenseTransactions"
                   :key="transaction.id"
                   :transaction="transaction"
                 />
@@ -77,23 +128,23 @@
                   </td>
                   <td class="px-1 py-1 whitespace-nowrap text-sm text-gray-500 border-t-4 border-gray-200">
                     <div class="flex items-center">
-                      <Label
+                      <InputLabel
                         for="expense_category"
                         class="mr-4"
                       >
                         {{ __('Category') }}
-                      </Label>
-                      <Select
+                      </InputLabel>
+                      <SelectInput
                         id="expense_category"
                         v-model="form.category"
                         name="category"
-                        :options="categories"
+                        :options="expenseCategories"
                         class="border-transparent py-2 px-2 w-full"
                       />
                     </div>
                   </td>
                   <td class="px-1 py-1 whitespace-nowrap text-sm text-gray-500 text-center border-t-4 border-gray-200">
-                    <Input
+                    <TextInput
                       v-model="form.debit"
                       name="debit"
                       placeholder="Debit"
@@ -104,7 +155,7 @@
                     />
                   </td>
                   <td class="px-1 py-1 whitespace-nowrap text-sm text-gray-500 text-center border-t-4 border-gray-200">
-                    <Input
+                    <TextInput
                       v-model="form.credit"
                       name="credit"
                       placeholder="Credit"
@@ -123,7 +174,7 @@
                     colspan="3"
                     class="px-1 py-1 whitespace-nowrap text-sm"
                   >
-                    <Input
+                    <TextInput
                       v-model="form.memo"
                       name="memo"
                       placeholder="Memo"
@@ -182,52 +233,3 @@
     </div>
   </PatientLayout>
 </template>
-
-<script setup>
-import { inject, computed } from 'vue';
-import { usePage, useForm } from '@inertiajs/vue3';
-import PatientLayout from '@/Layouts/PatientLayout.vue';
-import InputLabel from '@/Components/FormElements/InputLabel.vue';
-import TextInput from '@/Components/FormElements/TextInput.vue';
-import DatePicker from '@/Components/FormElements/DatePicker.vue';
-import SelectInput from '@/Components/FormElements/SelectInput.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import ValidationErrors from '@/Components/FormElements/ValidationErrors.vue';
-import TransactionRow from './Partials/TransactionRow.vue';
-import { PlusIcon } from '@heroicons/vue/24/outline';
-import {__} from '@/Composables/Translate';
-import {can} from '@/Composables/Can';
-import {Abilities} from '@/Enums/Abilities';
-
-const route = inject('route');
-
-defineProps({
-  transactions: {
-    type: Array,
-    required: true
-  },
-  expenseTotals: {
-    type: Object,
-    required: true
-  }
-})
-
-let patient = computed(() => usePage().props.admission.patient);
-let categories = computed(() => usePage().props.options.categories);
-
-let form = useForm({
-  transacted_at: null,
-  category: null,
-  debit: null,
-  credit: null,
-  memo: null
-});
-
-const store = () => {
-  form.post(route('patients.expenses.store', {
-    patient: patient.value.id
-  }), {
-    onSuccess: () => form.reset()
-  });
-};
-</script>

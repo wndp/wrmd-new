@@ -1,3 +1,32 @@
+<script setup>
+import {useForm} from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import MaintenanceAside from '../Partials/MaintenanceAside.vue';
+import { ArrowLongLeftIcon } from '@heroicons/vue/24/outline';
+import CategoryForm from './Partials/CategoryForm.vue';
+import DeleteCategoryForm from './Partials/DeleteCategoryForm.vue';
+import Alert from '@/Components/Alert.vue';
+
+const props = defineProps({
+  category: {
+    type: Object,
+    required: true
+  }
+});
+
+const form = useForm({
+  category: {}
+});
+
+const updateCategory = () => {
+  form.transform(data => ({
+    ...data.category
+  })).put(route('maintenance.expense_categories.update', props.category), {
+    preserveScroll: true
+  });
+};
+</script>
+
 <template>
   <AppLayout title="Expense Categories">
     <div class="lg:grid grid-cols-8 gap-8 mt-4">
@@ -15,7 +44,7 @@
           :title="__('Update Expense Category')"
           :action="__('Update Expense Category')"
           :category="category"
-          :can-submit="false"
+          :canSubmit="false"
           @saved="updateCategory"
         />
         <DeleteCategoryForm
@@ -33,39 +62,3 @@
     </div>
   </AppLayout>
 </template>
-
-<script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import MaintenanceAside from '../Partials/MaintenanceAside.vue';
-import { ArrowLongLeftIcon } from '@heroicons/vue/24/outline';
-import CategoryForm from './Partials/CategoryForm.vue';
-import DeleteCategoryForm from './Partials/DeleteCategoryForm.vue';
-import Alert from '@/Components/Alert.vue';
-</script>
-
-<script>
-  export default {
-    props: {
-      category: {
-        type: Object,
-        required: true
-      }
-    },
-    data() {
-      return {
-        form: this.$inertia.form({
-          category: {}
-        })
-      }
-    },
-    methods: {
-      updateCategory() {
-        this.form.transform(data => ({
-          ...data.category
-        })).put(this.route('maintenance.expense_categories.update', this.category), {
-          preserveScroll: true
-        });
-      },
-    }
-  };
-</script>

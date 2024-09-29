@@ -1,3 +1,43 @@
+<script setup>
+import {inject} from 'vue';
+import {useForm} from '@inertiajs/vue3';
+import ConfirmationModal from '@/Components/ConfirmationModal.vue';
+import DangerButton from '@/Components/FormElements/DangerButton.vue';
+import SecondaryButton from '@/Components/FormElements/SecondaryButton.vue';
+import {__} from '@/Composables/Translate';
+
+const route = inject('route');
+
+const props = defineProps({
+    transaction: {
+        type: Object,
+        required: true
+    },
+    patientId: {
+      type: String,
+      required: true
+    },
+    show: Boolean,
+})
+
+const emit = defineEmits(['close']);
+const form = useForm({});
+
+const close = () => {
+  emit('close');
+};
+
+const destroy = () => {
+  form.delete(route('patients.expenses.destroy', {
+    patient: props.patientId,
+    transaction: props.transaction.id
+  }), {
+    preserveScroll: true,
+    onSuccess: () => close()
+  });
+};
+</script>
+
 <template>
   <ConfirmationModal
     :show="show"
@@ -46,40 +86,3 @@
     </template>
   </ConfirmationModal>
 </template>
-
-<script setup>
-import { inject, computed } from 'vue';
-import { useForm, usePage } from '@inertiajs/vue3';
-import ConfirmationModal from '@/Components/ConfirmationModal.vue';
-import DangerButton from '@/Components/FormElements/DangerButton.vue';
-import SecondaryButton from '@/Components/FormElements/SecondaryButton.vue';
-
-const route = inject('route');
-
-const props = defineProps({
-    transaction: {
-        type: Object,
-        required: true
-    },
-    show: Boolean,
-})
-
-const emit = defineEmits(['close']);
-const form = useForm({});
-let patient = computed(() => usePage().props.admission.patient);
-
-const close = () => {
-  emit('close');
-};
-
-const destroy = () => {
-  form.delete(route('patients.expenses.destroy', {
-    patient: patient.value.id,
-    transaction: props.transaction.id
-  }), {
-    preserveScroll: true,
-    onSuccess: () => close()
-  });
-};
-
-</script>

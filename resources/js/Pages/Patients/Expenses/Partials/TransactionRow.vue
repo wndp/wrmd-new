@@ -1,3 +1,26 @@
+<script setup>
+import {ref,} from 'vue';
+import { TrashIcon, PencilIcon } from '@heroicons/vue/24/outline';
+import DeleteTransactionModal from './DeleteTransactionModal.vue';
+import EditTransactionModal from './EditTransactionModal.vue';
+import {can} from '@/Composables/Can';
+import {Abilities} from '@/Enums/Abilities';
+
+defineProps({
+  patient: {
+    type: Object,
+    required: true
+  },
+  transaction: {
+    type: Object,
+    required: true
+  }
+})
+
+let showDeleteTransaction = ref(false);
+let showEditTransaction = ref(false);
+</script>
+
 <template>
   <tr class="divide-x divide-gray-200">
     <td class="px-3 py-2 whitespace-nowrap text-sm font-medium text-gray-800">
@@ -39,36 +62,15 @@
   <DeleteTransactionModal
     v-if="showDeleteTransaction"
     :transaction="transaction"
+    :patientId="patient.id"
     :show="true"
     @close="showDeleteTransaction = false"
   />
   <EditTransactionModal
     v-if="showEditTransaction"
     :transaction="transaction"
+    :patientId="patient.id"
     :show="true"
     @close="showEditTransaction = false"
   />
 </template>
-
-<script setup>
-import { ref, computed } from 'vue';
-import { usePage } from '@inertiajs/vue3';
-import { TrashIcon, PencilIcon } from '@heroicons/vue/24/outline';
-import DeleteTransactionModal from './DeleteTransactionModal.vue';
-import EditTransactionModal from './EditTransactionModal.vue';
-import {__} from '@/Composables/Translate';
-import {can} from '@/Composables/Can';
-import {Abilities} from '@/Enums/Abilities';
-
-defineProps({
-  transaction: {
-    type: Object,
-    required: true
-  }
-})
-
-let patient = computed(() => usePage().props.admission.patient);
-
-let showDeleteTransaction = ref(false);
-let showEditTransaction = ref(false);
-</script>

@@ -1,3 +1,46 @@
+<script setup>
+import { computed } from 'vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import MaintenanceAside from '../Partials/MaintenanceAside.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/vue/24/outline';
+import debounce from 'lodash/debounce';
+import URI from 'urijs';
+
+const props = defineProps({
+  categories: {
+    type: Object,
+    required: true
+  }
+});
+
+let categoriesCount = computed(() => props.categories.reduce((carry, category) => carry + category.children.length, 0));
+</script>
+
+<script>
+export default {
+    data() {
+        return {
+            form: this.$inertia.form({
+                search: new URI().query(true).search
+            })
+        };
+    },
+    methods: {
+      search() {
+        this.debounceSearch();
+      },
+      debounceSearch: debounce(function() {
+          if (this.form.search === '') {
+              this.$inertia.get(this.route(this.route().current()));
+          } else {
+              this.form.get(this.route('maintenance.expense_categories.index'));
+          }
+      }, 500)
+    }
+};
+</script>
+
 <template>
   <AppLayout title="Expense Categories">
     <div class="lg:grid grid-cols-8 gap-8 mt-4">
@@ -8,7 +51,9 @@
             <h3 class="text-lg leading-6 font-medium text-gray-900">
               {{ __('Expense Categories') }}
             </h3>
-            <p class="mt-2 text-sm text-gray-500">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laudantium minus laboriosam laborum sint, autem enim! Aperiam dolorem, totam. Est possimus, quod, dicta unde officia architecto accusamus quos ea! Quod, delectus.</p>
+            <p class="mt-2 text-sm text-gray-500">
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laudantium minus laboriosam laborum sint, autem enim! Aperiam dolorem, totam. Est possimus, quod, dicta unde officia architecto accusamus quos ea! Quod, delectus.
+            </p>
           </div>
         </div>
         <div class="sm:flex sm:items-center sm:justify-between mt-8">
@@ -77,8 +122,7 @@
                       <th
                         scope="col"
                         class="px-6 py-3"
-                      >
-                      </th>
+                      />
                       <th
                         scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -135,46 +179,3 @@
     </div>
   </AppLayout>
 </template>
-
-<script setup>
-import { computed } from 'vue';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import MaintenanceAside from '../Partials/MaintenanceAside.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/vue/24/outline';
-import debounce from 'lodash/debounce';
-import URI from 'urijs';
-
-const props = defineProps({
-  categories: {
-    type: Object,
-    required: true
-  }
-});
-
-let categoriesCount = computed(() => props.categories.reduce((carry, category) => carry + category.children.length, 0));
-</script>
-
-<script>
-export default {
-    data() {
-        return {
-            form: this.$inertia.form({
-                search: new URI().query(true).search
-            })
-        };
-    },
-    methods: {
-      search() {
-        this.debounceSearch();
-      },
-      debounceSearch: debounce(function() {
-          if (this.form.search === '') {
-              this.$inertia.get(this.route(this.route().current()));
-          } else {
-              this.form.get(this.route('maintenance.expense_categories.index'));
-          }
-      }, 500)
-    }
-};
-</script>

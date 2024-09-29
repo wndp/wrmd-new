@@ -27,9 +27,15 @@ trait ValidatesOwnership
         );
     }
 
-    public function validateRelationshipWith(Model $model)
+    public function validateRelationshipWithPatient(Patient $patient)
     {
-        return $this->patient_id === $model->id;
+        if ($this->patient_id === $patient->id) {
+            return $this;
+        }
+
+        throw new HttpResponseException(
+            (new RecordNotOwned())->toResponse(request())
+        );
     }
 
     public function isOwnedBy(int $teamId): bool

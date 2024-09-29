@@ -44,6 +44,10 @@
         @include('reports.medical-record.banding-morphometrics')
     @endif
 
+    @if(in_array('expenses', $shareOptions))
+        @include('reports.medical-record.expenses')
+    @endif
+
     {{-- @foreach($shareOptions as $option)
         {!! \Illuminate\Support\Arr::first(event("report.admission.$option", [$admission])) !!}
     @endforeach --}}

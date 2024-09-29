@@ -104,7 +104,7 @@ class ExamController extends Controller
     public function update(ExamRequest $request, Patient $patient, Exam $exam)
     {
         $exam->validateOwnership(Auth::user()->current_team_id)
-            ->validateRelationshipWith($patient);
+            ->validateRelationshipWithPatient($patient);
 
         $exam->update($request->dataFromRequest());
 
@@ -119,7 +119,7 @@ class ExamController extends Controller
     public function destroy(Patient $patient, Exam $exam)
     {
         $exam->validateOwnership(Auth::user()->current_team_id)
-            ->validateRelationshipWith($patient)
+            ->validateRelationshipWithPatient($patient)
             ->delete();
 
         $admission = Admission::custody(Auth::user()->currentTeam, $patient);

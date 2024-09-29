@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Maintenance;
 
-use App\Domain\Options;
-use App\Domain\OptionsStore;
 use App\Extensions\Expenses\Models\Category;
 use App\Extensions\ExtensionNavigation;
 use App\Http\Controllers\Controller;
+use App\Models\ExpenseCategory;
+use App\Options\Options;
+use App\Repositories\OptionsStore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -19,12 +20,10 @@ class ExpenseCategoriesController extends Controller
      */
     public function index(Request $request)
     {
-        ExtensionNavigation::emit('maintenance');
-
-        $categories = Category::whereNull('parent_id')
-            ->whereNull('account_id')
+        $categories = ExpenseCategory::whereNull('parent_id')
+            ->whereNull('team_id')
             ->with(['children' => function ($query) use ($request) {
-                $query->where('account_id', Auth::user()->current_team_id)
+                $query->where('team_id', Auth::user()->current_team_id)
                     ->when($request->get('search'), fn ($query, $search) => $query->search($search))
                     ->orderBy('name');
             }])
@@ -39,9 +38,7 @@ class ExpenseCategoriesController extends Controller
      */
     public function create()
     {
-        ExtensionNavigation::emit('maintenance');
-
-        $parentCategories = Category::whereNull('parent_id')->whereNull('account_id')
+        $parentCategories = ExpenseCategory::whereNull('parent_id')->whereNull('team_id')
             ->orderBy('name')
             ->pluck('name')
             ->toArray();
@@ -59,15 +56,15 @@ class ExpenseCategoriesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'parent_category' => ['required', Rule::exists('expense_categories', 'name')->whereNull('parent_id')->whereNull('account_id')],
+            'parent_category' => ['required', Rule::exists('expense_categories', 'name')->whereNull('parent_id')->whereNull('team_id')],
             'name' => ['required', Rule::unique('expense_categories')->where(function ($query) {
-                return $query->where('account_id', Auth::user()->current_team_id);
+                return $query->where('team_id', Auth::user()->current_team_id);
             })],
         ]);
 
-        $childCategory = new Category($request->all('name', 'description'));
-        $childCategory->parent_id = Category::where('name', $request->parent_category)->whereNull('parent_id')->whereNull('account_id')->first()->id;
-        $childCategory->account_id = Auth::user()->current_team_id;
+        $childCategory = new ExpenseCategory($request->all('name', 'description'));
+        $childCategory->parent_id = ExpenseCategory::where('name', $request->parent_category)->whereNull('parent_id')->whereNull('team_id')->first()->id;
+        $childCategory->team_id = Auth::user()->current_team_id;
         $childCategory->save();
 
         return redirect()->route('maintenance.expense_categories.index');
@@ -76,15 +73,13 @@ class ExpenseCategoriesController extends Controller
     /**
      * Display the page to edit an expense category.
      */
-    public function edit(Category $category)
+    public function edit(ExpenseCategory $category)
     {
         abort_if($category->isParent(), 404);
 
         $category->validateOwnership(Auth::user()->current_team_id)->loadCount('transactions');
 
-        ExtensionNavigation::emit('maintenance');
-
-        $parentCategories = Category::whereNull('parent_id')->whereNull('account_id')
+        $parentCategories = ExpenseCategory::whereNull('parent_id')->whereNull('team_id')
             ->orderBy('name')
             ->pluck('name')
             ->toArray();
@@ -99,20 +94,20 @@ class ExpenseCategoriesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, ExpenseCategory $category)
     {
         abort_if($category->isParent(), 404);
 
         $category->validateOwnership(Auth::user()->current_team_id);
 
         $request->validate([
-            'parent_category' => ['required', Rule::exists('expense_categories', 'name')->whereNull('parent_id')->whereNull('account_id')],
+            'parent_category' => ['required', Rule::exists('expense_categories', 'name')->whereNull('parent_id')->whereNull('team_id')],
             'name' => ['required', Rule::unique('expense_categories')->where(function ($query) {
-                return $query->where('account_id', Auth::user()->current_team_id);
+                return $query->where('team_id', Auth::user()->current_team_id);
             })->ignore($category->id)],
         ]);
 
-        $category->parent_id = Category::where('name', $request->parent_category)->whereNull('parent_id')->whereNull('account_id')->first()->id;
+        $category->parent_id = ExpenseCategory::where('name', $request->parent_category)->whereNull('parent_id')->whereNull('team_id')->first()->id;
         $category->update($request->all('name', 'description'));
 
         return redirect()->route('maintenance.expense_categories.index');
@@ -131,13 +126,13 @@ class ExpenseCategoriesController extends Controller
             $category->delete();
 
             return redirect()->route('maintenance.expense_categories.index')
-                ->with('flash.notificationHeading', __('We hope you meant that.'))
-                ->with('flash.notification', __('The :categoryName category was deleted.', ['categoryName' => $category->name]));
+                ->with('notification.heading', __('We hope you meant that.'))
+                ->with('notification.text', __('The :categoryName category was deleted.', ['categoryName' => $category->name]));
         }
 
         return redirect()->route('maintenance.expense_categories.index')
-            ->with('flash.notificationHeading', __('Oops!'))
-            ->with('flash.notification', __('Can not delete a category used by an expense transaction.'))
+            ->with('notification.heading', __('Oops!'))
+            ->with('notification.text', __('Can not delete a category used by an expense transaction.'))
             ->with('flash.style', 'danger');
     }
 }

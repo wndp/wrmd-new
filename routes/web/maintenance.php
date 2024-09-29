@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Ability;
 use App\Http\Controllers\Maintenance\AutocompleteController;
 use App\Http\Controllers\Maintenance\CustomFieldsController;
 use App\Http\Controllers\Maintenance\DeletePatientController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Maintenance\PaperformsTemplatesController;
 use App\Http\Controllers\Maintenance\TransfersController;
 use App\Http\Controllers\Maintenance\UncollaborateTransferController;
 use App\Http\Controllers\Maintenance\UnrecognizedPatientsController;
+use Illuminate\Auth\Middleware\Authorize;
 
 Route::prefix('maintenance')->name('maintenance.')->group(function () {
     Route::get('/unrecognized-patients', UnrecognizedPatientsController::class)
@@ -36,7 +38,7 @@ Route::prefix('maintenance')->name('maintenance.')->group(function () {
         Route::delete('/autocomplete/{field}', 'destroy')->name('autocomplete.destroy');
     });
 
-    Route::controller(ExpenseCategoriesController::class)->middleware('can:manage-expenses')->group(function () {
+    Route::controller(ExpenseCategoriesController::class)->middleware(Authorize::using(Ability::MANAGE_EXPENSES))->group(function () {
         Route::get('/expense-categories', 'index')->name('expense_categories.index');
         Route::get('/expense-categories/create', 'create')->name('expense_categories.create');
         Route::post('/expense-categories', 'store')->name('expense_categories.store');
