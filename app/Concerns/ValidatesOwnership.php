@@ -6,6 +6,7 @@ use App\Exceptions\RecordNotOwned;
 use App\Models\Admission;
 use App\Models\Patient;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 trait ValidatesOwnership
@@ -24,6 +25,11 @@ trait ValidatesOwnership
         throw new HttpResponseException(
             (new RecordNotOwned())->toResponse(request())
         );
+    }
+
+    public function validateRelationshipWith(Model $model)
+    {
+        return $this->patient_id === $model->id;
     }
 
     public function isOwnedBy(int $teamId): bool

@@ -4,10 +4,12 @@ namespace App\Http\Requests;
 
 use App\Enums\Ability;
 use App\Enums\AttributeOptionName;
+use App\Enums\AttributeOptionUiBehavior;
 use App\Rules\AttributeOptionExistsRule;
 use App\Support\Timezone;
 use App\Support\Wrmd;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ExamRequest extends FormRequest
 {
@@ -32,10 +34,10 @@ class ExamRequest extends FormRequest
                 'integer',
                 new AttributeOptionExistsRule(AttributeOptionName::EXAM_TYPES),
                 Rule::when(
-                    in_array($request->type_id, $examTypeCanOnlyOccurOnceIds),
+                    in_array($this->input('type_id'), $examTypeCanOnlyOccurOnceIds),
                     Rule::unique('exams')
                         ->where('patient_id', $patient->id)
-                        ->where('type_id', $request->type_id)
+                        ->where('type_id', $this->input('type_id'))
                         ->ignore($this->route('exam') ?? 'NULL')
                 )
             ],

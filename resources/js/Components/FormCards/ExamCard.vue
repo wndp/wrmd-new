@@ -33,14 +33,14 @@ const props = defineProps({
     type: String,
     default: null
   },
-  formMethod: {
-    type: String,
-    default: 'put'
-  },
-  formRoute: {
-    type: String,
-    default: 'patients.exam.update'
-  },
+  // formMethod: {
+  //   type: String,
+  //   default: 'put'
+  // },
+  // formRoute: {
+  //   type: String,
+  //   default: 'patients.exam.update'
+  // },
   enforceRequired: {
     type: Boolean,
     default: true

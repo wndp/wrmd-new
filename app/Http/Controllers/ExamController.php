@@ -11,8 +11,11 @@ use App\Models\AttributeOption;
 use App\Models\Exam;
 use App\Models\Patient;
 use App\Options\Options;
+use App\Repositories\OptionsStore;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class ExamController extends Controller
 {
@@ -21,11 +24,11 @@ class ExamController extends Controller
      */
     public function index()
     {
-        $patient = $this->loadAdmissionAndSharePagination();
+        $admission = $this->loadAdmissionAndSharePagination();
 
         return Inertia::render('Patients/Exams/Index', [
-            'patient' => $patient,
-            'exams' => $patient->exams
+            'patient' => $admission->patient,
+            'exams' => $admission->patient->exams
         ]);
     }
 
@@ -38,8 +41,14 @@ class ExamController extends Controller
 
         $this->transformAndShareOptions($admission->patient, $admission->patient->exams);
 
+        [$abnormalBodyPartFindingID] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
+            AttributeOptionName::EXAM_BODY_PART_FINDINGS->value,
+            AttributeOptionUiBehavior::EXAM_BODY_PART_FINDING_IS_ABNORMAL->value
+        ]);
+
         return Inertia::render('Patients/Exams/Create', [
             'patient' => $admission->patient,
+            'abnormalBodyPartFindingID' => $abnormalBodyPartFindingID
         ]);
     }
 
@@ -74,9 +83,15 @@ class ExamController extends Controller
 
         $this->transformAndShareOptions($admission->patient, $admission->patient->exams, $exam);
 
+        [$abnormalBodyPartFindingID] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
+            AttributeOptionName::EXAM_BODY_PART_FINDINGS->value,
+            AttributeOptionUiBehavior::EXAM_BODY_PART_FINDING_IS_ABNORMAL->value
+        ]);
+
         return Inertia::render('Patients/Exams/Edit', [
             'patient' => $admission->patient,
-            'exams' => $admission->patient->exams
+            'exam' => $exam,
+            'abnormalBodyPartFindingID' => $abnormalBodyPartFindingID
         ]);
     }
 
@@ -148,14 +163,20 @@ class ExamController extends Controller
                 $exams->contains('exam_type_id', $releaseExamTypeId) && ($exam?->exam_type_id !== $releaseExamTypeId),
                 fn ($q) => $q->where('exam_type_id', '!=', $releaseExamTypeId)
             )
-            ->get()
-            ->toArray();
+            ->get();
 
-        OptionsStore::add($availableExamTypes->optionsToSelectable());
+        OptionsStore::add(
+            $availableExamTypes
+                ->groupBy('name')
+                ->map(fn ($attributeOptions) => $attributeOptions->mapWithKeys(fn ($attributeOption) => [
+                    $attributeOption->id => __($attributeOption->value)
+                ])->toArray())
+                ->optionsToSelectable()
+        );
 
         OptionsStore::add([
             'bodyPartOptions' => Options::enumsToSelectable(ExamBodyPart::cases()),
-            'taxaClassAgeUnits' => Options::arrayToSelectable(AttributeOption::getDropdownOptions([
+            'taxaClassAgeUnits' => is_null($patientTaxaClassAgeUnits) ? [] : Options::arrayToSelectable(AttributeOption::getDropdownOptions([
                 $patientTaxaClassAgeUnits
             ])->first()),
             AttributeOption::getDropdownOptions([
