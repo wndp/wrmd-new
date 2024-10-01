@@ -5,6 +5,7 @@ namespace App\Enums;
 enum MediaCollection: string
 {
     case GENERIC = 'GENERIC';
+    case EVIDENCE_PHOTO = 'EVIDENCE_PHOTO';
 
     public function supportedMimeTypes(): array
     {
@@ -19,6 +20,16 @@ enum MediaCollection: string
                 'image/heic',
                 'image/heif',
                 'application/pdf',
+            ],
+            self::EVIDENCE_PHOTO => [
+                'image/png',
+                'image/jpeg',
+                'image/jpg',
+                'image/gif',
+                'image/webp',
+                'image/avif',
+                'image/heic',
+                'image/heif',
             ],
         };
     }
@@ -36,6 +47,15 @@ enum MediaCollection: string
                 'heic',
                 'pdf',
             ],
+            self::EVIDENCE_PHOTO => [
+                'png',
+                'jpeg',
+                'jpg',
+                'gif',
+                'webp',
+                'avif',
+                'heic',
+            ]
         };
     }
 
@@ -56,7 +76,8 @@ enum MediaCollection: string
     public function limitCount(): int
     {
         return match ($this) {
-            self::GENERIC => 10,
+            self::GENERIC,
+            self::EVIDENCE_PHOTO => 10,
         };
     }
 }

@@ -1249,6 +1249,88 @@ class AttributeOptionSeeder extends Seeder
             __('Below the joint'),
             __('Above the joint'),
         ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_PROCESSING_CONDITIONS, [
+            __('Alive'),
+            __('Dead'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_PROCESSING_STATUSES, [
+            '0' => __('(0) No signs of oil detected'),
+            '1' => __('(1) Yes - oil visually detected'),
+            '2' => __('(2) Yes - smell oil'),
+            '3' => __('(3) Yes - skin burned'),
+            '4' => __('(4) Unknown - but skin wet / not waterproof'),
+            '5' => __('(5) Unknown - but plumage misaligned / parted / sticky'),
+            '99' => __('(99) Not evaluated or applicable'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_PROCESSING_OILING_PERCENTAGES, [
+            '1' => __('(1) <2% of body'),
+            '2' => __('(2) 2-25% of body'),
+            '3' => __('(3) 26-50% of body'),
+            '4' => __('(4) 51-75% of body'),
+            '5' => __('(5) 76-100% of body'),
+            '6' => __('(6) Oil detected but extent indeterminable due to state of carcass'),
+            '7' => __('(7) No oil detected but this may be due to state of carcass (i.e., partial)'),
+            '99' => __('(99) Not evaluated or applicable'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_PROCESSING_OILING_DEPTHS, [
+            '1' => __('(1) Surface (penetrated <1/4 feather / pelage)'),
+            '2' => __('(2) Moderate (penetrated <1/2 feather / pelage)'),
+            '3' => __('(3) Deep (penetrated to skin)'),
+            '99' => __('(99) Not evaluated or applicable'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_PROCESSING_OILING_LOCATIONS, [
+            '1' => __('(1) Bill / mouth area only'),
+            '2' => __('(2) Body (1 spot)'),
+            '3' => __('(3) Spotty (spots in multiple areas)'),
+            '4' => __('(4) Waterline'),
+            '5' => __('(5) Entire body'),
+            '99' => __('(99) Not evaluated or applicable'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_PROCESSING_EVIDENCES, [
+            __('Photo'),
+            __('Feathers'),
+            __('Pelage'),
+            __('Swab'),
+            __('Other Tissue'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_PROCESSING_CARCASS_CONDITIONS, [
+            '1' => __('(1) Fresh / whole / no scavenging'),
+            '2' => __('(2) Fresh / whole / scavenged'),
+            '3' => __('(3) Decomposing / whole'),
+            '4' => __('(4) Fresh / body parts only'),
+            '5' => __('(5) Decomposing / body parts only'),
+            '6' => __('(6) Dessicated / mummified'),
+            '99' => __('(99) Not evaluated'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_PROCESSING_EXTENT_OF_SCAVENGINGS, [
+            '0' => __('(0) None detected'),
+            '1' => __('(1) Light'),
+            '2' => __('(2) Moderate'),
+            '3' => __('(3) Heavy'),
+            '99' => __('(99) Not evaluated'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_PROCESSING_OIL_CONDITION, [
+            __('Fresh'),
+            __('Weathered'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_PROCESSING_OIL_TYPES, [
+            __('Crude'),
+            __('Refined'),
+            __('Motor'),
+            __('Bitumen'),
+            __('Vegetable / Fish'),
+            __('Other'),
+        ]);
     }
 
     private function createOrUpdateAttributes(AttributeOptionName $attributeName, array $values): void

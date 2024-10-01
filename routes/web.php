@@ -84,6 +84,6 @@ Route::middleware([
     require __DIR__.'/web/settings.php';
     require __DIR__.'/web/sharing.php';
     require __DIR__.'/web/importing.php';
-    // require __DIR__.'/web/oiled.php';
+    require __DIR__.'/web/oiled.php';
     // require __DIR__.'/web/owcn.php';
 });

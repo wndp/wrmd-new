@@ -70,6 +70,7 @@ const form = useForm({
   city_found: props.incident.city || '',
   county_found: '',
   subdivision_found: props.incident.subdivision || '',
+  postal_code_found: props.incident.postal_code || '',
   lat_found: '',
   lng_found: '',
   reason_for_admission: '',
@@ -124,6 +125,14 @@ const store = () => {
 };
 
 const nextCaseNumber = ref(formatCaseNumber(usePage().props.lastCaseId.year, usePage().props.lastCaseId.id  +1));
+
+const copyFromRescuer = () => {
+  form.address_found = form.address,
+  form.city_found = form.city
+  form.county_found = form.county
+  form.subdivision_found = form.subdivision
+  form.postal_code_found = form.postal_code
+};
 </script>
 
 <template>
@@ -311,11 +320,18 @@ const nextCaseNumber = ref(formatCaseNumber(usePage().props.lastCaseId.year, use
           </FormRow>
         </template>
       </Panel>
+      <button
+        class="mt-8 text-base leading-5 text-blue-600 hover:text-blue-700 focus:outline-none focus:text-blue-700 transition ease-in-out duration-150 mt-2"
+        type="button"
+        @click="copyFromRescuer"
+      >
+        {{ __('Copy Address From Rescuer') }}
+      </button>
       <IntakeCard
         v-bind="$props"
         :form="form"
         :canSubmit="false"
-        class="mt-8"
+        class="mt-1"
       />
       <Panel class="mt-8">
         <template #title>

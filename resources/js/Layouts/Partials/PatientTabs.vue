@@ -21,6 +21,8 @@ import {
   ScissorsIcon,
   SwatchIcon,
   BanknotesIcon,
+  FingerPrintIcon,
+  ArchiveBoxIcon,
   DocumentDuplicateIcon,
   ChartBarIcon,
   FolderIcon,
@@ -55,21 +57,21 @@ const showEmailModal = ref(false);
 const currentRoute = ref(route().current());
 
 const tabs = ref([
-  can(Abilities.COMPUTED_VIEW_RESCUER) ? { name: __('Rescuer'), route: 'patients.rescuer.edit' } : false,
-  { name: __('Initial Care'), route: 'patients.initial.edit' },
-  { name: __('Continued Care'), route: 'patients.continued.edit' },
-].filter(Boolean));
+  { name: __('Rescuer'), route: 'patients.rescuer.edit', can: can(Abilities.COMPUTED_VIEW_RESCUER) },
+  { name: __('Initial Care'), route: 'patients.initial.edit', can: true },
+  { name: __('Continued Care'), route: 'patients.continued.edit', can: true },
+].filter(o => o.can));
 
 const dailyTasksOptionGroups = ref([
   [
-    { name: __('Daily Tasks Due Now'), icon: CalendarIcon, action: 'patients.daily-tasks.edit' },
-    { name: __('Daily Tasks Past Due'), icon: BellAlertIcon, action: 'patients.past-due-tasks.edit' },
-    { name: __('All Scheduled Tasks'), icon: CalendarDaysIcon, action: 'patients.scheduled-tasks.edit' }
+    { name: __('Daily Tasks Due Now'), action: 'patients.daily-tasks.edit', icon: CalendarIcon },
+    { name: __('Daily Tasks Past Due'), action: 'patients.past-due-tasks.edit', icon: BellAlertIcon },
+    { name: __('All Scheduled Tasks'), action: 'patients.scheduled-tasks.edit', icon: CalendarDaysIcon }
   ],
   [
-    { name: __('Add New Recheck'), icon: ClockIcon, action: 'recheck' },
-    { name: __('Add New Prescription'), icon: TagIcon, action: 'prescription' },
-    { name: __('New Nutrition Plan'), icon: CakeIcon, action: 'nutrition' },
+    { name: __('Add New Recheck'), action: 'recheck', icon: ClockIcon },
+    { name: __('Add New Prescription'), action: 'prescription', icon: TagIcon },
+    { name: __('New Nutrition Plan'), action: 'nutrition', icon: CakeIcon },
     // { name: __('New Housing Plan'), icon: HomeIcon, action: 'housing' },
     // { name: __('New Vaccine'), icon: EyeDropperIcon, action: 'vaccine' },
   ]
@@ -77,27 +79,31 @@ const dailyTasksOptionGroups = ref([
 
 const moreOptionGroups = ref([
     [
-      { name: __('Attachments'), icon: PhotoIcon, route: 'patients.attachments.edit', can: usePage().props.subscription.isProPlan && active(Extension.ATTACHMENTS) },
-      { name: __('Daily Exams'), icon: ClipboardDocumentListIcon, route: 'patients.exam.index', can: active(Extension.DAILY_EXAM) },
-      { name: __('Necropsy'), icon: ScissorsIcon, route: 'patients.necropsy.edit', can: active(Extension.NECROPSY) },
-      { name: __('Banding and Morphometrics'), icon: SwatchIcon, route: 'patients.banding_morphometrics.edit', can: active(Extension.BANDING_MORPHOMETRICS) },
-      { name: __('Expenses'), icon: BanknotesIcon, route: 'patients.expenses.index', can: active(Extension.EXPENSES) },
+      { name: __('Attachments'), route: 'patients.attachments.edit', icon: PhotoIcon, can: usePage().props.subscription.isProPlan && active(Extension.ATTACHMENTS) },
+      { name: __('Daily Exams'), route: 'patients.exam.index', icon: ClipboardDocumentListIcon, can: active(Extension.DAILY_EXAM) },
+      { name: __('Necropsy'), route: 'patients.necropsy.edit', icon: ScissorsIcon, can: active(Extension.NECROPSY) },
+      { name: __('Banding and Morphometrics'), route: 'patients.banding_morphometrics.edit', icon: SwatchIcon, can: active(Extension.BANDING_MORPHOMETRICS) },
+      { name: __('Expenses'), route: 'patients.expenses.index', icon: BanknotesIcon, can: active(Extension.EXPENSES) },
     ].filter(o => o.can),
     [
-      { name: __('Duplicate Patient'), icon: DocumentDuplicateIcon, route: 'patients.duplicate.create', can: can(Abilities.CREATE_PATIENTS) },
-      { name: __('Patient Analytics'), icon: ChartBarIcon, route: 'patients.analytics', can: true }
+      { name: __('Individual Oiled Animal Processing'), route: 'oiled.processing.edit', icon: FingerPrintIcon, can: can(Abilities.OWCN_MEMBER_ORGANIZATION) },
+      { name: __('Individual Oiled Animal Wash'), route: 'oiled.wash.index', icon: ArchiveBoxIcon,  can: can(Abilities.OWCN_MEMBER_ORGANIZATION) }
     ].filter(o => o.can),
     [
-      { name: __('Revisions'), icon: FolderIcon, route: 'patients.revisions.index', can: can(Abilities.COMPUTED_DISPLAY_REVISIONS) }
+      { name: __('Duplicate Patient'), route: 'patients.duplicate.create', icon: DocumentDuplicateIcon, can: can(Abilities.CREATE_PATIENTS) },
+      { name: __('Patient Analytics'), route: 'patients.analytics', icon: ChartBarIcon, can: true }
+    ].filter(o => o.can),
+    [
+      { name: __('Revisions'), route: 'patients.revisions.index', icon: FolderIcon, can: can(Abilities.COMPUTED_DISPLAY_REVISIONS) }
     ].filter(o => o.can),
   ]
   .filter(array => array.length));
 
 const share = ref([
   can(Abilities.SHARE_PATIENTS) ? [
-    { name: __('Print Patient Medical Record'), icon: PrinterIcon, action: 'print' },
-    { name: __('Export Patient to Spreadsheet'), icon: ArrowDownTrayIcon, action: 'export' },
-    { name: __('Email Patient Medical Record'), icon: AtSymbolIcon, action: 'email' },
+    { name: __('Print Patient Medical Record'), action: 'print', icon: PrinterIcon },
+    { name: __('Export Patient to Spreadsheet'), action: 'export', icon: ArrowDownTrayIcon },
+    { name: __('Email Patient Medical Record'), action: 'email', icon: AtSymbolIcon },
   ] : [],
   [
     { name: __('Print Necropsy Report'), icon: ScissorsIcon, action: route('reports.generate', {

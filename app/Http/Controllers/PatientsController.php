@@ -81,19 +81,6 @@ class PatientsController extends Controller
         $this->shareLastCaseId();
 
         return Inertia::render('Patients/Create');
-
-        // listen(ViewPartial::class, function ($name) {
-        //     if ($name === 'intake.top') {
-        //         $html = '<div class="field-inline">';
-        //         $html .= '<div class="label-col"></div>';
-        //         $html .= '<div class="data-1-col">';
-        //         $html .= \Form::button(trans('buttons.copy_rescuer'), ['class' => 'btn btn-b btn-sm js-copyRescuer']);
-        //         $html .= '</div>';
-        //         $html .= '</div>';
-
-        //         return $html;
-        //     }
-        // }, 10);
     }
 
     /**
