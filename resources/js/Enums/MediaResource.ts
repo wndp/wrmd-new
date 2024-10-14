@@ -1,5 +1,5 @@
 export enum MediaResource
 {
-    PATIENT = 'PATIENT';
-    INCIDENT = 'INCIDENT';
+    PATIENT = 'PATIENT',
+    INCIDENT = 'INCIDENT',
 }
