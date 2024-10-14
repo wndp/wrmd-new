@@ -1340,14 +1340,14 @@ class AttributeOptionSeeder extends Seeder
         $index = 0;
 
         foreach ($values as $key => $value) {
-            $attributeOption = AttributeOption::firstOrNew([
+            $attributeOption = AttributeOption::firstOrCreate([
                 'name' => $attributeName,
                 'value' => $value,
                 'code' => $isAssoc ? $key : null
-            ])->fill([
+            ], [
                 'value_lowercase' => strtolower($value),
                 'sort_order' => $index + 1,
-            ])->save();
+            ]);
 
             if (empty($value)) {
                 $attributeOption->delete();
