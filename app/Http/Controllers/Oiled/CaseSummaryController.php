@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Oiled;
 
 use App\Domain\OptionsStore;
-use App\Domain\Patients\Concerns\RetrievesTreatmentLogs;
+//use App\Domain\Patients\Concerns\RetrievesTreatmentLogs;
 use App\Domain\Patients\ExamOptions;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +12,7 @@ use Inertia\Response;
 
 class CaseSummaryController extends Controller
 {
-    use RetrievesTreatmentLogs;
+    //use RetrievesTreatmentLogs;
 
     public function __invoke(ExamOptions $examOptions): Response
     {

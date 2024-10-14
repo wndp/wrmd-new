@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\QueriesDateRange;
+use App\Notifications\NotifyOwcnOfIoa;
 use App\Support\Timezone;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
@@ -69,13 +70,23 @@ class OilProcessing extends Model
     public static function store(int $patientId, array $values, bool $isIndividualOiledAnimal = false): Processing
     {
         $processing = static::firstOrNew(['patient_id' => $patientId]);
-
         if (! $processing->exists) {
             $processing->is_individual_oiled_animal = $isIndividualOiledAnimal;
         }
-
         $processing->fill($values)->save();
-
         return $processing;
+    }
+
+    public static function boot(): void
+    {
+        parent::boot();
+
+        static::created(function ($processing) {
+            if ($processing->is_individual_oiled_animal) {
+                TransferIoaPatient::withChain([
+                    new NotifyOwcnOfIoa($processing),
+                ])->dispatch($processing);
+            }
+        });
     }
 }
