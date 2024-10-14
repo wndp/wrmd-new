@@ -10,7 +10,7 @@ echo "Running seeders..."
 sail artisan db:seed
 
 echo "Creating local development user..."
-sail artisan app:create-test-user
+sail artisan app:create-local-dev-user
 
 echo "Clearing cache..."
 sail artisan cache:clear
