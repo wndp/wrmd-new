@@ -36,6 +36,7 @@ import merge from 'lodash/merge';
 import { parseISO } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
 import { usePage } from '@inertiajs/vue3';
+import {SettingKey} from '@/Enums/SettingKey';
 
 export default {
     components: {
@@ -76,7 +77,7 @@ export default {
                 onOpen: this.onOpen,
                 static: true,
                 parseDate: (dateString) => {
-                    let timezone = usePage().props.settings.timezone;
+                    let timezone = usePage().props.settings[SettingKey.TIMEZONE];
                     return toZonedTime(
                         parseISO(dateString),
                         (this.time ? timezone : null)

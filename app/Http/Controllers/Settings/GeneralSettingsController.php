@@ -28,15 +28,15 @@ class GeneralSettingsController extends Controller
         ]);
 
         $generalSettings = [
-            'logOrder' => Wrmd::settings('logOrder', 'desc'),
-            'logAllowAuthorEdit' => (bool) Wrmd::settings('logAllowAuthorEdit'),
-            'logAllowEdit' => Wrmd::settings('logAllowEdit', []),
-            'logAllowDelete' => Wrmd::settings('logAllowDelete', []),
-            'logShares' => (bool) Wrmd::settings('logShares'),
-            'showLookupRescuer' => (bool) Wrmd::settings('showLookupRescuer'),
-            'showGeolocationFields' => (bool) Wrmd::settings('showGeolocationFields'),
-            'areas' => implode(', ', Wrmd::settings('areas', [])),
-            'enclosures' => implode(', ', Wrmd::settings('enclosures', [])),
+            'logOrder' => Wrmd::settings(SettingKey::LOG_ORDER, 'desc'),
+            'logAllowAuthorEdit' => (bool) Wrmd::settings(SettingKey::LOG_ALLOW_AUTHOR_EDIT),
+            'logAllowEdit' => Wrmd::settings(SettingKey::LOG_ALLOW_EDIT, []),
+            'logAllowDelete' => Wrmd::settings(SettingKey::LOG_ALLOW_DELETE, []),
+            'logShares' => (bool) Wrmd::settings(SettingKey::LOG_SHARES),
+            'showLookupRescuer' => (bool) Wrmd::settings(SettingKey::SHOW_LOOKUP_RESCUER),
+            'showGeolocationFields' => (bool) Wrmd::settings(SettingKey::SHOW_GEOLOCATION_FIELDS),
+            'areas' => implode(', ', Wrmd::settings(SettingKey::AREAS, [])),
+            'enclosures' => implode(', ', Wrmd::settings(SettingKey::ENCLOSURES, [])),
         ];
 
         // $klist = array_flip(Wrmd::settings('listFields', config('wrmd.defaultListFields')));
@@ -76,9 +76,9 @@ class GeneralSettingsController extends Controller
     public function update(Request $request): RedirectResponse
     {
         Wrmd::settings([
-            'showLookupRescuer' => $request->get('showLookupRescuer'),
-            'showGeolocationFields' => $request->get('showGeolocationFields'),
-            'listFields' => $request->get('listFields'),
+            SettingKey::SHOW_LOOKUP_RESCUER => $request->get('showLookupRescuer'),
+            SettingKey::SHOW_GEOLOCATION_FIELDS => $request->get('showGeolocationFields'),
+            SettingKey::LISTED_FIELDS => $request->get('listFields'),
         ]);
 
         event(new TeamUpdated(Auth::user()->currentTeam));
@@ -94,11 +94,11 @@ class GeneralSettingsController extends Controller
     public function updateTreatmentLog(Request $request): RedirectResponse
     {
         Wrmd::settings([
-            'logOrder' => $request->get('logOrder'),
-            'logAllowAuthorEdit' => $request->get('logAllowAuthorEdit'),
-            'logAllowEdit' => $request->get('logAllowEdit'),
-            'logAllowDelete' => $request->get('logAllowDelete'),
-            'logShares' => $request->get('logShares'),
+            SettingKey::LOG_ORDER => $request->get('logOrder'),
+            SettingKey::LOG_ALLOW_AUTHOR_EDIT => $request->get('logAllowAuthorEdit'),
+            SettingKey::LOG_ALLOW_EDIT => $request->get('logAllowEdit'),
+            SettingKey::LOG_ALLOW_DELETE => $request->get('logAllowDelete'),
+            SettingKey::LOG_SHARES => $request->get('logShares'),
         ]);
 
         event(new TeamUpdated(Auth::user()->currentTeam));
@@ -114,8 +114,8 @@ class GeneralSettingsController extends Controller
     public function updateLocations(Request $request): RedirectResponse
     {
         Wrmd::settings([
-            'areas' => Str::of($request->get('areas'))->explode(',')->map(fn ($s) => trim($s)),
-            'enclosures' => Str::of($request->get('enclosures'))->explode(',')->map(fn ($s) => trim($s)),
+            SettingKey::AREAS => Str::of($request->get('areas'))->explode(',')->map(fn ($s) => trim($s)),
+            SettingKey::ENCLOSURES => Str::of($request->get('enclosures'))->explode(',')->map(fn ($s) => trim($s)),
         ]);
 
         event(new TeamUpdated(Auth::user()->currentTeam));

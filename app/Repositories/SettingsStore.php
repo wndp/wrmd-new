@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\SettingKey;
 use App\Models\Setting;
 use App\Models\Team;
 use ArrayIterator;
@@ -36,9 +37,9 @@ class SettingsStore implements IteratorAggregate, JsonSerializable
      *
      * @param  mixed  $default
      */
-    public function get(string $key, $default = null)
+    public function get(SettingKey $key, $default = null)
     {
-        $value = Arr::get($this->settings, $key, $default);
+        $value = Arr::get($this->settings, $key->value, $default);
 
         return is_null($value) ? $default : $value;
     }
@@ -46,13 +47,13 @@ class SettingsStore implements IteratorAggregate, JsonSerializable
     /**
      * Create and persist a new setting.
      *
-     * @param  mixed  $key
+     * @param  SettingKey|array  $key
      * @param  mixed  $value
      */
-    public function set($key, $value = null)
+    public function set(SettingKey|array $key, $value = null)
     {
-        if (! is_array($key)) {
-            $key = [$key => $value];
+        if ($key instanceof SettingKey) {
+            $key = [$key->value => $value];
         }
 
         foreach ($key as $arrayKey => $arrayValue) {
@@ -66,9 +67,9 @@ class SettingsStore implements IteratorAggregate, JsonSerializable
     /**
      * Determine if the given setting exists.
      */
-    public function has(string $key): bool
+    public function has(SettingKey $key): bool
     {
-        return array_key_exists($key, $this->settings);
+        return array_key_exists($key->value, $this->settings);
     }
 
     /**
@@ -82,12 +83,12 @@ class SettingsStore implements IteratorAggregate, JsonSerializable
     /**
      * Delete a setting from storage.
      */
-    public function delete(string $key): bool
+    public function delete(SettingKey $key): bool
     {
         if ($this->has($key) && $this->isNotProtected($key)) {
             return (bool) Setting::where([
                 'team_id' => $this->team->id,
-                'key' => $key,
+                'key' => $key->value,
             ])->delete();
         }
 
@@ -97,7 +98,7 @@ class SettingsStore implements IteratorAggregate, JsonSerializable
     /**
      * Persist a setting.
      */
-    protected function persist($key, $value): void
+    protected function persist(string $key, $value): void
     {
         $setting = Setting::firstOrNew([
             'team_id' => $this->team->id,
@@ -113,11 +114,11 @@ class SettingsStore implements IteratorAggregate, JsonSerializable
     /**
      * Determine if the provided key is not protected.
      */
-    protected function isNotProtected(string $key): bool
+    protected function isNotProtected(SettingKey $key): bool
     {
-        return ! in_array($key, [
-            'date_format',
-            'timezone',
+        return ! in_array($key->value, [
+            SettingKey::TIMEZONE->value,
+            SettingKey::LANGUAGE->value
         ]);
     }
 

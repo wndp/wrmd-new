@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\SettingKey;
 use App\Enums\AttributeOptionName;
 use App\Rules\AttributeOptionExistsRule;
 use App\Support\Wrmd;
@@ -25,7 +26,7 @@ class StoreIncidentRequest extends FormRequest
      */
     public function rules(): array
     {
-        $now = Carbon::now(Wrmd::settings('timezone'));
+        $now = Carbon::now(Wrmd::settings(SettingKey::TIMEZONE));
 
         return [
             'reported_at' => 'required|date|before_or_equal:'.($this->input('resolved_at') ?? $now),

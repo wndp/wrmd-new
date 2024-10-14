@@ -2,6 +2,7 @@
 
 namespace App\Reporting\Filters;
 
+use App\Enums\SettingKey;
 use App\Reporting\Contracts\DateFilter;
 use App\Support\Wrmd;
 use Carbon\Carbon;
@@ -27,7 +28,7 @@ class DateOn extends DateFilter
      */
     public function default(): string
     {
-        return now(Wrmd::settings('timezone'))->format('Y-m-d');
+        return now(Wrmd::settings(SettingKey::TIMEZONE))->format('Y-m-d');
     }
 
     public function name(): string

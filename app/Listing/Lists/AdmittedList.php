@@ -2,6 +2,7 @@
 
 namespace App\Listing\Lists;
 
+use App\Enums\SettingKey;
 use App\Domain\Admissions\Admission;
 use App\Listing\ListingQuery;
 use App\Listing\LiveList;
@@ -40,7 +41,7 @@ class AdmittedList extends LiveList
             ->selectColumns($this->columns)
             ->selectAdmissionKeys()
             ->joinTables($this->columns)
-            ->whereDate('date_admitted_at', Carbon::now(Wrmd::settings('timezone'))->format('Y-m-d'))
+            ->whereDate('date_admitted_at', Carbon::now(Wrmd::settings(SettingKey::TIMEZONE))->format('Y-m-d'))
             ->with('patient')
             ->get();
     }

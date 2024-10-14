@@ -19,6 +19,7 @@ import InputError from '@/Components/FormElements/InputError.vue';
 import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
 import OutcomeCard from '@/Components/FormCards/OutcomeCard.vue';
 import { formatISO9075 } from 'date-fns';
+import {SettingKey} from '@/Enums/SettingKey';
 
 let route = inject('route');
 
@@ -244,7 +245,7 @@ let sexes = computed(() => usePage().props.options.sexes);
             </div>
           </div>
           <div
-            v-if="settings.showGeolocationFields"
+            v-if="settings[SettingKey.SHOW_GEOLOCATION_FIELDS]"
             class="sm:grid sm:grid-cols-6 sm:gap-x-2 sm:items-center"
           >
             <Label

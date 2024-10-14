@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\SettingKey;
 use App\Enums\AttributeOptionName;
 use App\Models\Patient;
 use App\Models\PatientLocation;
@@ -20,7 +21,7 @@ class PatientLocationsController extends Controller
     public function store(Request $request, Patient $patient)
     {
         $patient->validateOwnership(Auth::user()->current_team_id);
-        $admittedAt = $patient->admitted_at->setTimezone(Wrmd::settings('timezone'))->startOfDay();
+        $admittedAt = $patient->admitted_at->setTimezone(Wrmd::settings(SettingKey::TIMEZONE))->startOfDay();
 
         $request->validate([
             'moved_in_at' => [
@@ -86,7 +87,7 @@ class PatientLocationsController extends Controller
      */
     public function update(Request $request, Patient $patient, PatientLocation $location)
     {
-        $admittedAt = $patient->admitted_at->setTimezone(Wrmd::settings('timezone'))->startOfDay();
+        $admittedAt = $patient->admitted_at->setTimezone(Wrmd::settings(SettingKey::TIMEZONE))->startOfDay();
 
         $request->validate([
             'moved_in_at' => [

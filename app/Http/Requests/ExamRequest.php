@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\SettingKey;
 use App\Enums\Ability;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
@@ -21,7 +22,7 @@ class ExamRequest extends FormRequest
     public function rules(): array
     {
         $patient = $this->route('patient')->validateOwnership($this->user()->current_team_id);
-        $admittedAt = $patient->admitted_at->setTimezone(Wrmd::settings('timezone'))->startOfDay();
+        $admittedAt = $patient->admitted_at->setTimezone(Wrmd::settings(SettingKey::TIMEZONE))->startOfDay();
 
         [$examTypeCanOnlyOccurOnceIds] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::EXAM_TYPES->value,

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\SettingKey;
 use App\Concerns\ValidatesOwnership;
 use App\Summarizable;
 use App\Support\Timezone;
@@ -71,8 +72,8 @@ class CareLog extends Model implements Summarizable, Weighable
         if ($data->get('date_care_at') instanceof Carbon) {
             $dateCareAt = $data->get('date_care_at');
         } else {
-            $dateCareAtParsed = Carbon::parse($data->get('date_care_at'), Wrmd::settings('timezone'));
-            $dateCareAt = $dateCareAtParsed->isToday() ? Carbon::now(Wrmd::settings('timezone')) : $dateCareAtParsed;
+            $dateCareAtParsed = Carbon::parse($data->get('date_care_at'), Wrmd::settings(SettingKey::TIMEZONE));
+            $dateCareAt = $dateCareAtParsed->isToday() ? Carbon::now(Wrmd::settings(SettingKey::TIMEZONE)) : $dateCareAtParsed;
         }
 
         $careLog = new static([

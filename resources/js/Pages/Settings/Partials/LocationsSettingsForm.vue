@@ -7,6 +7,7 @@ import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import {__} from '@/Composables/Translate';
 import LocalStorage from '@/Composables/LocalStorage';
+import {SettingKey} from '@/Enums/SettingKey';
 
 const localStorage = LocalStorage();
 
@@ -18,8 +19,8 @@ const props = defineProps({
 });
 
 const form = useForm({
-    areas: props.generalSettings.areas,
-    enclosures: props.generalSettings.enclosures,
+    areas: props.generalSettings[SettingKey.AREAS],
+    enclosures: props.generalSettings[SettingKey.ENCLOSURES],
 });
 
 const updateLocations = () => {

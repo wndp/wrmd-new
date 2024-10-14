@@ -2,6 +2,7 @@
 
 namespace App\Listing\Lists;
 
+use App\Enums\SettingKey;
 use App\Domain\Admissions\Admission;
 use App\Listing\ListingQuery;
 use App\Listing\LiveList;
@@ -45,7 +46,7 @@ class UpdatedList extends LiveList
             ->selectAdmissionKeys()
             ->joinTables($this->columns)
             ->where('team_id', $this->team->id)
-            ->whereDate('patients.updated_at', Carbon::now(Wrmd::settings('timezone'))->format('Y-m-d'))
+            ->whereDate('patients.updated_at', Carbon::now(Wrmd::settings(SettingKey::TIMEZONE))->format('Y-m-d'))
             ->with('patient')
             ->get();
     }

@@ -2,6 +2,7 @@
 
 namespace App\Concerns;
 
+use App\Enums\SettingKey;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
 use App\Jobs\DeleteRecordedDailyTasks;
@@ -43,7 +44,7 @@ trait HasDailyTasks
             $date = new Carbon($date);
         }
 
-        $startDate = $this->start_date->shiftTimezone(Wrmd::settings('timezone'));
+        $startDate = $this->start_date->shiftTimezone(Wrmd::settings(SettingKey::TIMEZONE));
 
         // If the start date is the same as the date in question then it is due.
         if ($startDate->isSameDay($date)) {
@@ -87,7 +88,7 @@ trait HasDailyTasks
      */
     public function isDueToday(): bool
     {
-        return $this->isDueOn(now(Wrmd::settings('timezone')));
+        return $this->isDueOn(now(Wrmd::settings(SettingKey::TIMEZONE)));
     }
 
     /**
@@ -133,7 +134,7 @@ trait HasDailyTasks
             return false;
         }
 
-        return $date->shiftTimezone(Wrmd::settings('timezone'))->format('Y-m-d') < Carbon::now(Wrmd::settings('timezone'))->format('Y-m-d');
+        return $date->shiftTimezone(Wrmd::settings(SettingKey::TIMEZONE))->format('Y-m-d') < Carbon::now(Wrmd::settings(SettingKey::TIMEZONE))->format('Y-m-d');
     }
 
     private function getFrequencyIds()

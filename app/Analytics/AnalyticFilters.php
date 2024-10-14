@@ -2,6 +2,7 @@
 
 namespace App\Analytics;
 
+use App\Enums\SettingKey;
 use App\Repositories\SettingsStore;
 use App\Support\Wrmd;
 use Carbon\Carbon;
@@ -17,14 +18,14 @@ class AnalyticFilters extends Fluent
     public static function defaultDateFrom()
     {
         return Carbon::now(
-            Wrmd::settings('timezone')
+            Wrmd::settings(SettingKey::TIMEZONE)
         )->subDays(6)->format('Y-m-d');
     }
 
     public static function defaultDateTo()
     {
         return Carbon::now(
-            Wrmd::settings('timezone')
+            Wrmd::settings(SettingKey::TIMEZONE)
         )->format('Y-m-d');
     }
 

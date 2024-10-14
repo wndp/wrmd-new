@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\SettingKey;
 use App\Enums\AttributeOptionName;
 use App\Rules\AttributeOptionExistsRule;
 use App\Support\Wrmd;
@@ -25,7 +26,7 @@ class SaveBandingRequest extends FormRequest
     public function rules(): array
     {
         $patient = $this->route('patient')->validateOwnership($this->user()->current_team_id);
-        $admittedAt = $patient->admitted_at->setTimezone(Wrmd::settings('timezone'))->startOfDay();
+        $admittedAt = $patient->admitted_at->setTimezone(Wrmd::settings(SettingKey::TIMEZONE))->startOfDay();
 
         return [
             'band_number' => 'required|string',
@@ -80,7 +81,7 @@ class SaveBandingRequest extends FormRequest
     public function messages()
     {
         $patient = $this->route('patient');
-        $admittedAt = $patient->admitted_at->setTimezone(Wrmd::settings('timezone'))->startOfDay();
+        $admittedAt = $patient->admitted_at->setTimezone(Wrmd::settings(SettingKey::TIMEZONE))->startOfDay();
 
         return [
             'banded_at.required' => 'The banding date field is required.',

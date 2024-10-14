@@ -10,8 +10,7 @@ import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import CustomFields from '@/Components/FormElements/CustomFields.vue';
 import {__} from '@/Composables/Translate';
-// import autoSave from '@/Mixins/AutoSave';
-// import hoistForm from '@/Mixins/HoistForm';
+import {SettingKey} from '@/Enums/SettingKey';
 
 const props = defineProps({
   form: {
@@ -30,7 +29,7 @@ const props = defineProps({
 
 const emit = defineEmits(['submitted']);
 
-const showTags = computed(() => usePage().props.settings.showTags);
+const showTags = computed(() => usePage().props.settings[SettingKey.SHOW_TAGS]);
 
 const doSubmit = () => emit('submitted');
 

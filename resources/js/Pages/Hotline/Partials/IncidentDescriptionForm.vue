@@ -8,6 +8,7 @@ import SelectInput from '@/Components/FormElements/SelectInput.vue';
 import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import {__} from '@/Composables/Translate';
+import {SettingKey} from '@/Enums/SettingKey';
 
 defineProps({
   form: {
@@ -80,7 +81,7 @@ const emit = defineEmits(['submitted']);
           name="incident_postal_code"
         />
       </FormRow>
-      <template v-if="$page.props.settings.showGeolocationFields">
+      <template v-if="$page.props.settings[SettingKey.SHOW_GEOLOCATION_FIELDS]">
         <FormRow
           id="incident_latitude"
           :label="__('Latitude')"

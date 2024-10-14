@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Enums\Ability;
 use App\Enums\Role;
+use App\Enums\SettingKey;
 use App\Models\User;
 use App\Support\Wrmd;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -95,6 +96,6 @@ class PrivacyPolicy
             return false;
         }
 
-        return (int) Wrmd::settings('fullPeopleAccess') === 1;
+        return (int) Wrmd::settings(SettingKey::FULL_PEOPLE_ACCESS) === 1;
     }
 }

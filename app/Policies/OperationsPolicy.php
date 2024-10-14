@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Enums\Ability;
 use App\Enums\Role;
+use App\Enums\SettingKey;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class OperationsPolicy
@@ -20,7 +21,7 @@ class OperationsPolicy
         if ($user->currentTeam?->isSubAccount()) {
             if ($user->roleOn($user->currentTeam->masterAccount)->name === Role::ADMIN->value) {
                 return true;
-            } elseif ($user->currentTeam->settingsStore()->get('subAccountAllowManageSettings') === false) {
+            } elseif ($user->currentTeam->settingsStore()->get(SettingKey::SUB_ACCOUNT_ALLOW_MANAGE_SETTINGS) === false) {
                 return false;
             }
         }
@@ -35,7 +36,7 @@ class OperationsPolicy
 
     public function viewTransferPatient($user)
     {
-        if ($user->currentTeam?->settingsStore()->get('subAccountAllowTransferPatients') === false) {
+        if ($user->currentTeam?->settingsStore()->get(SettingKey::SUB_ACCOUNT_ALLOW_TRANSFER_PATIENTS) === false) {
             return false;
         }
 

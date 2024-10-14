@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\SettingKey;
 use App\Options\LocaleOptions;
 use App\Support\Wrmd;
 use Closure;
@@ -17,7 +18,7 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $locale = Wrmd::settings('language');
+        $locale = Wrmd::settings(SettingKey::LANGUAGE);
 
         if (is_string($locale) && array_key_exists($locale, LocaleOptions::$languages)) {
             app()->setLocale($locale);

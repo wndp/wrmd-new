@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\SettingKey;
 use App\Enums\AttributeOptionName;
 use App\Rules\AttributeOptionExistsRule;
 use App\Actions\AdmitPatient;
@@ -27,7 +28,7 @@ class StoreQuickAdmitRequest extends FormRequest
      */
     public function rules(): array
     {
-        $now = Carbon::now(Wrmd::settings('timezone'));
+        $now = Carbon::now(Wrmd::settings(SettingKey::TIMEZONE));
 
         return [
             'case_year' => 'required|in:'.AdmitPatient::availableYears(Auth::user()->currentTeam)->implode(','),

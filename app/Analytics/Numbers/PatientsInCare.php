@@ -2,6 +2,7 @@
 
 namespace App\Analytics\Numbers;
 
+use App\Enums\SettingKey;
 use App\Analytics\Contracts\Number;
 use App\Models\Admission;
 use App\Repositories\SettingsStore;
@@ -15,10 +16,10 @@ class PatientsInCare extends Number
      */
     public function compute()
     {
-        $inCare = Admission::inCareOnDate($this->team, Carbon::now(Wrmd::settings('timezone')))->count();
+        $inCare = Admission::inCareOnDate($this->team, Carbon::now(Wrmd::settings(SettingKey::TIMEZONE)))->count();
 
         $other = $this->filters->compare
-            ? Admission::inCareOnDate($this->team, Carbon::now(Wrmd::settings('timezone'))->subDay())->count()
+            ? Admission::inCareOnDate($this->team, Carbon::now(Wrmd::settings(SettingKey::TIMEZONE))->subDay())->count()
             : null;
 
         $this->calculatePercentageDifference($inCare, $other);

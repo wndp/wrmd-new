@@ -10,10 +10,10 @@ import TextareaAutosize from '@/Components/FormElements/TextareaAutosize.vue';
 import InputError from '@/Components/FormElements/InputError.vue';
 import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import RequiredInput from '@/Components/FormElements/RequiredInput.vue';
 import TagsInput from '@/Components/FormElements/TagsInput.vue';
 import CustomFields from '@/Components/FormElements/CustomFields.vue';
 import {__} from '@/Composables/Translate';
+import {SettingKey} from '@/Enums/SettingKey';
 
 const props = defineProps({
   form: {
@@ -33,7 +33,7 @@ const props = defineProps({
 const emit = defineEmits(['submitted']);
 
 const settings = computed(() => usePage().props.settings);
-const showTags = computed(() => settings.value.showTags === '1' && props.form.patient.id);
+const showTags = computed(() => settings.value[SettingKey.SHOW_TAGS] === '1' && props.form.patient.id);
 
 const saveIntake = () => emit('submitted');
 </script>
@@ -164,7 +164,7 @@ const saveIntake = () => emit('submitted');
         />
       </FormRow>
       <FormRow
-        v-if="settings.showGeolocationFields"
+        v-if="settings[SettingKey.SHOW_GEOLOCATION_FIELDS]"
         id="lat_found"
         :label="__('Latitude Found')"
         class="col-span-6 md:col-span-2"
@@ -183,7 +183,7 @@ const saveIntake = () => emit('submitted');
         />
       </FormRow>
       <FormRow
-        v-if="settings.showGeolocationFields"
+        v-if="settings[SettingKey.SHOW_GEOLOCATION_FIELDS]"
         id="lng_found"
         :label="__('Longitude Found')"
         class="col-span-6 md:col-span-2"

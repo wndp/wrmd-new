@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\SettingKey;
 use App\Enums\AttributeOptionName;
 use App\Rules\AttributeOptionExistsRule;
 use App\Support\Wrmd;
@@ -35,7 +36,7 @@ class SaveExpenseTransactionRequest extends FormRequest
         }, __('A debit or credit is required.'));
 
         $patient = $this->route('patient')->validateOwnership($this->user()->current_team_id);
-        $admittedAt = $patient->admitted_at->setTimezone(Wrmd::settings('timezone'))->startOfDay();
+        $admittedAt = $patient->admitted_at->setTimezone(Wrmd::settings(SettingKey::TIMEZONE))->startOfDay();
 
         return [
             'transacted_at' => 'required|date|after_or_equal:'.$admittedAt,
@@ -57,7 +58,7 @@ class SaveExpenseTransactionRequest extends FormRequest
     public function messages()
     {
         $patient = $this->route('patient');
-        $admittedAt = $patient->admitted_at->setTimezone(Wrmd::settings('timezone'))->startOfDay();
+        $admittedAt = $patient->admitted_at->setTimezone(Wrmd::settings(SettingKey::TIMEZONE))->startOfDay();
 
         return [
             'transacted_at.required' => __('The transaction date field is required.'),

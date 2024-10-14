@@ -8,6 +8,7 @@ import Toggle from '@/Components/FormElements/Toggle.vue';
 import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import {__} from '@/Composables/Translate';
+import {SettingKey} from '@/Enums/SettingKey';
 
 const props = defineProps({
   generalSettings: {
@@ -17,11 +18,11 @@ const props = defineProps({
 });
 
 const form = useForm({
-  logOrder: props.generalSettings.logOrder,
-  logAllowAuthorEdit: props.generalSettings.logAllowAuthorEdit,
-  logAllowEdit: props.generalSettings.logAllowEdit,
-  logAllowDelete: props.generalSettings.logAllowDelete,
-  logShares: props.generalSettings.logShares,
+  logOrder: props.generalSettings[SettingKey.LOG_ORDER],
+  logAllowAuthorEdit: props.generalSettings[SettingKey.LOG_ALLOW_AUTHOR_EDIT],
+  logAllowEdit: props.generalSettings[SettingKey.LOG_ALLOW_EDIT],
+  logAllowDelete: props.generalSettings[SettingKey.LOG_ALLOW_DELETE],
+  logShares: props.generalSettings[SettingKey.LOG_SHARES],
 });
 
 const orderOptions = [

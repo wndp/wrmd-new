@@ -7,6 +7,7 @@ import SelectInput from '@/Components/FormElements/SelectInput.vue';
 import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import {__} from '@/Composables/Translate';
+import {SettingKey} from '@/Enums/SettingKey';
 
 const props = defineProps({
   timezones: {
@@ -16,8 +17,8 @@ const props = defineProps({
 });
 
 const form = useForm({
-  timezone: usePage().props.settings.timezone,
-  language: usePage().props.settings.language,
+  timezone: usePage().props.settings[SettingKey.TIMEZONE],
+  language: usePage().props.settings[SettingKey.LANGUAGE],
 });
 
 const update = () => {

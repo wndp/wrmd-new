@@ -11,6 +11,7 @@ import DonateHeader from '@/Layouts/Partials/DonateHeader.vue';
 import {__} from '@/Composables/Translate';
 import {can} from '@/Composables/Can';
 import {Abilities} from '@/Enums/Abilities';
+import {SettingKey} from '@/Enums/SettingKey';
 
 defineProps({
   title: String,
@@ -23,7 +24,7 @@ defineProps({
 const sidebarOpen = ref(false);
 
 const showDonateHeader = computed(() => usePage().props.showDonateHeader || false);
-const timezone = computed(() => usePage().props.settings.timezone);
+const timezone = computed(() => usePage().props.settings[SettingKey.TIMEZONE]);
 const differentTimeZone = computed(() => window.Intl.DateTimeFormat().resolvedOptions().timeZone !== timezone.value);
 
 if (typeof window !== 'undefined' && typeof window.Beacon !== 'undefined') {

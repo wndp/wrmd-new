@@ -18,7 +18,7 @@ class ClassificationsController extends Controller
      */
     public function edit(): Response
     {
-        $showTags = (bool) Wrmd::settings('showTags');
+        $showTags = (bool) Wrmd::settings(SettingKey::SHOW_TAGS);
 
         return Inertia::render('Settings/Classifications', compact('showTags'));
     }
@@ -28,7 +28,9 @@ class ClassificationsController extends Controller
      */
     public function update(): RedirectResponse
     {
-        Wrmd::settings(request()->all('showTags'));
+        Wrmd::settings([
+            SettingKey::SHOW_TAGS => request()->input('showTags')
+        ]);
 
         event(new TeamUpdated(Auth::user()->currentAccount));
 

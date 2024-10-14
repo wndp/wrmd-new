@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Enums\Role;
+use App\Enums\SettingKey;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
@@ -40,8 +41,9 @@ class CreateLocalDevUser extends Command
         BouncerFacade::scope()->to($user->personalTeam()->id)->onlyRelations()->dontScopeRoleAbilities();
         BouncerFacade::assign(Role::ADMIN->value)->to($user);
 
-        $user->personalTeam()->settingsStore()->set([
-            'timezone' => 'America/Los_Angeles'
-        ]);
+        $user->personalTeam()->settingsStore()->set(
+            SettingKey::TIMEZONE,
+            'America/Los_Angeles'
+        );
     }
 }

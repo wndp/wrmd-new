@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Hotline;
 
+use App\Enums\SettingKey;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
 use App\Http\Controllers\Controller;
@@ -22,7 +23,7 @@ class IncidentResolutionController extends Controller
         $incident->validateOwnership(Auth::user()->current_team_id);
 
         $request->validate([
-            'resolved_at' => 'nullable|required_with:resolution|date|after_or_equal:'.$incident->occurred_at->timezone(Wrmd::settings('timezone')),
+            'resolved_at' => 'nullable|required_with:resolution|date|after_or_equal:'.$incident->occurred_at->timezone(Wrmd::settings(SettingKey::TIMEZONE)),
             'resolution' => 'nullable|required_with:resolved_at',
             'given_information' => 'sometimes|boolean',
         ], [

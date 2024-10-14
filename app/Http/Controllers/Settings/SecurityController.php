@@ -30,13 +30,13 @@ class SecurityController extends Controller
         $users = Auth::user()->currentTeam->allUsers()->where('is_api_user', false)->values();
 
         $remoteAccess = [
-            'remoteRestricted' => (bool) Wrmd::settings('remoteRestricted'),
-            'clinicIp' => Wrmd::settings('clinicIp'),
-            'userRemotePermission' => Wrmd::settings()->get('userRemotePermission', []),
-            'roleRemotePermission' => Wrmd::settings()->get('roleRemotePermission', []),
+            'remoteRestricted' => (bool) Wrmd::settings(SettingKey::REMOTE_RESTRICTED),
+            'clinicIp' => Wrmd::settings(SettingKey::CLINIC_IP),
+            'userRemotePermission' => Wrmd::settings()->get(SettingKey::USER_REMOTE_PERMISSION, []),
+            'roleRemotePermission' => Wrmd::settings()->get(SettingKey::ROLE_REMOTE_PERMISSION, []),
         ];
         $security = [
-            'requireTwoFactor' => (bool) Wrmd::settings()->get('requireTwoFactor'),
+            'requireTwoFactor' => (bool) Wrmd::settings()->get(SettingKey::REQUIRE_TWO_FACTOR),
         ];
 
         return Inertia::render('Settings/Security', compact(
@@ -53,7 +53,7 @@ class SecurityController extends Controller
     public function update(Request $request): RedirectResponse
     {
         Wrmd::settings([
-            'requireTwoFactor' => $request->get('requireTwoFactor'),
+            SettingKey::REQUIRE_TWO_FACTOR => $request->get('requireTwoFactor'),
         ]);
 
         event(new TeamUpdated(Auth::user()->currentTeam));

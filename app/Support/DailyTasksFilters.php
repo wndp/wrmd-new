@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Enums\SettingKey;
 use App\Enums\DailyTaskSchedulable;
 use App\Support\Wrmd;
 use Carbon\Carbon;
@@ -47,7 +48,7 @@ class DailyTasksFilters extends Fluent
 
     public function setDate($value)
     {
-        $this->attributes['date'] = Carbon::parse($value, Wrmd::settings('timezone'));
+        $this->attributes['date'] = Carbon::parse($value, Wrmd::settings(SettingKey::TIMEZONE));
     }
 
     public function setFacility($value)
@@ -86,7 +87,7 @@ class DailyTasksFilters extends Fluent
 
     public static function defaultDate()
     {
-        return Carbon::now(Wrmd::settings('timezone'));
+        return Carbon::now(Wrmd::settings(SettingKey::TIMEZONE));
     }
 
     public static function defaultFacility()
@@ -142,7 +143,7 @@ class DailyTasksFilters extends Fluent
         // }
 
         if ($key === 'date') {
-            return Carbon::parse($this->get('date'), Wrmd::settings('timezone'));
+            return Carbon::parse($this->get('date'), Wrmd::settings(SettingKey::TIMEZONE));
         }
 
         if ($this->offsetExists($key)) {

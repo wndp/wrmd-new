@@ -9,6 +9,7 @@ import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import SettingsAside from './Partials/SettingsAside.vue';
 import {__} from '@/Composables/Translate';
+import {SettingKey} from '@/Enums/SettingKey';
 
 const route = inject('route');
 
@@ -17,8 +18,8 @@ const props = defineProps({
 });
 
 const form = useForm({
-  wildAlertSharing: props.sharingSettings.wildAlertSharing,
-  exportSharing: props.sharingSettings.exportSharing,
+  wildAlertSharing: props.sharingSettings[SettingKey.WILD_ALERT_SHARING],
+  exportSharing: props.sharingSettings[SettingKey.EXPORT_SHARING],
 });
 
 const update = () => {

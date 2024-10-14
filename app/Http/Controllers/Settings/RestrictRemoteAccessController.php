@@ -23,8 +23,8 @@ class RestrictRemoteAccessController extends Controller
         ]);
 
         $settings = $request->all('remoteRestricted', 'clinicIp', 'roleRemotePermission', 'userRemotePermission');
-        $settings['roleRemotePermission'] = array_values(Arr::wrap($settings['roleRemotePermission']));
-        $settings['userRemotePermission'] = array_values(Arr::wrap($settings['userRemotePermission']));
+        $settings[SettingKey::ROLE_REMOTE_PERMISSION] = array_values(Arr::wrap($settings['roleRemotePermission']));
+        $settings[SettingKey::USER_REMOTE_PERMISSION] = array_values(Arr::wrap($settings['userRemotePermission']));
 
         Wrmd::settings($settings);
 

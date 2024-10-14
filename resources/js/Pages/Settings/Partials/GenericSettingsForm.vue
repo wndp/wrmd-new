@@ -10,6 +10,7 @@ import { XMarkIcon } from '@heroicons/vue/24/outline';
 import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import {__} from '@/Composables/Translate';
+import {SettingKey} from '@/Enums/SettingKey';
 
 const props = defineProps({
   generalSettings: Object,
@@ -18,8 +19,8 @@ const props = defineProps({
 })
 
 const form = useForm({
-    showLookupRescuer: props.generalSettings.showLookupRescuer,
-    showGeolocationFields: props.generalSettings.showGeolocationFields,
+    showLookupRescuer: props.generalSettings[SettingKey.SHOW_LOOKUP_RESCUER],
+    showGeolocationFields: props.generalSettings[SettingKey.SHOW_GEOLOCATION_FIELDS],
     listFields: []
 });
 const filteredList = ref(props.selectableFields);

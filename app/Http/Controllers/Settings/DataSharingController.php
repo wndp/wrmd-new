@@ -20,8 +20,8 @@ class DataSharingController extends Controller
     public function edit(): Response
     {
         $sharingSettings = [
-            'wildAlertSharing' => (bool) Wrmd::settings('wildAlertSharing', true),
-            'exportSharing' => (bool) Wrmd::settings('exportSharing', true),
+            'wildAlertSharing' => (bool) Wrmd::settings(SettingKey::WILD_ALERT_SHARING, true),
+            'exportSharing' => (bool) Wrmd::settings(SettingKey::EXPORT_SHARING, true),
         ];
 
         return Inertia::render('Settings/DataSharing', compact('sharingSettings'));
@@ -33,8 +33,8 @@ class DataSharingController extends Controller
     public function update(Request $request): RedirectResponse
     {
         Wrmd::settings([
-            'wildAlertSharing' => $request->get('wildAlertSharing'),
-            'exportSharing' => $request->get('exportSharing'),
+            SettingKey::WILD_ALERT_SHARING => $request->get('wildAlertSharing'),
+            SettingKey::EXPORT_SHARING => $request->get('exportSharing'),
         ]);
 
         TeamUpdated::dispatch(Auth::user()->currentTeam);

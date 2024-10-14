@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\SettingKey;
 use App\Enums\AttributeOptionName;
 use App\Rules\AttributeOptionExistsRule;
 use App\Actions\AdmitPatient;
@@ -27,7 +28,7 @@ class StorePatientRequest extends FormRequest
      */
     public function rules(): array
     {
-        $now = Carbon::now(Wrmd::settings('timezone'));
+        $now = Carbon::now(Wrmd::settings(SettingKey::TIMEZONE));
 
         return [
             'incident_id' => 'nullable|integer|exists:incidents,id',

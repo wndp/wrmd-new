@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\SettingKey;
 use App\Enums\AttributeOptionName;
 use App\Events\PatientUpdated;
 use App\Jobs\AttemptTaxaIdentification;
@@ -24,7 +25,7 @@ class CageCardController extends Controller
     {
         $request->validate([
             'common_name' => 'required',
-            'admitted_at' => 'required|date|before_or_equal:'.($patient->dispositioned_at ?? Carbon::now(Wrmd::settings('timezone'))),
+            'admitted_at' => 'required|date|before_or_equal:'.($patient->dispositioned_at ?? Carbon::now(Wrmd::settings(SettingKey::TIMEZONE))),
             'morph_id' => [
                 'nullable',
                 'integer',

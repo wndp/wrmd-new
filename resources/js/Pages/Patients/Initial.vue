@@ -10,6 +10,7 @@ import {can} from '@/Composables/Can';
 import {Abilities} from '@/Enums/Abilities';
 import omit from 'lodash/omit';
 import {AttributeOptionUiBehavior} from '@/Enums/AttributeOptionUiBehavior';
+import {SettingKey} from '@/Enums/SettingKey';
 
 const props = defineProps({
   teamIsInPossession: {
@@ -125,7 +126,7 @@ const outcomeForm = useForm({
 
 const updateIntake = () => {
   intakeForm.transform(data => {
-    return usePage().props.settings.showGeolocationFields
+    return usePage().props.settings[SettingKey.SHOW_GEOLOCATION_FIELDS]
       ? data
       : omit(data, ['lat_found', 'lng_found'])
   })

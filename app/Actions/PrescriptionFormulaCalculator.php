@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Enums\SettingKey;
 use App\Actions\GetPatientWeights;
 use App\Concerns\AsAction;
 use App\Enums\AttributeOptionName;
@@ -224,7 +225,7 @@ class PrescriptionFormulaCalculator implements JsonSerializable, Arrayable
     public function calculateStartDate(): ?Carbon
     {
         if ($this->defaults->get('start_on_prescription_date')) {
-            return Carbon::now(Wrmd::settings('timezone'));
+            return Carbon::now(Wrmd::settings(SettingKey::TIMEZONE));
         }
 
         return null;

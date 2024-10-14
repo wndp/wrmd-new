@@ -41,7 +41,7 @@ class PrivacyController extends Controller
     public function edit(): Response
     {
         $users = Auth::user()->currentTeam->allUsers()->where('is_api_user', false)->values();
-        $fullPeopleAccess = (bool) Wrmd::settings('fullPeopleAccess', 0);
+        $fullPeopleAccess = (bool) Wrmd::settings(SettingKey::FULL_PEOPLE_ACCESS, 0);
         $authorized = $users
             ->each
             ->load('abilities')
@@ -71,7 +71,9 @@ class PrivacyController extends Controller
         $this->disallowAllPeopleAbilities($teammates);
         $this->allowPeopleAbilities($teammates, $abilities);
 
-        Wrmd::settings($request->all('fullPeopleAccess'));
+        Wrmd::settings([
+            SettingKey::FULL_PEOPLE_ACCESS => $request->input('fullPeopleAccess')
+        ]);
 
         event(new TeamUpdated(auth()->user()->currentTeam));
         BouncerFacade::refresh();

@@ -13,8 +13,7 @@ import InputError from '@/Components/FormElements/InputError.vue';
 import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import CustomFields from '@/Components/FormElements/CustomFields.vue';
-// import autoSave from '@/Mixins/AutoSave';
-// import hoistForm from '@/Mixins/HoistForm';
+import {SettingKey} from '@/Enums/SettingKey';
 import {__} from '@/Composables/Translate';
 import {AttributeOptionUiBehavior} from '@/Enums/AttributeOptionUiBehavior';
 
@@ -220,7 +219,7 @@ const doSubmit = () => emit('submitted');
               name="disposition_postal_code"
             />
           </FormRow>
-          <template v-if="$page.props.settings.showGeolocationFields">
+          <template v-if="$page.props.settings[SettingKey.SHOW_GEOLOCATION_FIELDS]">
             <FormRow
               id="disposition_lat"
               :label="__('Latitude')"

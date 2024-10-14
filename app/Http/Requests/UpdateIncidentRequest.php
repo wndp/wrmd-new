@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\SettingKey;
 use App\Enums\AttributeOptionName;
 use App\Rules\AttributeOptionExistsRule;
 use App\Support\Wrmd;
@@ -26,8 +27,8 @@ class UpdateIncidentRequest extends FormRequest
     public function rules(): array
     {
         $incident = $this->route('incident')->validateOwnership($this->user()->current_team_id);
-        $resolvedAt = $incident->resolved_at?->timezone(Wrmd::settings('timezone'));
-        $now = Carbon::now(Wrmd::settings('timezone'));
+        $resolvedAt = $incident->resolved_at?->timezone(Wrmd::settings(SettingKey::TIMEZONE));
+        $now = Carbon::now(Wrmd::settings(SettingKey::TIMEZONE));
 
         return [
             'reported_at' => 'required|date|before_or_equal:'.($resolvedAt ?? $now),
