@@ -18,6 +18,7 @@ return new class () extends Migration {
             $table->integer('value');
             $table->unsignedBigInteger('method_id')->nullable()->index();
             $table->string('comments')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

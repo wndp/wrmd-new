@@ -53,18 +53,18 @@ const doSubmit = () => emit('submitted');
         class="col-span-6"
       />
       <FormRow
-        id="entity"
+        id="entity_id"
         :label="__('Entity')"
         class="col-span-6 md:col-span-3"
       >
         <SelectInput
-          v-model="form.entity"
-          name="entity"
+          v-model="form.entity_id"
+          name="entity_id"
           :options="$page.props.options.personEntityTypesOptions"
           hasBlankOption
         />
         <InputError
-          :message="form.errors?.entity"
+          :message="form.errors?.entity_id"
           class="mt-2"
         />
       </FormRow>

@@ -78,7 +78,7 @@ class GeneralSettingsController extends Controller
         Wrmd::settings([
             SettingKey::SHOW_LOOKUP_RESCUER => $request->get('showLookupRescuer'),
             SettingKey::SHOW_GEOLOCATION_FIELDS => $request->get('showGeolocationFields'),
-            SettingKey::LISTED_FIELDS => $request->get('listFields'),
+            SettingKey::LIST_FIELDS => $request->get('listFields'),
         ]);
 
         event(new TeamUpdated(Auth::user()->currentTeam));

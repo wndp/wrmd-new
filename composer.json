@@ -24,6 +24,8 @@
         "pusher/pusher-php-server": "^7.2",
         "silber/bouncer": "^1.0",
         "singlestoredb/singlestoredb-laravel": "^1.5",
+        "sokil/php-isocodes": "^4.2",
+        "sokil/php-isocodes-db-i18n": "^4.0",
         "spatie/laravel-honeypot": "^4.5",
         "spatie/laravel-medialibrary": "^11.9",
         "spatie/laravel-sluggable": "^3.6",

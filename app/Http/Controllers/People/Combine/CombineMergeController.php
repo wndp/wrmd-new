@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\People\Combine;
 
-use App\Domain\People\Person;
-use App\Events\NewPersonCreated;
 use App\Http\Controllers\Controller;
+use App\Models\Donation;
+use App\Models\Incident;
+use App\Models\Patient;
+use App\Models\Person;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,36 +21,36 @@ class CombineMergeController extends Controller
         $request->validate([
             'newPerson' => 'required|array',
             'oldPeople' => 'required|array',
-            'oldPeople.*' => 'numeric',
+            'oldPeople.*' => 'string',
         ], [
             'newPerson.required' => 'There was a problem creating the new person.',
             'newPerson.array' => 'There was a problem creating the new person.',
-            'oldPeople.*.numeric' => 'There was a problem with one of the duplicate persons.',
+            'oldPeople.*.string' => 'There was a problem with one of the duplicate persons.',
         ]);
 
         DB::beginTransaction();
 
         try {
-            event(new NewPersonCreated(
-                $this->makeNewPerson($request->input('newPerson')),
-                $request->input('oldPeople')
-            ));
+            $newPerson = $this->makeNewPerson($request->input('newPerson'));
 
+            $this->reAssociatePatients($newPerson, $request->input('oldPeople'));
+            $this->reAssociateIncidents($newPerson, $request->input('oldPeople'));
+            $this->reAssociateDonations($newPerson, $request->input('oldPeople'));
             $this->destroyOldPeople($request->input('oldPeople'));
 
             DB::commit();
 
             return redirect()->route('people.combine.search')
-                ->with('flash.notificationHeading', __('Success!'))
-                ->with('flash.notification', __('The duplicate people were merged into one person.'));
-        } catch (QueryExceptionx $e) {
+                ->with('notification.heading', __('Success!'))
+                ->with('notification.text', __('The duplicate people were merged into one person.'));
+        } catch (QueryException $e) {
             DB::rollBack();
             Log::error($e);
 
             return redirect()->back()
-                ->with('flash.notificationHeading', __('Oops!'))
-                ->with('flash.notification', __('There was an unexpected error when trying to merge the people. You may try again or click the Help link above.'))
-                ->with('flash.style', 'danger');
+                ->with('notification.heading', __('Oops!'))
+                ->with('notification.text', __('There was an unexpected error when trying to merge the people. You may try again or click the Help link above.'))
+                ->with('notification.style', 'danger');
         }
     }
 
@@ -62,15 +65,27 @@ class CombineMergeController extends Controller
             'is_member' => isset($attributes['is_member']) ?: 0,
         ]));
 
-        $newPerson->account()->associate(Auth::user()->currentAccount);
+        $newPerson->team()->associate(Auth::user()->currentTeam);
         $newPerson->save();
 
         return $newPerson;
     }
 
-    /**
-     * Permanently destroy the old people in storage.
-     */
+    private function reAssociatePatients(Person $newPerson, array $oldPeople)
+    {
+        Patient::whereIn('rescuer_id', $oldPeople)->update(['rescuer_id' => $newPerson->id]);
+    }
+
+    private function reAssociateIncidents(Person $newPerson, array $oldPeople)
+    {
+        Incident::withTrashed()->whereIn('responder_id', $oldPeople)->update(['responder_id' => $newPerson->id]);
+    }
+
+    private function reAssociateDonations(Person $newPerson, array $oldPeople)
+    {
+        Donation::whereIn('person_id', $oldPeople)->update(['person_id' => $newPerson->id]);
+    }
+
     private function destroyOldPeople(array $oldPeople): void
     {
         foreach ($oldPeople as $id) {

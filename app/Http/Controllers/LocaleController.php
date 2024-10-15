@@ -4,33 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Options\LocaleOptions;
 use App\Options\Options;
-use CommerceGuys\Addressing\Country\CountryRepository;
-use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
+use App\Repositories\AdministrativeDivision;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\App;
 
 class LocaleController extends Controller
 {
     /**
-     * Show the details for the request country.
+     * Show the details for the requested country.
      */
     public function __invoke(string $country): JsonResponse
     {
-        $countryRepository = new CountryRepository();
-        $subdivisionRepository = new SubdivisionRepository();
-
-        $timezones = LocaleOptions::formatTimezones($countryRepository->get($country)->getTimezones());
-        $subdivisions = $subdivisionRepository->getAll([$country]);
+        $adminDivision = app(AdministrativeDivision::class);
+        $subdivisions = $adminDivision->countrySubdivisions($country);
+        $timezones = $adminDivision->countryTimeZones($country);
 
         return response()->json([
+            'subdivisionType' => $adminDivision->countrySubdivisionType($country),
             'subdivisions' => Options::arrayToSelectable($subdivisions),
             'timezones' => Options::arrayToSelectable($timezones),
         ]);
-
-        //$locale = locale()->get($country);
-
-        // return response()->json(array_merge($locale->jsonSerialize(), [
-        //     'subdivisions' => Options::arrayToSelectable(array_keys($locale::$subdivisions)),
-        //     'timezones' => Options::arrayToSelectable($locale::timezones()),
-        // ]));
     }
 }

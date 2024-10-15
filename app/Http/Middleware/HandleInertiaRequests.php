@@ -53,7 +53,7 @@ class HandleInertiaRequests extends Middleware
         $parentShare['appName'] = config('app.name');
         $parentShare['showDonateHeader'] = config('wrmd.show_donate_header');
 
-        if (!Auth::guest()) {
+        if (Auth::check()) {
             $user = $request->user();
             $team = $user->current_team_id ? $user->currentTeam : null;
 

@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use App\Concerns\ValidatesOwnership;
+use App\Repositories\AdministrativeDivision;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\App;
 
 class Veterinarian extends Model
 {
@@ -41,6 +44,19 @@ class Veterinarian extends Model
         return $this->belongsTo(User::class);
     }
 
+    protected function formattedInlineAddress(): Attribute
+    {
+        return Attribute::get(fn () =>
+            app(AdministrativeDivision::class)->inlineAddress(
+                organization: $this->business_name,
+                subdivision: $this->subdivision,
+                locality: $this->city,
+                postalCode: $this->postal_code,
+                addressLine1: $this->address,
+            )
+        );
+    }
+
     /**
      * Present the veterinarians full address.
      */
@@ -62,27 +78,27 @@ class Veterinarian extends Model
         // get subdivision type
         //$subDivision->getType(); // 'Autonomous republic'
 
-        $address = new \CommerceGuys\Addressing\Address(
-            countryCode: $this->team->country,
-            organization: $this->business_name ?? '',
-            administrativeArea: $this->subdivision ?? '', // this should be the actual name not the abreviation
-            locality: $this->city ?? '',
-            postalCode: $this->postal_code ?? '',
-            addressLine1: $this->address ?? '',
-        );
+        // $address = new \CommerceGuys\Addressing\Address(
+        //     countryCode: $this->team->country,
+        //     organization: $this->business_name ?? '',
+        //     administrativeArea: $this->subdivision ?? '', // this should be the actual name not the abreviation
+        //     locality: $this->city ?? '',
+        //     postalCode: $this->postal_code ?? '',
+        //     addressLine1: $this->address ?? '',
+        // );
 
-        $addressFormatRepository = new \CommerceGuys\Addressing\AddressFormat\AddressFormatRepository();
-        $countryRepository = new \CommerceGuys\Addressing\Country\CountryRepository();
-        $subdivisionRepository = new \CommerceGuys\Addressing\Subdivision\SubdivisionRepository();
-        $formatter = new \CommerceGuys\Addressing\Formatter\DefaultFormatter(
-            $addressFormatRepository,
-            $countryRepository,
-            $subdivisionRepository
-        );
+        // $addressFormatRepository = new \CommerceGuys\Addressing\AddressFormat\AddressFormatRepository();
+        // $countryRepository = new \CommerceGuys\Addressing\Country\CountryRepository();
+        // $subdivisionRepository = new \CommerceGuys\Addressing\Subdivision\SubdivisionRepository();
+        // $formatter = new \CommerceGuys\Addressing\Formatter\DefaultFormatter(
+        //     $addressFormatRepository,
+        //     $countryRepository,
+        //     $subdivisionRepository
+        // );
 
-        return $formatter->format($address, [
-            'html_tag' => 'address',
-            'locale' => app()->getLocale()
-        ]);
+        // return $formatter->format($address, [
+        //     'html_tag' => 'address',
+        //     'locale' => app()->getLocale()
+        // ]);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Listing;
 use App\Caches\PatientSelector;
 use App\Enums\Attribute;
 use App\Enums\Entity;
+use App\Enums\SettingKey;
 use App\Models\Team;
 use App\Support\Wrmd;
 use Carbon\Carbon;
@@ -29,7 +30,7 @@ abstract class LiveList implements JsonSerializable
     {
         $this->team = $team;
 
-        $this->columns = $team->settingsStore()->get('listFields', [
+        $this->columns = $team->settingsStore()->get(SettingKey::LIST_FIELDS, [
             Attribute::PATIENT_LOCATIONS_FACILITY_ID->value,
             Attribute::PATIENTS_BAND->value,
             Attribute::PATIENTS_DISPOSITION_ID->value,

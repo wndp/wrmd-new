@@ -23,18 +23,18 @@ class TeamFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->unique()->company(),
+            'name' => fake()->unique()->company(),
             'user_id' => User::factory(),
             'personal_team' => true,
             'status' => AccountStatus::ACTIVE,
-            'contact_name' => $this->faker->name,
-            'contact_email' => $this->faker->email,
+            'contact_name' => fake()->name,
+            'contact_email' => fake()->unique()->safeEmail(),
             'country' => 'US',
-            'address' => $this->faker->address,
-            'city' => $this->faker->city,
-            'subdivision' => $this->faker->stateAbbr(),
-            'postal_code' => $this->faker->postcode,
-            'phone_number' => $this->faker->phoneNumber,
+            'address' => fake()->streetAddress,
+            'city' => fake()->city,
+            'subdivision' => fake()->stateAbbr(),
+            'postal_code' => fake()->postcode,
+            'phone_number' => fake()->phoneNumber,
         ];
     }
 

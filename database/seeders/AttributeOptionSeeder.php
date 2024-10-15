@@ -405,6 +405,11 @@ class AttributeOptionSeeder extends Seeder
             __('In-Kind'),
             __('Bank Transfer'),
         ]);
+        $this->createOrUpdateAttributeOptionUiBehaviors(
+            AttributeOptionName::DONATION_METHODS,
+            __('Cash'),
+            AttributeOptionUiBehavior::DONATION_METHOD_IS_CASH,
+        );
 
         $this->createOrUpdateAttributes(AttributeOptionName::DAILY_TASK_ASSIGNMENTS, [
             __('Veterinarian'),

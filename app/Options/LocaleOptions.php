@@ -2,10 +2,9 @@
 
 namespace App\Options;
 
-use CommerceGuys\Addressing\Country\CountryRepository;
-use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
-use Illuminate\Support\Arr;
+use App\Repositories\AdministrativeDivision;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 
 class LocaleOptions extends Options
@@ -18,12 +17,11 @@ class LocaleOptions extends Options
 
     public function toArray(): array
     {
-        $countryRepository = new CountryRepository();
-        $subdivisionRepository = new SubdivisionRepository();
+        $adminDivision = app(AdministrativeDivision::class);
 
-        $countries = $countryRepository->getList(app()->getLocale());
-        $timezones = static::formatTimezones($countryRepository->get('US')->getTimezones());
-        $subdivisions = $subdivisionRepository->getList(['US'], app()->getLocale());
+        $countries = $adminDivision->countries();
+        $subdivisions = $adminDivision->countrySubdivisions();
+        $timezones = $adminDivision->countryTimeZones();
 
         return [
             'countryOptions' => static::arrayToSelectable($countries),
@@ -31,16 +29,5 @@ class LocaleOptions extends Options
             'timezoneOptions' => static::arrayToSelectable($timezones),
             'languageOptions' => static::arrayToSelectable(static::$languages),
         ];
-    }
-
-    public static function formatTimezones($timezones)
-    {
-        return Collection::make($timezones)->mapWithKeys(fn ($timezone) => [
-            $timezone => Str::headline(
-                Str::of($timezone)->explode('/')->last()
-            )
-        ])
-        ->sort()
-        ->toArray();
     }
 }

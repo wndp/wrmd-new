@@ -36,6 +36,7 @@ class AttributeOptionExistsRule implements ValidationRule
                 ->pluck('name', 'id')
                 ->toArray();
         }
+
         $attributeOptionNames = array_column(Arr::wrap($this->attributeOptionName), 'value');
 
         if (

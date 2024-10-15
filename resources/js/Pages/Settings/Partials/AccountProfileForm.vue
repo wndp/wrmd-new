@@ -83,7 +83,7 @@ const clearPhotoFileInput = () => {
 const onCountryChange = () => {
   axios.get('/internal-api/locale/' + form.country)
     .then(response => {
-      subdivisionLabel.value = response.data.subdivision;
+      subdivisionLabel.value = response.data.subdivisionType;
       mutableSubdivisions.value = response.data.subdivisions;
       form.subdivision = response.data.subdivisions[0].value;
       emit('country-change', response.data);

@@ -7,6 +7,7 @@ use App\Concerns\QueriesOneOfMany;
 use App\Concerns\ValidatesOwnership;
 use App\Models\Patient;
 use App\Models\Team;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -102,18 +103,43 @@ class Person extends Model
     /**
      * Present the persons full name.
      */
-    public function getFullNameAttribute(): string
+    public function fullName(): Attribute
     {
-        return $this->first_name.' '.$this->last_name;
+        return Attribute::get(
+            fn () => $this->first_name.' '.$this->last_name
+        );
     }
 
     /**
      * Present an identifier name for the person.
      */
-    public function getIdentifierAttribute(): string
+    public function identifier(): Attribute
     {
         $parts = array_filter(array_map('trim', [$this->organization, $this->first_name.' '.$this->last_name]));
 
-        return implode(', ', $parts) ?: 'Unidentified';
+        return Attribute::get(
+            fn () => implode(', ', $parts) ?: 'Unidentified'
+        );
+    }
+
+    protected function isRescuer(): Attribute
+    {
+        return Attribute::get(
+            fn () => $this->patients->count() > 0,
+        );
+    }
+
+    protected function isReportingParty(): Attribute
+    {
+        return Attribute::get(
+            fn () => $this->hotline->count() > 0,
+        );
+    }
+
+    protected function isDonor(): Attribute
+    {
+        return Attribute::get(
+            fn () => $this->donations->count() > 0,
+        );
     }
 }

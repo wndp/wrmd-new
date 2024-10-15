@@ -5,10 +5,12 @@ namespace App\Providers;
 use Api2Pdf\Api2Pdf;
 use App\Models\Patient;
 use App\PdfApiInterface;
+use App\Repositories\AdministrativeDivision;
 use App\Repositories\SettingsStore;
 use App\Services\DomPdfEngine;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -28,6 +30,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(SettingsStore::class, function () {
             if (Auth::check()) {
                 return new SettingsStore(Auth::user()->currentTeam);
+            }
+        });
+
+        $this->app->singleton(AdministrativeDivision::class, function () {
+            if (Auth::check()) {
+                return new AdministrativeDivision(App::getLocale(), Auth::user()->currentTeam->country);
             }
         });
 
@@ -75,6 +83,12 @@ class AppServiceProvider extends ServiceProvider
             'survivalRate' => \App\Macros\SurvivalRate::class
         ] as $macro => $class) {
             Number::macro($macro, app($class)());
+        }
+
+        foreach ([
+            'prefix' => \App\Macros\Prefix::class,
+        ] as $macro => $class) {
+            Arr::macro($macro, app($class)());
         }
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\People;
 
 use App\Http\Controllers\Controller;
+use App\Models\Person;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
