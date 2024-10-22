@@ -16,24 +16,21 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class ExpenseCategory extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use ValidatesOwnership;
     use HasVersion7Uuids;
+    use LogsActivity;
 
     protected $fillable = [
         'name',
         'description',
     ];
 
-    /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
-     */
     protected $casts = [
 
     ];
@@ -86,5 +83,13 @@ class ExpenseCategory extends Model
     public function isParent(): bool
     {
         return $this->parent_id === null;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

@@ -17,7 +17,7 @@ class TaxonFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'class' => $this->faker->word()
         ];
     }
 }

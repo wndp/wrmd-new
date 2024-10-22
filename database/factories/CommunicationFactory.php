@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Incident;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,9 @@ class CommunicationFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'incident_id' => Incident::factory(),
+            'communication_at' => $this->faker->dateTimeBetween('-10 days', '10 days')->format('Y-m-d'),
+            'communication' => $this->faker->sentence()
         ];
     }
 }

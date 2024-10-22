@@ -328,9 +328,19 @@ class AttributeOptionSeeder extends Seeder
         );
 
         $this->createOrUpdateAttributes(AttributeOptionName::EXAM_TEMPERATURE_UNITS, [
-            'C' => 'Celsius (C)',
-            'F' => 'Fahrenheit (F)',
+            'C' => 'Celsius',
+            'F' => 'Fahrenheit',
         ]);
+        $this->createOrUpdateAttributeOptionUiBehaviors(
+            AttributeOptionName::EXAM_TEMPERATURE_UNITS,
+            'Celsius',
+            AttributeOptionUiBehavior::EXAM_WEIGHT_TEMPERATURE_IS_C,
+        );
+        $this->createOrUpdateAttributeOptionUiBehaviors(
+            AttributeOptionName::EXAM_TEMPERATURE_UNITS,
+            'Fahrenheit',
+            AttributeOptionUiBehavior::EXAM_WEIGHT_TEMPERATURE_IS_F,
+        );
 
         $this->createOrUpdateAttributes(AttributeOptionName::EXAM_MUCUS_MEMBRANE_COLORS, [
             __('Pink'),
@@ -1335,6 +1345,10 @@ class AttributeOptionSeeder extends Seeder
             __('Bitumen'),
             __('Vegetable / Fish'),
             __('Other'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::LAB_RESULT_METHOD, [
+            __('CBC (Complete Blood Count)'),
         ]);
     }
 

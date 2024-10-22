@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\HasDailyTasks;
+use App\Concerns\LocksPatient;
 use App\Concerns\ValidatesOwnership;
 use App\Schedulable;
 use App\Support\Wrmd;
@@ -13,6 +14,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Recheck extends Model implements Schedulable
 {
@@ -21,6 +24,8 @@ class Recheck extends Model implements Schedulable
     use HasDailyTasks;
     use ValidatesOwnership;
     use HasVersion7Uuids;
+    use LocksPatient;
+    use LogsActivity;
 
     protected $fillable = [
         'patient_id',
@@ -104,5 +109,13 @@ class Recheck extends Model implements Schedulable
         return Attribute::get(
             fn () => 'green',
         );
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

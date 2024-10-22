@@ -10,12 +10,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\App;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Veterinarian extends Model
 {
     use HasFactory;
     use ValidatesOwnership;
     use HasVersion7Uuids;
+    use LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -44,6 +47,14 @@ class Veterinarian extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function phone(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => app(AdministrativeDivision::class)->phoneNumber($value),
+            set: fn ($value) => preg_replace('/[^0-9]/', '', $value)
+        );
+    }
+
     protected function formattedInlineAddress(): Attribute
     {
         return Attribute::get(fn () =>
@@ -57,48 +68,11 @@ class Veterinarian extends Model
         );
     }
 
-    /**
-     * Present the veterinarians full address.
-     */
-    public function getFullAddressAttribute(): string
+    public function getActivitylogOptions(): LogOptions
     {
-        // $driver = new \Sokil\IsoCodes\TranslationDriver\SymfonyTranslationDriver();
-        // $isoCodes = new \Sokil\IsoCodes\IsoCodesFactory(null, $driver);
-        // $subDivisions = $isoCodes->getSubdivisions();
-
-
-        // $subDivision = $subDivisions->getByCode(
-        //     \App\Support\Wrmd::iso3166(dd($this->team->country, $this->subdivision))
-        // );
-
-        // dd($subDivision->getName()); // Respublika Krym
-
-        //$subDivision->getLocalName(); // Автономна Республіка Крим
-
-        // get subdivision type
-        //$subDivision->getType(); // 'Autonomous republic'
-
-        // $address = new \CommerceGuys\Addressing\Address(
-        //     countryCode: $this->team->country,
-        //     organization: $this->business_name ?? '',
-        //     administrativeArea: $this->subdivision ?? '', // this should be the actual name not the abreviation
-        //     locality: $this->city ?? '',
-        //     postalCode: $this->postal_code ?? '',
-        //     addressLine1: $this->address ?? '',
-        // );
-
-        // $addressFormatRepository = new \CommerceGuys\Addressing\AddressFormat\AddressFormatRepository();
-        // $countryRepository = new \CommerceGuys\Addressing\Country\CountryRepository();
-        // $subdivisionRepository = new \CommerceGuys\Addressing\Subdivision\SubdivisionRepository();
-        // $formatter = new \CommerceGuys\Addressing\Formatter\DefaultFormatter(
-        //     $addressFormatRepository,
-        //     $countryRepository,
-        //     $subdivisionRepository
-        // );
-
-        // return $formatter->format($address, [
-        //     'html_tag' => 'address',
-        //     'locale' => app()->getLocale()
-        // ]);
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

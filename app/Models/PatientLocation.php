@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use App\Concerns\LocksPatient;
 use App\Concerns\ValidatesOwnership;
+use App\Enums\AttributeOptionName;
+use App\Enums\AttributeOptionUiBehavior;
+use App\Summarizable;
 use App\Support\Timezone;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
@@ -10,13 +14,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
-class PatientLocation extends Model
+class PatientLocation extends Model implements Summarizable
 {
     use HasFactory;
     use SoftDeletes;
     use ValidatesOwnership;
     use HasVersion7Uuids;
+    use LogsActivity;
+    use LocksPatient;
 
     protected $fillable = [
         'moved_in_at',
@@ -60,19 +68,46 @@ class PatientLocation extends Model
         return $this->belongsTo(AttributeOption::class, 'facility_id');
     }
 
-    protected function locationForHumans(): Attribute
+    public function summaryDate(): Attribute
+    {
+        return Attribute::get(fn () => 'moved_in_at');
+    }
+
+    public function summaryBody(): Attribute
     {
         return Attribute::get(
-            function () {
+            fn () => __('Moved to :location.', [
+                'location' => $this->location_for_humans
+            ])." $this->comments"
+        );
+    }
+
+    protected function locationForHumans(): Attribute
+    {
+        [$homeCareId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
+            AttributeOptionName::PATIENT_LOCATION_FACILITIES->value,
+            AttributeOptionUiBehavior::PATIENT_LOCATION_FACILITIES_IS_HOMECARE->value
+        ]);
+
+        return Attribute::get(
+            function () use ($homeCareId) {
                 $string = $this->area;
 
-                if ($this->facility === 'Homecare') {
+                if ($this->facility_id === $homeCareId) {
                     return $string;
                 }
 
                 return $string .= trim($this->enclosure) === '' ? '' : ', '.$this->enclosure;
             }
         );
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 
     // protected function movedInAtForHumans(): Attribute

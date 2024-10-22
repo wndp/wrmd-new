@@ -67,6 +67,7 @@ class AppServiceProvider extends ServiceProvider
 
         Route::bind('voidedPatient', fn ($value) => Patient::onlyVoided()->findOrFail($value));
 
+        // Policies
         foreach ([
             \App\Policies\AdminPolicy::class,
             \App\Policies\PrivacyPolicy::class,
@@ -77,6 +78,7 @@ class AppServiceProvider extends ServiceProvider
             }
         }
 
+        // Number macros
         foreach ([
             'significantFigures' => \App\Macros\SignificantFigures::class,
             'percentageOf' => \App\Macros\PercentageOf::class,
@@ -85,6 +87,7 @@ class AppServiceProvider extends ServiceProvider
             Number::macro($macro, app($class)());
         }
 
+        // Array macros
         foreach ([
             'prefix' => \App\Macros\Prefix::class,
         ] as $macro => $class) {

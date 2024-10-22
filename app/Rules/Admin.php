@@ -50,11 +50,11 @@ class Admin implements ValidationRule
             return true;
         }
 
-        foreach ($this->user->fresh()->coAccountUsers as $accountUser) {
-            if ($accountUser->user->isA(Role::ADMIN->value)) {
+        foreach ($this->user->fresh()->teammates() as $teammate) {
+            if ($teammate->isA(Role::ADMIN->value)) {
                 $doesAdminExist = true;
 
-                if ($accountUser->user_id == $this->user->id && $newRole !== Role::ADMIN->value) {
+                if ($teammate->id == $this->user->id && $newRole !== Role::ADMIN->value) {
                     $doesAdminExist = false;
                 } else {
                     $doesAdminExist = true;

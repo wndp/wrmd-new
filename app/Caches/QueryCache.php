@@ -79,7 +79,7 @@ class QueryCache
     public static function empty(): void
     {
         Redis::connection('cache')->del(static::fingerprint());
-        SearchCache::empty();
+        //SearchCache::empty();
     }
 
     /**

@@ -18,9 +18,9 @@ class AttributeOptionFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => AttributeOptionName::STRANDING_EXAM_TYPE,
-            'value' => $this->faker->name(),
-            'value_lowercase' => $this->faker->name(),
+            'name' => AttributeOptionName::PATIENT_DISPOSITIONS,
+            'value' => $this->faker->word(),
+            'value_lowercase' => $this->faker->word(),
             'sort_order' => null,
         ];
     }

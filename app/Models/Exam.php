@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\LocksPatient;
 use App\Concerns\ValidatesOwnership;
 use App\Summarizable;
 use App\Support\Timezone;
@@ -14,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Exam extends Model implements Summarizable, Weighable
 {
@@ -21,6 +24,8 @@ class Exam extends Model implements Summarizable, Weighable
     use SoftDeletes;
     use HasVersion7Uuids;
     use ValidatesOwnership;
+    use LogsActivity;
+    use LocksPatient;
 
     protected $fillable = [
         'patient_id',
@@ -283,5 +288,13 @@ class Exam extends Model implements Summarizable, Weighable
     public function summaryWeightUnitId(): Attribute
     {
         return Attribute::get(fn () => $this->weight_unit_id);
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

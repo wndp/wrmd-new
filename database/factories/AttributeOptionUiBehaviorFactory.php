@@ -20,7 +20,7 @@ class AttributeOptionUiBehaviorFactory extends Factory
     {
         return [
             'attribute_option_id' => AttributeOption::factory(),
-            'behavior' => AttributeOptionUiBehavior::NEW_EVENT_SHOWS_HUMAN_INTERACTION_FILE_UPLOAD,
+            'behavior' => AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_PENDING,
         ];
     }
 }

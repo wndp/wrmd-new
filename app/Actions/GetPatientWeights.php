@@ -7,6 +7,8 @@ use App\Enums\Entity;
 use App\Events\GettingPatientWeights;
 use App\Models\CareLog;
 use App\Models\Exam;
+use App\Models\Morphometric;
+use App\Models\Necropsy;
 use App\Models\Patient;
 use App\Summarizable;
 use App\Support\WeightsCollection;
@@ -22,9 +24,11 @@ class GetPatientWeights
      */
     public static function handle(Patient $patient)
     {
-        $records = event(new GettingPatientWeights($patient));
+        //$records = event(new GettingPatientWeights($patient));
         $records[] = CareLog::where('patient_id', $patient->id)->get();
         $records[] = Exam::where('patient_id', $patient->id)->get();
+        $records[] = Morphometric::where('patient_id', $patient->id)->get();
+        $records[] = Necropsy::where('patient_id', $patient->id)->get();
 
         return (new WeightsCollection($records))
             ->collapse()

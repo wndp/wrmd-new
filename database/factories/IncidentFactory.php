@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\AttributeOption;
+use App\Models\Person;
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +20,14 @@ class IncidentFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'team_id' => Team::factory(),
+            'responder_id' => function (array $attributes) {
+                return Person::factory()->create(['team_id' => $attributes['team_id']]);
+            },
+            'reported_at' => $this->faker->dateTimeBetween('-10 days', '10 days')->format('Y-m-d'),
+            'occurred_at' => $this->faker->dateTimeBetween('-10 days', '10 days')->format('Y-m-d'),
+            'recorded_by' => $this->faker->name,
+            'incident_status_id' => AttributeOption::factory(),
         ];
     }
 }

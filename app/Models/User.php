@@ -87,6 +87,13 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
     ];
 
+    public function teammates()
+    {
+        return $this->currentTeam
+            ->allUsers()
+            ->where('user_id', '!=', $this->id);
+    }
+
     /**
      * Return a team's API user.
      */

@@ -2,32 +2,23 @@
 
 namespace App\Models;
 
+use App\Enums\ForumGroupRole;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class ForumGroupMember extends Model
+class ForumGroupMember extends Pivot
 {
     use HasFactory;
-    use HasVersion7Uuids;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'role',
         'settings',
     ];
 
-    /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
-     */
     protected $casts = [
+        'role' => ForumGroupRole::class,
         'settings' => 'json',
     ];
 
@@ -38,6 +29,6 @@ class ForumGroupMember extends Model
 
     public function group(): BelongsTo
     {
-        return $this->belongsTo(ForumGroup::class); // forum_group_id
+        return $this->belongsTo(ForumGroup::class);
     }
 }

@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use App\Concerns\LocksPatient;
 use App\Concerns\ValidatesOwnership;
+use App\Enums\AttributeOptionName;
+use App\Enums\AttributeOptionUiBehavior;
+use App\Summarizable;
 use App\Weighable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
@@ -10,13 +14,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
-class Morphometric extends Model implements Weighable
+class Morphometric extends Model implements Weighable, Summarizable
 {
     use HasFactory;
     use SoftDeletes;
     use ValidatesOwnership;
     use HasVersion7Uuids;
+    use LogsActivity;
+    use LocksPatient;
 
     protected $fillable = [
         'patient_id',
@@ -75,6 +83,29 @@ class Morphometric extends Model implements Weighable
 
     public function summaryWeightUnitId(): Attribute
     {
-        return Attribute::get(fn () => 'g');
+        [$gWeightId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
+            AttributeOptionName::EXAM_WEIGHT_UNITS->value,
+            AttributeOptionUiBehavior::EXAM_WEIGHT_UNITS_IS_G->value,
+        ]);
+
+        return Attribute::get(fn () => $gWeightId);
+    }
+
+    public function summaryBody(): Attribute
+    {
+        return Attribute::get(fn () => '');
+    }
+
+    public function summaryDate(): Attribute
+    {
+        return Attribute::get(fn () => 'measured_at');
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

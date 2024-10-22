@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Communication extends Model
 {
@@ -14,6 +16,7 @@ class Communication extends Model
     use SoftDeletes;
     use HasVersion7Uuids;
     use ValidatesOwnership;
+    use LogsActivity;
 
     protected $fillable = [
         'incident_id',
@@ -32,5 +35,13 @@ class Communication extends Model
     public function incident()
     {
         return $this->belongsTo(Incident::class);
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

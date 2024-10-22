@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use App\Enums\SettingKey;
+use App\Concerns\LocksPatient;
 use App\Concerns\ValidatesOwnership;
+use App\Enums\SettingKey;
 use App\Summarizable;
 use App\Support\Timezone;
 use App\Support\Wrmd;
@@ -17,6 +18,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class CareLog extends Model implements Summarizable, Weighable
 {
@@ -24,6 +27,8 @@ class CareLog extends Model implements Summarizable, Weighable
     use ValidatesOwnership;
     use HasVersion7Uuids;
     use SoftDeletes;
+    use LogsActivity;
+    use LocksPatient;
 
     protected $fillable = [
         'date_care_at',
@@ -57,14 +62,14 @@ class CareLog extends Model implements Summarizable, Weighable
         return $this->belongsTo(User::class);
     }
 
-    public function weight(): BelongsTo
+    public function weightUnit(): BelongsTo
     {
-        return $this->belongsTo(AttributeOption::class, 'weight_id');
+        return $this->belongsTo(AttributeOption::class, 'weight_unit_id');
     }
 
-    public function temperature(): BelongsTo
+    public function temperatureUnit(): BelongsTo
     {
-        return $this->belongsTo(AttributeOption::class, 'temperature_id');
+        return $this->belongsTo(AttributeOption::class, 'temperature_unit_id');
     }
 
     public static function store($patientId, Collection $data, User $user): static
@@ -98,7 +103,7 @@ class CareLog extends Model implements Summarizable, Weighable
         return Attribute::get(
             fn () => empty($this->weight_unit_id) || !is_numeric($this->weight) || $this->weight == 0
                 ? ''
-                : $this->weight.$this->weightUnit?->value
+                : "$this->weight".$this->weightUnit?->value
         );
     }
 
@@ -160,5 +165,13 @@ class CareLog extends Model implements Summarizable, Weighable
         return Attribute::get(
             fn () => $this->weight_unit_id
         );
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

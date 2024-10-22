@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Number;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Donation extends Model
 {
@@ -21,6 +23,7 @@ class Donation extends Model
     use SoftDeletes;
     use QueriesDateRange;
     use HasVersion7Uuids;
+    use LogsActivity;
 
     protected $fillable = [
         'person_id',
@@ -50,10 +53,18 @@ class Donation extends Model
 
     protected function valueForHumans(): Attribute
     {
-        $currencyCode = app(AdministrativeDivision::class)->countryCurrencyCode('US');
+        $currencyCode = app(AdministrativeDivision::class)->countryCurrencyCode();
 
         return Attribute::get(
             fn () => Number::currency($this->value / 100, $currencyCode)
         );
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

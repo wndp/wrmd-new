@@ -13,16 +13,17 @@ class Weight
     public static function toKilograms(float $weight, int $unitId): float
     {
         [
-            $dosageUnitIsPerKgId,
-            $dosageUnitIsGId,
-            $dosageUnitIsLbId,
-            $dosageUnitIsOzId,
+            $unitIsPerKgId,
+            $unitIsGId,
+            $unitIsLbId,
+            $unitIsOzId,
         ] = static::weightUnitIds();
 
         $weight = match ($unitId) {
-            $dosageUnitIsGId => $weight = $weight / 1000,
-            $dosageUnitIsLbId => $weight = $weight / 2.205,
-            $dosageUnitIsOzId => $weight = $weight / 35.274,
+            $unitIsGId => $weight = $weight / 1000,
+            $unitIsLbId => $weight = $weight / 2.205,
+            $unitIsOzId => $weight = $weight / 35.274,
+            default => $weight
         };
 
         return round($weight, 4);
@@ -34,16 +35,17 @@ class Weight
     public static function toGrams(float $weight, int $unitId): float
     {
         [
-            $dosageUnitIsPerKgId,
-            $dosageUnitIsGId,
-            $dosageUnitIsLbId,
-            $dosageUnitIsOzId,
+            $unitIsPerKgId,
+            $unitIsGId,
+            $unitIsLbId,
+            $unitIsOzId,
         ] = static::weightUnitIds();
 
         $weight = match ($unitId) {
-            $dosageUnitIsPerKgId => $weight = $weight * 1000,
-            $dosageUnitIsLbId => $weight = $weight * 453.592,
-            $dosageUnitIsOzId => $weight = $weight * 28.35,
+            $unitIsPerKgId => $weight = $weight * 1000,
+            $unitIsLbId => $weight = $weight * 453.592,
+            $unitIsOzId => $weight = $weight * 28.35,
+            default => $weight
         };
 
         return round($weight, 4);
@@ -55,16 +57,17 @@ class Weight
     public static function toPounds(float $weight, int $unitId): float
     {
         [
-            $dosageUnitIsPerKgId,
-            $dosageUnitIsGId,
-            $dosageUnitIsLbId,
-            $dosageUnitIsOzId,
+            $unitIsPerKgId,
+            $unitIsGId,
+            $unitIsLbId,
+            $unitIsOzId,
         ] = static::weightUnitIds();
 
         $weight = match ($unitId) {
-            $dosageUnitIsPerKgId => $weight = $weight * 2.205,
-            $dosageUnitIsGId => $weight = $weight / 453.592,
-            $dosageUnitIsOzId => $weight = $weight / 16,
+            $unitIsPerKgId => $weight = $weight * 2.205,
+            $unitIsGId => $weight = $weight / 453.592,
+            $unitIsOzId => $weight = $weight / 16,
+            default => $weight
         };
 
         return round($weight, 4);
@@ -76,16 +79,17 @@ class Weight
     public static function toOunces(float $weight, int $unitId): float
     {
         [
-            $dosageUnitIsPerKgId,
-            $dosageUnitIsGId,
-            $dosageUnitIsLbId,
-            $dosageUnitIsOzId,
+            $unitIsPerKgId,
+            $unitIsGId,
+            $unitIsLbId,
+            $unitIsOzId,
         ] = static::weightUnitIds();
 
         $weight = match ($unitId) {
-            $dosageUnitIsPerKgId => $weight = $weight * 35.274,
-            $dosageUnitIsGId => $weight = $weight / 28.35,
-            $dosageUnitIsLbId => $weight = $weight * 16,
+            $unitIsPerKgId => $weight = $weight * 35.274,
+            $unitIsGId => $weight = $weight / 28.35,
+            $unitIsLbId => $weight = $weight * 16,
+            default => $weight
         };
 
         return round($weight, 4);

@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Enums\SettingKey;
 use App\Models\Team;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -37,7 +38,7 @@ class Timezone
         return Cache::remember(
             'timezone.'.$team->id,
             Carbon::tomorrow(),
-            fn () => $team->settingsStore()->get('timezone', 'UTC'),
+            fn () => $team->settingsStore()->get(SettingKey::TIMEZONE, 'UTC'),
         );
     }
 }

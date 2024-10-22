@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('locations', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->unsignedBigInteger('legacy_id')->nullable()->index();
+            $table->unsignedBigInteger('team_id')->unsigned()->index();
+            $table->string('area');
+            $table->string('enclosure')->nullable();
+            $table->string('hash', 20)->nullable();
             $table->timestamps();
         });
     }

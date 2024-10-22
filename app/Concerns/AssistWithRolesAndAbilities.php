@@ -7,11 +7,22 @@ use App\Models\Team;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Str;
+use Silber\Bouncer\BouncerFacade;
 use Silber\Bouncer\Database\Models;
 use Silber\Bouncer\Database\Role;
 
 trait AssistWithRolesAndAbilities
 {
+    public function joinTeamWithRole(Team $team, RoleEnum $role)
+    {
+        $this->teams()->attach($team);
+
+        BouncerFacade::scope()->to($team->id)->onlyRelations()->dontScopeRoleAbilities();
+        BouncerFacade::assign($role->value)->to($this->id);
+
+        return $this;
+    }
+
     /**
      * Switch the user's role.
      */
@@ -44,7 +55,7 @@ trait AssistWithRolesAndAbilities
      */
     public function roleOnCurrentTeam(): Role
     {
-        return $this->roleOn($this->current_team);
+        return $this->roleOn($this->currentTeam);
     }
 
     /**

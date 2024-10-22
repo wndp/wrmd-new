@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\AttributeOption;
+use App\Models\Patient;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,9 @@ class PatientLocationFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'patient_id' => Patient::factory(),
+            'facility_id' => AttributeOption::factory(),
+            'area' => $this->faker->word(),
         ];
     }
 }

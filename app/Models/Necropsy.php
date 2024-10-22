@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\LocksPatient;
 use App\Concerns\ValidatesOwnership;
 use App\Summarizable;
 use App\Support\Timezone;
@@ -11,6 +12,8 @@ use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Necropsy extends Model implements Summarizable, Weighable
 {
@@ -18,6 +21,8 @@ class Necropsy extends Model implements Summarizable, Weighable
     use SoftDeletes;
     use HasVersion7Uuids;
     use ValidatesOwnership;
+    use LogsActivity;
+    use LocksPatient;
 
     protected $fillable = [
         'date_necropsied_at',
@@ -178,5 +183,13 @@ class Necropsy extends Model implements Summarizable, Weighable
             return Timezone::convertFromUtcToLocal($this->date_necropsied_at->setTimeFromTimeString($this->time_necropsied_at))
                 ?->translatedFormat(config('wrmd.date_time_format'));
         });
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

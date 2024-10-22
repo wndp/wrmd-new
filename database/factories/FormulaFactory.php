@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Enums\FormulaType;
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,10 @@ class FormulaFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'team_id' => Team::factory(),
+            'name' => $this->faker->word(),
+            'type' => FormulaType::PRESCRIPTION,
+            'defaults' => []
         ];
     }
 }

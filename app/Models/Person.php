@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Concerns\LocksPatient;
 use App\Concerns\QueriesDateRange;
 use App\Concerns\QueriesOneOfMany;
 use App\Concerns\ValidatesOwnership;
 use App\Models\Patient;
 use App\Models\Team;
+use App\Repositories\AdministrativeDivision;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,6 +16,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Person extends Model
 {
@@ -23,6 +27,8 @@ class Person extends Model
     use QueriesDateRange;
     use QueriesOneOfMany;
     use HasVersion7Uuids;
+    use LogsActivity;
+    use LocksPatient;
 
     protected $fillable = [
         'team_id',
@@ -100,9 +106,22 @@ class Person extends Model
         return $this->belongsTo(AttributeOption::class, 'entity_id');
     }
 
-    /**
-     * Present the persons full name.
-     */
+    public function phone(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => app(AdministrativeDivision::class)->phoneNumber($value),
+            set: fn ($value) => preg_replace('/[^0-9]/', '', $value)
+        );
+    }
+
+    public function alternatePhone(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => app(AdministrativeDivision::class)->phoneNumber($value),
+            set: fn ($value) => preg_replace('/[^0-9]/', '', $value)
+        );
+    }
+
     public function fullName(): Attribute
     {
         return Attribute::get(
@@ -110,9 +129,6 @@ class Person extends Model
         );
     }
 
-    /**
-     * Present an identifier name for the person.
-     */
     public function identifier(): Attribute
     {
         $parts = array_filter(array_map('trim', [$this->organization, $this->first_name.' '.$this->last_name]));
@@ -141,5 +157,13 @@ class Person extends Model
         return Attribute::get(
             fn () => $this->donations->count() > 0,
         );
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

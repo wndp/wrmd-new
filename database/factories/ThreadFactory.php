@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Enums\Channel;
+use App\Enums\ThreadStatus;
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +20,11 @@ class ThreadFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'team_id' => Team::factory(),
+            'channel' => Channel::GENERAL,
+            'status' => ThreadStatus::UNSOLVED,
+            'title' => $this->faker->word(),
+            'body' => $this->faker->sentence(),
         ];
     }
 }

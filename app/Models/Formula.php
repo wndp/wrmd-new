@@ -13,12 +13,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Formula extends Model
 {
     use HasFactory;
     use HasVersion7Uuids;
     use ValidatesOwnership;
+    use LogsActivity;
 
     protected $fillable = [
         'team_id',
@@ -90,5 +93,13 @@ class Formula extends Model
                 ->orWhere(DB::raw("LOWER(JSON_EXTRACT_STRING(defaults, 'drug'))"), 'like', $like)
             //fn ($query) => $query->where('name', 'like', $like)->orWhereRaw('LOWER(`defaults`->\'$."drug"\') like ?', $like)
         );
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

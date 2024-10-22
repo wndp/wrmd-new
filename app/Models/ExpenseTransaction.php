@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Collections\ExpenseTransactionCollection;
 use App\Concerns\InteractsWithMedia;
+use App\Concerns\LocksPatient;
 use App\Concerns\QueriesDateRange;
 use App\Concerns\QueriesOneOfMany;
 use App\Concerns\ValidatesOwnership;
@@ -16,6 +18,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class ExpenseTransaction extends Model
 {
@@ -23,6 +27,8 @@ class ExpenseTransaction extends Model
     use SoftDeletes;
     use ValidatesOwnership;
     use HasVersion7Uuids;
+    use LogsActivity;
+    use LocksPatient;
 
     protected $fillable = [
         'transacted_at',
@@ -41,10 +47,6 @@ class ExpenseTransaction extends Model
         'transacted_at_for_humans',
         'debit_for_humans',
         'credit_for_humans',
-    ];
-
-    protected $with = [
-        'category',
     ];
 
     public function patient(): BelongsTo
@@ -121,5 +123,18 @@ class ExpenseTransaction extends Model
         $charge = number_format($charge / 100, 2);
 
         return $this->debit !== 0 ? "($$charge)" : "$$charge";
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
+    public function newCollection(array $models = []): ExpenseTransactionCollection
+    {
+        return new ExpenseTransactionCollection($models);
     }
 }

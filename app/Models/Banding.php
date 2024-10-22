@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Concerns\LocksPatient;
 use App\Concerns\ValidatesOwnership;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Banding extends Model
 {
@@ -15,6 +18,8 @@ class Banding extends Model
     use SoftDeletes;
     use ValidatesOwnership;
     use HasVersion7Uuids;
+    use LogsActivity;
+    use LocksPatient;
 
     protected $fillable = [
         'patient_id',
@@ -159,5 +164,13 @@ class Banding extends Model
     public function howPresentCondition(): BelongsTo
     {
         return $this->belongsTo(AttributeOption::class, 'how_present_condition_id');
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Enums\SettingKey;
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,8 @@ class SettingFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'team_id' => Team::factory(),
+            'key' => SettingKey::TIMEZONE
         ];
     }
 }

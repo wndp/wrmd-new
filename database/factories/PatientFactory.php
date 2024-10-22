@@ -2,6 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\AttributeOption;
+use App\Models\Person;
+use App\Models\Taxon;
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +21,35 @@ class PatientFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'team_possession_id' => Team::factory(),
+            'rescuer_id' => Person::factory(),
+            'taxon_id' => null,
+            'is_resident' => false,
+            'locked_at' => null,
+            'voided_at' => null,
+            'common_name' => 'Example Critter',
+            'date_admitted_at' => $this->faker->date(),
+            'admitted_by' => $this->faker->firstName(),
+            'found_at' => $this->faker->date(),
+            'address_found' => $this->faker->streetAddress(),
+            'city_found' => $this->faker->city(),
+            'county_found' => $this->faker->word(),
+            'subdivision_found' => $this->faker->stateAbbr(),
+            'reason_for_admission' => $this->faker->sentence(),
+            'care_by_rescuer' => $this->faker->sentence(),
+            'diagnosis' => $this->faker->sentence(),
+            'band' => $this->faker->word(),
+            'name' => $this->faker->word(),
+            //'keywords' => $this->faker->word(),
+            'disposition_id' => AttributeOption::factory(),
+            'transfer_type_id' => AttributeOption::factory(),
+            'release_type_id' => AttributeOption::factory(),
+            'dispositioned_at' => null,
+            'disposition_address' => null,
+            'disposition_subdivision' => null,
+            'disposition_county' => null,
+            'is_carcass_saved' => $this->faker->randomElement([0, 1]),
+            'is_criminal_activity' => $this->faker->randomElement([0, 1]),
         ];
     }
 }

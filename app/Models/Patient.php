@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Actions\ClonePatientRelations;
 use App\Concerns\InteractsWithMedia;
+use App\Concerns\LocksPatient;
 use App\Concerns\QueriesDateRange;
 use App\Concerns\ValidatesOwnership;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
-use App\Events\PatientReplicated;
 use App\Models\Incident;
 use App\Models\Scopes\VoidedScope;
 use App\Support\Timezone;
@@ -21,8 +22,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 
 class Patient extends Model implements HasMedia
@@ -33,6 +37,8 @@ class Patient extends Model implements HasMedia
     use QueriesDateRange;
     use HasVersion7Uuids;
     use InteractsWithMedia;
+    use LogsActivity;
+    use LocksPatient;
 
     public $incrementing = false;
     protected $keyType = 'string';
@@ -191,6 +197,36 @@ class Patient extends Model implements HasMedia
         return $this->hasOne(Morphometric::class);
     }
 
+    public function careLogs(): HasMany
+    {
+        return $this->hasMany(CareLog::class);
+    }
+
+    public function rechecks(): HasMany
+    {
+        return $this->hasMany(Recheck::class);
+    }
+
+    public function prescriptions(): HasMany
+    {
+        return $this->hasMany(Prescription::class);
+    }
+
+    public function oilProcessing(): HasOne
+    {
+        return $this->hasOne(OilProcessing::class);
+    }
+
+    public function oilConditionings(): HasMany
+    {
+        return $this->hasMany(OilConditioning::class);
+    }
+
+    public function labReports(): HasMany
+    {
+        return $this->hasMany(LabReport::class);
+    }
+
     public function morph(): BelongsTo
     {
         return $this->belongsTo(AttributeOption::class, 'morph_id');
@@ -227,6 +263,7 @@ class Patient extends Model implements HasMedia
             if (is_null($this->time_admitted_at)) {
                 return $this->date_admitted_at->translatedFormat(config('wrmd.date_format'));
             }
+
             return Timezone::convertFromUtcToLocal($this->date_admitted_at->setTimeFromTimeString($this->time_admitted_at))
                 ?->translatedFormat(config('wrmd.date_time_format'));
         });
@@ -248,9 +285,46 @@ class Patient extends Model implements HasMedia
      */
     public function scopeWhereUnrecognized(Builder $query): Builder
     {
-        return $query->whereNotIn('patients.common_name', ['Void', 'UNBI', 'unidentified'])
-            ->where('patients.common_name', 'not like', '%unknown%')
+        return $query->whereNotIn('patients.common_name', ['Void', 'UNBI', 'Unidentified', 'Unknown'])
+            ->where('patients.common_name', 'not like', 'Unknown%')
             ->whereNull('patients.taxon_id');
+    }
+
+    /**
+     * Scope patients that are misidentified to WRMD.
+     */
+    public function scopeWhereMisidentified(Builder $query): Builder
+    {
+        $wildAlertDbName = config('database.connections.wildalert.database');
+
+        return $query->whereNotIn('patients.common_name', ['Void', 'UNBI', 'Unidentified', 'Unknown'])
+            ->where('patients.common_name', 'not like', 'Unknown%')
+            ->whereNotNull('patients.taxon_id')
+            ->whereNotIn('patients.common_name', function ($query) use ($wildAlertDbName) {
+                $query->select("$wildAlertDbName.common_names.common_name")
+                    ->from("$wildAlertDbName.common_names")
+                    ->join('patients as p2', "$wildAlertDbName.common_names.taxon_id", '=', 'p2.taxon_id')
+                    ->whereRaw('patients.id = p2.id');
+            })
+            ->whereNotIn('patients.common_name', function ($query) use ($wildAlertDbName) {
+                $query->select("$wildAlertDbName.taxa.alpha_code")
+                    ->from("$wildAlertDbName.taxa")
+                    ->join('patients as p2', "$wildAlertDbName.taxa.id", '=', 'p2.taxon_id')
+                    ->whereRaw('patients.id = p2.id')
+                    ->whereNotNull("$wildAlertDbName.taxa.alpha_code");
+            })
+            ->whereNotIn('patients.common_name', function ($query) use ($wildAlertDbName) {
+                $query->select("$wildAlertDbName.common_names.alpha_code")
+                    ->from("$wildAlertDbName.common_names")
+                    ->join('patients as p2', "$wildAlertDbName.common_names.taxon_id", '=', 'p2.taxon_id')
+                    ->whereRaw('patients.id = p2.id')
+                    ->whereNotNull("$wildAlertDbName.common_names.alpha_code");
+            });
+    }
+
+    public function isUnrecognized(): bool
+    {
+        return is_null($this->locked_at) && !Str::contains($this->common_name, ['Void', 'UNBI', 'Unidentified', 'Unknown'], true);
     }
 
     protected function daysInCare(): Attribute
@@ -261,9 +335,11 @@ class Patient extends Model implements HasMedia
         ]);
 
         return Attribute::get(
-            fn () => intval($this->disposition_id !== $dispositionPendingId && $this->dispositioned_at instanceof Carbon
-                ? $this->dispositioned_at->diffInDays($this->date_admitted_at) + 1
-                : ($this->date_admitted_at instanceof Carbon ? $this->date_admitted_at->diffInDays() + 1 : null))
+            fn () => intval(
+                $this->disposition_id !== $dispositionPendingId && $this->dispositioned_at instanceof Carbon
+                    ? $this->date_admitted_at->diffInDays($this->dispositioned_at) + 1
+                    : ($this->date_admitted_at instanceof Carbon ? $this->date_admitted_at->diffInDays() + 1 : null)
+            )
         );
     }
 
@@ -272,8 +348,16 @@ class Patient extends Model implements HasMedia
         $new = $this->replicate();
         $new->save();
 
-        event(new PatientReplicated($this, $new));
+        ClonePatientRelations::run($this, $new);
 
         return $new;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

@@ -5,7 +5,11 @@ namespace App\Concerns;
 use App\Enums\Ability;
 use App\Enums\Entity;
 use App\Models\CareLog;
+use App\Models\Exam;
+use App\Models\LabReport;
 use App\Models\Patient;
+use App\Models\PatientLocation;
+use App\Models\Prescription;
 use App\Models\User;
 use App\Summarizable;
 use App\Support\Timezone;
@@ -21,9 +25,10 @@ trait GetsCareLogs
             'weight',
             'temperature'
         ])->get();
-        // $records[] = PatientLocation::where('patient_id', $patient->id)->get();
-        // $records[] = Exam::where('patient_id', $patient->id)->get();
-        // $records[] = Prescription::where('patient_id', $patient->id)->get();
+        $records[] = PatientLocation::where('patient_id', $patient->id)->get();
+        $records[] = Exam::where('patient_id', $patient->id)->get();
+        $records[] = Prescription::where('patient_id', $patient->id)->get();
+        $records[] = LabReport::where('patient_id', $patient->id)->get();
 
         return collect($records)
             ->collapse()

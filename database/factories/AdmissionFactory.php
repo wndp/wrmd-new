@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Patient;
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,11 @@ class AdmissionFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'team_id' => Team::factory(),
+            'case_year' => null,
+            'case_id' => 1,
+            'patient_id' => Patient::factory(),
+            'hash' => null
         ];
     }
 }

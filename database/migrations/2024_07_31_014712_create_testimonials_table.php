@@ -12,7 +12,7 @@ return new class () extends Migration {
     {
         Schema::create('testimonials', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('team_id');
+            $table->unsignedBigInteger('team_id')->index();
             $table->string('name');
             $table->text('text');
             $table->timestamps();

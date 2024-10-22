@@ -13,6 +13,9 @@ use Illuminate\Support\Str;
 use Sokil\IsoCodes\Database\Subdivisions\Subdivision;
 use Sokil\IsoCodes\IsoCodesFactory;
 use Sokil\IsoCodes\TranslationDriver\SymfonyTranslationDriver;
+use libphonenumber\NumberParseException;
+use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumberUtil;
 
 class AdministrativeDivision
 {
@@ -119,6 +122,7 @@ class AdministrativeDivision
      * @param  string|null $address
      * @param  string|null $postalCode
      * @param  string|null $organization
+     * @param  string|null $name
      * @return string
      */
     public function inlineAddress(
@@ -127,14 +131,77 @@ class AdministrativeDivision
         string $city = null,
         string $addressLine1 = null,
         string $postalCode = null,
-        string $organization = null
+        string $organization = null,
+        string $name = null
     ): string {
-        $formatter = new DefaultFormatter(
-            new AddressFormatRepository(),
-            new CountryRepository(),
-            new SubdivisionRepository()
+        return $this->formatAddress(
+            true,
+            $alpha2CountryCode,
+            $subdivision,
+            $city,
+            $addressLine1,
+            $postalCode,
+            $organization,
+            $name
         );
+    }
 
+    /**
+     * Format an address for inline presentation.
+     *
+     * @param  string|null $alpha2CountryCode
+     * @param  string|null $subdivision
+     * @param  string|null $city
+     * @param  string|null $address
+     * @param  string|null $postalCode
+     * @param  string|null $organization
+     * @param  string|null $name
+     * @return string
+     */
+    public function blockAddress(
+        string $alpha2CountryCode = null,
+        string $subdivision = null,
+        string $city = null,
+        string $addressLine1 = null,
+        string $postalCode = null,
+        string $organization = null,
+        string $name = null
+    ): string {
+        return $this->formatAddress(
+            false,
+            $alpha2CountryCode,
+            $subdivision,
+            $city,
+            $addressLine1,
+            $postalCode,
+            $organization,
+            $name
+        );
+    }
+
+    /**
+     * Create an address using the provided parts.
+     *
+     * @param  string|null $alpha2CountryCode
+     * @param  string|null $subdivision
+     * @param  string|null $city
+     * @param  string|null $addressLine1
+     * @param  string|null $postalCode
+     * @param  string|null $organization
+     * @param  string|null $name
+     * @return Address
+     */
+    private function formatAddress(
+        bool $inline = false,
+        string $alpha2CountryCode = null,
+        string $subdivision = null,
+        string $city = null,
+        string $addressLine1 = null,
+        string $postalCode = null,
+        string $organization = null,
+        string $name = null
+    ): string
+    {
         $address = (new Address())
             ->withLocale($this->locale)
             ->withCountryCode($alpha2CountryCode ?? $this->alpha2CountryCode)
@@ -142,10 +209,38 @@ class AdministrativeDivision
             ->withLocality($city ?: '')
             ->withAddressLine1($addressLine1 ?: '')
             ->withPostalCode($postalCode ?: '')
-            ->withOrganization($organization ?: '');
+            ->withOrganization($organization ?: '')
+            ->withGivenName($name ?: '');
 
-        return $formatter->format($address, [
-            'html' => false
-        ]);
+        $formatter = new DefaultFormatter(
+            new AddressFormatRepository(),
+            new CountryRepository(),
+            new SubdivisionRepository()
+        );
+
+        return str_replace("\n", ' ', $formatter->format($address, [
+            'html' => !$inline
+        ]));
+    }
+
+    /**
+     * Format a phone number according to its nationality.
+     *
+     * @param string $phoneNumber
+     * @return string
+     */
+    function phoneNumber($phoneNumber, string $alpha2CountryCode = null)
+    {
+        $phoneUtil = PhoneNumberUtil::getInstance();
+
+        try {
+            $numberProto = $phoneUtil->parse($phoneNumber, $alpha2CountryCode ?? $this->alpha2CountryCode);
+        } catch (NumberParseException $e) {
+            return $phoneNumber;
+        }
+
+        return $phoneUtil->isValidNumber($numberProto)
+            ? $phoneUtil->format($numberProto, PhoneNumberFormat::NATIONAL)
+            : $phoneNumber;
     }
 }

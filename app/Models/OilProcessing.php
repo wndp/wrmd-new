@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Concerns\LocksPatient;
 use App\Concerns\QueriesDateRange;
+use App\Concerns\ValidatesOwnership;
 use App\Notifications\NotifyOwcnOfIoa;
 use App\Support\Timezone;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -10,11 +12,18 @@ use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class OilProcessing extends Model
 {
     use HasFactory;
     use HasVersion7Uuids;
+    use SoftDeletes;
+    use LogsActivity;
+    use LocksPatient;
+    use ValidatesOwnership;
 
     protected $fillable = [
         'patient_id',
@@ -75,6 +84,14 @@ class OilProcessing extends Model
         }
         $processing->fill($values)->save();
         return $processing;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 
     public static function boot(): void

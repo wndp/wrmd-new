@@ -2,17 +2,25 @@
 
 namespace App\Models;
 
+use App\Concerns\LocksPatient;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\MediaCollections\Models\Media as BaseMedia;
 use Spatie\MediaLibrary\Support\UrlGenerator\UrlGeneratorFactory;
 
 class Media extends BaseMedia
 {
+    use LogsActivity;
+    use LocksPatient;
+    use HasFactory;
+
     public $incrementing = false;
 
     /**
@@ -26,18 +34,18 @@ class Media extends BaseMedia
 
         static::creating(function (Model $model) {
             if (is_null($model->getOriginal('id'))) {
-                $model->id = Str::uuid()->toString();
+                $model->id = Str::uuid7()->toString();
             }
         });
 
         static::retrieved(function ($model) {
             static::setObtainedAtDateAttribute($model);
-            static::setObtainedAtFormattedAttribute($model);
+            static::setObtainedAtForHumansAttribute($model);
         });
 
         static::created(function ($model) {
             static::setObtainedAtDateAttribute($model);
-            static::setObtainedAtFormattedAttribute($model);
+            static::setObtainedAtForHumansAttribute($model);
         });
     }
 
@@ -75,6 +83,7 @@ class Media extends BaseMedia
         );
     }
 
+    /** TODO: write tests */
     public static function setObtainedAtDateAttribute($model)
     {
         if (! $model->hasCustomProperty('obtained_at')) {
@@ -88,7 +97,8 @@ class Media extends BaseMedia
         $model->setCustomProperty('obtained_at_date', $date->format('Y-m-d'));
     }
 
-    public static function setObtainedAtFormattedAttribute($model)
+    /** TODO: write tests */
+    public static function setObtainedAtForHumansAttribute($model)
     {
         if (! $model->hasCustomProperty('obtained_at')) {
             return null;
@@ -98,7 +108,7 @@ class Media extends BaseMedia
             $model->custom_properties['obtained_at']
         );
 
-        $model->setCustomProperty('obtained_at_formatted', $date->format(config('wrmd.date_format')));
+        $model->setCustomProperty('obtained_at_for_humans', $date->format(config('wrmd.date_format')));
     }
 
     public function getUrl(string $conversionName = ''): string
@@ -131,5 +141,13 @@ class Media extends BaseMedia
         }
 
         return $url;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

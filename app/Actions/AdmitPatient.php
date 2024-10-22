@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Concerns\AsAction;
+use App\Concerns\PersistsAdmission;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
 use App\Events\PatientAdmitted;
@@ -25,6 +26,7 @@ use TypeError;
 class AdmitPatient
 {
     use AsAction;
+    use PersistsAdmission;
 
     /**
      * The number of case to create.
@@ -116,7 +118,7 @@ class AdmitPatient
         throw_unless($this->modelsAreSet(), new LogicException('Models not set'));
 
         return Collection::make(range(1, $this->casesToCreate))->map(function () use ($patientData) {
-            $admission = $this->persistAdmission($this->persistPatient($patientData));
+            $admission = $this->persistAdmission($this->team, $this->persistPatient($patientData), $this->year);
 
             AttemptTaxaIdentification::dispatch($admission->patient)->delay(5);
 
@@ -187,32 +189,6 @@ class AdmitPatient
                 $patient->save();
             }
         });
-    }
-
-    /**
-     * Persist the admission to storage.
-     *
-     * @link https://mysql.rjweb.org/doc.php/myisam2innodb
-     *
-     * @note INDEX issue -- 2-column PK
-     */
-    protected function persistAdmission(Patient $patient): Admission
-    {
-        return DB::transaction(function () use ($patient) {
-            $nextCaseId = Admission::where([
-                'team_id' => $this->team->id,
-                'case_year' => $this->year,
-            ])
-                ->lockForUpdate()
-                ->count() + 1;
-
-            return Admission::create([
-                'team_id' => $this->team->id,
-                'case_year' => $this->year,
-                'case_id' => $nextCaseId,
-                'patient_id' => $patient->id,
-            ]);
-        }, 5);
     }
 
     /**

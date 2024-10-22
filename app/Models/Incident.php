@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use MatanYadaev\EloquentSpatial\Objects\Point;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 
 class Incident extends Model implements HasMedia
@@ -24,6 +26,7 @@ class Incident extends Model implements HasMedia
     use QueriesOneOfMany;
     use InteractsWithMedia;
     use HasVersion7Uuids;
+    use LogsActivity;
 
     protected $fillable = [
         'team_id',
@@ -139,5 +142,13 @@ class Incident extends Model implements HasMedia
 
             return true;
         });
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

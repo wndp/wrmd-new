@@ -17,6 +17,8 @@ use Laravel\Jetstream\Events\TeamUpdated;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\Team as JetstreamTeam;
 use Spark\Billable;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Team extends JetstreamTeam
 {
@@ -24,6 +26,7 @@ class Team extends JetstreamTeam
     use HasFactory;
     use HasProfilePhoto;
     use HasSubAccounts;
+    use LogsActivity;
 
     protected $fillable = [
         'name',
@@ -92,6 +95,14 @@ class Team extends JetstreamTeam
         );
     }
 
+    public function phoneNumber(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => app(AdministrativeDivision::class)->phoneNumber($value),
+            set: fn ($value) => preg_replace('/[^0-9]/', '', $value)
+        );
+    }
+
     /**
      * Get the name that should be associated with the Paddle customer.
      */
@@ -106,5 +117,13 @@ class Team extends JetstreamTeam
     public function paddleEmail(): string|null
     {
         return $this->contact_email;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

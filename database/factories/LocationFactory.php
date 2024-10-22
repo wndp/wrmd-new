@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\AttributeOption;
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,9 @@ class LocationFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'team_id' => Team::factory(),
+            'facility_id' => AttributeOption::factory(),
+            'area' => $this->faker->word()
         ];
     }
 }

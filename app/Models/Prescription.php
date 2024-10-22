@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\HasDailyTasks;
+use App\Concerns\LocksPatient;
 use App\Concerns\ValidatesOwnership;
 use App\Schedulable;
 use App\Support\Wrmd;
@@ -14,6 +15,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Prescription extends Model implements Schedulable
 {
@@ -22,6 +25,8 @@ class Prescription extends Model implements Schedulable
     use HasDailyTasks;
     use HasVersion7Uuids;
     use ValidatesOwnership;
+    use LogsActivity;
+    use LocksPatient;
 
     protected $fillable = [
         'drug',
@@ -203,5 +208,13 @@ class Prescription extends Model implements Schedulable
                 {$this->frequency?->value}"
             )->trim()->squish().trim(". $loading $instructions")
         );
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }
