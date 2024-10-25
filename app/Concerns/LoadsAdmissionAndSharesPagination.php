@@ -39,143 +39,15 @@ trait LoadsAdmissionAndSharesPagination
         $listPaginationPage = $this->getListPaginationPage($admissionsPaginator, $admission);
         $searchPaginator = $this->getSearchResultPaginator($admission);
 
-        Inertia::share([
-            'admissionsPaginator' => $admissionsPaginator,
-            'searchPaginator' => $searchPaginator,
-            'listPaginationPage' => $listPaginationPage,
-            'patientMeta' => [
-                'patient_id' => $admission->patient->id,
-                'locked_at' => $admission->patient->locked_at,
-                'voided_at' => $admission->patient->voided_at,
-                'is_criminal_activity' => $admission->patient->is_criminal_activity,
-                'is_resident' => $admission->patient->is_resident,
-                'keywords' => $admission->patient->keywords,
-                'taxon' => [
-                    'class' => $admission->patient->taxon?->class,
-                    'genus' => $admission->patient->taxon?->genus,
-                    'species' => $admission->patient->taxon?->species,
-                    'binomen' => $admission->patient->taxon?->binomen,
-                    'bow_code' => $admission->patient->taxon?->bow_code,
-                    'bow_url' => $admission->patient->taxon?->bow_url,
-                    'inaturalist_taxon_id' => $admission->patient->taxon?->inaturalist_taxon_id,
-                    'inaturalist_url' => $admission->patient->taxon?->inaturalist_url,
-                    'iucn_id' => $admission->patient->taxon?->iucn_id,
-                    'iucn_url' => $admission->patient->taxon?->iucn_url,
-                    'iucn_conservation_status' => null
-                ],
-                'days_in_care' => $admission->patient->days_in_care,
-                'incident' => [
-                    'id' => $admission->patient->incident?->id,
-                    'incident_number' => $admission->patient->incident?->incident_number,
-                ],
-                'numberOfTasksDueToday' => $this->getNumberOfTasksDueToday($admission->patient)
-            ],
-            'cageCard' => [
-                'patient_id' => $admission->patient->id,
-                'taxonID' => $admission->patient->taxon_id,
-                'common_name' => $admission->patient->common_name,
-                'admitted_at_for_humans' => Timezone::convertFromUtcToLocal($admission->patient->admitted_at)?->toDayDateTimeString(),
-                'admitted_at_local' => Timezone::convertFromUtcToLocal($admission->patient->admitted_at)?->toDateTimeLocalString(),
-                'morph_id' => $admission->patient->morph_id,
-                'morph' => __($admission->patient->morph?->value),
-                'band' => $admission->patient->band,
-                'name' => $admission->patient->name,
-                'reference_number' => $admission->patient->reference_number,
-                'microchip_number' => $admission->patient->microchip_number,
-                'case_number' => $admission->case_number
-            ],
-            'locationCard' => [
-                'patient_id' => $admission->patient->id,
-                'disposition_id' => $admission->patient->disposition_id,
-                'disposition' => __($admission->patient->disposition->value),
-                'dispositioned_at_formatted' => Timezone::convertFromUtcToLocal($admission->patient->dispositioned_at)?->toDayDateTimeString(),
-                'patientLocations' => $admission->patient->locations->map(fn ($patientLocation) => [
-                    'patient_location_id' => $patientLocation->id,
-                    'location_for_humans' => $patientLocation->location_for_humans,
-                    'moved_in_at_local' => Timezone::convertFromUtcToLocal($patientLocation->moved_in_at)?->toDateTimeLocalString(),
-                    'moved_in_at_for_humans' => Timezone::convertFromUtcToLocal($patientLocation->moved_in_at)?->toDayDateTimeString(),
-                    'facility_id' => $patientLocation->facility_id,
-                    'facility' => $patientLocation->facility->value,
-                    'area' => $patientLocation->area,
-                    'enclosure' => $patientLocation->enclosure,
-                    'comments' => $patientLocation->comments,
-                ])
-            ],
-            'admission' => [
-                'patient_id' => $admission->patient_id,
-                'case_year' => $admission->case_year,
-                'case_id' => $admission->case_id,
-                'hash' => $admission->hash,
-            ]
-        ]);
+        $this->shareCommonPatientProperties(
+            $admissionsPaginator,
+            $searchPaginator,
+            $listPaginationPage,
+            $admission
+        );
 
-        OptionsStore::add([
-            AttributeOption::getDropdownOptions([
-                AttributeOptionName::TAXA_MORPHS->value,
-                AttributeOptionName::PATIENT_LOCATION_FACILITIES->value,
-                AttributeOptionName::DAILY_TASK_ASSIGNMENTS->value,
-                AttributeOptionName::DAILY_TASK_FREQUENCIES->value,
-                AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS->value,
-                AttributeOptionName::DAILY_TASK_DOSAGE_UNITS->value,
-                AttributeOptionName::DAILY_TASK_DOSE_UNITS->value,
-                AttributeOptionName::DAILY_TASK_ROUTES->value,
-                AttributeOptionName::DAILY_TASK_NUTRITION_ROUTES->value,
-            ]),
-            'includableOptions' => Options::arrayToSelectable(array_filter([
-                'rescuer' => __('Rescuer contact information'),
-                'location_history' => __('Location history'),
-                'rechecks' => __('Future rechecks'),
-                'intake_exam' => __('Full intake exam'),
-                'necropsy' => ExtensionManager::isActivated(Extension::NECROPSY) ? __('Necropsy Report') : false,
-                'banding_morphometrics' => ExtensionManager::isActivated(Extension::BANDING_MORPHOMETRICS) ? __('Banding and Morphometrics') : false,
-                'expenses' => ExtensionManager::isActivated(Extension::EXPENSES) ? __('Expense statement') : false,
-            ]))
-        ]);
-
-        [
-            $dispositionPendingId,
-            $dispositionReleasedId,
-            $dispositionTransferredId,
-            $clinicFacilityId,
-            $homecareFacilityId,
-            $singleDoseId,
-            $veterinarianId,
-            $mgPerMlId,
-            $mgPerKgId,
-            $mlId
-        ] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
-            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_PENDING->value],
-            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_RELEASED->value],
-            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_TRANSFERRED->value],
-            [AttributeOptionName::PATIENT_LOCATION_FACILITIES->value, AttributeOptionUiBehavior::PATIENT_LOCATION_FACILITIES_IS_CLINIC->value],
-            [AttributeOptionName::PATIENT_LOCATION_FACILITIES->value, AttributeOptionUiBehavior::PATIENT_LOCATION_FACILITIES_IS_HOMECARE->value],
-            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_SINGLE_DOSE->value],
-            [AttributeOptionName::DAILY_TASK_ASSIGNMENTS->value, AttributeOptionUiBehavior::DAILY_TASK_ASSIGNMENT_IS_VETERINARIAN->value],
-            [AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_CONCENTRATION_UNIT_IS_MG_PER_ML->value],
-            [AttributeOptionName::DAILY_TASK_DOSAGE_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_MG_PER_KG->value],
-            [AttributeOptionName::DAILY_TASK_DOSE_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_DOSE_UNIT_IS_ML->value],
-        ]);
-
-        Inertia::share([
-            'locationOptionUiBehaviorIds' => compact(
-                'dispositionPendingId',
-                'dispositionReleasedId',
-                'dispositionTransferredId',
-                'clinicFacilityId',
-                'homecareFacilityId'
-            ),
-            'dailyTaskOptionUiBehaviorIds' => compact(
-                'singleDoseId',
-                'veterinarianId',
-                'mgPerMlId',
-                'mgPerKgId',
-                'mlId'
-            )
-        ]);
-
-        //OptionsStore::add(new TaxonomyOptions());
-        //ExtensionNavigation::emit('patient', $admission);
-
+        $this->shareCommonOptions();
+        $this->shareCommonOptionUiBehaviors();
         $this->shareLastCaseId();
 
         return $admission;
@@ -281,9 +153,153 @@ trait LoadsAdmissionAndSharesPagination
         }
     }
 
-    /**
-     * Share the last case id.
-     */
+    public function shareCommonPatientProperties(
+        $admissionsPaginator,
+        $searchPaginator,
+        $listPaginationPage,
+        $admission
+    ) {
+        Inertia::share([
+            'admissionsPaginator' => $admissionsPaginator,
+            'searchPaginator' => $searchPaginator,
+            'listPaginationPage' => $listPaginationPage,
+            'patientMeta' => [
+                'patient_id' => $admission->patient->id,
+                'locked_at' => $admission->patient->locked_at,
+                'voided_at' => $admission->patient->voided_at,
+                'is_criminal_activity' => $admission->patient->is_criminal_activity,
+                'is_resident' => $admission->patient->is_resident,
+                'keywords' => $admission->patient->keywords,
+                'taxon' => [
+                    'class' => $admission->patient->taxon?->class,
+                    'genus' => $admission->patient->taxon?->genus,
+                    'species' => $admission->patient->taxon?->species,
+                    'binomen' => $admission->patient->taxon?->binomen,
+                    'bow_code' => $admission->patient->taxon?->bow_code,
+                    'bow_url' => $admission->patient->taxon?->bow_url,
+                    'inaturalist_taxon_id' => $admission->patient->taxon?->inaturalist_taxon_id,
+                    'inaturalist_url' => $admission->patient->taxon?->inaturalist_url,
+                    'iucn_id' => $admission->patient->taxon?->iucn_id,
+                    'iucn_url' => $admission->patient->taxon?->iucn_url,
+                    'iucn_conservation_status' => $admission->patient->taxon?->conservationStatuses()->where('authority', 'iucn')->first()?->status
+                ],
+                'days_in_care' => $admission->patient->days_in_care,
+                'incident' => [
+                    'id' => $admission->patient->incident?->id,
+                    'incident_number' => $admission->patient->incident?->incident_number,
+                ],
+                'numberOfTasksDueToday' => $this->getNumberOfTasksDueToday($admission->patient)
+            ],
+            'cageCard' => [
+                'patient_id' => $admission->patient->id,
+                'taxonID' => $admission->patient->taxon_id,
+                'common_name' => $admission->patient->common_name,
+                'admitted_at_for_humans' => Timezone::convertFromUtcToLocal($admission->patient->admitted_at)?->toDayDateTimeString(),
+                'admitted_at_local' => Timezone::convertFromUtcToLocal($admission->patient->admitted_at)?->toDateTimeLocalString(),
+                'morph_id' => $admission->patient->morph_id,
+                'morph' => __($admission->patient->morph?->value),
+                'band' => $admission->patient->band,
+                'name' => $admission->patient->name,
+                'reference_number' => $admission->patient->reference_number,
+                'microchip_number' => $admission->patient->microchip_number,
+                'case_number' => $admission->case_number
+            ],
+            'locationCard' => [
+                'patient_id' => $admission->patient->id,
+                'disposition_id' => $admission->patient->disposition_id,
+                'disposition' => __($admission->patient->disposition->value),
+                'dispositioned_at_formatted' => Timezone::convertFromUtcToLocal($admission->patient->dispositioned_at)?->toDayDateTimeString(),
+                'patientLocations' => $admission->patient->locations->map(fn ($patientLocation) => [
+                    'patient_location_id' => $patientLocation->id,
+                    'location_for_humans' => $patientLocation->location_for_humans,
+                    'moved_in_at_local' => Timezone::convertFromUtcToLocal($patientLocation->moved_in_at)?->toDateTimeLocalString(),
+                    'moved_in_at_for_humans' => Timezone::convertFromUtcToLocal($patientLocation->moved_in_at)?->toDayDateTimeString(),
+                    'facility_id' => $patientLocation->facility_id,
+                    'facility' => $patientLocation->facility->value,
+                    'area' => $patientLocation->area,
+                    'enclosure' => $patientLocation->enclosure,
+                    'comments' => $patientLocation->comments,
+                ])
+            ],
+            'admission' => [
+                'patient_id' => $admission->patient_id,
+                'case_year' => $admission->case_year,
+                'case_id' => $admission->case_id,
+                'hash' => $admission->hash,
+            ]
+        ]);
+    }
+
+    public function shareCommonOptions()
+    {
+        OptionsStore::add([
+            AttributeOption::getDropdownOptions([
+                AttributeOptionName::TAXA_MORPHS->value,
+                AttributeOptionName::PATIENT_LOCATION_FACILITIES->value,
+                AttributeOptionName::DAILY_TASK_ASSIGNMENTS->value,
+                AttributeOptionName::DAILY_TASK_FREQUENCIES->value,
+                AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS->value,
+                AttributeOptionName::DAILY_TASK_DOSAGE_UNITS->value,
+                AttributeOptionName::DAILY_TASK_DOSE_UNITS->value,
+                AttributeOptionName::DAILY_TASK_ROUTES->value,
+                AttributeOptionName::DAILY_TASK_NUTRITION_ROUTES->value,
+            ]),
+            'includableOptions' => Options::arrayToSelectable(array_filter([
+                'rescuer' => __('Rescuer contact information'),
+                'location_history' => __('Location history'),
+                'rechecks' => __('Future rechecks'),
+                'intake_exam' => __('Full intake exam'),
+                'necropsy' => ExtensionManager::isActivated(Extension::NECROPSY) ? __('Necropsy Report') : false,
+                'banding_morphometrics' => ExtensionManager::isActivated(Extension::BANDING_MORPHOMETRICS) ? __('Banding and Morphometrics') : false,
+                'expenses' => ExtensionManager::isActivated(Extension::EXPENSES) ? __('Expense statement') : false,
+            ]))
+        ]);
+    }
+
+    public function shareCommonOptionUiBehaviors()
+    {
+        [
+            $dispositionPendingId,
+            $dispositionReleasedId,
+            $dispositionTransferredId,
+            $clinicFacilityId,
+            $homecareFacilityId,
+            $singleDoseId,
+            $veterinarianId,
+            $mgPerMlId,
+            $mgPerKgId,
+            $mlId
+        ] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_PENDING->value],
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_RELEASED->value],
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_TRANSFERRED->value],
+            [AttributeOptionName::PATIENT_LOCATION_FACILITIES->value, AttributeOptionUiBehavior::PATIENT_LOCATION_FACILITIES_IS_CLINIC->value],
+            [AttributeOptionName::PATIENT_LOCATION_FACILITIES->value, AttributeOptionUiBehavior::PATIENT_LOCATION_FACILITIES_IS_HOMECARE->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_SINGLE_DOSE->value],
+            [AttributeOptionName::DAILY_TASK_ASSIGNMENTS->value, AttributeOptionUiBehavior::DAILY_TASK_ASSIGNMENT_IS_VETERINARIAN->value],
+            [AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_CONCENTRATION_UNIT_IS_MG_PER_ML->value],
+            [AttributeOptionName::DAILY_TASK_DOSAGE_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_MG_PER_KG->value],
+            [AttributeOptionName::DAILY_TASK_DOSE_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_DOSE_UNIT_IS_ML->value],
+        ]);
+
+        Inertia::share([
+            'locationOptionUiBehaviorIds' => compact(
+                'dispositionPendingId',
+                'dispositionReleasedId',
+                'dispositionTransferredId',
+                'clinicFacilityId',
+                'homecareFacilityId'
+            ),
+            'dailyTaskOptionUiBehaviorIds' => compact(
+                'singleDoseId',
+                'veterinarianId',
+                'mgPerMlId',
+                'mgPerKgId',
+                'mlId'
+            )
+        ]);
+    }
+
     public function shareLastCaseId(): void
     {
         $lastCaseId = Admission::getLastCaseId(

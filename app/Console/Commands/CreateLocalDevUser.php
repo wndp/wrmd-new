@@ -41,9 +41,9 @@ class CreateLocalDevUser extends Command
         BouncerFacade::scope()->to($user->personalTeam()->id)->onlyRelations()->dontScopeRoleAbilities();
         BouncerFacade::assign(Role::ADMIN->value)->to($user);
 
-        $user->personalTeam()->settingsStore()->set(
-            SettingKey::TIMEZONE,
-            'America/Los_Angeles'
-        );
+        $user->personalTeam()->settingsStore()->set([
+            SettingKey::TIMEZONE->value => 'America/Los_Angeles',
+            SettingKey::LANGUAGE->value => 'en'
+        ]);
     }
 }

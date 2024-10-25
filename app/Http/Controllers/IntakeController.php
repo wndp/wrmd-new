@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\SettingKey;
 use App\Events\PatientUpdated;
 use App\Models\Patient;
 use App\Support\Wrmd;
@@ -27,8 +28,8 @@ class IntakeController extends Controller
             'city_found' => 'required',
             'county_found' => 'nullable',
             'subdivision_found' => 'required',
-            'lat_found' => Rule::when(Wrmd::settings('showGeolocationFields'), 'nullable|required_with:lng_found|numeric|between:-90,90'),
-            'lng_found' => Rule::when(Wrmd::settings('showGeolocationFields'), 'nullable|required_with:lat_found|numeric|between:-180,180'),
+            'lat_found' => Rule::when(Wrmd::settings(SettingKey::SHOW_GEOLOCATION_FIELDS), 'nullable|required_with:lng_found|numeric|between:-90,90'),
+            'lng_found' => Rule::when(Wrmd::settings(SettingKey::SHOW_GEOLOCATION_FIELDS), 'nullable|required_with:lat_found|numeric|between:-180,180'),
             'reason_for_admission' => 'required',
             'care_by_rescuer' => 'nullable',
             'notes_about_rescue' => 'nullable',

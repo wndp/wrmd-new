@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
 use App\Enums\ExamBodyPart;
+use App\Enums\SettingKey;
 use App\Models\AttributeOption;
 use App\Options\LocaleOptions;
 use App\Options\Options;
@@ -38,9 +39,10 @@ class InitialCareController extends Controller
         OptionsStore::add([
             new LocaleOptions(),
             'bodyPartOptions' => Options::enumsToSelectable(ExamBodyPart::cases()),
-            'taxaClassAgeUnits' => Options::arrayToSelectable(AttributeOption::getDropdownOptions([
-                $patientTaxaClassAgeUnits
-            ])->first()),
+            'taxaClassAgeUnits' => [],
+            // Options::arrayToSelectable(AttributeOption::getDropdownOptions([
+            //     $patientTaxaClassAgeUnits
+            // ])),
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::EXAM_TYPES->value,
                 AttributeOptionName::EXAM_WEIGHT_UNITS->value,
@@ -59,7 +61,7 @@ class InitialCareController extends Controller
             ])
         ]);
 
-        if (Wrmd::settings('showTags')) {
+        if (Wrmd::settings(SettingKey::SHOW_TAGS)) {
             OptionsStore::add([
                 'circumstancesOfAdmission' => Options::arrayToSelectable(app(CircumstancesOfAdmission::class)::terms()),
                 'clinicalClassifications' => Options::arrayToSelectable(app(ClinicalClassifications::class)::terms()),

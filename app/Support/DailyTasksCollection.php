@@ -5,6 +5,7 @@ namespace App\Support;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
 use App\Enums\DailyTaskSchedulable;
+use App\Enums\SettingKey;
 use App\Models\Admission;
 use App\Models\Patient;
 use App\Models\PatientLocation;
@@ -140,7 +141,7 @@ class DailyTasksCollection extends Collection
         $this->team = $team;
         $this->patientIds = new Collection($patient->id);
 
-        $timezone = $team->settingsStore()->get('timezone');
+        $timezone = $team->settingsStore()->get(SettingKey::TIMEZONE);
 
         return Collection::make(
             new CarbonPeriod(

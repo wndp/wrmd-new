@@ -22,7 +22,7 @@ class RecordedDailyTaskListController extends Controller
     /**
      * Store a new daily-tasks task check in storage.
      */
-    public function store(Request $request, string $resource, int $resourceId): JsonResponse
+    public function store(Request $request, string $resource, string $resourceId): JsonResponse
     {
         $data = $request->validate([
             'occurrence' => 'required|integer|in:1,2,3,4',
@@ -34,18 +34,18 @@ class RecordedDailyTaskListController extends Controller
             ->validateOwnership(Auth::user()->current_team_id);
 
         //try {
-            $result = $schedualableModel->recordedTasks()->updateOrCreate([
-                'occurrence' => $data['occurrence'],
-                'occurrence_at' => $data['occurrence_at'],
-            ], [
-                'user_id' => Auth::id(),
-                'summary' => $schedualableModel->summary_body,
-                'completed_at' => Timezone::convertFromLocalToUtc($data['completed_at'])
-            ]);
+        $result = $schedualableModel->recordedTasks()->updateOrCreate([
+            'occurrence' => $data['occurrence'],
+            'occurrence_at' => $data['occurrence_at'],
+        ], [
+            'user_id' => Auth::id(),
+            'summary' => $schedualableModel->summary_body,
+            'completed_at' => Timezone::convertFromLocalToUtc($data['completed_at'])
+        ]);
 
-            //event(new DailyTaskCompleted($schedualableModel, $check));
+        //event(new DailyTaskCompleted($schedualableModel, $check));
 
-            return response()->json($result);
+        return response()->json($result);
         // } catch (QueryException $e) {
         //     if (Str::contains($e->getMessage(), 'Duplicate entry')) {
         //         return response()->json([

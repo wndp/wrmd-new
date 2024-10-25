@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Settings;
 
+use App\Enums\SettingKey;
 use App\Http\Controllers\Controller;
 use App\Options\LocaleOptions;
 use App\Repositories\OptionsStore;
@@ -91,20 +92,25 @@ class AccountProfileController extends Controller
      */
     public function updateLocalization(Request $request): RedirectResponse
     {
-        Wrmd::settings($request->validate([
+        $request->validate([
             'timezone' => 'required|timezone',
             'language' => 'required',
-        ]));
+        ]);
+
+        Wrmd::settings([
+            SettingKey::TIMEZONE->value => $request->input('timezone'),
+            SettingKey::LANGUAGE->value => $request->input('language')
+        ]);
 
         app()->setLocale($request->language);
 
-        if ($customer = $team->customer) {
-            retry(5, fn () => Cashier::api('PATCH', "customers/{$customer->paddle_id}", [
-                'locale' => $request->input('language'),
-            ]), 100);
-        }
+        // if ($customer = Auth::user()->currentTeam->customer) {
+        //     retry(5, fn () => Cashier::api('PATCH', "customers/{$customer->paddle_id}", [
+        //         'locale' => $request->input('language'),
+        //     ]), 100);
+        // }
 
-        Cache::forget('timezone.'.Auth::id());
+        //Cache::forget('timezone.'.Auth::id());
 
         return redirect()->route('account.profile.edit')->cookie(
             'locale',

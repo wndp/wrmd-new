@@ -12,7 +12,7 @@ return new class () extends Migration {
     {
         Schema::create('daily_tasks', function (Blueprint $table) {
             $table->uuid('id')->index();
-            $table->morphs('task');
+            $table->uuidMorphs('task');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('summary');
             $table->string('occurrence');

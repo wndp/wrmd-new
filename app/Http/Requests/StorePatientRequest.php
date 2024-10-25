@@ -81,7 +81,7 @@ class StorePatientRequest extends FormRequest
                 'integer',
                 new AttributeOptionExistsRule(AttributeOptionName::DONATION_METHODS),
             ],
-            "donation_value" => 'nullable|numerid',
+            "donation_value" => 'nullable|numeric',
             "donation_comments" => 'nullable|string',
             'action_after_store' => 'required',
             'custom_values' => 'nullable|array'

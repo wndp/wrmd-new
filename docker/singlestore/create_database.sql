@@ -64,3 +64,17 @@ CREATE TABLE IF NOT EXISTS `wildalert`.`classifications` (
   SHARD KEY `__SHARDKEY` (`id`),
   SORT KEY `__UNORDERED` ()
 );
+
+CREATE TABLE `conservation_statuses` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `taxon_id` bigint(20) unsigned NOT NULL,
+  `authority` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `territory` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `conservation_statuses_taxon_id_index` (`taxon_id`) USING HASH,
+  SHARD KEY `__SHARDKEY` (`id`),
+  SORT KEY `__UNORDERED` ()
+);

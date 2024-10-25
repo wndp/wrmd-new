@@ -43,8 +43,23 @@ class AttributeOption extends Model
         return new AttributeOptionsCollection($models);
     }
 
-    public static function getDropdownOptions(array $attributeOptionNames)
+    public static function getDropdownOptions(array $attributeOptionNames): AttributeOptionsCollection
     {
+        return static::select([
+                    'name',
+                    'id',
+                    'value',
+                ])
+                ->whereIn('name', $attributeOptionNames)
+                ->orderBy('sort_order')
+                ->orderBy('value')
+                ->get()
+                ->groupBy('name')
+                //->map(fn ($attributeOptions) => $attributeOptions->pluck('value', 'id')->toArray())
+                ->map(fn ($attributeOptions) => $attributeOptions->mapWithKeys(fn ($attributeOption) => [
+                    $attributeOption->id => __($attributeOption->value)
+                ])->toArray());
+
         return Cache::remember(
             'getDropdownOptions.'.App::getLocale().'.'.md5(json_encode($attributeOptionNames)),
             Carbon::now()->addMinutes(10),

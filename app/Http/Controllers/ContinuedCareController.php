@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Concerns\GetsCareLogs;
 use App\Enums\AttributeOptionName;
+use App\Enums\SettingKey;
 use App\Events\PatientUpdated;
 use App\Models\AttributeOption;
 use App\Models\AttributeOptionUiBehavior;
@@ -42,7 +43,7 @@ class ContinuedCareController extends Controller
             ])
         ]);
 
-        if (Wrmd::settings('showTags')) {
+        if (Wrmd::settings(SettingKey::SHOW_TAGS)) {
             OptionsStore::add([
                 'clinicalClassifications' => Options::arrayToSelectable(app(ClinicalClassifications::class)::terms()),
                 'categorizationOfClinicalSigns' => Options::arrayToSelectable(app(CategorizationOfClinicalSigns::class)::terms()),
@@ -55,7 +56,7 @@ class ContinuedCareController extends Controller
             ]),
             'teamIsInPossession' => $teamIsInPossession,
             'patient' => $admission->patient,
-            'logs' => fn () => $this->getCareLogs($admission->patient, Auth::user(), (Wrmd::settings('logOrder') === 'desc'))
+            'logs' => fn () => $this->getCareLogs($admission->patient, Auth::user(), (Wrmd::settings(SettingKey::LOG_ORDER) === 'desc'))
         ]);
     }
 

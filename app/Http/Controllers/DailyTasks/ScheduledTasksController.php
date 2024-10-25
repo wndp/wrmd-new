@@ -6,6 +6,7 @@ use App\Domain\DailyTasks\DailyTaskOptions;
 use App\Domain\DailyTasks\Prescriptions\Prescription;
 use App\Domain\DailyTasks\Rechecks\Recheck;
 use App\Enums\DailyTaskSchedulable;
+use App\Enums\SettingKey;
 use App\Http\Controllers\Controller;
 use App\Support\Wrmd;
 use Illuminate\Http\Request;
@@ -41,8 +42,8 @@ class ScheduledTasksController extends Controller
                 'recorded_tasks' => $schedulable->recordedTasks,
             ])
             ->sortBy([
-                ['created_at', Wrmd::settings('logOrder') === 'desc' ? 'desc' : 'asc'],
-                ['start_date', Wrmd::settings('logOrder') === 'desc' ? 'desc' : 'asc'],
+                ['created_at', Wrmd::settings(SettingKey::LOG_ORDER) === 'desc' ? 'desc' : 'asc'],
+                ['start_date', Wrmd::settings(SettingKey::LOG_ORDER) === 'desc' ? 'desc' : 'asc'],
             ])
             ->values();
 
