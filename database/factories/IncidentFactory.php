@@ -20,7 +20,7 @@ class IncidentFactory extends Factory
     public function definition(): array
     {
         return [
-            'team_id' => Team::factory(),
+            'team_id' => Team::factory()->createQuietly(),
             'responder_id' => function (array $attributes) {
                 return Person::factory()->create(['team_id' => $attributes['team_id']]);
             },

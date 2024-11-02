@@ -9,6 +9,9 @@ use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+use Laravel\Paddle\Cashier;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Team>
@@ -36,6 +39,15 @@ class TeamFactory extends Factory
             'postal_code' => fake()->postcode,
             'phone_number' => fake()->phoneNumber,
         ];
+    }
+
+    public function suspended(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'account_status' => 'suspended',
+            ];
+        });
     }
 
     public function withProSubscription(): static

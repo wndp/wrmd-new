@@ -21,7 +21,7 @@ class PatientFactory extends Factory
     public function definition(): array
     {
         return [
-            'team_possession_id' => Team::factory(),
+            'team_possession_id' => Team::factory()->createQuietly(),
             'rescuer_id' => Person::factory(),
             'taxon_id' => null,
             'is_resident' => false,

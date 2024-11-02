@@ -19,7 +19,7 @@ class WildlifeRecoveryPatientFactory extends Factory
     public function definition(): array
     {
         return [
-            'team_id' => Team::factory(),
+            'team_id' => Team::factory()->createQuietly(),
             //'patient_id' => Patient::factory()
         ];
     }

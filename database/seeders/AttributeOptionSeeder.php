@@ -1347,8 +1347,68 @@ class AttributeOptionSeeder extends Seeder
             __('Other'),
         ]);
 
-        $this->createOrUpdateAttributes(AttributeOptionName::LAB_RESULT_METHOD, [
-            __('CBC (Complete Blood Count)'),
+        $this->createOrUpdateAttributes(AttributeOptionName::LAB_BOOLEAN, [
+            __('Negative'),
+            __('Positive'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::LAB_PLASMA_COLORS, [
+            __('Clear'),
+            __('Lypemic'),
+            __('Hemolyzed'),
+            __('Icteric'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::LAB_RESULT_QUANTITY_UNITS, [
+            __('Total'),
+            __('Estimate'),
+            __('Percent'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::LAB_CHEMISTRY_UNITS, [
+            'mEq/L',
+            'mg/dL',
+            'MMOL/L',
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::LAB_URINE_COLLECTION_METHODS, [
+            __('Free catch'),
+            __('Midstream'),
+            __('Manual compression'),
+            __('Cystocentesis'),
+            __('Catheter'),
+            __('Table'),
+            __('Floor'),
+            __('Cage'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::LAB_URINE_TURBIDITIES, [
+            __('Clear'),
+            __('Cloudy'),
+            __('Flocculent'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::LAB_URINE_ODORS, [
+            __('Charac'),
+            __('Ammonia'),
+            __('Sweet'),
+            __('Putrid'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::LAB_TOXINS, [
+            __('Lead'),
+            __('Mercury'),
+            __('Arsenic'),
+            __('Cadmium'),
+            __('Chromium'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::LAB_TOXIN_LEVEL_UNITS, [
+            'ppm',
+            'ug/dl',
+            'mEq/L',
+            'mg/dL',
+            'MMOL/L',
         ]);
     }
 

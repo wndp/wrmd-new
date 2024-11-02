@@ -19,7 +19,7 @@ class AdmissionFactory extends Factory
     public function definition(): array
     {
         return [
-            'team_id' => Team::factory(),
+            'team_id' => Team::factory()->createQuietly(),
             'case_year' => null,
             'case_id' => 1,
             'patient_id' => Patient::factory(),

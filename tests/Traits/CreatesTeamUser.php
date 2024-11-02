@@ -20,7 +20,7 @@ trait CreatesTeamUser
             $teamOverrides = array_merge($teamOverrides, ['contact_email' => $userOverrides['email']]);
         }
 
-        $team = Team::factory()->create($teamOverrides);
+        $team = Team::factory()->createQuietly($teamOverrides);
         $team->settingsStore()->set(SettingKey::TIMEZONE, 'America/Los_Angeles');
 
         // This might be causing trouble

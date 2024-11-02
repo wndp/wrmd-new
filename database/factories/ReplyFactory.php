@@ -21,7 +21,7 @@ class ReplyFactory extends Factory
     {
         return [
             'thread_id' => Thread::factory(),
-            'team_id' => Team::factory(),
+            'team_id' => Team::factory()->createQuietly(),
             'user_id' => User::factory(),
             'body' => $this->faker->sentence()
         ];

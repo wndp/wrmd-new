@@ -2,43 +2,49 @@
 
 namespace App\Models;
 
+use App\Badgeable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class LabResult extends Model
+class LabCytologyResult extends Model implements Badgeable
 {
+    /** @use HasFactory<\Database\Factories\LabCytologyResultFactory> */
     use HasFactory;
     use SoftDeletes;
     use HasVersion7Uuids;
     use LogsActivity;
 
     protected $fillable = [
-        'lab_report_id',
-        'lab_result_template_parameter_id',
-        'value_type',
-        'value',
+        'source'
     ];
 
     protected $casts = [
-        'lab_report_id' => 'string',
-        'lab_result_template_parameter_id' => 'string',
-        'value_type' => SampleResultAmountTypes::class,
-        'value' => 'string'
+        'source' => 'string'
     ];
 
-    public function labReport(): BelongsTo
+    public function labReport(): MorphOne
     {
-        return $this->belongsTo(LabReport::class);
+        return $this->morphOne(LabReport::class, 'lab_result');
     }
 
-    public function labResultTemplateParameter(): BelongsTo
+    public function badgeText(): Attribute
     {
-        return $this->belongsTo(LabResultTemplateParameter::class);
+        return Attribute::get(
+            fn () => __('Cytology Analysis'),
+        );
+    }
+
+    public function badgeColor(): Attribute
+    {
+        return Attribute::get(
+            fn () => 'green',
+        );
     }
 
     public function getActivitylogOptions(): LogOptions

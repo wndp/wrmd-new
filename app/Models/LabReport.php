@@ -12,9 +12,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
+
+use function Illuminate\Events\queueable;
 
 class LabReport extends Model implements Summarizable
 {
@@ -26,20 +29,18 @@ class LabReport extends Model implements Summarizable
     use LocksPatient;
 
     protected $fillable = [
-        'type',
-        'storage_analysis_facility_id',
+        'patient_id',
         'accession_number',
-        'lab_result_template_id',
+        'analysis_facility',
         'analysis_date_at',
         'technician',
         'comments',
     ];
 
     protected $casts = [
-        'type' => LabReportType::class,
-        'storage_analysis_facility_id' => 'integer',
+        'patient_id' => 'string',
         'accession_number' => 'string',
-        'lab_result_template_id' => 'integer',
+        'analysis_facility' => 'string',
         'analysis_date_at' => 'date',
         'technician' => 'string',
         'comments' => 'string',
@@ -54,19 +55,9 @@ class LabReport extends Model implements Summarizable
         return $this->belongsTo(Patient::class);
     }
 
-    public function labResultTemplate(): BelongsTo
+    public function labResult(): MorphTo
     {
-        return $this->belongsTo(LabResultTemplate::class);
-    }
-
-    public function storageAnalysisFacility(): BelongsTo
-    {
-        return $this->belongsTo(AttributeOption::class, 'storage_analysis_facility_id');
-    }
-
-    public function labResults(): HasMany
-    {
-        return $this->hasMany(LabResult::class);
+        return $this->morphTo();
     }
 
     public function summaryDate(): Attribute
@@ -89,5 +80,12 @@ class LabReport extends Model implements Summarizable
             ->logAll()
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
+    }
+
+    protected static function booted(): void
+    {
+        static::deleting(queueable(function (LabReport $labReport) {
+            $labReport->labResult()->delete();
+        }));
     }
 }

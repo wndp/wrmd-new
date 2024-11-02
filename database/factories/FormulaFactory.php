@@ -19,7 +19,7 @@ class FormulaFactory extends Factory
     public function definition(): array
     {
         return [
-            'team_id' => Team::factory(),
+            'team_id' => Team::factory()->createQuietly(),
             'name' => $this->faker->word(),
             'type' => FormulaType::PRESCRIPTION,
             'defaults' => []

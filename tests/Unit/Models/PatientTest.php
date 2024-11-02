@@ -7,6 +7,13 @@ use App\Jobs\GeocodeAddress;
 use App\Jobs\PredictCircumstancesOfAdmission;
 use App\Models\AttributeOption;
 use App\Models\CommonName;
+use App\Models\LabCbcResult;
+use App\Models\LabChemistryResult;
+use App\Models\LabCytologyResult;
+use App\Models\LabFecalResult;
+use App\Models\LabReport;
+use App\Models\LabToxicologyResult;
+use App\Models\LabUrinalysisResult;
 use App\Models\Patient;
 use App\Models\Taxon;
 use Carbon\Carbon;
@@ -19,6 +26,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Fluent;
 use MatanYadaev\EloquentSpatial\Objects\Point;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Support\AssistsWithAuthentication;
 use Tests\TestCase;
@@ -41,6 +49,87 @@ final class PatientTest extends TestCase
         $patient = Patient::factory()->make();
 
         $this->assertInstanceOf(Collection::class, $patient->exams);
+    }
+
+    #[Test]
+    #[Group('lab')]
+    public function aPatientHasLabReports(): void
+    {
+        $patient = Patient::factory()->make();
+
+        $this->assertInstanceOf(Collection::class, $patient->labReports);
+    }
+
+    #[Test]
+    #[Group('lab')]
+    public function aPatientHasLabFecalResults(): void
+    {
+        $labReport = LabReport::factory()
+            ->for(LabFecalResult::factory(), 'labResult')
+            ->create();
+
+        $this->assertInstanceOf(Collection::class, $labReport->patient->labFecalResults);
+        $this->assertInstanceOf(LabFecalResult::class, $labReport->patient->labFecalResults->first());
+    }
+
+    #[Test]
+    #[Group('lab')]
+    public function aPatientHasLabCbcResults(): void
+    {
+        $labReport = LabReport::factory()
+            ->for(LabCbcResult::factory(), 'labResult')
+            ->create();
+
+        $this->assertInstanceOf(Collection::class, $labReport->patient->labCbcResults);
+        $this->assertInstanceOf(LabCbcResult::class, $labReport->patient->labCbcResults->first());
+    }
+
+    #[Test]
+    #[Group('lab')]
+    public function aPatientHasLabCytologyResults(): void
+    {
+        $labReport = LabReport::factory()
+            ->for(LabCytologyResult::factory(), 'labResult')
+            ->create();
+
+        $this->assertInstanceOf(Collection::class, $labReport->patient->labCytologyResults);
+        $this->assertInstanceOf(LabCytologyResult::class, $labReport->patient->labCytologyResults->first());
+    }
+
+    #[Test]
+    #[Group('lab')]
+    public function aPatientHasLabChemistryResults(): void
+    {
+        $labReport = LabReport::factory()
+            ->for(LabChemistryResult::factory(), 'labResult')
+            ->create();
+
+        $this->assertInstanceOf(Collection::class, $labReport->patient->labChemistryResults);
+        $this->assertInstanceOf(LabChemistryResult::class, $labReport->patient->labChemistryResults->first());
+    }
+
+    #[Test]
+    #[Group('lab')]
+    public function aPatientHasLabUrinalysisResults(): void
+    {
+        $labReport = LabReport::factory()
+            ->for(LabUrinalysisResult::factory(), 'labResult')
+            ->create();
+
+        $this->assertInstanceOf(Collection::class, $labReport->patient->labUrinalysisResults);
+        $this->assertInstanceOf(LabUrinalysisResult::class, $labReport->patient->labUrinalysisResults->first());
+    }
+
+    #[Test]
+    #[Group('lab')]
+    public function aPatientHasLabToxicologyResults(): void
+    {
+        $labReport = LabReport::factory()
+            ->for(LabToxicologyResult::factory(), 'labResult')
+            ->create();
+
+        $this->assertInstanceOf(Collection::class, $labReport->patient->labToxicologyResults);
+        $this->assertInstanceOf(LabToxicologyResult::class, $labReport->patient->labToxicologyResults->first());
     }
 
     #[Test]

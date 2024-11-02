@@ -21,5 +21,15 @@ abstract class TestCase extends BaseTestCase
         app()->singleton(AdministrativeDivision::class, function () {
             return new AdministrativeDivision('en', 'US');
         });
+
+        \Illuminate\Support\Facades\Http::fake([
+            \Laravel\Paddle\Cashier::apiUrl().'/*' => \Illuminate\Support\Facades\Http::response([
+                'data' => [[
+                    'id' => fn () => \Illuminate\Support\Str::random(),
+                    'name' => '',
+                    'email' => '',
+                ]]
+            ]),
+        ]);
     }
 }

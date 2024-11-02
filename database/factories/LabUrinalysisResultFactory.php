@@ -2,13 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\AttributeOption;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\LabResultsTemplate>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\LabUrinalysisResult>
  */
-class LabResultTemplateFactory extends Factory
+class LabUrinalysisResultFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,8 +17,7 @@ class LabResultTemplateFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word(),
-            'method_id' => AttributeOption::factory()
+            //
         ];
     }
 }

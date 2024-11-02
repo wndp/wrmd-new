@@ -2,8 +2,14 @@
 
 use App\Enums\Ability;
 use App\Http\Controllers\AttachmentsController;
+use App\Http\Controllers\BandingMorphometrics\AuxiliaryMarkerController;
+use App\Http\Controllers\BandingMorphometrics\BandingController;
+use App\Http\Controllers\BandingMorphometrics\BandingMorphometricsController;
+use App\Http\Controllers\BandingMorphometrics\MorphometricsController;
+use App\Http\Controllers\BandingMorphometrics\RecaptureController;
 use App\Http\Controllers\BatchUpdateController;
 use App\Http\Controllers\CageCardController;
+use App\Http\Controllers\CareLogController;
 use App\Http\Controllers\ContinuedCareController;
 use App\Http\Controllers\DetachRescuerController;
 use App\Http\Controllers\DiagnosisController;
@@ -13,7 +19,13 @@ use App\Http\Controllers\Expenses\ExpensesController;
 use App\Http\Controllers\InitialCareController;
 use App\Http\Controllers\IntakeController;
 use App\Http\Controllers\IntakeExamController;
-use App\Http\Controllers\Labs\LabsController;
+use App\Http\Controllers\Labs\LabToxicologyResultsController;
+use App\Http\Controllers\Labs\LabFecalResultsController;
+use App\Http\Controllers\Labs\LabCbcResultsController;
+use App\Http\Controllers\Labs\LabChemistryResultsController;
+use App\Http\Controllers\Labs\LabCytologyResultsController;
+use App\Http\Controllers\Labs\LabUrinalysisResultsController;
+use App\Http\Controllers\Labs\LabReportsController;
 use App\Http\Controllers\Necropsy\NecropsyController;
 use App\Http\Controllers\Necropsy\NecropsyMorphometricsController;
 use App\Http\Controllers\Necropsy\NecropsySummaryController;
@@ -31,12 +43,6 @@ use App\Http\Controllers\PatientsQuickAdmitController;
 use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\RecheckController;
 use App\Http\Controllers\RescuerController;
-use App\Http\Controllers\BandingMorphometrics\AuxiliaryMarkerController;
-use App\Http\Controllers\BandingMorphometrics\BandingController;
-use App\Http\Controllers\BandingMorphometrics\MorphometricsController;
-use App\Http\Controllers\BandingMorphometrics\RecaptureController;
-use App\Http\Controllers\BandingMorphometrics\BandingMorphometricsController;
-use App\Http\Controllers\CareLogController;
 use App\Http\Controllers\VitalsController;
 use Illuminate\Auth\Middleware\Authorize;
 
@@ -148,8 +154,21 @@ Route::prefix('patients')->name('patients.')->group(function () {
 
     Route::get('/attachments', AttachmentsController::class)->middleware('pro')->name('attachments.edit');
 
-    Route::name('lab.')->middleware(Authorize::using(Ability::MANAGE_LABS->value))->group(function () {
-        Route::get('/lab', LabsController::class)->name('index');
+    Route::name('lab-reports.')->middleware(Authorize::using(Ability::MANAGE_LABS->value))->group(function () {
+        Route::get('/lab-report', [LabReportsController::class, 'index'])->name('index');
+        Route::delete('{patient}/lab-report/{labReport}', [LabReportsController::class, 'delete'])->name('delete');
+        Route::post('{patient}/lab-report/fecal', [LabFecalResultsController::class, 'store'])->name('fecal.store');
+        Route::put('{patient}/lab-report/fecal/{labResult}', [LabFecalResultsController::class, 'update'])->name('fecal.update');
+        Route::post('{patient}/lab-report/cbc', [LabCbcResultsController::class, 'store'])->name('cbc.store');
+        Route::put('{patient}/lab-report/cbc/{labResult}', [LabCbcResultsController::class, 'update'])->name('cbc.update');
+        Route::post('{patient}/lab-report/chemistry', [LabChemistryResultsController::class, 'store'])->name('chemistry.store');
+        Route::put('{patient}/lab-report/chemistry/{labResult}', [LabChemistryResultsController::class, 'update'])->name('chemistry.update');
+        Route::post('{patient}/lab-report/cytology', [LabCytologyResultsController::class, 'store'])->name('cytology.store');
+        Route::put('{patient}/lab-report/cytology/{labResult}', [LabCytologyResultsController::class, 'update'])->name('cytology.update');
+        Route::post('{patient}/lab-report/urinalysis', [LabUrinalysisResultsController::class, 'store'])->name('urinalysis.store');
+        Route::put('{patient}/lab-report/urinalysis/{labResult}', [LabUrinalysisResultsController::class, 'update'])->name('urinalysis.update');
+        Route::post('{patient}/lab-report/toxicology', [LabToxicologyResultsController::class, 'store'])->name('toxicology.store');
+        Route::put('{patient}/lab-report/toxicology/{labResult}', [LabToxicologyResultsController::class, 'update'])->name('toxicology.update');
     });
 
     Route::name('expenses.')->middleware(Authorize::using(Ability::VIEW_EXPENSES->value))->group(function () {

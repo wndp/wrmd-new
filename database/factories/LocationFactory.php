@@ -19,7 +19,7 @@ class LocationFactory extends Factory
     public function definition(): array
     {
         return [
-            'team_id' => Team::factory(),
+            'team_id' => Team::factory()->createQuietly(),
             'facility_id' => AttributeOption::factory(),
             'area' => $this->faker->word()
         ];

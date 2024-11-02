@@ -18,7 +18,7 @@ class VeterinarianFactory extends Factory
     public function definition(): array
     {
         return [
-            'team_id' => Team::factory(),
+            'team_id' => Team::factory()->createQuietly(),
             'name' => $this->faker->name(),
             'license' => $this->faker->word()
         ];

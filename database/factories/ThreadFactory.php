@@ -20,7 +20,7 @@ class ThreadFactory extends Factory
     public function definition(): array
     {
         return [
-            'team_id' => Team::factory(),
+            'team_id' => Team::factory()->createQuietly(),
             'channel' => Channel::GENERAL,
             'status' => ThreadStatus::UNSOLVED,
             'title' => $this->faker->word(),

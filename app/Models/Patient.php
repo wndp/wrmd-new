@@ -10,6 +10,7 @@ use App\Concerns\ValidatesOwnership;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
 use App\Models\Incident;
+use App\Models\LabUrinalysisResult;
 use App\Models\Scopes\VoidedScope;
 use App\Support\Timezone;
 use Carbon\Carbon;
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use MatanYadaev\EloquentSpatial\Objects\Point;
@@ -225,6 +227,72 @@ class Patient extends Model implements HasMedia
     public function labReports(): HasMany
     {
         return $this->hasMany(LabReport::class);
+    }
+
+    public function labFecalResults(): MorphToMany
+    {
+        return $this->morphedByMany(LabFecalResult::class, 'lab_result', 'lab_reports')->withPivot([
+            'accession_number',
+            'analysis_facility_id',
+            'analysis_date_at',
+            'technician',
+            'comments',
+        ]);
+    }
+
+    public function labCbcResults(): MorphToMany
+    {
+        return $this->morphedByMany(LabCbcResult::class, 'lab_result', 'lab_reports')->withPivot([
+            'accession_number',
+            'analysis_facility_id',
+            'analysis_date_at',
+            'technician',
+            'comments',
+        ]);
+    }
+
+    public function labCytologyResults(): MorphToMany
+    {
+        return $this->morphedByMany(LabCytologyResult::class, 'lab_result', 'lab_reports')->withPivot([
+            'accession_number',
+            'analysis_facility_id',
+            'analysis_date_at',
+            'technician',
+            'comments',
+        ]);
+    }
+
+    public function labChemistryResults(): MorphToMany
+    {
+        return $this->morphedByMany(LabChemistryResult::class, 'lab_result', 'lab_reports')->withPivot([
+            'accession_number',
+            'analysis_facility_id',
+            'analysis_date_at',
+            'technician',
+            'comments',
+        ]);
+    }
+
+    public function labUrinalysisResults(): MorphToMany
+    {
+        return $this->morphedByMany(LabUrinalysisResult::class, 'lab_result', 'lab_reports')->withPivot([
+            'accession_number',
+            'analysis_facility_id',
+            'analysis_date_at',
+            'technician',
+            'comments',
+        ]);
+    }
+
+    public function labToxicologyResults(): MorphToMany
+    {
+        return $this->morphedByMany(LabToxicologyResult::class, 'lab_result', 'lab_reports')->withPivot([
+            'accession_number',
+            'analysis_facility_id',
+            'analysis_date_at',
+            'technician',
+            'comments',
+        ]);
     }
 
     public function morph(): BelongsTo

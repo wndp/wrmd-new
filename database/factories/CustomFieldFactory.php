@@ -18,7 +18,7 @@ class CustomFieldFactory extends Factory
     public function definition(): array
     {
         return [
-            'team_id' => Team::factory(),
+            'team_id' => Team::factory()->createQuietly(),
             'team_field_id' => $this->faker->randomDigitNotZero(),
             'group' => $this->faker->word(),
             'location' => $this->faker->word(),

@@ -4,7 +4,6 @@ namespace Tests\Unit\Models;
 
 use App\Concerns\GetsCareLogs;
 use App\Models\LabReport;
-use App\Models\LabResultTemplate;
 use App\Models\Patient;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -31,13 +30,6 @@ final class LabReportTest extends TestCase
     {
         $labReport = LabReport::factory()->make();
         $this->assertInstanceOf(Patient::class, $labReport->patient);
-    }
-
-    #[Test]
-    public function aLabReportBelongsToALabResultTemplate(): void
-    {
-        $labReport = LabReport::factory()->make();
-        $this->assertInstanceOf(LabResultTemplate::class, $labReport->LabResultTemplate);
     }
 
     #[Test]

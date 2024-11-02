@@ -18,6 +18,7 @@ import {
   CakeIcon,
   PhotoIcon,
   ClipboardDocumentListIcon,
+  BeakerIcon,
   ScissorsIcon,
   SwatchIcon,
   BanknotesIcon,
@@ -81,6 +82,7 @@ const moreOptionGroups = ref([
     [
       { name: __('Attachments'), route: 'patients.attachments.edit', icon: PhotoIcon, can: usePage().props.subscription.isProPlan && active(Extension.ATTACHMENTS) },
       { name: __('Daily Exams'), route: 'patients.exam.index', icon: ClipboardDocumentListIcon, can: active(Extension.DAILY_EXAM) },
+      { name: __('Lab Reports'), route: 'patients.lab-reports.index', icon: BeakerIcon, can: active(Extension.LAB_REPORTS) },
       { name: __('Necropsy'), route: 'patients.necropsy.edit', icon: ScissorsIcon, can: active(Extension.NECROPSY) },
       { name: __('Banding and Morphometrics'), route: 'patients.banding_morphometrics.edit', icon: SwatchIcon, can: active(Extension.BANDING_MORPHOMETRICS) },
       { name: __('Expenses'), route: 'patients.expenses.index', icon: BanknotesIcon, can: active(Extension.EXPENSES) },

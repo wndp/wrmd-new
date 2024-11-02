@@ -9,6 +9,7 @@ use App\Repositories\AdministrativeDivision;
 use App\Repositories\SettingsStore;
 use App\Services\DomPdfEngine;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
@@ -42,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(PdfApiInterface::class, function () {
             if (config('wrmd.reporting.pdf_driver') === 'api2pdf') {
                 return new Api2Pdf(config('services.api2pdf.key'));
-            } else if (config('wrmd.reporting.pdf_driver') === 'domPdf') {
+            } elseif (config('wrmd.reporting.pdf_driver') === 'domPdf') {
                 return new DomPdfEngine();
             }
         });
@@ -53,6 +54,23 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Relation::enforceMorphMap([
+            'user' => \App\Models\User::class,
+            'team' => \App\Models\Team::class,
+            'cbc' => \App\Models\LabCbcResult::class,
+            'settings' => \App\Models\Setting::class,
+            'person' => \App\Models\Person::class,
+            'patient' => \App\Models\Patient::class,
+            'labReport' => \App\Models\LabReport::class,
+            'fecal' => \App\Models\LabFecalResult::class,
+            'cytology' => \App\Models\LabCytologyResult::class,
+            'chemistry' => \App\Models\LabChemistryResult::class,
+            'urinalysis' => \App\Models\LabUrinalysisResult::class,
+            'toxicology' => \App\Models\LabToxicologyResult::class,
+        ]);
+
+        Route::bind('voidedPatient', fn ($value) => Patient::onlyVoided()->findOrFail($value));
+
         Queue::createPayloadUsing(function ($connection, $queue, $payload) {
             $jobData = $payload['data'];
 
@@ -64,8 +82,6 @@ class AppServiceProvider extends ServiceProvider
 
             return ['data' => $jobData];
         });
-
-        Route::bind('voidedPatient', fn ($value) => Patient::onlyVoided()->findOrFail($value));
 
         // Policies
         foreach ([

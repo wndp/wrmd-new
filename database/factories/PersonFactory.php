@@ -18,7 +18,7 @@ class PersonFactory extends Factory
     public function definition(): array
     {
         return [
-            'team_id' => Team::factory(),
+            'team_id' => Team::factory()->createQuietly(),
             'organization' => $this->faker->company(),
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->firstName(),

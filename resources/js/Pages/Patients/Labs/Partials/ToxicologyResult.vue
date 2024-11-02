@@ -1,0 +1,225 @@
+<script setup>
+import {useForm} from '@inertiajs/vue3';
+import { formatISO9075 } from 'date-fns';
+import DialogModal from '@/Components/DialogModal.vue';
+import FormRow from '@/Components/FormElements/FormRow.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import TextareaInput from '@/Components/FormElements/TextareaInput.vue';
+import SelectInput from '@/Components/FormElements/SelectInput.vue';
+import InputWithUnit from '@/Components/FormElements/InputWithUnit.vue';
+import DatePicker from '@/Components/FormElements/DatePicker.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import SecondaryButton from '@/Components/FormElements/SecondaryButton.vue';
+import {__} from '@/Composables/Translate';
+
+const props = defineProps({
+  patientId: {
+    type: String,
+    required: true
+  },
+  labReport: {
+    type: Object,
+    default: () => { return {} }
+  },
+  show: Boolean
+});
+
+const emit = defineEmits(['close']);
+
+const form = useForm({
+  analysis_date_at: props.labReport.id ? props.labReport.analysis_date_at : formatISO9075(new Date()),
+  technician: props.labReport.id ? props.labReport.technician : '',
+  accession_number: props.labReport.id ? props.labReport.accession_number : '',
+  analysis_facility: props.labReport.id ? props.labReport.analysis_facility : '',
+  comments: props.labReport.id ? props.labReport.comments : '',
+  toxin_id: props.labReport.id ? props.labReport.lab_result.toxin_id : '',
+  level: props.labReport.id ? props.labReport.lab_result.level : '',
+  level_unit_id: props.labReport.id ? props.labReport.lab_result.level_unit_id : '',
+  source: props.labReport.id ? props.labReport.lab_result.source : '',
+});
+
+const close = () => emit('close');
+
+const save = () => {
+    if (props.labReport.id) {
+        update();
+        return;
+    }
+    store();
+};
+
+const store = () => {
+    form.post(route('patients.lab-reports.toxicology.store', {
+        patient: props.patientId
+    }), {
+        preserveScroll: true,
+        onSuccess: () => {
+          form.reset();
+          close();
+        }
+    });
+};
+
+const update = () => {
+    form.put(route('patients.lab-reports.toxicology.update', {
+        patient: props.patientId,
+        labResult: props.labReport.lab_result.id
+    }), {
+        preserveScroll: true,
+        onSuccess: () => close()
+    });
+};
+</script>
+
+<template>
+  <DialogModal
+    :show="show"
+    @close="close"
+  >
+    <template #title>
+      {{ __('Fecal Analysis') }}
+    </template>
+    <template #content>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-6">
+        <FormRow
+          id="analysis_date_at"
+          class="sm:col-span-3"
+          :label="__('Date')"
+        >
+          <DatePicker
+            v-model="form.analysis_date_at"
+            name="analysis_date_at"
+          />
+          <InputError
+            :message="form.errors.analysis_date_at"
+            class="mt-2"
+          />
+        </FormRow>
+        <FormRow
+          id="technician"
+          class="sm:col-span-3"
+          :label="__('Technician')"
+        >
+          <TextInput
+            v-model="form.technician"
+            name="technician"
+          />
+          <InputError
+            :message="form.errors.technician"
+            class="mt-2"
+          />
+        </FormRow>
+        <FormRow
+          id="accession_number"
+          class="sm:col-span-3"
+          :label="__('Accession Number')"
+        >
+          <TextInput
+            v-model="form.accession_number"
+            name="accession_number"
+          />
+          <InputError
+            :message="form.errors.accession_number"
+            class="mt-2"
+          />
+        </FormRow>
+        <FormRow
+          id="analysis_facility"
+          class="sm:col-span-3"
+          :label="__('Analysis Facility')"
+        >
+          <TextInput
+            v-model="form.analysis_facility"
+            name="analysis_facility"
+          />
+          <InputError
+            :message="form.errors.analysis_facility"
+            class="mt-2"
+          />
+        </FormRow>
+        <hr class="sm:col-span-6">
+        <FormRow
+          id="toxin_id"
+          class="sm:col-span-2"
+          :label="__('Toxin')"
+        >
+          <SelectInput
+            v-model="form.toxin_id"
+            name="toxin_id"
+            :options="$page.props.options.labToxinsOptions"
+          />
+          <InputError
+            :message="form.errors.toxin_id"
+            class="mt-2"
+          />
+        </FormRow>
+        <FormRow
+          id="level"
+          class="sm:col-span-2"
+          :label="__('Level')"
+        >
+          <InputWithUnit
+            v-model:text="form.level"
+            v-model:unit="form.level_unit_id"
+            name="level"
+            type="number"
+            step="any"
+            min="0"
+            :units="$page.props.options.labToxinLevelUnitsOptions"
+          />
+          <InputError
+            :message="form.errors.level"
+            class="mt-2"
+          />
+          <InputError
+            :message="form.errors.level_unit_id"
+            class="mt-2"
+          />
+        </FormRow>
+        <FormRow
+          id="source"
+          class="sm:col-span-6"
+          :label="__('Source')"
+        >
+          <TextInput
+            v-model="form.source"
+            name="source"
+          />
+          <InputError
+            :message="form.errors.source"
+            class="mt-2"
+          />
+        </FormRow>
+        <hr class="sm:col-span-6">
+        <FormRow
+          id="comments"
+          class="sm:col-span-6"
+          :label="__('Comments')"
+        >
+          <TextareaInput
+            v-model="form.comments"
+            name="comments"
+          />
+          <InputError
+            :message="form.errors.comments"
+            class="mt-2"
+          />
+        </FormRow>
+      </div>
+    </template>
+    <template #footer>
+      <SecondaryButton @click="close">
+        {{ __('Nevermind') }}
+      </SecondaryButton>
+      <PrimaryButton
+        class="ml-2"
+        :class="{ 'opacity-25': form.processing }"
+        :disabled="form.processing"
+        @click="save"
+      >
+        {{ __('Save Lab Result') }}
+      </PrimaryButton>
+    </template>
+  </DialogModal>
+</template>
