@@ -2,35 +2,35 @@
 
 namespace App\Analytics\Maps;
 
-use App\Domain\Accounts\Account as AccountModel;
 use App\Analytics\Contracts\Map;
 use App\Analytics\Series;
+use App\Models\Team;
 
 class Account extends Map
 {
     public function compute()
     {
-        $account = AccountModel::find($this->team->id);
+        $team = Team::find($this->team->id);
 
-        if ($account->coordinates) {
+        if ($team->coordinates) {
             $this->series = (new Series())->push(
                 [
                     //'name' => 'test',
-                    'data' => [$this->formatMarkers($account)],
+                    'data' => [$this->formatMarkers($team)],
                 ]
             );
         }
     }
 
-    public function formatMarkers($account)
+    public function formatMarkers($team)
     {
         return [
             'coordinates' => [
-                'lat' => $account->coordinates->latitude,
-                'lng' => $account->coordinates->longitude,
+                'lat' => $team->coordinates->latitude,
+                'lng' => $team->coordinates->longitude,
             ],
-            'title' => $account->organization,
-            'content' => $account->full_address,
+            'title' => $team->organization,
+            'content' => $team->full_address,
             'link' => '',
         ];
     }

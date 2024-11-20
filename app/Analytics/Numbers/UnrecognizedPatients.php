@@ -24,7 +24,6 @@ class UnrecognizedPatients extends Number
     public function query()
     {
         $query = Admission::where('team_id', $this->team->id)
-            ->where('disposition', '!=', 'Void')
             ->whereUnrecognized();
 
         return $query->count();

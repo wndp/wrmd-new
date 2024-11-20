@@ -23,8 +23,6 @@ class MissidentifiedPatients extends Number
 
     public function query()
     {
-        //$query = Admission::where('team_id', $this->team->id)->whereMisidentified();
-
         return Admission::where('team_id', $this->team->id)->whereMisidentified()->count();
     }
 }

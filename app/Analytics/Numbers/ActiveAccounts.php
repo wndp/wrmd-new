@@ -2,8 +2,9 @@
 
 namespace App\Analytics\Numbers;
 
-use App\Domain\Accounts\Account;
 use App\Analytics\Contracts\Number;
+use App\Enums\AccountStatus;
+use App\Models\Team;
 
 class ActiveAccounts extends Number
 {
@@ -23,6 +24,6 @@ class ActiveAccounts extends Number
 
     public function query()
     {
-        return Account::where('status', 'Active')->count();
+        return Team::where('status', AccountStatus::ACTIVE)->count();
     }
 }

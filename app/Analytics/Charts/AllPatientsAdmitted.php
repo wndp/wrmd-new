@@ -2,11 +2,12 @@
 
 namespace App\Analytics\Charts;
 
-use App\Models\Admission;
 use App\Analytics\ChronologicalCollection;
 use App\Analytics\Concerns\HandleChronologicalData;
 use App\Analytics\Contracts\Chart;
 use App\Analytics\DataSet;
+use App\Enums\AccountStatus;
+use App\Models\Admission;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
@@ -28,16 +29,16 @@ class AllPatientsAdmitted extends Chart
     public function query(string $segment, CarbonPeriod $period = null): ChronologicalCollection
     {
         $query = Admission::joinPatients()
-            ->join('accounts', 'admissions.team_id', '=', 'accounts.id')
+            ->join('teams', 'admissions.team_id', '=', 'teams.id')
             ->selectRaw('count(*) as aggregate, date_admitted_at as date')
-            ->where('accounts.is_active', true)
+            ->where('teams.status', AccountStatus::ACTIVE)
             ->groupBy('date')
             ->orderBy('date');
 
         if ($this->filters->date_period !== 'all-dates') {
             $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
         } else {
-            $query->dateRange($period->first()->format('Y-m-d'), $period->last()->format('Y-m-d'));
+            $query->dateRange($period->first()->format('Y-m-d'), $period->last()->format('Y-m-d'), 'date_admitted_at');
         }
 
         $this->withSegment($query, $segment);

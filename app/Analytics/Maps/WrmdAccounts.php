@@ -2,9 +2,10 @@
 
 namespace App\Analytics\Maps;
 
-use App\Domain\Accounts\Account;
 use App\Analytics\Contracts\Map;
 use App\Analytics\Series;
+use App\Enums\AccountStatus;
+use App\Models\Team;
 
 class WrmdAccounts extends Map
 {
@@ -15,7 +16,7 @@ class WrmdAccounts extends Map
         $this->series->push(
             [
                 'name' => 'Active Accounts',
-                'data' => Account::where('is_active', true)
+                'data' => Team::where('status', AccountStatus::ACTIVE)
                     ->get()
                     ->map([$this, 'formatMarkers'])
                     ->filter()
@@ -25,8 +26,19 @@ class WrmdAccounts extends Map
 
         $this->series->push(
             [
-                'name' => 'Inactive Accounts',
-                'data' => Account::where('is_active', false)
+                'name' => 'Stale Accounts',
+                'data' => Team::where('status', AccountStatus::STALE)
+                    ->get()
+                    ->map([$this, 'formatMarkers'])
+                    ->filter()
+                    ->values(),
+            ]
+        );
+
+        $this->series->push(
+            [
+                'name' => 'Banned Accounts',
+                'data' => Team::where('status', AccountStatus::BANNED)
                     ->get()
                     ->map([$this, 'formatMarkers'])
                     ->filter()

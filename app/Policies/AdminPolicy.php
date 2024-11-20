@@ -9,42 +9,64 @@ class AdminPolicy
 {
     use HandlesAuthorization;
 
-    public function viewAdmin($user)
+    public function viewWrmdAdmin($user)
     {
-        return in_array($user->id, [
-            WrmdStaff::AMY->value,
-            WrmdStaff::TERRA->value,
-            WrmdStaff::PRANAV->value,
-        ]);
+        $userIds = array_column(WrmdStaff::cases(), 'value');
+
+        return in_array($user->id, $userIds);
     }
 
     public function manageMaintenance($user)
     {
-        return in_array($user->id, []);
+        return in_array($user->id, [
+            WrmdStaff::DEVIN->value,
+            WrmdStaff::RACHEL->value,
+            WrmdStaff::MISTY->value,
+        ]);
     }
 
     public function manageAccounts($user)
     {
-        return in_array($user->id, []);
+        return in_array($user->id, [
+            WrmdStaff::DEVIN->value,
+            WrmdStaff::RACHEL->value,
+            WrmdStaff::MISTY->value,
+            WrmdStaff::BRITTANY->value,
+        ]);
     }
 
     public function spoofAccounts($user)
     {
-        return in_array($user->id, []);
+        return in_array($user->id, [
+            WrmdStaff::DEVIN->value,
+            WrmdStaff::RACHEL->value,
+            WrmdStaff::MISTY->value,
+        ]);
     }
 
     public function manageAuthorizations($user)
     {
-        return in_array($user->id, []);
+        return in_array($user->id, [
+            WrmdStaff::DEVIN->value,
+            WrmdStaff::RACHEL->value,
+        ]);
     }
 
     public function viewRevisions($user)
     {
-        return in_array($user->id, []);
+        return in_array($user->id, [
+            WrmdStaff::DEVIN->value,
+            WrmdStaff::RACHEL->value,
+            WrmdStaff::MISTY->value,
+        ]);
     }
 
     public function importPatients($user)
     {
-        return in_array($user->id, []);
+        return in_array($user->id, [
+            WrmdStaff::DEVIN->value,
+            WrmdStaff::RACHEL->value,
+            WrmdStaff::MISTY->value,
+        ]);
     }
 }

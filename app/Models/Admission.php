@@ -99,6 +99,16 @@ class Admission extends Model
         return (new Patient())->scopeWhereUnrecognized($query);
     }
 
+    /**
+     * Scope patients that are unrecognized to WRMD.
+     */
+    public function scopeWhereMisidentified(Builder $query): Builder
+    {
+        $query->joinPatients();
+
+        return (new Patient())->scopeWhereMisidentified($query);
+    }
+
     public static function custody(Team $team, Patient $patient): ?self
     {
         return static::where([

@@ -2,8 +2,9 @@
 
 namespace App\Analytics\Numbers;
 
-use App\Models\Admission;
 use App\Analytics\Contracts\Number;
+use App\Enums\AccountStatus;
+use App\Models\Admission;
 
 class AllPatientsAdmitted extends Number
 {
@@ -26,8 +27,8 @@ class AllPatientsAdmitted extends Number
     public function query($segment)
     {
         $query = Admission::joinPatients()
-            ->join('accounts', 'admissions.team_id', '=', 'accounts.id')
-            ->where('accounts.is_active', true);
+            ->join('teams', 'admissions.team_id', '=', 'teams.id')
+            ->where('teams.status', AccountStatus::ACTIVE);
 
         if ($this->filters->date_period !== 'all-dates') {
             $query->dateRange($this->filters->date_from, $this->filters->date_to, 'date_admitted_at');
