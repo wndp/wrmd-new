@@ -19,6 +19,7 @@ return new class () extends Migration {
             $table->string('hash', 20)->nullable()->index();
             $table->timestamps();
 
+            $table->sortKey(['case_year', 'case_id']);
             $table->shardKey(['team_id', 'case_year', 'case_id']);
         });
     }
