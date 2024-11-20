@@ -30,6 +30,8 @@ return new class () extends Migration {
                 $table->string('profile_photo_path')->nullable();
                 $table->string('notes')->nullable();
                 $table->string('timezone')->nullable();
+
+                $table->spatialIndex('coordinates');
             });
         });
     }
@@ -40,6 +42,8 @@ return new class () extends Migration {
     public function down(): void
     {
         Schema::table('teams', function (Blueprint $table) {
+            $table->dropSpatialIndex('coordinates');
+
             $table->dropColumn('status');
             $table->dropColumn('is_master_account');
             $table->dropColumn('master_account_id');

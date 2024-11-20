@@ -11,6 +11,7 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('patients', function (Blueprint $table) {
+            $table->rowstore();
             $table->uuid('id')->primary();
             $table->unsignedBigInteger('legacy_id')->nullable()->index();
             $table->unsignedBigInteger('team_possession_id')->index();
@@ -56,6 +57,9 @@ return new class () extends Migration {
             $table->boolean('is_carcass_saved')->default(0);
             $table->boolean('is_criminal_activity')->default(0);
             $table->timestamps();
+
+            $table->spatialIndex('coordinates_found');
+            $table->spatialIndex('disposition_coordinates');
         });
     }
 
