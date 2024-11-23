@@ -9,7 +9,6 @@ import PatientPagination from './Partials/PatientPagination.vue';
 import PatientMetaTags from './Partials/PatientMetaTags.vue';
 import PatientNotifications from './Partials/PatientNotifications.vue';
 import PatientTabs from './Partials/PatientTabs.vue';
-import OiledPatientTabs from './Partials/OiledPatientTabs.vue';
 import { TransitionRoot } from '@headlessui/vue';
 import { PencilIcon, MapPinIcon, ClockIcon } from '@heroicons/vue/24/outline';
 import debounce from 'lodash/debounce';
@@ -44,14 +43,6 @@ const showCurrentLocation = computed(
     usePage().props.locationOptionUiBehaviorIds.dispositionTransferredId
   ].includes(usePage().props.locationCard.disposition_id)
 );
-
-const tabsComponent = computed(() => {
-  let isOwrmd = false;
-  return isOwrmd ? OiledPatientTabs : PatientTabs;
-  // return {
-  //   OiledPatientTabs
-  // }[this.extensionNavigation('patient.tabs_component')] || PatientTabs;
-});
 
 const customFields = [];
 // const customFields = computed(() => {
@@ -262,8 +253,7 @@ onBeforeUnmount(() => document.removeEventListener('scroll', handleDebouncedScro
       </div>
     </div>
     <slot name="tabs">
-      <component
-        :is="tabsComponent"
+      <PatientTabs
         :patientId="$page.props.admission.patient_id"
       />
     </slot>

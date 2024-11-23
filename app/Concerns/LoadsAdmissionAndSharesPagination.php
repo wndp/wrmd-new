@@ -236,6 +236,7 @@ trait LoadsAdmissionAndSharesPagination
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::TAXA_MORPHS->value,
                 AttributeOptionName::PATIENT_LOCATION_FACILITIES->value,
+                //AttributeOptionName::EXAM_WEIGHT_UNITS->value,
                 AttributeOptionName::DAILY_TASK_ASSIGNMENTS->value,
                 AttributeOptionName::DAILY_TASK_FREQUENCIES->value,
                 AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS->value,

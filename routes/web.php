@@ -68,7 +68,7 @@ Route::middleware([
     });
 
     require __DIR__.'/web/admin.php';
-    // require __DIR__.'/web/sub-accounts.php';
+    require __DIR__.'/web/sub-accounts.php';
     require __DIR__.'/web/analytics.php';
     require __DIR__.'/web/daily-tasks.php';
     require __DIR__.'/web/forum.php';

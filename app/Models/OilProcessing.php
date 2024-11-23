@@ -76,13 +76,36 @@ class OilProcessing extends Model
         return $this->belongsTo(Patient::class);
     }
 
-    public static function store(int $patientId, array $values, bool $isIndividualOiledAnimal = false): Processing
+    protected function collectedAt(): Attribute
+    {
+        return Attribute::get(function () {
+            if (is_null($this->time_collected_at)) {
+                return $this->date_collected_at?->toFormattedDayDateString();
+            }
+            return $this->date_collected_at?->setTimeFromTimeString($this->time_collected_at);
+        });
+    }
+
+    protected function processedAt(): Attribute
+    {
+        return Attribute::get(function () {
+            if (is_null($this->time_processed_at)) {
+                return $this->date_processed_at?->toFormattedDayDateString();
+            }
+            return $this->date_processed_at?->setTimeFromTimeString($this->time_processed_at);
+        });
+    }
+
+    public static function store(string $patientId, array $values, bool $isIndividualOiledAnimal = false): OilProcessing
     {
         $processing = static::firstOrNew(['patient_id' => $patientId]);
+
         if (! $processing->exists) {
             $processing->is_individual_oiled_animal = $isIndividualOiledAnimal;
         }
+
         $processing->fill($values)->save();
+
         return $processing;
     }
 

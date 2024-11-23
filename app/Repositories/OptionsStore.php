@@ -25,8 +25,6 @@ class OptionsStore
     public static function all(): array
     {
         return array_merge(
-            //app(PatientOptions::class)->toArray(),
-            //app(SharingOptions::class)->toArray(),
             static::$options
         );
     }

@@ -12,7 +12,7 @@ import {Abilities} from '@/Enums/Abilities';
 
 defineProps({
     patientId: {
-        type: Number,
+        type: String,
         required: true
     }
 });

@@ -68,8 +68,8 @@ class AccountExtensionsController extends Controller
     {
         if ($team instanceof Team) {
             abort_unless(
-                Auth::user()->can('manageAccounts') || Auth::user()->currentTeam->hasSubAccount($team),
-                new RecordNotOwnedResponse()
+                Auth::user()->can('manageTeams') || Auth::user()->currentTeam->hasSubAccount($team),
+                new RecordNotOwned()
             );
         }
 

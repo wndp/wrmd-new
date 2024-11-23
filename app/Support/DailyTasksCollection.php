@@ -59,8 +59,12 @@ class DailyTasksCollection extends Collection
             ->join('admissions', 'patients.id', '=', 'admissions.patient_id')
             ->where('team_id', $team->id);
 
-        if (($facility = $this->filters->facility) !== 'anywhere') {
-            $query->joinLastLocation()->where('facility', $facility);
+        if ($this->filters->facility === 'anywhere') {
+            $query->leftJoinCurrentLocation()->whereNotNull('facility_id');
+        } else if ($this->filters->facility === 'none-assigned') {
+            $query->leftJoinCurrentLocation()->whereNull('facility_id');
+        } else {
+            $query->leftJoinCurrentLocation()->where('facility_id', $this->filters->facility);
         }
 
         if (!$this->filters->include_non_pending) {
@@ -260,7 +264,7 @@ class DailyTasksCollection extends Collection
                 ->orderBy('occurrence_at')
                 ->pluck('occurrence'),
             'body' => nl2br($model->summary_body),
-            'area' => $model->patient->locations->first(null, new PatientLocation())->area ?? __('Unknown'),
+            'area' => $model->patient->locations->first()?->area,
             'enclosure' => $model->patient->current_location,
             'assignment' => $model->assigned_to,
             'model' => $model->attributesToArray(),
@@ -273,11 +277,11 @@ class DailyTasksCollection extends Collection
     public function groupByFilter(array $task): string
     {
         if ($this->filters->group_by === 'Area') {
-            return $task['area'];
+            return $task['area'] ?? __('Unknown');
         }
 
         if ($this->filters->group_by === 'Enclosure') {
-            return $task['enclosure'];
+            return $task['enclosure'] ?? __('Unknown');
         }
 
         if ($this->filters->group_by === 'Type') {

@@ -19,14 +19,14 @@ class CreateLocalDevUser extends Command
      *
      * @var string
      */
-    protected $signature = 'app:create-local-dev-user';
+    protected $signature = 'wrmd:create-local-dev-user';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a user that can be used in local development.';
+    protected $description = 'Create a user for use in local development.';
 
     /**
      * Execute the console command.

@@ -90,10 +90,12 @@ class HandleInertiaRequests extends Middleware
 
             if ($team instanceof Team) {
                 $parentShare['subscription'] = [
-                    'isProPlan' => is_null($team->onGenericTrial()) ? false : $team->sparkPlan()?->name === Plan::PRO->value,
-                    'genericTrialEndsAt' => $team->onGenericTrial()
-                        ? $team->customer->trial_ends_at->translatedFormat(config('wrmd.date_format'))
-                        : null,
+                    'isProPlan' => true,
+                    'genericTrialEndsAt' => null,
+                    // 'isProPlan' => is_null($team->onGenericTrial()) ? false : $team->sparkPlan()?->name === Plan::PRO->value,
+                    // 'genericTrialEndsAt' => $team->onGenericTrial()
+                    //     ? $team->customer->trial_ends_at->translatedFormat(config('wrmd.date_format'))
+                    //     : null,
                 ];
 
                 $parentShare['settings'] = fn () => Wrmd::settings()->all();

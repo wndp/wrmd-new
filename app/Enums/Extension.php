@@ -28,7 +28,7 @@ enum Extension: string
             self::ATTACHMENTS => __('Attachments'),
             self::BANDING_MORPHOMETRICS => __('Banding and Morphometrics'),
             self::CALCULATORS => __('Calculators'),
-            self::CUSTOM_FIELD => __('Custom Field'),
+            self::CUSTOM_FIELD => __('Custom Fields'),
             self::DAILY_EXAM => __('Daily Exam'),
             self::EXPENSES => __('Expenses'),
             self::LAB_REPORTS => __('Lab Reports'),
@@ -58,13 +58,13 @@ enum Extension: string
             self::NECROPSY => __('Write detailed necropsy reports on your patients.'),
             self::PAPER_FORMS => __('Use paper forms to log your intake and daily treatments.'),
             self::QUICK_ADMIT => __('Even more quickly admit patients into WRMD.'),
-            self::OIL_SPILL_PROCESSING,
-            self::OIL_SPILL_WASH,
-            self::OIL_SPILL_CONDITIONING,
-            self::OIL_SPILL,
-            self::OWCN_OWRMD,
-            self::OWCN_IOA,
-            self::OWCN_MEMBER_ORGANIZATION => '',
+            self::OIL_SPILL => __('Specialized features to manage patients during an oil spill event.'),
+            self::OIL_SPILL_PROCESSING => __('Collect evidence processing data for you oil spill patients.'),
+            self::OIL_SPILL_WASH => __('Record wash related data for you oil spill patients.'),
+            self::OIL_SPILL_CONDITIONING => __('Record pre-release conditioning related data for you oil spill patients.'),
+            self::OWCN_OWRMD => 'Oil spill extension exclusive to the Oiled Wildlife Care Network at UC Davis.',
+            self::OWCN_IOA => 'Individual oiled animal extension exclusive to the Oiled Wildlife Care Network at UC Davis.',
+            self::OWCN_MEMBER_ORGANIZATION => 'Oil spill extension exclusive to the Oiled Wildlife Care Network member organizations.',
         };
     }
 
@@ -87,7 +87,7 @@ enum Extension: string
             self::OIL_SPILL,
             self::OWCN_OWRMD,
             self::OWCN_IOA,
-            self::OWCN_MEMBER_ORGANIZATION => '',
+            self::OWCN_MEMBER_ORGANIZATION => 'LockClosedIcon',
         };
     }
 
@@ -173,7 +173,6 @@ enum Extension: string
             self::NECROPSY,
             self::PAPER_FORMS,
             self::QUICK_ADMIT,
-            self::OIL_SPILL_PROCESSING,
             self::OIL_SPILL_WASH,
             self::OIL_SPILL_CONDITIONING => [],
             self::OIL_SPILL_PROCESSING => [
@@ -189,7 +188,8 @@ enum Extension: string
                 self::OIL_SPILL_CONDITIONING
             ],
             self::OWCN_OWRMD => [
-                self::OIL_SPILL
+                self::OIL_SPILL,
+                self::CUSTOM_FIELD,
             ],
             self::OWCN_IOA => [
                 self::OIL_SPILL_PROCESSING,

@@ -1,24 +1,95 @@
+<script setup>
+import FormSection from '@/Components/FormElements/FormSection.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import TextareaInput from '@/Components/FormElements/TextareaInput.vue';
+import SelectInput from '@/Components/FormElements/SelectInput.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import {__} from '@/Composables/Translate';
+
+defineProps({
+  title: {
+    type: String,
+    required: true
+  },
+  action: {
+    type: String,
+    required: true
+  },
+  teams: {
+    type: Array,
+    required: true
+  },
+  form: {
+    type: Object,
+    required: true
+  }
+});
+
+const emit = defineEmits(['saved']);
+</script>
+
+<script>
+  export default {
+    //mixins: [hoistForm],
+    // props: {
+    //   title: {
+    //     type: String,
+    //     required: true
+    //   },
+    //   action: {
+    //     type: String,
+    //     required: true
+    //   },
+    //   teams: {
+    //     type: Array,
+    //     required: true
+    //   },
+    //   testimonial: {
+    //     type: Object,
+    //     default: () => ({})
+    //   }
+    // },
+    //emits: ['saved'],
+    // data() {
+    //   return {
+    //     form: this.$inertia.form({
+          // name: this.testimonial.id ? this.testimonial.name : '',
+          // text: this.testimonial.id ? this.testimonial.text : '',
+          // team_id: this.testimonial.id ? this.testimonial.team_id : '',
+    //     }),
+    //   };
+    // },
+  };
+</script>
+
 <template>
   <FormSection>
     <template #title>
       {{ title }}
     </template>
     <div class="col-span-4 sm:col-span-2">
-      <Label for="account_id">Account</Label>
-      <Select
-        v-model="form.account_id"
-        name="account_id"
-        :options="accounts"
+      <InputLabel for="team_id">
+        Account
+      </InputLabel>
+      <SelectInput
+        v-model="form.team_id"
+        name="team_id"
+        :options="teams"
         class="mt-1"
       />
       <InputError
-        :message="form.errors.account_id"
+        :message="form.errors.team_id"
         class="mt-2"
       />
     </div>
     <div class="col-span-4 sm:col-span-2">
-      <Label for="name">Name</Label>
-      <Input
+      <InputLabel for="name">
+        Name
+      </InputLabel>
+      <TextInput
         v-model="form.name"
         name="name"
         autocomplete="given-name"
@@ -30,8 +101,10 @@
       />
     </div>
     <div class="col-span-4">
-      <Label for="text">Testimonial</Label>
-      <Textarea
+      <InputLabel for="text">
+        Testimonial
+      </InputLabel>
+      <TextareaInput
         v-model="form.text"
         name="text"
         rows="20"
@@ -53,56 +126,10 @@
       <PrimaryButton
         :class="{ 'opacity-25': form.processing }"
         :disabled="form.processing"
-        @click="$emit('saved')"
+        @click="emit('saved')"
       >
         {{ action }}
       </PrimaryButton>
     </template>
   </FormSection>
 </template>
-
-<script setup>
-import FormSection from '@/Components/FormElements/FormSection.vue';
-import Label from '@/Components/FormElements/Label.vue';
-import Input from '@/Components/FormElements/Input.vue';
-import Textarea from '@/Components/FormElements/Textarea.vue';
-import Select from '@/Components/FormElements/Select.vue';
-import InputError from '@/Components/FormElements/InputError.vue';
-import ActionMessage from '@/Components/FormElements/ActionMessage.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import hoistForm from '@/Mixins/HoistForm';
-</script>
-
-<script>
-  export default {
-    mixins: [hoistForm],
-    props: {
-      title: {
-        type: String,
-        required: true
-      },
-      action: {
-        type: String,
-        required: true
-      },
-      accounts: {
-        type: Array,
-        required: true
-      },
-      testimonial: {
-        type: Object,
-        default: () => ({})
-      }
-    },
-    emits: ['saved'],
-    data() {
-      return {
-        form: this.$inertia.form({
-          name: this.testimonial.id ? this.testimonial.name : '',
-          text: this.testimonial.id ? this.testimonial.text : '',
-          account_id: this.testimonial.id ? this.testimonial.account_id : '',
-        }),
-      };
-    },
-  };
-</script>

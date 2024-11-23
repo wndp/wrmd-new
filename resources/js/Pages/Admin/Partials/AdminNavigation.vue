@@ -3,13 +3,10 @@ import {ref} from 'vue';
 import {router} from '@inertiajs/vue3';
 import {
   Cog6ToothIcon,
-  GlobeAmericasIcon,
   AdjustmentsVerticalIcon,
   UserGroupIcon,
   CheckBadgeIcon,
   ChatBubbleBottomCenterTextIcon,
-  CloudIcon,
-  LanguageIcon
 } from '@heroicons/vue/24/outline';
 import {__} from '@/Composables/Translate';
 
@@ -19,7 +16,6 @@ const navigation = [
   { name: 'Authorizations', route: 'admin.authorization', icon: CheckBadgeIcon },
   { name: 'Testimonials', route: 'admin.testimonials.index', icon: ChatBubbleBottomCenterTextIcon },
   { name: 'Maintenance', route: 'admin.maintenance', icon: AdjustmentsVerticalIcon },
-  { name: 'Localization', route: 'admin.localization', icon: GlobeAmericasIcon },
 ];
 
 const currentRoute = ref(route().current())

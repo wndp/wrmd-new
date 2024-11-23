@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Oiled;
 
-use App\Domain\OptionsStore;
-use App\Domain\Patients\Patient;
-use App\Extensions\EventConditioning\Conditioning;
-use App\Extensions\EventConditioning\ConditioningOptions;
+use App\Enums\AttributeOptionName;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SaveOilConditioningRequest;
+use App\Models\AttributeOption;
+use App\Models\OilConditioning;
+use App\Models\Patient;
+use App\Repositories\OptionsStore;
+use App\Support\Timezone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -14,28 +17,53 @@ use Inertia\Response;
 
 class ConditioningController extends Controller
 {
-    public function index(ConditioningOptions $options)
+    public function index()
     {
-        OptionsStore::merge($options);
+        $admission = $this->loadAdmissionAndSharePagination();
 
-        $this->loadAdmissionAndSharePagination()->patient->load('eventConditioning');
-
-        return Inertia::render('Oiled/Conditioning');
-    }
-
-    public function store(Request $request, Patient $patient)
-    {
-        $patient->validateOwnership(Auth::user()->current_account_id);
-
-        $request->validate([
-            'evaluated_at' => 'required|date',
-            'examiner' => 'required',
-        ], [
-            'evaluated_at.required' => 'The evaluated at date field is required.',
-            'evaluated_at.date' => 'The evaluated at date is not a valid date.',
+        OptionsStore::add([
+            AttributeOption::getDropdownOptions([
+                AttributeOptionName::OILED_CONDITIONING_BUOYANCIES->value,
+                AttributeOptionName::OILED_CONDITIONING_HAULED_OUTS->value,
+                AttributeOptionName::OILED_CONDITIONING_PREENINGS->value,
+                AttributeOptionName::OILED_CONDITIONING_UNKNOWN_BOOL->value,
+                AttributeOptionName::OILED_CONDITIONING_AREAS_WET_TO_SKIN->value,
+            ])
         ]);
 
-        tap(new Conditioning($this->formatRequestInput($request)), function ($wash) use ($patient) {
+        $conditionings = $admission
+            ->patient
+            ->load([
+                'oilConditionings' => fn ($q) => $q->orderByDesc('date_evaluated_at')->orderByDesc('time_evaluated_at'),
+                'oilConditionings.buoyancy',
+                'oilConditionings.hauledOut',
+                'oilConditionings.preening',
+                'oilConditionings.selfFeeding',
+                'oilConditionings.flighted',
+            ])
+            ->oilConditionings
+            ->transform(fn ($conditioning) => [
+                ...$conditioning->toArray(),
+                'evaluated_at_for_humans' => Timezone::convertFromUtcToLocal($conditioning->evaluated_at)->translatedFormat(config('wrmd.date_time_format')),
+                'buoyancy' => $conditioning->Buoyancy?->value,
+                'hauled_out' => $conditioning->hauledOut?->value,
+                'preening' => $conditioning->preening?->value,
+                'self_feeding' => $conditioning->selfFeeding?->value,
+                'flighted' => $conditioning->flighted?->value,
+                'area_wet_to_skin_for_humans' => implode(', ', $conditioning->areas_wet_to_skin ?? []),
+            ]);
+
+        return Inertia::render('Oiled/Conditioning', [
+            'patient' => $admission->patient,
+            'conditionings' => $conditionings,
+        ]);
+    }
+
+    public function store(SaveOilConditioningRequest $request, Patient $patient)
+    {
+        $patient->validateOwnership(Auth::user()->current_team_id);
+
+        tap(new OilConditioning($this->formatRequestInput($request)), function ($wash) use ($patient) {
             $wash->patient()->associate($patient);
             $wash->save();
         });
@@ -46,17 +74,10 @@ class ConditioningController extends Controller
     /**
      * Update a conditioning in storage.
      */
-    public function update(Request $request, Patient $patient, Conditioning $conditioning)
+    public function update(SaveOilConditioningRequest $request, Patient $patient, OilConditioning $conditioning)
     {
-        $conditioning->validateOwnership(Auth::user()->current_account_id);
-
-        $request->validate([
-            'evaluated_at' => 'required|date',
-            'examiner' => 'required',
-        ], [
-            'evaluated_at.required' => 'The evaluated at date field is required.',
-            'evaluated_at.date' => 'The evaluated at date is not a valid date.',
-        ]);
+        $conditioning->validateOwnership(Auth::user()->current_team_id)
+            ->validateRelationshipWithPatient($patient);
 
         $conditioning->update($this->formatRequestInput($request));
 
@@ -66,9 +87,10 @@ class ConditioningController extends Controller
     /**
      * Delete conditioning from storage.
     */
-    public function destroy(Request $request, Patient $patient, Conditioning $conditioning)
+    public function destroy(Request $request, Patient $patient, OilConditioning $conditioning)
     {
-        $conditioning->validateOwnership(Auth::user()->current_account_id);
+        $conditioning->validateOwnership(Auth::user()->current_team_id)
+            ->validateRelationshipWithPatient($patient);
 
         $conditioning->delete();
 
@@ -83,10 +105,19 @@ class ConditioningController extends Controller
      */
     private function formatRequestInput($request)
     {
-        return array_merge($request->all(), [
-            'is_self_feeding' => $request->is_self_feeding === 'Unknown' ? null : ($request->is_self_feeding === 'Yes' ? 1 : 0),
-            'is_flighted' => $request->is_flighted === 'Unknown' ? null : ($request->is_flighted === 'Yes' ? 1 : 0),
-            'evaluated_at' => $request->convertDateFromLocal('evaluated_at'),
-        ]);
+        $evaluatedAt = Timezone::convertFromLocalToUtc($request->input('evaluated_at'));
+
+        return [
+            'date_evaluated_at' => $evaluatedAt->toDateString(),
+            'time_evaluated_at' => $evaluatedAt->toTimeString(),
+            'buoyancy_id' => $request->input('buoyancy_id'),
+            'hauled_out_id' => $request->input('hauled_out_id'),
+            'preening_id' => $request->input('preening_id'),
+            'self_feeding_id' => $request->input('self_feeding_id'),
+            'flighted_id' => $request->input('flighted_id'),
+            'areas_wet_to_skin' => $request->input('areas_wet_to_skin'),
+            'observations' => $request->input('observations'),
+            'examiner' => $request->input('examiner'),
+        ];
     }
 }

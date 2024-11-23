@@ -6,7 +6,7 @@
     >
       <h3
         v-if="$slots.title"
-        class="text-lg leading-6 font-medium text-gray-900"
+        class="text-xl leading-6 font-bold text-gray-700"
       >
         <slot name="title" />
       </h3>

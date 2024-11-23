@@ -25,7 +25,7 @@ const form = useForm({
 });
 
 const saveMasterAccount = () => {
-  form.put(route('accounts.update.master-account', props.team));
+  form.put(route('teams.update.master-account', props.team));
 }
 </script>
 
@@ -88,7 +88,7 @@ const saveMasterAccount = () => {
                   </dd>
                 </div>
                 <div
-                  v-if="! team.is_master_account"
+                  v-if="masterAccounts.length > 0 && ! team.is_master_account"
                   class="col-span-2"
                 >
                   <dt class="text-sm font-bold text-gray-500">
@@ -99,6 +99,7 @@ const saveMasterAccount = () => {
                       v-model="form.master_account_id"
                       name="master_account_id"
                       :options="masterAccounts"
+                      hasBlankOption
                       class="mt-1 block w-full"
                     />
                     <PrimaryButton

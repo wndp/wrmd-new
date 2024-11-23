@@ -22,53 +22,17 @@ class AdminMaintenanceController extends Controller
      */
     public function store(string $method): RedirectResponse
     {
-        try {
-            $this->{'Dispatch'.Str::studly($method)}();
-            $message = "The $method maintenance script is in the queue!";
-        } catch (\BadMethodCallException $e) {
-            $message = "Unable to dispatch the $method maintenance script!";
-        }
+        $result = match ($method) {
+            'unspoof' => UnSpoofAccounts::dispatch(),
+            'unrecognized' => Artisan::queue('wrmd:unrecognized'),
+            'misidentified' => Artisan::queue('wrmd:misidentified'),
+            'geocode' => Artisan::queue('wrmd:geocode'),
+            'unlock' => Artisan::queue('wrmd:unlock', ['--all' => true]),
+            default => null,
+        };
 
-        return back()->with('flash.notification', $message);
-    }
-
-    /**
-     * Dispatch the un-spoof accounts job.
-     */
-    private function DispatchUnSpoof()
-    {
-        dispatch(new UnSpoofAccounts());
-    }
-
-    /**
-     * Dispatch the unrecognized job.
-     */
-    private function DispatchUnrecognizedd()
-    {
-        Artisan::queue('wrmd:unrecognized');
-    }
-
-    /**
-     * Dispatch the misidentified job.
-     */
-    private function DispatchMisidentified()
-    {
-        Artisan::queue('wrmd:misidentified');
-    }
-
-    /**
-     * Dispatch the geocode addresses job.
-     */
-    private function DispatchGeocode()
-    {
-        Artisan::queue('wrmd:geocode');
-    }
-
-    /**
-     * Dispatch the unlock patients job.
-     */
-    private function DispatchUnlock()
-    {
-        Artisan::queue('wrmd:unlock', ['--all' => true]);
+        return back()
+            ->with('notification.heading', 'Success!')
+            ->with('notification.text', "The $method maintenance script is in the queue!");
     }
 }

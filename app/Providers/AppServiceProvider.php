@@ -55,18 +55,20 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Relation::enforceMorphMap([
-            'user' => \App\Models\User::class,
-            'team' => \App\Models\Team::class,
             'cbc' => \App\Models\LabCbcResult::class,
-            'settings' => \App\Models\Setting::class,
-            'person' => \App\Models\Person::class,
-            'patient' => \App\Models\Patient::class,
-            'labReport' => \App\Models\LabReport::class,
-            'fecal' => \App\Models\LabFecalResult::class,
-            'cytology' => \App\Models\LabCytologyResult::class,
             'chemistry' => \App\Models\LabChemistryResult::class,
-            'urinalysis' => \App\Models\LabUrinalysisResult::class,
+            'cytology' => \App\Models\LabCytologyResult::class,
+            'fecal' => \App\Models\LabFecalResult::class,
+            'labReport' => \App\Models\LabReport::class,
+            'patient' => \App\Models\Patient::class,
+            'person' => \App\Models\Person::class,
+            'prescription' => \App\Models\Prescription::Class,
+            'recheck' => \App\Models\Recheck::class,
+            'settings' => \App\Models\Setting::class,
+            'team' => \App\Models\Team::class,
             'toxicology' => \App\Models\LabToxicologyResult::class,
+            'urinalysis' => \App\Models\LabUrinalysisResult::class,
+            'user' => \App\Models\User::class,
         ]);
 
         Route::bind('voidedPatient', fn ($value) => Patient::onlyVoided()->findOrFail($value));

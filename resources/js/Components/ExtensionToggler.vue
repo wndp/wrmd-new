@@ -12,7 +12,7 @@ const props = defineProps({
     type: Object,
     required: true
   },
-  account: {
+  team: {
     type: Object,
     default: () => null
   }
@@ -24,7 +24,7 @@ const toggle = () => {
     props.extension.is_activated ? 'delete' : 'post',
     route(formRoute, {
       extension: props.extension.value,
-      account: props.account
+      team: props.team
     }),
     {
       preserveScroll: true

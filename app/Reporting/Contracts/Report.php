@@ -2,6 +2,7 @@
 
 namespace App\Reporting\Contracts;
 
+use App\Enums\SettingKey;
 use App\Jobs\QueuedReportGeneration;
 use App\Models\Patient;
 use App\Models\Team;
@@ -393,7 +394,7 @@ abstract class Report implements Arrayable, Jsonable, JsonSerializable
      */
     public function isFavorited()
     {
-        return in_array($this->key(), (array) Wrmd::settings('favoriteReports', []));
+        return in_array($this->key(), (array) Wrmd::settings(SettingKey::FAVORITE_REPORTS, []));
     }
 
     /**

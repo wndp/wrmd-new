@@ -21,6 +21,7 @@ class AdminAuthorizationController extends Controller
         $roles = Role::with(['abilities' => function ($query) {
             $query->addSelect('abilities.*', 'forbidden');
         }])
+            ->orderBy('id')
             ->get();
 
         $abilities = Ability::get();

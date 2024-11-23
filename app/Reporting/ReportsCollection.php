@@ -15,6 +15,7 @@ use App\Reporting\Reports\Disposition\DispositionsByDate;
 use App\Reporting\Reports\Disposition\ReleaseTypesBySpecies;
 use App\Reporting\Reports\Disposition\TotalDispositionsBySpecies;
 use App\Reporting\Reports\Disposition\TransferTypesBySpecies;
+use App\Reporting\Reports\Expenses\ExpenseStatement;
 use App\Reporting\Reports\Homecare\HomecareHoursByCaregiver;
 use App\Reporting\Reports\Homecare\PatientsSentToHomecare;
 use App\Reporting\Reports\Location\DeceasedPatientsByLocation;
@@ -40,6 +41,7 @@ use App\Reporting\Reports\Prescriptions\PrescriptionsDueByLocation;
 use App\Reporting\Reports\Prescriptions\PrescriptionsDueByPatient;
 use App\Support\ExtensionManager;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class ReportsCollection extends Collection
 {
@@ -137,8 +139,25 @@ class ReportsCollection extends Collection
             (new ReportGroup('Patient Reports', [
                 NecropsyReport::class,
                 ExpenseStatement::class,
-            ]))->setPatientReports(false)
+            ]))->setPatientReports(true)->setVisibility(false)
         );
+
+
+        if (Auth::check() && Auth::user()->can('viewWrmdAdmin')) {
+            //$account = Auth::user()->current_account;
+
+            $collection->push(
+                (new ReportGroup('Account Reports', [
+                    DeleteableAccounts::class,
+                    InactiveAccounts::class,
+                ]))//->setPatientReports(false)
+            );
+
+            // return new ReportGroup('Account Reports', [
+            //     new DeleteableAccounts($account),
+            //     new InactiveAccounts($account),
+            // ]);
+        }
 
         // collect((array) event(new RegisterReports()))
         //     ->filter(function ($group) {

@@ -2,9 +2,10 @@
 
 namespace App\Reporting\Reports\Admin;
 
-use App\Accounts\Account;
+use App\Enums\AccountStatus;
+use App\Models\Team;
 use App\Reporting\Contracts\ExportableReport;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
 class DeleteableAccounts extends ExportableReport
@@ -68,7 +69,7 @@ class DeleteableAccounts extends ExportableReport
     public function query(): Builder
     {
         // Account has been marked as inactive and the organization name is similar to an active accounts name.
-        $query = Account::where('is_active', false)
+        $query = Team::where('status', AccountStatus::BANNED)
             ->whereExists(function ($query) {
                 $query->select(DB::raw(1))
                     ->from('accounts as a2')

@@ -6,9 +6,9 @@ import TeamMemberManager from '@/Pages/Teams/Partials/TeamMemberManager.vue';
 import UpdateTeamNameForm from '@/Pages/Teams/Partials/UpdateTeamNameForm.vue';
 
 defineProps({
-    team: Object,
-    availableRoles: Array,
-    permissions: Object,
+  team: Object,
+  availableRoles: Array,
+  permissions: Object,
 });
 </script>
 

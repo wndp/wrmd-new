@@ -13,7 +13,6 @@ use App\Http\Controllers\Admin\AccountsUnrecognizedPatientsController;
 use App\Http\Controllers\Admin\AccountsUsersController;
 use App\Http\Controllers\Admin\AdminAuthorizationController;
 use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\AdminLocalizationController;
 use App\Http\Controllers\Admin\AdminMaintenanceController;
 use App\Http\Controllers\Admin\MisidentifiedController;
 use App\Http\Controllers\Admin\UnrecognizedController;
@@ -22,37 +21,37 @@ Route::prefix('admin')->middleware('can:viewWrmdAdmin')->group(function () {
     Route::get('dashboard', AdminDashboardController::class)->name('admin.dashboard');
 
     Route::middleware('can:manageAccounts')->group(function () {
-        Route::get('accounts/reports', [AccountsReportsController::class, 'index'])
+        Route::get('teams/reports', [AccountsReportsController::class, 'index'])
             ->name('teams.reports');
 
         Route::resource('teams', AccountsController::class);
 
-        Route::put('accounts/{account}/master-account', AccountsMasterAccountController::class)
+        Route::put('teams/{team}/master-account', AccountsMasterAccountController::class)
             ->name('teams.update.master-account');
 
-        Route::get('accounts/{account}/delete', [AccountsController::class, 'delete'])
+        Route::get('teams/{team}/delete', [AccountsController::class, 'delete'])
             ->name('teams.delete');
 
-        Route::get('accounts/{account}/users', AccountsUsersController::class)
+        Route::get('teams/{team}/users', AccountsUsersController::class)
             ->name('teams.show.users');
 
-        Route::get('accounts/{account}/unrecognized', AccountsUnrecognizedPatientsController::class)
+        Route::get('teams/{team}/unrecognized', AccountsUnrecognizedPatientsController::class)
             ->name('teams.show.unrecognized');
 
-        Route::get('accounts/{account}/misidentified', AccountsMisidentifiedPatientsController::class)
+        Route::get('teams/{team}/misidentified', AccountsMisidentifiedPatientsController::class)
             ->name('teams.show.misidentified');
 
-        Route::get('accounts/{account}/meta', AccountsMetaController::class)
+        Route::get('teams/{team}/meta', AccountsMetaController::class)
             ->name('teams.show.meta');
 
-        Route::get('accounts/{account}/extensions', AccountsExtensionsController::class)->name('teams.extensions.edit');
+        Route::get('teams/{team}/extensions', AccountsExtensionsController::class)->name('teams.extensions.edit');
 
-        Route::get('accounts/{account}/actions', AccountsActionsController::class)
+        Route::get('teams/{team}/actions', AccountsActionsController::class)
             ->name('teams.show.actions');
     });
 
     Route::middleware('can:spoofAccounts')->group(function () {
-        Route::post('accounts/spoof/{account}', AccountSpoofController::class)->name('accounts.spoof');
+        Route::post('teams/spoof/{team}', AccountSpoofController::class)->name('teams.spoof');
     });
 
     Route::middleware('can:manageTaxa')->group(function () {
@@ -65,9 +64,6 @@ Route::prefix('admin')->middleware('can:viewWrmdAdmin')->group(function () {
 
     Route::get('maintenance', [AdminMaintenanceController::class, 'index'])
         ->name('admin.maintenance');
-
-    Route::get('localization', AdminLocalizationController::class)
-        ->name('admin.localization');
 
     Route::post('maintenance/{script}', [AdminMaintenanceController::class, 'store'])
         ->name('admin.maintenance.dispatch');

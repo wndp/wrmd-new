@@ -45,10 +45,6 @@ class OperationsPolicy
 
     public function viewSubAccounts($user)
     {
-        if (is_null($user->current_account_id)) {
-            return false;
-        }
-
         return $user->currentTeam?->is_master_account && $user->isA(Role::ADMIN->value);
     }
 }

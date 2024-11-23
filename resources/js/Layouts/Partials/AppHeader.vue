@@ -13,7 +13,7 @@ import {
     QuestionMarkCircleIcon,
     Bars3BottomLeftIcon,
     CogIcon,
-    UserGroupIcon,
+    BuildingOffice2Icon,
     AdjustmentsVerticalIcon,
     ArrowsRightLeftIcon,
     ArrowRightOnRectangleIcon,
@@ -202,7 +202,7 @@ export default {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <MenuItems class="origin-top-right absolute right-0 z-40 mt-2 w-72 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none divide-y-4 divide-gray-100">
+              <MenuItems class="origin-top-right absolute right-0 z-50 mt-2 w-72 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none divide-y-4 divide-gray-100">
                 <div>
                   <MenuItem v-slot="{ active }">
                     <Link
@@ -272,16 +272,16 @@ export default {
                     </Link>
                   </MenuItem>
                 </div>
-                <div>
+                <div v-if="currentTeam.is_master_account && can(Abilities.COMPUTED_VIEW_SUB_ACCOUNTS)">
                   <MenuItem
-                    v-if="currentTeam.is_master_account && can(Abilities.COMPUTED_VIEW_SUB_ACCOUNTS)"
                     v-slot="{ active }"
+                    as="div"
                   >
                     <Link
                       :href="route('sub_accounts.index')"
                       :class="[active ? 'bg-gray-100' : '', 'group flex items-center px-2 py-2 text-base text-gray-800']"
                     >
-                      <UserGroupIcon
+                      <BuildingOffice2Icon
                         :active="active"
                         class="w-5 h-5 mr-2 text-gray-400"
                         aria-hidden="true"
@@ -289,52 +289,56 @@ export default {
                       {{ __('Sub-Accounts') }}
                     </Link>
                   </MenuItem>
-                  <template v-if="$page.props.auth.user.all_teams.length > 1">
-                    <MenuItem v-slot="{ active }">
-                      <div class="block px-4 py-2 text-xs text-gray-400">
-                        {{ __('Switch Accounts') }}
-                      </div>
-                      <template
-                        v-for="team in $page.props.auth.user.all_teams"
-                        :key="team.id"
-                      >
-                        <form @submit.prevent="switchToTeam(team)">
-                          <Link as="button">
-                            <div class="flex items-center">
-                              <svg
-                                v-if="team.id == $page.props.auth.user.current_team_id"
-                                class="me-2 h-5 w-5 text-green-400"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="1.5"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                />
-                              </svg>
+                </div>
+                <div>
+                  <MenuItem
+                    v-if="$page.props.auth.user.all_teams.length > 1"
+                    v-slot="{ active }"
+                    as="div"
+                  >
+                    <!-- <div class="block px-4 py-2 text-xs text-gray-400">
+                      {{ __('Switch Accounts') }}
+                    </div> -->
+                    <!-- <template
+                      v-for="team in $page.props.auth.user.all_teams"
+                      :key="team.id"
+                    >
+                      <form @submit.prevent="switchToTeam(team)">
+                        <Link as="button">
+                          <div class="flex items-center">
+                            <svg
+                              v-if="team.id == $page.props.auth.user.current_team_id"
+                              class="me-2 h-5 w-5 text-green-400"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke-width="1.5"
+                              stroke="currentColor"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                              />
+                            </svg>
 
-                              <div>{{ team.name }}</div>
-                            </div>
-                          </Link>
-                        </form>
-                      </template>
-                      <Link
-                        :href="route('choose_account.index')"
-                        :class="[active ? 'bg-gray-100' : '', 'group flex items-center px-2 py-2 text-base text-gray-800']"
-                      >
-                        <ArrowsRightLeftIcon
-                          :active="active"
-                          class="w-5 h-5 mr-2 text-gray-400"
-                          aria-hidden="true"
-                        />
-                        {{ __('Switch Accounts') }}
-                      </Link>
-                    </MenuItem>
-                  </template>
+                            <div>{{ team.name }}</div>
+                          </div>
+                        </Link>
+                      </form>
+                    </template> -->
+                    <Link
+                      :href="route('choose_team.index')"
+                      :class="[active ? 'bg-gray-100' : '', 'group flex items-center px-2 py-2 text-base text-gray-800']"
+                    >
+                      <ArrowsRightLeftIcon
+                        :active="active"
+                        class="w-5 h-5 mr-2 text-gray-400"
+                        aria-hidden="true"
+                      />
+                      {{ __('Switch Accounts') }}
+                    </Link>
+                  </MenuItem>
                   <MenuItem v-slot="{ active }">
                     <Link
                       :href="route('logout')"

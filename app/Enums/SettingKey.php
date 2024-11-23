@@ -30,8 +30,41 @@ enum SettingKey: string
     case WILD_ALERT_SHARING = 'WILD_ALERT_SHARING';
     case EXPORT_SHARING = 'EXPORT_SHARING';
 
+    case FAVORITE_REPORTS = 'FAVORITE_REPORTS';
+
     case SUB_ACCOUNT_ALLOW_MANAGE_SETTINGS = 'SUB_ACCOUNT_ALLOW_MANAGE_SETTINGS';
     case SUB_ACCOUNT_ALLOW_TRANSFER_PATIENTS = 'SUB_ACCOUNT_ALLOW_TRANSFER_PATIENTS';
 
     case OSPR_SPILL_ID = 'OSPR_SPILL_ID';
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::TIMEZONE => 'Timezone',
+            self::LANGUAGE => 'Language',
+            self::FULL_PEOPLE_ACCESS => 'Full people access',
+            self::REMOTE_RESTRICTED => 'Remote access restricted',
+            self::CLINIC_IP => 'Clinic IP address',
+            self::USER_REMOTE_PERMISSION => 'User remote permission',
+            self::ROLE_REMOTE_PERMISSION => 'Role remote permission',
+            self::REQUIRE_TWO_FACTOR => 'Require two factor authentication',
+            self::LOG_ORDER => 'Care log order',
+            self::LOG_ALLOW_AUTHOR_EDIT => 'Care log allow author edit',
+            self::LOG_ALLOW_EDIT => 'Care log allow edit',
+            self::LOG_ALLOW_DELETE => 'Care log allow delete',
+            self::LOG_SHARES => 'Record when patient data is shared',
+            self::SHOW_LOOKUP_RESCUER => 'Show lookup rescuer by default',
+            self::SHOW_GEOLOCATION_FIELDS => 'Show geolocation fields',
+            self::AREAS => 'Areas',
+            self::ENCLOSURES => 'Enclosures',
+            self::LIST_FIELDS => 'LIST_FIELDS',
+            self::SHOW_TAGS => 'SHOW_TAGS',
+            self::WILD_ALERT_SHARING => 'WILD_ALERT_SHARING',
+            self::EXPORT_SHARING => 'EXPORT_SHARING',
+            self::FAVORITE_REPORTS => 'FAVORITE_REPORTS',
+            self::SUB_ACCOUNT_ALLOW_MANAGE_SETTINGS => 'SUB_ACCOUNT_ALLOW_MANAGE_SETTINGS',
+            self::SUB_ACCOUNT_ALLOW_TRANSFER_PATIENTS => 'SUB_ACCOUNT_ALLOW_TRANSFER_PATIENTS',
+            self::OSPR_SPILL_ID => 'OSPR_SPILL_ID',
+        };
+    }
 }

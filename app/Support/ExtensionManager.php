@@ -21,9 +21,7 @@ class ExtensionManager
      */
     // public static function getAll(): Collection
     // {
-    //     return Cache::remember('allExtensions', 1440, function () {
-    //         return Extension::orderBy('name')->get();
-    //     });
+    //     return Extension::cases();
     // }
 
     /**
@@ -32,9 +30,14 @@ class ExtensionManager
     public static function getPublic(): array
     {
         return Arr::where(Extension::cases(), fn ($extension) => $extension->public());
-        // return Cache::remember('publicExtensions', 1440, function () {
-        //     return Extension::where('is_private', false)->orderBy('name')->get();
-        // });
+    }
+
+    /**
+     * Get all the public extensions.
+     */
+    public static function getNonPublic(): array
+    {
+        return Arr::where(Extension::cases(), fn ($extension) => ! $extension->public());
     }
 
     /**
@@ -66,7 +69,7 @@ class ExtensionManager
     /**
      * Activate an extension.
      */
-    public static function activate(Team $team, Extension $extension): void
+    public static function activate(Team $team, Extension $extension, bool $activateDependents = true): void
     {
         if (! static::isActivated($extension, $team)) {
             $team->extensions()->create([
@@ -76,7 +79,9 @@ class ExtensionManager
 
         Cache::clear('activatedExtensions.'.$team->id);
 
-        static::activateDependents($team, $extension);
+        if ($activateDependents) {
+            static::activateDependents($team, $extension);
+        }
     }
 
     /**
@@ -87,13 +92,17 @@ class ExtensionManager
      */
     public static function deactivate(Team $team, Extension $extension): void
     {
-        $activatedParents = Collection::make($extension->dependencies())
-            ->filter(fn ($extension) => static::isActivated($extension, $team));
+        $activatedParents = Collection::make(Extension::cases())
+            ->filter(
+                fn ($filterExtension) => static::isActivated($filterExtension, $team) && in_array($extension, $filterExtension->dependencies())
+            );
 
         throw_if(
             $activatedParents->isNotEmpty(),
             \DomainException::class,
-            'Can not deactivate extension because of active parent: '.$activatedParents->pluck('label')->implode(', ')
+            __('Can not deactivate extension because of active parent extension: :extension', [
+                'extension' => $activatedParents->map(fn ($extension) => $extension->label())->implode(', ')
+            ])
         );
 
         $team->extensions()->where('extension', $extension->value)->delete();
@@ -141,7 +150,7 @@ class ExtensionManager
     private static function deactivateDependents(Team $team, Extension $parentExtension): void
     {
         foreach ($parentExtension->dependencies() as $extension) {
-            static::deactivate($team, $extensionId);
+            static::deactivate($team, $extension);
         }
     }
 }

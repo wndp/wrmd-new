@@ -2,8 +2,9 @@
 
 namespace App\Analytics\Numbers;
 
-use App\Models\Admission;
 use App\Analytics\Contracts\Number;
+use App\Enums\AccountStatus;
+use App\Models\Admission;
 
 class AllUnrecognizedPatients extends Number
 {
@@ -23,9 +24,8 @@ class AllUnrecognizedPatients extends Number
 
     public function query()
     {
-        $query = Admission::join('accounts', 'admissions.team_id', '=', 'accounts.id')
-            ->where('disposition', '!=', 'Void')
-            ->where('accounts.is_active', true)
+        $query = Admission::join('teams', 'admissions.team_id', '=', 'teams.id')
+            ->where('teams.status', AccountStatus::ACTIVE)
             ->whereUnrecognized();
 
         return $query->count();

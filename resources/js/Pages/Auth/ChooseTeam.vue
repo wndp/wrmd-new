@@ -6,18 +6,18 @@ import { RadioGroup, RadioGroupDescription, RadioGroupLabel, RadioGroupOption } 
 import {__} from '@/Composables/Translate';
 
 defineProps({
-  usersAccounts: {
+  usersTeams: {
     type: Array,
     required: true
   }
 });
 
 const form = useForm({
-    account: usePage().props.auth.account?.id
+    team: usePage().props.auth.team?.id
 });
 
 const submit = () => {
-    form.post(route('choose_account.store'));
+    form.post(route('choose_team.store'));
 };
 </script>
 
@@ -26,20 +26,20 @@ const submit = () => {
     <div class="flex justify-center">
       <form @submit.prevent="submit">
         <div class="w-full">
-          <RadioGroup v-model="form.account">
+          <RadioGroup v-model="form.team">
             <RadioGroupLabel class="sr-only">
               {{ __('Choose Account') }}
             </RadioGroupLabel>
             <div class="w-full bg-white shadow-md -space-y-px rounded-md">
               <RadioGroupOption
-                v-for="(account, i) in usersAccounts"
-                :key="account.id"
+                v-for="(team, i) in usersTeams"
+                :key="team.id"
                 v-slot="{ checked, active }"
                 as="template"
-                :value="account.id"
-                :dusk="`account-radio-${account.id}`"
+                :value="team.id"
+                :dusk="`team-radio-${team.id}`"
               >
-                <div :class="[i === 0 ? 'rounded-tl-md rounded-tr-md' : '', i === usersAccounts.length - 1 ? 'rounded-bl-md rounded-br-md' : '', checked ? 'bg-green-50 border-green-200 z-10' : 'border-gray-200', 'relative border p-4 flex cursor-pointer focus:outline-none']">
+                <div :class="[i === 0 ? 'rounded-tl-md rounded-tr-md' : '', i === usersTeams.length - 1 ? 'rounded-bl-md rounded-br-md' : '', checked ? 'bg-green-50 border-green-200 z-10' : 'border-gray-200', 'relative border p-4 flex cursor-pointer focus:outline-none']">
                   <span
                     :class="[checked ? 'bg-green-600 border-transparent' : 'bg-white border-gray-300', active ? 'ring-2 ring-offset-2 ring-green-500' : '', 'h-4 w-4 mt-0.5 cursor-pointer rounded-full border flex items-center justify-center']"
                     aria-hidden="true"
@@ -49,8 +49,8 @@ const submit = () => {
                   <div class="mx-6 flex-shrink-0">
                     <img
                       class="h-16 w-16 rounded-md"
-                      :src="account.profile_photo_url"
-                      :alt="account.organization"
+                      :src="team.profile_photo_url"
+                      :alt="team.name"
                     >
                   </div>
                   <div class="flex flex-col">
@@ -58,13 +58,13 @@ const submit = () => {
                       as="span"
                       :class="[checked ? 'text-green-900' : 'text-gray-900', 'block text-sm font-medium']"
                     >
-                      {{ account.organization }}
+                      {{ team.name }}
                     </RadioGroupLabel>
                     <RadioGroupDescription
                       as="span"
                       :class="[checked ? 'text-green-700' : 'text-gray-500', 'block text-sm']"
                     >
-                      {{ account.locale }}
+                      {{ team.locale }}
                     </RadioGroupDescription>
                   </div>
                 </div>

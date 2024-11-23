@@ -20,8 +20,8 @@ return new class extends Migration
             $table->unsignedBigInteger('buoyancy_id')->nullable()->index();
             $table->unsignedBigInteger('hauled_out_id')->nullable()->index();
             $table->unsignedBigInteger('preening_id')->nullable()->index();
-            $table->boolean('is_self_feeding')->default(0)->nullable();
-            $table->boolean('is_flighted')->default(0)->nullable();
+            $table->unsignedBigInteger('self_feeding_id')->nullable()->index();
+            $table->unsignedBigInteger('flighted_id')->nullable()->index();
             $table->json('areas_wet_to_skin')->nullable();
             $table->text('comments')->nullable();
             $table->string('examiner');

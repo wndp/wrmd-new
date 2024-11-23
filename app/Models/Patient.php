@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Actions\ClonePatientRelations;
 use App\Concerns\InteractsWithMedia;
+use App\Concerns\JoinsTablesToPatients;
 use App\Concerns\LocksPatient;
 use App\Concerns\QueriesDateRange;
 use App\Concerns\ValidatesOwnership;
@@ -11,6 +12,7 @@ use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
 use App\Models\Incident;
 use App\Models\LabUrinalysisResult;
+use App\Models\OilWash;
 use App\Models\Scopes\VoidedScope;
 use App\Support\Timezone;
 use Carbon\Carbon;
@@ -41,6 +43,7 @@ class Patient extends Model implements HasMedia
     use InteractsWithMedia;
     use LogsActivity;
     use LocksPatient;
+    use JoinsTablesToPatients;
 
     public $incrementing = false;
     protected $keyType = 'string';
@@ -217,6 +220,11 @@ class Patient extends Model implements HasMedia
     public function oilProcessing(): HasOne
     {
         return $this->hasOne(OilProcessing::class);
+    }
+
+    public function oilWashes(): HasMany
+    {
+        return $this->hasMany(OilWash::class);
     }
 
     public function oilConditionings(): HasMany

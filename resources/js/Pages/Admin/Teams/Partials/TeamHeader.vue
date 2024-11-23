@@ -1,5 +1,5 @@
 <script setup>
-import {ref, onMounted} from 'vue';
+import {ref, onMounted, computed} from 'vue';
 import {router} from '@inertiajs/vue3';
 import { ArrowLongLeftIcon } from '@heroicons/vue/24/outline';
 import { MapPinIcon } from '@heroicons/vue/24/solid';
@@ -16,7 +16,7 @@ const currentRoute = ref(route().current())
 
 const redirectToTab = () => router.get(route(currentRoute.value));
 
-const tabs = [
+const tabs = ref([
   { name: 'Details', route: 'teams.show' },
   { name: 'Profile', route: 'teams.edit' },
   { name: 'Users', route: 'teams.show.users' },
@@ -25,9 +25,11 @@ const tabs = [
   { name: 'Extensions ', route: 'teams.extensions.edit' },
   { name: 'Meta ', route: 'teams.show.meta' },
   { name: 'Actions ', route: 'teams.show.actions' },
-];
+]);
 
-onMounted(() => localStorage.store('peopleFilters', new URI().query(true)));
+const uri = computed(() => localStorage.get('accountFilters'));
+
+onMounted(() => localStorage.store('accountFilters', new URI().query(true)));
 
 // export default {
 

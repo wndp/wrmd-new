@@ -1,4 +1,5 @@
 <script setup>
+import {useForm, usePage} from '@inertiajs/vue3';
 import { formatISO9075 } from 'date-fns';
 import DialogModal from '@/Components/DialogModal.vue';
 import FormRow from '@/Components/FormElements/FormRow.vue';
@@ -11,8 +12,8 @@ import SecondaryButton from '@/Components/FormElements/SecondaryButton.vue';
 import {__} from '@/Composables/Translate';
 
 const props = defineProps({
-  patient: {
-      type: Object,
+  patientId: {
+      type: String,
       required: true
   },
   title: {
@@ -27,15 +28,15 @@ const emit = defineEmits(['close']);
 const form = useForm({
   date_care_at: formatISO9075(new Date()),
   weight: '',
-  weight_unit_id: '',
+  weight_unit_id: usePage().props.dailyTaskOptionUiBehaviorIds.gramId,
   comments: ''
 });
 
 const close = () => emit('close');
 
 const save = () => {
-    form.post(route('patients.treatment_log.store', {
-        patient: props.patient
+    form.post(route('patients.care_log.store', {
+        patient: props.patientId
     }), {
         preserveScroll: true,
         onSuccess: () => {
@@ -83,7 +84,7 @@ const save = () => {
             type="number"
             step="any"
             min="0"
-            :units="$page.props.options.weightUnitOptions"
+            :units="$page.props.options.examWeightUnitsOptions"
           />
           <InputError
             :message="form.errors.weight"
@@ -95,7 +96,7 @@ const save = () => {
           class="sm:col-span-6"
           :label="__('Comments')"
         >
-          <Textarea
+          <TextareaInput
             v-model="form.comments"
             name="comments"
           />

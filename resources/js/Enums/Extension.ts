@@ -10,4 +10,5 @@ export enum Extension
     NECROPSY = 'NECROPSY',
     PAPER_FORMS = 'PAPER_FORMS',
     QUICK_ADMIT = 'QUICK_ADMIT',
+    OIL_SPILL = 'OIL_SPILL',
 }

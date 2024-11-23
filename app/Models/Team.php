@@ -30,6 +30,7 @@ class Team extends JetstreamTeam
 
     protected $fillable = [
         'name',
+        'status',
         'personal_team',
         'is_master_account',
         'contact_name',
@@ -65,6 +66,11 @@ class Team extends JetstreamTeam
             'personal_team' => 'boolean',
             'status' => AccountStatus::class
         ];
+    }
+
+    public function admissions(): HasMany
+    {
+        return $this->hasMany(Admission::class);
     }
 
     public function extensions(): HasMany

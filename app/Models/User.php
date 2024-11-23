@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Concerns\AssistWithRolesAndAbilities;
 use App\Concerns\HasUniqueFields;
 use App\Concerns\ValidatesOwnership;
+use App\Enums\Role;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -16,6 +17,7 @@ use Laravel\Jetstream\Contracts\AddsTeamMembers;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
+use Silber\Bouncer\BouncerFacade;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -92,6 +94,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->currentTeam
             ->allUsers()
             ->where('user_id', '!=', $this->id);
+    }
+
+    public function joinTeam(Team $team, Role $role)
+    {
+        $team->users()->attach($this);
+
+        BouncerFacade::scope()->to($team->id)->onlyRelations()->dontScopeRoleAbilities();
+        BouncerFacade::assign($role->value)->to($this->id);
+
+        return $this;
     }
 
     /**

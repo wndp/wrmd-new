@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Domain\Accounts\Account;
 use App\Http\Controllers\Controller;
+use App\Models\Team;
 use Inertia\Inertia;
 
 class AccountsUsersController extends Controller
@@ -13,17 +13,14 @@ class AccountsUsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Account $account)
+    public function __invoke(Team $team)
     {
-        $users = $account->users->append([
-            'created_at_diff_for_humans',
-        ])
-            ->transform(function ($user) use ($account) {
-                $user->role_name_for_humans = $user->getRoleNameOnAccountForHumans($account);
+        $users = $team->allUsers()->transform(fn ($user) => [
+            ...$user->toArray(),
+            'created_at_diff_for_humans' => $user->created_at->translatedFormat(config('wrmd.date_format')),
+            'role_name_for_humans' => $user->getRoleNameOnTeamForHumans($team)
+        ]);
 
-                return $user;
-            });
-
-        return Inertia::render('Admin/Accounts/Users', compact('account', 'users'));
+        return Inertia::render('Admin/Teams/Users', compact('team', 'users'));
     }
 }

@@ -1269,6 +1269,16 @@ class AttributeOptionSeeder extends Seeder
             __('Alive'),
             __('Dead'),
         ]);
+        $this->createOrUpdateAttributeOptionUiBehaviors(
+            AttributeOptionName::OILED_PROCESSING_CONDITIONS,
+            __('Alive'),
+            AttributeOptionUiBehavior::OILED_PROCESSING_CONDITION_IS_ALIVE,
+        );
+        $this->createOrUpdateAttributeOptionUiBehaviors(
+            AttributeOptionName::OILED_PROCESSING_CONDITIONS,
+            __('Dead'),
+            AttributeOptionUiBehavior::OILED_PROCESSING_CONDITION_IS_DEAD,
+        );
 
         $this->createOrUpdateAttributes(AttributeOptionName::OILED_PROCESSING_STATUSES, [
             '0' => __('(0) No signs of oil detected'),
@@ -1346,6 +1356,93 @@ class AttributeOptionSeeder extends Seeder
             __('Vegetable / Fish'),
             __('Other'),
         ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_WASH_PRE_TREATMENTS, [
+            __('None'),
+            __('Methyl soyate'),
+            __('Methyl oleate'),
+            __('Vegetable oil'),
+            __('Soap pressure spray'),
+            __('Olive oil'),
+            __('Canola oil'),
+            __('Baking soda paste'),
+            __('Other - Specify'),
+        ]);
+        $this->createOrUpdateAttributeOptionUiBehaviors(
+            AttributeOptionName::OILED_WASH_PRE_TREATMENTS,
+            __('None'),
+            AttributeOptionUiBehavior::OILED_WASH_PRE_TREATMENT_IS_NONE,
+        );
+
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_WASH_TYPES, [
+            __('Initial wash'),
+            __('Re-wash'),
+            __('Quick wash'),
+            __('Hock / Foot wash'),
+        ]);
+        $this->createOrUpdateAttributeOptionUiBehaviors(
+            AttributeOptionName::OILED_WASH_TYPES,
+            __('Initial wash'),
+            AttributeOptionUiBehavior::OILED_WASH_TYPE_IS_INITIAL,
+        );
+
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_WASH_DETERGENTS, [
+            __('Dawn 2%'),
+            __('Dawn higher concentration'),
+            __('Other - Specify'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_WASH_DRYING_METHODS, [
+            __('Pet dryer'),
+            __('Heat lamp'),
+            __('Other - Specify'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_CONDITIONING_BUOYANCIES, [
+            __('Normal'),
+            __('Reduced'),
+            __('Sinking'),
+            __('Asymmetric'),
+            __('Not applicable'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_CONDITIONING_HAULED_OUTS, [
+            __('Continuously'),
+            __('Frequently'),
+            __('Occasionally'),
+            __('Rarely or never'),
+            __('Not observed'),
+            __('Not applicable'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_CONDITIONING_PREENINGS, [
+            __('Normal'),
+            __('Excessive'),
+            __('Reduced'),
+            __('None observed'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_CONDITIONING_AREAS_WET_TO_SKIN, [
+            __('Head / Neck'),
+            __('Left Axillary'),
+            __('Righ Axillary'),
+            __('Vent'),
+            __('Back'),
+            __('Chest'),
+            __('Keel'),
+            __('Left Inguinal'),
+            __('Right Inguinal'),
+            __('Other - Specify'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_CONDITIONING_UNKNOWN_BOOL, [
+            __('Unknown'),
+            __('Yes'),
+            __('No')
+        ]);
+
+
+
 
         $this->createOrUpdateAttributes(AttributeOptionName::LAB_BOOLEAN, [
             __('Negative'),

@@ -19,7 +19,14 @@ class ChooseTeamController extends Controller
      */
     public function index()
     {
-        $usersTeams = Auth::user()->allTeams()->where('status', AccountStatus::ACTIVE);
+        $usersTeams = Auth::user()->allTeams()
+            ->where('status', AccountStatus::ACTIVE)
+            ->sortBy('name')
+            ->transform(fn ($team) => [
+                ...$team->toArray(),
+                'locale' => $team->formatted_inline_address
+            ])
+            ->values();
 
         if (count($usersTeams) === 0) {
             event(new NoTeams(Auth::user()));
@@ -37,11 +44,11 @@ class ChooseTeamController extends Controller
     /**
      * Attempt to choose an team for the authenticated user.
      */
-    public function chooseAccount(Request $request): RedirectResponse
+    public function update(Request $request): RedirectResponse
     {
         $usersTeams = Auth::user()
             ->teams
-            ->where('status', AccountStatus::ACTIVE->value)
+            ->where('status', AccountStatus::ACTIVE)
             ->pluck('id')
             ->implode(',');
 

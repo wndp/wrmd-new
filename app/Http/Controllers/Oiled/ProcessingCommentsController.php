@@ -18,7 +18,7 @@ class ProcessingCommentsController extends Controller
             'comments' => 'nullable|string',
         ]);
 
-        $patient->validateOwnership(Auth::user()->current_account_id);
+        $patient->validateOwnership(Auth::user()->current_team_id);
 
         OilProcessing::store(
             $patient->id,

@@ -35,15 +35,15 @@ trait HasSubAccounts
     /**
      * Determine if the master account has the given sub-account.
      */
-    public function hasSubAccount(Account $account): bool
+    public function hasSubAccount(Team $team): bool
     {
-        return $this->fresh()->subAccounts->contains($account);
+        return $this->fresh()->subAccounts->contains($team);
     }
 
     /**
      * Assign the account the provided master account.
      */
-    public function assignToMasterAccount(Account $masterAccount): static
+    public function assignToMasterAccount(Team $masterAccount): static
     {
         $this->masterAccount()->associate($masterAccount)->save();
 

@@ -47,7 +47,7 @@ class ProcessingCollectionController extends Controller
             [
                 'date_collected_at' => $collectedAt->toDateString(),
                 'time_collected_at' => $collectedAt->toTimeString(),
-                'collection_condition' => $request->input('collection_condition'),
+                'collection_condition_id' => $request->input('collection_condition_id'),
             ],
             isIndividualOiledAnimal: ExtensionManager::isActivated(Extension::OWCN_MEMBER_ORGANIZATION, Auth::user()->currentTeam)
         );

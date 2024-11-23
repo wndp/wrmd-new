@@ -2,27 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Domain\Accounts\Account;
-use App\Domain\Admissions\Admission;
 use App\Http\Controllers\Controller;
+use App\Models\Admission;
+use App\Models\Team;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class AccountsUnrecognizedPatientsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function __invoke(Account $account): Response
+    public function __invoke(Team $team): Response
     {
         $unrecognizedPatients = Admission::select('admissions.*')
-            ->where('account_id', $account->id)
+            ->where('team_id', $team->id)
             ->whereUnrecognized()
             ->orderBy('common_name')
-            ->with('patient', 'account')
+            ->with('patient', 'team')
             ->paginate()
             ->onEachSide(1);
 
-        return Inertia::render('Admin/Accounts/Unrecognized', compact('account', 'unrecognizedPatients'));
+        return Inertia::render('Admin/Teams/Unrecognized', compact('team', 'unrecognizedPatients'));
     }
 }

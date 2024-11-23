@@ -19,7 +19,8 @@ return new class extends Migration
             $table->time('time_collected_at')->nullable();
             $table->boolean('is_individual_oiled_animal')->default(false);
             $table->unsignedBigInteger('collection_condition_id');
-            $table->dateTime('processed_at')->nullable();
+            $table->date('date_processed_at');
+            $table->time('time_processed_at')->nullable();
             $table->string('processor')->nullable();
             $table->unsignedBigInteger('oiling_status_id')->nullable();
             $table->unsignedBigInteger('oiling_percentage_id')->nullable();

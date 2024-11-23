@@ -37,8 +37,8 @@ Route::middleware(['guest', 'throttle:auth', ProtectAgainstSpam::class])->group(
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('choose-account', [ChooseAccountController::class, 'listAccounts'])->name('choose_account.index');
-    Route::post('choose-account', [ChooseAccountController::class, 'chooseAccount'])->name('choose_account.store');
+    // Route::get('choose-account', [ChooseAccountController::class, 'listAccounts'])->name('choose_account.index');
+    // Route::post('choose-account', [ChooseAccountController::class, 'chooseAccount'])->name('choose_account.store');
 
     Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])
         ->name('verification.notice');

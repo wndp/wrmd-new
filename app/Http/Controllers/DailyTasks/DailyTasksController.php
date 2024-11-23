@@ -20,24 +20,10 @@ class DailyTasksController extends Controller
 {
     public function index(Request $request): Response
     {
-        // OptionsStore::add($options);
-        // OptionsStore::add($examOptions);
-
-        // OptionsStore::add([
-        //     'facilityOptions' => $options[AttributeOptionName::PATIENT_LOCATION_FACILITIES->value],
-        //     'assignmentOptions' => $options[AttributeOptionName::DAILY_TASK_ASSIGNMENTS->value],
-        //     'frequencyOptions' => $options[AttributeOptionName::DAILY_TASK_FREQUENCIES->value],
-        //     'concentrationUnitOptions' => $options[AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS->value],
-        //     'dosageUnitOptions' => $options[AttributeOptionName::DAILY_TASK_DOSAGE_UNITS->value],
-        //     'doseUnitOptions' => $options[AttributeOptionName::DAILY_TASK_DOSE_UNITS->value],
-        //     'routeOptions' => $options[AttributeOptionName::DAILY_TASK_ROUTES->value],
-        //     'nutritionRouteOptions' => $options[AttributeOptionName::DAILY_TASK_NUTRITION_ROUTES->value],
-        //     'schedulableOptions' => Options::enumsToSelectable(DailyTaskSchedulable::cases())
-        // ]);
-
         OptionsStore::add([
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::PATIENT_LOCATION_FACILITIES->value,
+                AttributeOptionName::EXAM_WEIGHT_UNITS->value,
                 AttributeOptionName::DAILY_TASK_ASSIGNMENTS->value,
                 AttributeOptionName::DAILY_TASK_FREQUENCIES->value,
                 AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS->value,
@@ -54,13 +40,15 @@ class DailyTasksController extends Controller
             $veterinarianId,
             $mgPerMlId,
             $mgPerKgId,
-            $mlId
+            $mlId,
+            $gramId,
         ] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_SINGLE_DOSE->value],
             [AttributeOptionName::DAILY_TASK_ASSIGNMENTS->value, AttributeOptionUiBehavior::DAILY_TASK_ASSIGNMENT_IS_VETERINARIAN->value],
             [AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_CONCENTRATION_UNIT_IS_MG_PER_ML->value],
             [AttributeOptionName::DAILY_TASK_DOSAGE_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_MG_PER_KG->value],
             [AttributeOptionName::DAILY_TASK_DOSE_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_DOSE_UNIT_IS_ML->value],
+            [AttributeOptionName::EXAM_WEIGHT_UNITS->value, AttributeOptionUiBehavior::EXAM_WEIGHT_UNITS_IS_G->value],
         ]);
 
         Inertia::share([
@@ -69,7 +57,8 @@ class DailyTasksController extends Controller
                 'veterinarianId',
                 'mgPerMlId',
                 'mgPerKgId',
-                'mlId'
+                'mlId',
+                'gramId'
             )
         ]);
 

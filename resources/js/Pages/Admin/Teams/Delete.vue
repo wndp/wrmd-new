@@ -1,10 +1,46 @@
+<script setup>
+import {ref} from 'vue';
+import {useForm} from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import TeamHeader from './Partials/TeamHeader.vue';
+import InputLabel from '@/Components/FormElements/InputLabel.vue';
+import TextInput from '@/Components/FormElements/TextInput.vue';
+import InputError from '@/Components/FormElements/InputError.vue';
+import DangerButton from '@/Components/FormElements/DangerButton.vue';
+
+const props = defineProps({
+  team: Object
+})
+
+const password = ref(null);
+
+const form = useForm({
+  organization: '',
+  password: '',
+  password_confirmation: '',
+});
+
+const deleteTeam = () => {
+    form.delete(route('accounts.destroy', {
+        team: props.team
+    }), {
+        preserveScroll: true,
+        onSuccess: () => form.reset(),
+        onError: () => {
+            form.reset();
+            password.value.focus();
+        }
+    });
+};
+</script>
+
 <template>
   <AppLayout title="Accounts">
-    <AccountHeader :account="account" />
+    <TeamHeader :team="team" />
     <div class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200 mt-8">
       <div class="px-4 py-5 sm:px-6">
         <h3 class="text-xl leading-6 font-medium text-red-600">
-          Are you ABSOLUTELY sure you want to DELETE the account {{ account.organization }}?
+          Are you ABSOLUTELY sure you want to DELETE the account {{ team.name }}?
         </h3>
       </div>
       <div class="px-4 py-5 sm:p-6 prose max-w-none">
@@ -30,11 +66,11 @@
             <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
               <div class="grid grid-cols-3 gap-6">
                 <div class="col-span-3 sm:col-span-2">
-                  <Label
+                  <InputLabel
                     value="Account Organization Name"
                     for="organization"
                   />
-                  <Input
+                  <TextInput
                     v-model="form.organization"
                     name="organization"
                     autofill="off"
@@ -45,14 +81,13 @@
                   />
                 </div>
               </div>
-
               <div class="grid grid-cols-3 gap-6">
                 <div class="col-span-3 sm:col-span-2">
-                  <Label
+                  <InputLabel
                     value="Your Password"
                     for="password"
                   />
-                  <Input
+                  <TextInput
                     ref="password"
                     v-model="form.password"
                     name="password"
@@ -64,14 +99,13 @@
                   />
                 </div>
               </div>
-
               <div class="grid grid-cols-3 gap-6">
                 <div class="col-span-3 sm:col-span-2">
-                  <Label
+                  <InputLabel
                     value="Confirm Your Password"
                     for="password_confirmation"
                   />
-                  <Input
+                  <TextInput
                     v-model="form.password_confirmation"
                     name="password_confirmation"
                     type="password"
@@ -87,9 +121,9 @@
               <DangerButton
                 :class="{ 'opacity-25': form.processing }"
                 :disabled="form.processing"
-                @click="deletePatient"
+                @click="deleteTeam"
               >
-                I Understand the Consequences, Delete {{ account.organization }}
+                I Understand the Consequences, Delete {{ team.name }}
               </DangerButton>
             </div>
           </div>
@@ -98,49 +132,3 @@
     </div>
   </AppLayout>
 </template>
-
-<script>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import AccountHeader from './Partials/AccountHeader.vue';
-import Label from '@/Components/FormElements/Label.vue';
-import Input from '@/Components/FormElements/Input.vue';
-import InputError from '@/Components/FormElements/InputError.vue';
-import DangerButton from '@/Components/FormElements/DangerButton.vue';
-
-export default {
-    components: {
-        AppLayout,
-        AccountHeader,
-        Label,
-        Input,
-        InputError,
-        DangerButton
-    },
-    props: {
-        account: Object
-    },
-    data() {
-        return {
-            form: this.$inertia.form({
-                organization: '',
-                password: '',
-                password_confirmation: '',
-            }),
-        };
-    },
-    methods: {
-        deletePatient() {
-            this.form.delete(this.route('accounts.destroy', {
-                account: this.account
-            }), {
-                preserveScroll: true,
-                onSuccess: () => this.form.reset(),
-                onError: () => {
-                    this.form.reset();
-                    this.$refs.organization.focus();
-                }
-            });
-        },
-    },
-};
-</script>

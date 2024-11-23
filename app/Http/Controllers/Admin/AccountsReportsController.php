@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Domain\Accounts\Account;
-use App\Domain\Reporting\ReportsCollection;
 use App\Http\Controllers\Controller;
+use App\Reporting\ReportsCollection;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -13,12 +12,13 @@ class AccountsReportsController extends Controller
 {
     public function index(): Response
     {
-        $accountReports = app(ReportsCollection::class)->firstWhere('title', 'Account Reports');
+        $accountReports = ReportsCollection::register()
+            ->where('title', 'Account Reports')
+            ->initializeAll(
+                Auth::user()->currentTeam
+            )
+            ->first();
 
-        // ->instantiate(
-        //     Auth::user()->current_account
-        // )
-
-        return Inertia::render('Admin/Accounts/AccountReports', compact('accountReports'));
+        return Inertia::render('Admin/Teams/AccountReports', compact('accountReports'));
     }
 }

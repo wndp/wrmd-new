@@ -2,37 +2,29 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Domain\Accounts\Account;
-use App\Extensions\ExtensionManager;
+use App\Enums\Extension;
 use App\Http\Controllers\Controller;
+use App\Models\Team;
+use App\Support\ExtensionManager;
+use Illuminate\Support\Arr;
 use Inertia\Inertia;
 
 class AccountsExtensionsController extends Controller
 {
     /**
-     * Constructor.
-     */
-    public function __construct(ExtensionManager $extensionManager)
-    {
-        $this->extensionManager = $extensionManager;
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Account $account)
+    public function __invoke(Team $team)
     {
-        $activated = $this->extensionManager->getActivated($account);
-        $extensions = $this->extensionManager
-            ->getAll()
-            ->transform(function ($extension) use ($activated) {
-                $extension->is_activated = $activated->contains($extension);
+        $activated = ExtensionManager::getActivated($team);
 
-                return $extension;
-            });
+        $extensions = Arr::map(Extension::cases(), fn ($extension) => [
+            ...$extension->toArray(),
+            'is_activated' => $activated->contains(fn ($active) => $active->extension === $extension->value)
+        ]);
 
-        return Inertia::render('Admin/Accounts/Extensions', compact('account', 'extensions'));
+        return Inertia::render('Admin/Teams/Extensions', compact('team', 'extensions'));
     }
 }

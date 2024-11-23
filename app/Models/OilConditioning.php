@@ -24,27 +24,29 @@ class OilConditioning extends Model implements Summarizable
 
     protected $fillable = [
         'patient_id',
-        'evaluated_at',
+        'date_evaluated_at',
+        'time_evaluated_at',
         'buoyancy_id',
         'hauled_out_id',
         'preening_id',
-        'is_self_feeding',
-        'is_flighted',
+        'self_feeding_id',
+        'flighted_id',
         'areas_wet_to_skin',
-        'observations',
+        'comments',
         'examiner',
     ];
 
     protected $casts = [
         'patient_id' => 'string',
-        'evaluated_at' => 'datetime',
+        'date_evaluated_at' => 'date:Y-m-d',
+        'time_evaluated_at' => 'string',
         'buoyancy_id' => 'integer',
         'hauled_out_id' => 'integer',
         'preening_id' => 'integer',
-        'is_self_feeding' => 'boolean',
-        'is_flighted' => 'boolean',
+        'self_feeding_id' => 'integer',
+        'flighted_id' => 'integer',
         'areas_wet_to_skin' => 'array',
-        'observations' => 'string',
+        'comments' => 'string',
         'examiner' => 'string',
     ];
 
@@ -57,10 +59,45 @@ class OilConditioning extends Model implements Summarizable
         return $this->belongsTo(Patient::class);
     }
 
+    public function buoyancy()
+    {
+        return $this->belongsTo(AttributeOption::class, 'buoyancy_id');
+    }
+
+    public function hauledOut()
+    {
+        return $this->belongsTo(AttributeOption::class, 'hauled_out_id');
+    }
+
+    public function preening()
+    {
+        return $this->belongsTo(AttributeOption::class, 'preening_id');
+    }
+
+    public function selfFeeding()
+    {
+        return $this->belongsTo(AttributeOption::class, 'self_feeding_id');
+    }
+
+    public function flighted()
+    {
+        return $this->belongsTo(AttributeOption::class, 'flighted_id');
+    }
+
+    protected function evaluatedAt(): Attribute
+    {
+        return Attribute::get(function () {
+            if (is_null($this->time_evaluated_at)) {
+                return $this->date_evaluated_at?->toFormattedDayDateString();
+            }
+            return $this->date_evaluated_at?->setTimeFromTimeString($this->time_evaluated_at);
+        });
+    }
+
     public function summaryBody(): Attribute
     {
         return Attribute::get(function () {
-                $keys = ['buoyancy_id', 'hauled_out_id', 'preening_id', 'observations', 'examiner'];
+                $keys = ['buoyancy_id', 'hauled_out_id', 'preening_id', 'comments', 'examiner'];
 
                 $details[] = $this->areas_wet_to_skin ? '<strong>Areas WTS:</strong> '.implode(', ', $this->areas_wet_to_skin) : '';
 

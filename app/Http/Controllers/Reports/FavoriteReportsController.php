@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Reports;
 
+use App\Enums\SettingKey;
 use App\Http\Controllers\Controller;
 use App\Support\Wrmd;
 
@@ -14,7 +15,7 @@ class FavoriteReportsController extends Controller
      */
     public function store(string $namespace)
     {
-        $favoriteReports = (array) Wrmd::settings('favoriteReports', []);
+        $favoriteReports = (array) Wrmd::settings(SettingKey::FAVORITE_REPORTS, []);
 
         Wrmd::settings()->set('favoriteReports', array_merge($favoriteReports, [$namespace]));
     }
@@ -26,7 +27,7 @@ class FavoriteReportsController extends Controller
      */
     public function destroy(string $namespace)
     {
-        $favoriteReports = (array) Wrmd::settings('favoriteReports', []);
+        $favoriteReports = (array) Wrmd::settings(SettingKey::FAVORITE_REPORTS, []);
 
         if (($key = array_search($namespace, $favoriteReports)) !== false) {
             unset($favoriteReports[$key]);

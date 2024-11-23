@@ -2,29 +2,40 @@
 
 namespace App\Http\Controllers\Oiled;
 
-use App\Domain\OptionsStore;
-//use App\Domain\Patients\Concerns\RetrievesTreatmentLogs;
-use App\Domain\Patients\ExamOptions;
+use App\Concerns\GetsCareLogs;
+use App\Enums\AttributeOptionName;
+use App\Enums\MediaCollection;
+use App\Enums\SettingKey;
 use App\Http\Controllers\Controller;
+use App\Models\AttributeOption;
+use App\Repositories\OptionsStore;
+use App\Support\Wrmd;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class CaseSummaryController extends Controller
 {
-    //use RetrievesTreatmentLogs;
+    use GetsCareLogs;
 
-    public function __invoke(ExamOptions $examOptions): Response
+    public function __invoke(): Response
     {
-        OptionsStore::merge($examOptions);
-
         $admission = $this->loadAdmissionAndSharePagination();
-        $admission->patient->load('vitals', 'eventProcessing');
-        $logs = $this->getTreatmentLogs($admission->patient, Auth::user(), (settings('logOrder') === 'desc'));
+        //$admission->patient->load('vitals', 'oilProcessing');
+
+        OptionsStore::add([
+            //new LocaleOptions(),
+            AttributeOption::getDropdownOptions([
+                AttributeOptionName::EXAM_WEIGHT_UNITS->value,
+                AttributeOptionName::EXAM_TEMPERATURE_UNITS->value,
+                AttributeOptionName::EXAM_ATTITUDES->value,
+            ])
+        ]);
 
         return Inertia::render('Oiled/CaseSummary', [
-            'logs' => $logs,
-            'media' => fn () => $admission->patient->getMedia(),
+            'patient' => $admission->patient,
+            'logs' => fn () => $this->getCareLogs($admission->patient, Auth::user(), (Wrmd::settings(SettingKey::LOG_ORDER) === 'desc')),
+            'media' => fn () => $admission->patient->getMedia(MediaCollection::EVIDENCE_PHOTO->value),
         ]);
     }
 }

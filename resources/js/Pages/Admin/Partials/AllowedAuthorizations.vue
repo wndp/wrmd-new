@@ -1,3 +1,44 @@
+<script>
+import Checkbox from '@/Components/FormElements/Checkbox.vue';
+import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+
+export default {
+  components: {
+    Checkbox,
+    PrimaryButton
+  },
+  props: {
+    roles: Array,
+    abilities: Array
+  },
+  data() {
+    const obj = {};
+
+    for (let role of this.roles) {
+      obj[role.name] = role.abilities.filter(
+        ability => ability.forbidden === 0
+        ).map(
+        role => role.name
+        );
+      }
+
+      return {
+        form: this.$inertia.form(obj),
+      };
+    },
+    computed: {
+      width() {
+        return 100 / (this.roles.length + 1);
+      }
+    },
+    methods: {
+      saveAuthorizations() {
+        this.form.put(this.route('admin.authorization.update', 'allowed'));
+      }
+    }
+  };
+</script>
+
 <template>
   <div class="flex flex-col">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -58,44 +99,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import Checkbox from '@/Components/FormElements/Checkbox.vue';
-import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-
-export default {
-  components: {
-    Checkbox,
-    PrimaryButton
-  },
-  props: {
-    roles: Array,
-    abilities: Array
-  },
-  data() {
-    const obj = {};
-
-    for (let role of this.roles) {
-      obj[role.name] = role.abilities.filter(
-        ability => ability.forbidden === 0
-        ).map(
-        role => role.name
-        );
-      }
-
-      return {
-        form: this.$inertia.form(obj),
-      };
-    },
-    computed: {
-      width() {
-        return 100 / (this.roles.length + 1);
-      }
-    },
-    methods: {
-      saveAuthorizations() {
-        this.form.put(this.route('admin.authorization.update', 'allowed'));
-      }
-    }
-  };
-</script>

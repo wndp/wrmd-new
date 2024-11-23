@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Domain\Accounts\Account;
-use App\Domain\Accounts\Testimonial;
-use App\Domain\Options;
+use App\Enums\AccountStatus;
 use App\Http\Controllers\Controller;
+use App\Models\Team;
+use App\Models\Testimonial;
+use App\Options\Options;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -18,10 +19,11 @@ class AccountsTestimonialsController extends Controller
      */
     public function index(Request $request): Response
     {
-        $testimonials = Testimonial::with('account')
+        $testimonials = Testimonial::with('team')
             ->when(
                 $request->get('search'),
-                fn ($query, $search) => $query->where('name', 'like', "%$search%")->orWhere('text', 'like', "%$search%")
+                fn ($query, $search) => $query->where('name', 'like', "%$search%")
+                    ->orWhere('text', 'like', "%$search%")
             )
             ->paginate();
 
@@ -33,11 +35,11 @@ class AccountsTestimonialsController extends Controller
      */
     public function create(): Response
     {
-        $accounts = Options::arrayToSelectable(
-            Account::where('status', 'Active')->get()->pluck('organization', 'id')->sort()->toArray()
+        $teams = Options::arrayToSelectable(
+            Team::where('status', AccountStatus::ACTIVE)->get()->pluck('name', 'id')->sort()->toArray()
         );
 
-        return Inertia::render('Admin/Testimonials/Create', compact('accounts'));
+        return Inertia::render('Admin/Testimonials/Create', compact('teams'));
     }
 
     /**
@@ -48,7 +50,7 @@ class AccountsTestimonialsController extends Controller
         Testimonial::create($request->validate([
             'name' => 'required',
             'text' => 'required',
-            'account_id' => 'required',
+            'team_id' => 'required',
         ]));
 
         return redirect()->route('admin.testimonials.index');
@@ -59,11 +61,11 @@ class AccountsTestimonialsController extends Controller
      */
     public function edit(Testimonial $testimonial): Response
     {
-        $accounts = Options::arrayToSelectable(
-            Account::where('status', 'Active')->get()->pluck('organization', 'id')->sort()->toArray()
+        $teams = Options::arrayToSelectable(
+            Team::where('status', AccountStatus::ACTIVE)->get()->pluck('name', 'id')->sort()->toArray()
         );
 
-        return Inertia::render('Admin/Testimonials/Edit', compact('testimonial', 'accounts'));
+        return Inertia::render('Admin/Testimonials/Edit', compact('testimonial', 'teams'));
     }
 
     /**
@@ -74,7 +76,7 @@ class AccountsTestimonialsController extends Controller
         $testimonial->update($request->validate([
             'name' => 'required',
             'text' => 'required',
-            'account_id' => 'required',
+            'team_id' => 'required',
         ]));
 
         return redirect()->route('admin.testimonials.index');

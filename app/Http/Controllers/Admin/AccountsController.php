@@ -31,6 +31,13 @@ class AccountsController extends Controller
         // OptionsStore::merge($accountOptions);
         // OptionsStore::merge($localeOptions);
 
+        OptionsStore::add([
+            new LocaleOptions(),
+            'accountStatusOptions' => Options::enumsToSelectable(AccountStatus::cases()),
+            //'subdivisionOptions' => Options::arrayToSelectable($locale->countrySubdivisions()),
+            //'timezoneOptions' => Options::arrayToSelectable($locale->countryTimeZones()),
+        ]);
+
         $teams = Team::query()
             ->when($request->get('status'), function ($query, $status) {
                 if ($status !== 'All') {
@@ -60,10 +67,15 @@ class AccountsController extends Controller
             })
             ->orderBy('name')
             ->paginate()
-            ->withQueryString();
+            ->withQueryString()
+            ->through(fn ($team) => [
+                ...$team->toArray(),
+                'status_for_humans' => $team->status->label(),
+                'locale' => $team->formatted_inline_address
+            ]);
 
         if ($teams->total() === 1) {
-            return redirect()->route('teams.show', $teams->first());
+            return redirect()->route('teams.show', ['team' => $teams->first()['id']]);
         }
 
         return Inertia::render('Admin/Teams/Index', compact('teams'));
@@ -113,8 +125,7 @@ class AccountsController extends Controller
         $masterAccounts = Options::arrayToSelectable(
             Team::where('is_master_account', true)
                 ->get()
-                ->pluck('organization', 'id')
-                ->prepend('', '')
+                ->pluck('name', 'id')
                 ->toArray()
         );
 

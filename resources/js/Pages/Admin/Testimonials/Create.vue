@@ -1,46 +1,43 @@
-<template>
-  <AppLayout title="Testimonials">
-    <TestimonialForm
-      v-model="form.testimonial"
-      :title="__('New Testimonial')"
-      :action="__('Create New Testimonial')"
-      :can-submit="false"
-      :accounts="accounts"
-      :errors="form.errors"
-      @saved="storeTestimonial"
-    />
-  </AppLayout>
-</template>
-
 <script setup>
+import {useForm} from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TestimonialForm from './Partials/TestimonialForm.vue';
+import AdminNavigation from '../Partials/AdminNavigation.vue';
+import {__} from '@/Composables/Translate';
 
 defineProps({
-    accounts: {
+    teams: {
         type: Object,
         required: true
     }
-})
-</script>
+});
 
-<script>
-export default {
-    data() {
-        return {
-            form: this.$inertia.form({
-                testimonial: {}
-            })
-        }
-    },
-    methods: {
-        storeTestimonial() {
-            this.form.transform((data) => ({
-              ...data.testimonial,
-            })).post(this.route('admin.testimonials.store'), {
-                preserveScroll: true
-            });
-        }
-    },
+const form = useForm({
+    name: '',
+    text: '',
+    team_id: '',
+});
+
+const storeTestimonial = () => {
+    form.post(route('admin.testimonials.store'), {
+        preserveScroll: true
+    });
 };
 </script>
+
+<template>
+  <AppLayout title="Testimonials">
+    <div class="lg:grid grid-cols-8 gap-8 mt-4">
+      <AdminNavigation class="mb-4 lg:mb-0 col-span-2" />
+      <div class="col-span-6">
+        <TestimonialForm
+          :form="form"
+          :title="__('New Testimonial')"
+          :action="__('Create New Testimonial')"
+          :teams="teams"
+          @saved="storeTestimonial"
+        />
+      </div>
+    </div>
+  </AppLayout>
+</template>

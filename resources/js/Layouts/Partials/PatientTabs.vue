@@ -31,7 +31,8 @@ import {
   ArrowDownTrayIcon,
   AtSymbolIcon,
   ShareIcon,
-  TruckIcon
+  TruckIcon,
+  ChatBubbleBottomCenterIcon
 } from "@heroicons/vue/24/outline";
 import {__} from '@/Composables/Translate';
 import {can} from '@/Composables/Can';
@@ -57,7 +58,12 @@ const showExportModal = ref(false);
 const showEmailModal = ref(false);
 const currentRoute = ref(route().current());
 
-const tabs = ref([
+const tabs = active(Extension.OIL_SPILL) ? ref([
+  { name: __('Field Stabilization'), route: 'oiled.field.edit', can: true },
+  { name: __('Processing'), route: 'oiled.processing.edit', can: true },
+  { name: __('Wash'), route: 'oiled.wash.index', can: true },
+  { name: __('Conditioning'), route: 'oiled.conditioning.index', can: true },
+].filter(o => o.can)) : ref([
   { name: __('Rescuer'), route: 'patients.rescuer.edit', can: can(Abilities.COMPUTED_VIEW_RESCUER) },
   { name: __('Initial Care'), route: 'patients.initial.edit', can: true },
   { name: __('Continued Care'), route: 'patients.continued.edit', can: true },
@@ -80,6 +86,7 @@ const dailyTasksOptionGroups = ref([
 
 const moreOptionGroups = ref([
     [
+      { name: __('Case Summary'), route: 'oiled.summary.edit', icon: ChatBubbleBottomCenterIcon, can: usePage().props.subscription.isProPlan && active(Extension.OIL_SPILL) },
       { name: __('Attachments'), route: 'patients.attachments.edit', icon: PhotoIcon, can: usePage().props.subscription.isProPlan && active(Extension.ATTACHMENTS) },
       { name: __('Daily Exams'), route: 'patients.exam.index', icon: ClipboardDocumentListIcon, can: active(Extension.DAILY_EXAM) },
       { name: __('Lab Reports'), route: 'patients.lab-reports.index', icon: BeakerIcon, can: active(Extension.LAB_REPORTS) },
@@ -88,8 +95,8 @@ const moreOptionGroups = ref([
       { name: __('Expenses'), route: 'patients.expenses.index', icon: BanknotesIcon, can: active(Extension.EXPENSES) },
     ].filter(o => o.can),
     [
-      { name: __('Individual Oiled Animal Processing'), route: 'oiled.processing.edit', icon: FingerPrintIcon, can: can(Abilities.OWCN_MEMBER_ORGANIZATION) },
-      { name: __('Individual Oiled Animal Wash'), route: 'oiled.wash.index', icon: ArchiveBoxIcon,  can: can(Abilities.OWCN_MEMBER_ORGANIZATION) }
+      { name: __('Individual Oiled Animal Processing'), route: 'oiled.processing.edit', icon: FingerPrintIcon, can: active(Extension.OWCN_MEMBER_ORGANIZATION) },
+      { name: __('Individual Oiled Animal Wash'), route: 'oiled.wash.index', icon: ArchiveBoxIcon,  can: active(Extension.OWCN_MEMBER_ORGANIZATION) }
     ].filter(o => o.can),
     [
       { name: __('Duplicate Patient'), route: 'patients.duplicate.create', icon: DocumentDuplicateIcon, can: can(Abilities.CREATE_PATIENTS) },
@@ -261,7 +268,7 @@ const handleMore = (action) => {
             leaveFromClass="transform opacity-100 scale-100"
             leaveToClass="transform opacity-0 scale-95"
           >
-            <MenuItems class="origin-top-right absolute right-0 z-10 mt-2 -mr-1 w-72 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none divide-y-4 divide-gray-100">
+            <MenuItems class="origin-top-right absolute right-0 z-20 mt-2 -mr-1 w-72 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none divide-y-4 divide-gray-100">
               <div
                 v-for="(dailyTasksOptions, i) in dailyTasksOptionGroups"
                 :key="i"
@@ -306,7 +313,7 @@ const handleMore = (action) => {
             leaveFromClass="transform opacity-100 scale-100"
             leaveToClass="transform opacity-0 scale-95"
           >
-            <MenuItems class="origin-top-right absolute right-0 z-10 mt-2 -mr-1 w-72 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none divide-y-4 divide-gray-100">
+            <MenuItems class="origin-top-right absolute right-0 z-20 mt-2 -mr-1 w-72 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none divide-y-4 divide-gray-100">
               <div
                 v-for="(moreOptions, i) in moreOptionGroups"
                 :key="i"
@@ -351,7 +358,7 @@ const handleMore = (action) => {
             leaveFromClass="transform opacity-100 scale-100"
             leaveToClass="transform opacity-0 scale-95"
           >
-            <MenuItems class="origin-top-right absolute right-0 z-10 mt-2 -mr-1 w-72 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none divide-y-4 divide-gray-100">
+            <MenuItems class="origin-top-right absolute right-0 z-20 mt-2 -mr-1 w-72 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none divide-y-4 divide-gray-100">
               <div
                 v-for="(items, i) in share"
                 :key="i"
