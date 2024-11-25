@@ -2,7 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\NutritionPlanRequest;
+use App\Models\Admission;
+use App\Models\NutritionPlan;
+use App\Models\NutritionPlanIngredient;
+use App\Models\Patient;
+use App\Services\RequestRecordsSaver;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class NutritionPlanController extends Controller
 {
@@ -11,31 +19,30 @@ class NutritionPlanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Patient $patient)
+    public function store(NutritionPlanRequest $request, Patient $patient)
     {
         $patient->validateOwnership(Auth::user()->current_team_id);
 
-        $request->validate([
-            'plan_start_at' => 'required|date',
-            'plan_end_at' => 'nullable|date|after_or_equal:plan_start_at',
-            'frequency' => 'required',
-        ], [
-            'plan_start_at.required' => 'The start date field is required.',
-            'plan_start_at.date' => 'The start date is not a valid date.',
-            'plan_end_at.date' => 'The end date is not a valid date.',
+        $nutritionPlan = NutritionPlan::create([
+            'patient_id' => $patient->id,
+            'name' => $request->input('name'),
+            'started_at' => $request->input('started_at'),
+            'ended_at' => $request->input('ended_at'),
+            'frequency' => $request->input('frequency'),
+            'frequency_unit_id' => $request->input('frequency_unit_id'),
+            'route_id' => $request->input('route_id'),
+            'description' => $request->input('description'),
         ]);
 
-        Nutrition::store($patient->id, [
-            'plan_start_at' => $request->convertDateFromLocal('plan_start_at'),
-            'plan_end_at' => $request->convertDateFromLocal('plan_end_at'),
-            'frequency' => $request->frequency,
-            'name' => $request->name,
-            'route' => $request->route,
-            'description' => $request->description,
-            'amount' => $request->amount
-        ]);
+        $requestRecordsSaver = new RequestRecordsSaver(
+            $nutritionPlan,
+            'ingredients',
+            NutritionPlanIngredient::class,
+            new Collection($request->get('ingredients'))
+        );
+        $requestRecordsSaver->save();
 
-        $caseNumber = Admission::custody(Auth::user()->currentAccount, $patient)->case_number;
+        $caseNumber = Admission::custody(Auth::user()->currentTeam, $patient)->case_number;
 
         return back()
             ->with('flash.notificationHeading', __('Nutrition Plan Created'))
@@ -45,30 +52,28 @@ class NutritionPlanController extends Controller
     /**
      * Update a nutrition.
      */
-    public function update(Request $request, Patient $patient, Nutrition $nutrition)
+    public function update(NutritionPlanRequest $request, Patient $patient, NutritionPlan $nutrition)
     {
-        $request->validate([
-            'plan_start_at' => 'required|date',
-            'plan_end_at' => 'nullable|date|after_or_equal:plan_start_at',
-            'frequency' => 'required',
-        ], [
-            'plan_start_at.required' => 'The start date field is required.',
-            'plan_start_at.date' => 'The start date is not a valid date.',
-            'plan_end_at.date' => 'The end date is not a valid date.',
-        ]);
-
         $nutrition->validateOwnership(Auth::user()->current_team_id)
             ->update([
-                'plan_start_at' => $request->convertDateFromLocal('plan_start_at'),
-                'plan_end_at' => $request->convertDateFromLocal('plan_end_at'),
-                'frequency' => $request->frequency,
-                'name' => $request->name,
-                'route' => $request->route,
-                'description' => $request->description,
-                'amount' => $request->amount
+                'name' => $request->input('name'),
+                'started_at' => $request->input('started_at'),
+                'ended_at' => $request->input('ended_at'),
+                'frequency' => $request->input('frequency'),
+                'frequency_unit_id' => $request->input('frequency_unit_id'),
+                'route_id' => $request->input('route_id'),
+                'description' => $request->input('description'),
             ]);
 
-        $caseNumber = Admission::custody(Auth::user()->currentAccount, $patient)->case_number;
+        $requestRecordsSaver = new RequestRecordsSaver(
+            $nutrition,
+            'ingredients',
+            NutritionPlanIngredient::class,
+            new Collection($request->get('ingredients'))
+        );
+        $requestRecordsSaver->save();
+
+        $caseNumber = Admission::custody(Auth::user()->currentTeam, $patient)->case_number;
 
         return back()
             ->with('flash.notificationHeading', __('Nutrition Plan Updated'))

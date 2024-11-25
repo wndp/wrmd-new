@@ -16,21 +16,19 @@ use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class FormulaController extends Controller
+class FormularyController extends Controller
 {
     /**
      * Display a listing of formulas.
      */
     public function index(Request $request): Response
     {
-        //ExtensionNavigation::emit('maintenance');
-
         $formulas = Formula::where('team_id', Auth::user()->current_team_id)
             ->where('type', FormulaType::PRESCRIPTION->value)
             ->when($request->get('search'), fn ($query, $search) => $query->search($search))
             ->paginate();
 
-        return Inertia::render('Maintenance/Formulas/Index', compact('formulas'));
+        return Inertia::render('Maintenance/Formulary/Index', compact('formulas'));
     }
 
     /**
@@ -50,7 +48,7 @@ class FormulaController extends Controller
             ]),
         ]);
 
-        return Inertia::render('Maintenance/Formulas/Create');
+        return Inertia::render('Maintenance/Formulary/Create');
     }
 
     /**
@@ -100,7 +98,7 @@ class FormulaController extends Controller
 
         $formula->validateOwnership(Auth::user()->current_team_id);
 
-        return Inertia::render('Maintenance/Formulas/Edit', compact('formula'));
+        return Inertia::render('Maintenance/Formulary/Edit', compact('formula'));
     }
 
     /**

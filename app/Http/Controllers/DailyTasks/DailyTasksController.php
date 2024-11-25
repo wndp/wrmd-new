@@ -30,7 +30,9 @@ class DailyTasksController extends Controller
                 AttributeOptionName::DAILY_TASK_DOSAGE_UNITS->value,
                 AttributeOptionName::DAILY_TASK_DOSE_UNITS->value,
                 AttributeOptionName::DAILY_TASK_ROUTES->value,
+                AttributeOptionName::DAILY_TASK_NUTRITION_FREQUENCIES->value,
                 AttributeOptionName::DAILY_TASK_NUTRITION_ROUTES->value,
+                AttributeOptionName::DAILY_TASK_NUTRITION_INGREDIENT_UNITS->value,
             ]),
             'schedulableOptions' => Options::enumsToSelectable(DailyTaskSchedulable::cases())
         ]);
@@ -42,6 +44,7 @@ class DailyTasksController extends Controller
             $mgPerKgId,
             $mlId,
             $gramId,
+            $nutritionFrequencyHoursId
         ] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_SINGLE_DOSE->value],
             [AttributeOptionName::DAILY_TASK_ASSIGNMENTS->value, AttributeOptionUiBehavior::DAILY_TASK_ASSIGNMENT_IS_VETERINARIAN->value],
@@ -49,6 +52,7 @@ class DailyTasksController extends Controller
             [AttributeOptionName::DAILY_TASK_DOSAGE_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_MG_PER_KG->value],
             [AttributeOptionName::DAILY_TASK_DOSE_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_DOSE_UNIT_IS_ML->value],
             [AttributeOptionName::EXAM_WEIGHT_UNITS->value, AttributeOptionUiBehavior::EXAM_WEIGHT_UNITS_IS_G->value],
+            [AttributeOptionName::DAILY_TASK_NUTRITION_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_NUTRITION_FREQUENCY_IS_HOURS->value]
         ]);
 
         Inertia::share([
@@ -58,7 +62,8 @@ class DailyTasksController extends Controller
                 'mgPerMlId',
                 'mgPerKgId',
                 'mlId',
-                'gramId'
+                'gramId',
+                'nutritionFrequencyHoursId'
             )
         ]);
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Actions\NutritionFormulaCalculator;
 use App\Actions\PrescriptionFormulaCalculator;
 use App\Concerns\ValidatesOwnership;
 use App\Enums\FormulaType;
@@ -52,7 +53,11 @@ class Formula extends Model
     public function calculatedAttributes(Patient $patient = null)
     {
         if ($patient) {
-            return PrescriptionFormulaCalculator::run($this, $patient);
+            return match ($this->type) {
+                FormulaType::PRESCRIPTION => PrescriptionFormulaCalculator::run($this, $patient),
+                FormulaType::NUTRITION => NutritionFormulaCalculator::run($this, $patient),
+                default => null,
+            };
         }
 
         return new NullFormulaCalculator($this);

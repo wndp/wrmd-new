@@ -17,11 +17,11 @@ import {
 } from "@heroicons/vue/24/outline";
 
 const props = defineProps({
-    group: Object,
-    hide: Boolean,
-    search: String,
-    filters: Object,
-    hasFocus: Boolean
+  group: Object,
+  hide: Boolean,
+  search: String,
+  filters: Object,
+  hasFocus: Boolean
 });
 
 const emit = defineEmits(['focus', 'print']);
@@ -30,13 +30,13 @@ const allTasksComplete = ref(false);
 
 // axios.delete(this.route('select-patient.destroy'), { maxRedirects: 0 });
 const listPatients = () =>
-    axios.post(route('select-patients.store'), {
-        patients: props.group.patients.map(p => p.patient_id)
-    }).then(() => {
-        router.visit(route('patients.index', {
-            list: 'selected-patients-list'
-        }));
-    });
+  axios.post(route('select-patients.store'), {
+    patients: props.group.patients.map(p => p.patient_id)
+  }).then(() => {
+    router.visit(route('patients.index', {
+      list: 'selected-patients-list'
+    }));
+  });
 
 const toggleAllTasks = () =>{
     if (isAllTasksCompleteInGroup()) {
@@ -117,7 +117,7 @@ onMounted(() => allTasksComplete.value = isAllTasksCompleteInGroup());
                 <button
                   type="button"
                   :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'flex items-center w-full text-left px-4 py-2 text-sm']"
-                  @click="$emit('focus', group.slug)"
+                  @click="emit('focus', group.slug)"
                 >
                   <ViewfinderCircleIcon :class="{'text-red-500': hasFocus, 'w-5 h-5 mr-2': true}" />
                   <span
@@ -131,7 +131,7 @@ onMounted(() => allTasksComplete.value = isAllTasksCompleteInGroup());
                 <button
                   type="button"
                   :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'flex items-center w-full text-left px-4 py-2 text-sm']"
-                  @click="$emit('print', group.slug)"
+                  @click="emit('print', group.slug)"
                 >
                   <PrinterIcon class="w-5 h-5 mr-2" />
                   {{ __('Print Tasks') }}

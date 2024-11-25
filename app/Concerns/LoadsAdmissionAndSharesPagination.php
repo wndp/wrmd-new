@@ -243,7 +243,9 @@ trait LoadsAdmissionAndSharesPagination
                 AttributeOptionName::DAILY_TASK_DOSAGE_UNITS->value,
                 AttributeOptionName::DAILY_TASK_DOSE_UNITS->value,
                 AttributeOptionName::DAILY_TASK_ROUTES->value,
+                AttributeOptionName::DAILY_TASK_NUTRITION_FREQUENCIES->value,
                 AttributeOptionName::DAILY_TASK_NUTRITION_ROUTES->value,
+                AttributeOptionName::DAILY_TASK_NUTRITION_INGREDIENT_UNITS->value,
             ]),
             'includableOptions' => Options::arrayToSelectable(array_filter([
                 'rescuer' => __('Rescuer contact information'),
@@ -269,7 +271,9 @@ trait LoadsAdmissionAndSharesPagination
             $veterinarianId,
             $mgPerMlId,
             $mgPerKgId,
-            $mlId
+            $mlId,
+            $gramId,
+            $nutritionFrequencyHoursId
         ] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_PENDING->value],
             [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_RELEASED->value],
@@ -281,6 +285,8 @@ trait LoadsAdmissionAndSharesPagination
             [AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_CONCENTRATION_UNIT_IS_MG_PER_ML->value],
             [AttributeOptionName::DAILY_TASK_DOSAGE_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_MG_PER_KG->value],
             [AttributeOptionName::DAILY_TASK_DOSE_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_DOSE_UNIT_IS_ML->value],
+            [AttributeOptionName::EXAM_WEIGHT_UNITS->value, AttributeOptionUiBehavior::EXAM_WEIGHT_UNITS_IS_G->value],
+            [AttributeOptionName::DAILY_TASK_NUTRITION_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_NUTRITION_FREQUENCY_IS_HOURS->value]
         ]);
 
         Inertia::share([
@@ -296,7 +302,9 @@ trait LoadsAdmissionAndSharesPagination
                 'veterinarianId',
                 'mgPerMlId',
                 'mgPerKgId',
-                'mlId'
+                'mlId',
+                'gramId',
+                'nutritionFrequencyHoursId'
             )
         ]);
     }

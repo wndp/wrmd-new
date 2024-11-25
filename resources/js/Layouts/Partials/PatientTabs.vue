@@ -143,7 +143,7 @@ const caseQueryString = ref({
 
 const admission = computed(() => usePage().props.admission);
 
-const handleSelectedItemChange = () => handleMore(currentRoute.value);
+const handleSelectedItemChange = () => handleDailyTasksAction(currentRoute.value);
 
 const handleDailyTasksAction = (action) => {
   const dictionary = {
@@ -157,6 +157,8 @@ const handleDailyTasksAction = (action) => {
     dictionary[action]();
   } else if (route().has(action)) {
     router.get(route(action, caseQueryString.value));
+  } else {
+    handleMore(action);
   }
 };
 
@@ -404,7 +406,7 @@ const handleMore = (action) => {
     v-if="showSaveNutrition"
     :patientId="admission.patient_id"
     :show="true"
-    :title="__('New Nutrition')"
+    :title="__('New Nutrition Plan')"
     @close="showSaveNutrition = false"
   />
   <PrintPatientModal

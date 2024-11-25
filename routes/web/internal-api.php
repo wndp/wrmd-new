@@ -4,6 +4,7 @@ use App\Http\Controllers\AdmissionYearController;
 use App\Http\Controllers\Api\V2\CustomTerminologyController;
 use App\Http\Controllers\Api\V2\FieldMetaController;
 use App\Http\Controllers\Api\V2\MediaOrderController;
+use App\Http\Controllers\Api\V2\NutritionCookbookSearchController;
 use App\Http\Controllers\Api\V2\PatientClassificationController;
 use App\Http\Controllers\Api\V2\PatientPredictionsController;
 use App\Http\Controllers\Api\V2\PrescriptionFormularyController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Api\V2\TrainingController;
 use App\Http\Controllers\Api\V2\UnrecognizedAccountPatientController;
 use App\Http\Controllers\Api\V2\UnrecognizedPatientController;
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\Maintenance\NutritionCookbookController;
 use App\Http\Controllers\RelationshipsController;
 use App\Http\Controllers\Settings\UsersController;
 
@@ -62,6 +64,7 @@ Route::prefix('internal-api')->group(function () {
 
     /* Formulary */
     Route::get('prescriptions/formulary/{patient?}', PrescriptionFormularyController::class)->name('formulary.search');
+    Route::get('nutrition/cookbook/{patient?}', NutritionCookbookSearchController::class)->name('cookbook.search');
 
     Route::get('users/search', [UsersController::class, 'search'])->name('users.search');
 

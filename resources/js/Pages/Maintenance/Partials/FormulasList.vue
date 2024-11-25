@@ -5,6 +5,10 @@ defineProps({
   formulas: {
     type: Object,
     required: true
+  },
+  editRoute: {
+    type: String,
+    required: true
   }
 })
 </script>
@@ -36,10 +40,10 @@ defineProps({
                 v-for="formula in formulas.data"
                 :key="formula.id"
               >
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-800">
                   <Link
-                    :href="route('maintenance.formulas.edit', { formula })"
-                    class="hover:text-gray-900"
+                    :href="route(editRoute, { formula })"
+                    class="hover:text-blue-900"
                   >
                     {{ formula.name }}
                   </Link>

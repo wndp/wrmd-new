@@ -146,7 +146,7 @@ export default {
             v-bind="getInputProps()"
             :placeholder="placeholder"
             :name="name"
-            autocomplete="none"
+            autocomplete="off"
             v-on="getInputEventListeners()"
           />
         </slot>

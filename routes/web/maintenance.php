@@ -6,7 +6,8 @@ use App\Http\Controllers\Maintenance\CustomFieldsController;
 use App\Http\Controllers\Maintenance\DeletePatientController;
 use App\Http\Controllers\Maintenance\DeleteYearController;
 use App\Http\Controllers\Maintenance\ExpenseCategoriesController;
-use App\Http\Controllers\Maintenance\FormulaController;
+use App\Http\Controllers\Maintenance\FormularyController;
+use App\Http\Controllers\Maintenance\NutritionCookbookController;
 use App\Http\Controllers\Maintenance\OwcnIoaMaintenanceController;
 use App\Http\Controllers\Maintenance\PaperformsTemplatesController;
 use App\Http\Controllers\Maintenance\TransfersController;
@@ -22,13 +23,22 @@ Route::prefix('maintenance')->name('maintenance.')->group(function () {
     Route::get('/transfers', TransfersController::class)->name('transfers');
     Route::post('/transfers/{transfer:uuid}/uncollaborate', UncollaborateTransferController::class)->name('transfers.uncollaborate');
 
-    Route::controller(FormulaController::class)->middleware('can:viewMaintenance')->group(function () {
-        Route::get('/prescription-formulas', 'index')->name('formulas.index');
-        Route::get('/prescription-formulas/create', 'create')->name('formulas.create');
-        Route::post('/prescription-formulas', 'store')->name('formulas.store');
-        Route::get('/prescription-formulas/{formula}/edit', 'edit')->name('formulas.edit');
-        Route::put('/prescription-formulas/{formula}', 'update')->name('formulas.update');
-        Route::delete('/prescription-formulas/{formula}', 'destroy')->name('formulas.destroy');
+    Route::controller(FormularyController::class)->middleware('can:viewMaintenance')->group(function () {
+        Route::get('/prescription-formulary', 'index')->name('formulas.index');
+        Route::get('/prescription-formulary/create', 'create')->name('formulas.create');
+        Route::post('/prescription-formulary', 'store')->name('formulas.store');
+        Route::get('/prescription-formulary/{formula}/edit', 'edit')->name('formulas.edit');
+        Route::put('/prescription-formulary/{formula}', 'update')->name('formulas.update');
+        Route::delete('/prescription-formulary/{formula}', 'destroy')->name('formulas.destroy');
+    });
+
+    Route::controller(NutritionCookbookController::class)->middleware('can:viewMaintenance')->group(function () {
+        Route::get('/nutrition-cookbook', 'index')->name('cookbook.index');
+        Route::get('/nutrition-cookbook/create', 'create')->name('cookbook.create');
+        Route::post('/nutrition-cookbook', 'store')->name('cookbook.store');
+        Route::get('/nutrition-cookbook/{formula}/edit', 'edit')->name('cookbook.edit');
+        Route::put('/nutrition-cookbook/{formula}', 'update')->name('cookbook.update');
+        Route::delete('/nutrition-cookbook/{formula}', 'destroy')->name('cookbook.destroy');
     });
 
     Route::controller(AutocompleteController::class)->middleware('can:viewMaintenance')->group(function () {

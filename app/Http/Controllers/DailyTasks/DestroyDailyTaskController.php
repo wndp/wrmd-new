@@ -17,7 +17,7 @@ class DestroyDailyTaskController extends Controller
     /**
      * Remove a daily-tasks from storage.
      */
-    public function __invoke(string $resource, int $resourceId)
+    public function __invoke(string $resource, string $resourceId)
     {
         $schedulable = $this->getSchedulable($resource, $resourceId)
             ->validateOwnership(Auth::user()->current_team_id);

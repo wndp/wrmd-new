@@ -134,7 +134,7 @@ onMounted(() => emits('ready', {tabGroups: dailyTasks}))
     v-if="showSaveNutrition"
     :patientId="admission.patient_id"
     :show="true"
-    :title="__('New Nutrition')"
+    :title="__('New Nutrition Plan')"
     @close="showSaveNutrition = false"
   />
 </template>

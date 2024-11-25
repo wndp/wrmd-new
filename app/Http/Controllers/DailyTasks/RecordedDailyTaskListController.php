@@ -59,7 +59,7 @@ class RecordedDailyTaskListController extends Controller
     /**
      * Remove a daily-tasks task check from storage.
      */
-    public function destroy(Request $request, string $resource, int $resourceId): JsonResponse
+    public function destroy(Request $request, string $resource, string $resourceId): JsonResponse
     {
         $data = $request->validate([
             'occurrence' => 'required|integer|in:1,2,3,4',

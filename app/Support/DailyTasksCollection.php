@@ -267,7 +267,7 @@ class DailyTasksCollection extends Collection
             'area' => $model->patient->locations->first()?->area,
             'enclosure' => $model->patient->current_location,
             'assignment' => $model->assigned_to,
-            'model' => $model->attributesToArray(),
+            'model' => $model->toArray(),
         ];
     }
 

@@ -47,25 +47,6 @@ class ScheduledTasksController extends Controller
             ])
             ->values();
 
-
-        // $tasks[] = Recheck::where('patient_id', $admission->patient_id)
-        //     ->with('recordedTasks.user')
-        //     ->get();
-
-        // $tasks[] = Prescription::where('patient_id', $admission->patient_id)
-        //     ->with('recordedTasks.user')
-        //     ->get();
-
-        // $tasks = collect($tasks)
-        //     ->collapse()
-        //     ->each->append('type')
-        //     ->sortBy([
-        //         fn ($task) => $task->start_date->timestamp, SORT_NUMERIC, (settings('logOrder') === 'desc'),
-        //         fn ($task) => $task->created_at->timestamp, SORT_NUMERIC, (settings('logOrder') === 'desc'),
-        //     ])
-        //     ->values()
-        //     ->dd();
-
         return Inertia::render('Patients/ScheduledTasks', compact('tasks'));
     }
 }

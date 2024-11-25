@@ -11,28 +11,28 @@ import {__} from '@/Composables/Translate';
 const props = defineProps({
   formula: {
     type: Object,
-    default: () => ({})
+    required: true
   },
 });
 
 const form = useForm({});
 const confirmingDeletion = ref(false);
 
-const deleteFormula = () => form.delete(route('maintenance.formulas.destroy', props.formula));
+const deleteRecipe = () => form.delete(route('maintenance.cookbook.destroy', props.formula));
 </script>
 
 <template>
   <div>
     <Panel>
       <template #title>
-        {{ __('Delete Formula') }}
+        {{ __('Delete Recipe') }}
       </template>
       <template #content>
         <Alert
           class="col-span-6"
           color="red"
         >
-          {{ __('Deleting a formula is safe. None of the prescriptions used by this formula will be deleted.') }}
+          {{ __('Deleting a recipe is safe. None of the nutrition plans used by this recipe will be deleted.') }}
         </Alert>
       </template>
       <template #actions>
@@ -41,7 +41,7 @@ const deleteFormula = () => form.delete(route('maintenance.formulas.destroy', pr
           :disabled="form.processing"
           @click="confirmingDeletion = true"
         >
-          {{ __('Delete Prescription Formula') }}
+          {{ __('Delete Recipe') }}
         </DangerButton>
       </template>
     </Panel>
@@ -51,11 +51,11 @@ const deleteFormula = () => form.delete(route('maintenance.formulas.destroy', pr
       @close="confirmingDeletion = false"
     >
       <template #title>
-        {{ __('Delete Formula') }}
+        {{ __('Delete Recipe') }}
       </template>
 
       <template #content>
-        <strong>{{ __('Are you sure you want to delete this formula?') }}</strong>
+        <strong>{{ __('Are you sure you want to delete this recipe?') }}</strong>
         <p class="my-8 text-sm text-gray-700">
           {{ formula.defaults_for_humans }}
         </p>
@@ -72,9 +72,9 @@ const deleteFormula = () => form.delete(route('maintenance.formulas.destroy', pr
         <DangerButton
           :class="{ 'opacity-25': form.processing }"
           :disabled="form.processing"
-          @click="deleteFormula"
+          @click="deleteRecipe"
         >
-          {{ __('Delete Formula') }}
+          {{ __('Delete Recipe') }}
         </DangerButton>
       </template>
     </ConfirmationModal>

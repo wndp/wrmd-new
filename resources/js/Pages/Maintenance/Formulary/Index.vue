@@ -101,6 +101,7 @@ const search = () => debounce(function() {
         </div>
         <FormulasList
           :formulas="formulas"
+          editRoute="maintenance.formulas.edit"
           class="mt-2"
         />
         <Paginator

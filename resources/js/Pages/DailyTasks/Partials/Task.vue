@@ -52,7 +52,7 @@ const editModal = computed(() => {
   switch (props.task.type) {
     case 'recheck': return SaveRecheckModal;
     case 'prescription': return SavePrescriptionModal;
-    case 'nutrition': return SaveNutritionModal;
+    case 'nutrition-plan': return SaveNutritionModal;
     default:
     return '';
   }
@@ -72,7 +72,7 @@ const editModalProps = computed(() => {
         prescription: props.task.model,
         patientId: props.task.model.patient_id
       };
-    case 'nutrition':
+    case 'nutrition-plan':
       return {
         title: __('Update Nutrition Plan'),
         nutrition: props.task.model,

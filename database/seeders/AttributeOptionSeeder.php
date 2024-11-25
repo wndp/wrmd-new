@@ -700,7 +700,41 @@ class AttributeOptionSeeder extends Seeder
             __('Leave in enclosure'),
             __('Hand feed'),
             __('Force feed'),
+            __('Tube feed'),
             __('Gavage'),
+
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::DAILY_TASK_NUTRITION_FREQUENCIES, [
+            'min' => __('Minutes'),
+            'hrs' => __('Hours'),
+            'days' => __('Days'),
+            'wks' => __('Weeks'),
+            'sid' => __('Once daily (sid)'),
+            'bid' => __('2 times daily (bid)'),
+            'tid' => __('3 times daily (tid)'),
+        ]);
+        $this->createOrUpdateAttributeOptionUiBehaviors(
+            AttributeOptionName::DAILY_TASK_NUTRITION_FREQUENCIES,
+            __('Hours'),
+            AttributeOptionUiBehavior::DAILY_TASK_NUTRITION_FREQUENCY_IS_HOURS,
+        );
+
+        $this->createOrUpdateAttributes(AttributeOptionName::DAILY_TASK_NUTRITION_ROUTES, [
+            __('Leave in enclosure'),
+            __('Hand feed'),
+            __('Force feed'),
+            __('Gavage'),
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::DAILY_TASK_NUTRITION_INGREDIENT_UNITS, [
+            __('Milliliters'),
+            __('Grams'),
+            __('Kilograms'),
+            __('Cups'),
+            __('Teaspoons'),
+            __('Tablespoons'),
+            __('Bowls'),
         ]);
 
         $this->createOrUpdateAttributes(AttributeOptionName::NECROPSY_CARCASS_CONDITIONS, [

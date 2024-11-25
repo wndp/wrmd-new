@@ -74,11 +74,6 @@ class Prescription extends Model implements Schedulable
         // 'badge_color',
     ];
 
-    /**
-     * The relationships that should be touched on save.
-     *
-     * @var array
-     */
     protected $touches = [
         'patient',
     ];

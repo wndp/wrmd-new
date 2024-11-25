@@ -7,7 +7,7 @@ import DailyTaskGroup from './Partials/DailyTaskGroup.vue';
 import TextInput from '@/Components/FormElements/TextInput.vue';
 import Toggle from '@/Components/FormElements/Toggle.vue';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
-import { PrinterIcon } from '@heroicons/vue/24/outline';
+import {PrinterIcon} from '@heroicons/vue/24/outline';
 import omitBy from 'lodash/omitBy';
 import isNil from 'lodash/isNil';
 import axios from 'axios';

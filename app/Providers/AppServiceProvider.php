@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Api2Pdf\Api2Pdf;
+use App\Models\NutritionPlan;
 use App\Models\Patient;
 use App\PdfApiInterface;
 use App\Repositories\AdministrativeDivision;
@@ -60,6 +61,7 @@ class AppServiceProvider extends ServiceProvider
             'cytology' => \App\Models\LabCytologyResult::class,
             'fecal' => \App\Models\LabFecalResult::class,
             'labReport' => \App\Models\LabReport::class,
+            'nutrition_plan' => NutritionPlan::class,
             'patient' => \App\Models\Patient::class,
             'person' => \App\Models\Person::class,
             'prescription' => \App\Models\Prescription::Class,

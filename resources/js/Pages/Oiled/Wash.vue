@@ -63,6 +63,8 @@ defineProps({
         :key="wash.id"
         :wash="wash"
         :patientId="patient.id"
+        :preTreatmentIsNoneId="preTreatmentIsNoneId"
+        :washTypeIsInitialId="washTypeIsInitialId"
       />
     </div>
     <WashModal

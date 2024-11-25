@@ -12,11 +12,11 @@ import {can} from '@/Composables/Can';
 import {Abilities} from '@/Enums/Abilities';
 
 const props = defineProps({
-    patient: Object,
-    slug: String,
-    filters: Object,
-    search: String,
-    hide: Boolean
+  patient: Object,
+  slug: String,
+  filters: Object,
+  search: String,
+  hide: Boolean
 })
 
 const tasksComplete = ref(false);
