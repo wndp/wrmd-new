@@ -56,21 +56,39 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Relation::enforceMorphMap([
+            'banding' => \App\Models\Banding::class,
+            'care_log' => \App\Models\CareLog::class,
+            'communication' => \App\Models\Communication::class,
             'cbc' => \App\Models\LabCbcResult::class,
             'chemistry' => \App\Models\LabChemistryResult::class,
             'cytology' => \App\Models\LabCytologyResult::class,
+            'custom_field' => \App\Models\CustomField::class,
+            'donation' => \App\Models\Donation::class,
+            'expense_category' => \App\Models\ExpenseCategory::class,
+            'expense_transaction' => \App\Models\ExpenseTransaction::class,
+            'exam' => \App\Models\Exam::class,
             'fecal' => \App\Models\LabFecalResult::class,
+            'formula' => \App\Models\Formula::class,
+            'incident' => \App\Models\Incident::class,
             'labReport' => \App\Models\LabReport::class,
+            'media' => \App\Models\Media::class,
+            'morphometric' => \App\Models\Morphometric::class,
+            'necropsy' => \App\Models\Necropsy::class,
             'nutrition_plan' => NutritionPlan::class,
+            'nutrition_plan_ingredient' => \App\Models\NutritionPlanIngredient::class,
+            'oil_processing' => \App\Models\OilProcessing::class,
             'patient' => \App\Models\Patient::class,
+            'patient_location' => \App\Models\PatientLocation::class,
             'person' => \App\Models\Person::class,
-            'prescription' => \App\Models\Prescription::Class,
+            'prescription' => \App\Models\Prescription::class,
             'recheck' => \App\Models\Recheck::class,
             'settings' => \App\Models\Setting::class,
             'team' => \App\Models\Team::class,
             'toxicology' => \App\Models\LabToxicologyResult::class,
             'urinalysis' => \App\Models\LabUrinalysisResult::class,
             'user' => \App\Models\User::class,
+            'oil_spill_event' => \App\Models\OilSpillEvent::class,
+            'oil_waterproofing_assessment' => \App\Models\OilWaterproofingAssessment::class
         ]);
 
         Route::bind('voidedPatient', fn ($value) => Patient::onlyVoided()->findOrFail($value));

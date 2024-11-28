@@ -175,6 +175,7 @@ trait LoadsAdmissionAndSharesPagination
                     'genus' => $admission->patient->taxon?->genus,
                     'species' => $admission->patient->taxon?->species,
                     'binomen' => $admission->patient->taxon?->binomen,
+                    'alpha_code' => $admission->patient->taxon?->alpha_code,
                     'bow_code' => $admission->patient->taxon?->bow_code,
                     'bow_url' => $admission->patient->taxon?->bow_url,
                     'inaturalist_taxon_id' => $admission->patient->taxon?->inaturalist_taxon_id,

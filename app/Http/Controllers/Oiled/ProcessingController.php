@@ -19,7 +19,7 @@ class ProcessingController extends Controller
     {
         $admission = $this->loadAdmissionAndSharePagination();
         $admission->patient->load('rescuer', 'oilProcessing');
-        $admission->patient->oilProcessing->append('collected_at', 'processed_at');
+        $admission->patient->oilProcessing?->append('collected_at', 'received_at_primary_care_at', 'processed_at');
 
         if (! ($teamIsInPossession = $admission->patient->team_possession_id === Auth::user()->current_team_id)) {
             $admission->load('patient.possession');
@@ -33,11 +33,11 @@ class ProcessingController extends Controller
                 AttributeOptionName::OILED_PROCESSING_OILING_PERCENTAGES->value,
                 AttributeOptionName::OILED_PROCESSING_OILING_DEPTHS->value,
                 AttributeOptionName::OILED_PROCESSING_OILING_LOCATIONS->value,
-                AttributeOptionName::OILED_PROCESSING_OIL_TYPES->value,
+                AttributeOptionName::OILED_PROCESSING_OIL_COLORS->value,
+                AttributeOptionName::OILED_PROCESSING_OIL_CONDITIONS->value,
                 AttributeOptionName::OILED_PROCESSING_EVIDENCES->value,
                 AttributeOptionName::OILED_PROCESSING_CARCASS_CONDITIONS->value,
                 AttributeOptionName::OILED_PROCESSING_EXTENT_OF_SCAVENGINGS->value,
-                AttributeOptionName::OILED_PROCESSING_OIL_CONDITION->value,
                 AttributeOptionName::PATIENT_DISPOSITIONS->value,
                 AttributeOptionName::PATIENT_RELEASE_TYPES->value,
                 AttributeOptionName::PATIENT_TRANSFER_TYPES->value,

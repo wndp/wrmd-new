@@ -35,44 +35,30 @@ const doSubmit = () => emit('submitted');
     </template>
     <template #content>
       <FormRow
-        id="processor"
+        id="processed_by"
         :label="__('Processor Full Name')"
         :required="true"
-        class="col-span-6 md:col-span-3"
+        class="col-span-6 md:col-span-2"
       >
         <TextInput
-          v-model="form.processor"
-          name="processor"
+          v-model="form.processed_by"
+          name="processed_by"
         />
         <InputError
-          :message="form.errors.processor"
-          class="mt-2"
-        />
-      </FormRow>
-      <FormRow
-        id="type_of_oil_id"
-        :label="__('Oiling Type')"
-        class="col-span-6 md:col-span-3"
-      >
-        <SelectInput
-          v-model="form.type_of_oil_id"
-          name="type_of_oil_id"
-          :options="$page.props.options.oiledProcessingOilTypesOptions"
-        />
-        <InputError
-          :message="form.errors.type_of_oil_id"
+          :message="form.errors.processed_by"
           class="mt-2"
         />
       </FormRow>
       <FormRow
         id="oiling_depth_id"
         :label="__('Oiling Depth')"
-        class="col-span-6 md:col-span-3"
+        class="col-span-6 md:col-span-2"
       >
         <SelectInput
           v-model="form.oiling_depth_id"
           name="oiling_depth_id"
           :options="$page.props.options.oiledProcessingOilingDepthsOptions"
+          hasBlankOption
         />
         <p class="col-start-2 col-span-2 mt-1 text-sm text-gray-500">{{ __('Select greatest depth observed') }}</p>
         <InputError
@@ -83,12 +69,13 @@ const doSubmit = () => emit('submitted');
       <FormRow
         id="oiling_status_id"
         :label="__('Oiling Status')"
-        class="col-span-6 md:col-span-3"
+        class="col-span-6 md:col-span-2"
       >
         <SelectInput
           v-model="form.oiling_status_id"
           name="oiling_status_id"
           :options="$page.props.options.oiledProcessingStatusesOptions"
+          hasBlankOption
         />
         <p class="col-start-2 col-span-2 mt-1 text-sm text-gray-500">{{ __('Hierarchical (choose first option that applies)') }}</p>
         <InputError
@@ -99,12 +86,13 @@ const doSubmit = () => emit('submitted');
       <FormRow
         id="oiling_location_id"
         :label="__('Oiling Location')"
-        class="col-span-6 md:col-span-3"
+        class="col-span-6 md:col-span-2"
       >
         <SelectInput
           v-model="form.oiling_location_id"
           name="oiling_location_id"
           :options="$page.props.options.oiledProcessingOilingLocationsOptions"
+          hasBlankOption
         />
         <InputError
           :message="form.errors.oiling_location_id"
@@ -114,15 +102,48 @@ const doSubmit = () => emit('submitted');
       <FormRow
         id="oiling_percentage_id"
         :label="__('Oiling Percentage')"
-        class="col-span-6 md:col-span-3"
+        class="col-span-6 md:col-span-2"
       >
         <SelectInput
           v-model="form.oiling_percentage_id"
           name="oiling_percentage_id"
           :options="$page.props.options.oiledProcessingOilingPercentagesOptions"
+          hasBlankOption
         />
         <InputError
           :message="form.errors.oiling_percentage_id"
+          class="mt-2"
+        />
+      </FormRow>
+      <FormRow
+        id="oil_condition_id"
+        :label="__('Oil Condition')"
+        class="col-span-6 md:col-span-2"
+      >
+        <SelectInput
+          v-model="form.oil_condition_id"
+          name="oil_condition_id"
+          :options="$page.props.options.oiledProcessingOilConditionsOptions"
+          hasBlankOption
+        />
+        <InputError
+          :message="form.errors.oil_condition_id"
+          class="mt-2"
+        />
+      </FormRow>
+      <FormRow
+        id="color_of_oil_id"
+        :label="__('Oiling Color')"
+        class="col-span-6 md:col-span-2"
+      >
+        <SelectInput
+          v-model="form.color_of_oil_id"
+          name="color_of_oil_id"
+          :options="$page.props.options.oiledProcessingOilColorsOptions"
+          hasBlankOption
+        />
+        <InputError
+          :message="form.errors.color_of_oil_id"
           class="mt-2"
         />
       </FormRow>

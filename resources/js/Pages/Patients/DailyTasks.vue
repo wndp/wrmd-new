@@ -21,7 +21,7 @@ const props = defineProps({
 
 const form = useForm({
   date: props.filters.date,
-  c: usePage().props.admission.id,
+  c: usePage().props.admission.case_id,
   y: usePage().props.admission.case_year
 });
 

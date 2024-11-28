@@ -22,7 +22,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Team extends JetstreamTeam
 {
-    use Billable;
+    //use Billable;
     use HasFactory;
     use HasProfilePhoto;
     use HasSubAccounts;
@@ -90,7 +90,8 @@ class Team extends JetstreamTeam
 
     protected function formattedInlineAddress(): Attribute
     {
-        return Attribute::get(fn () =>
+        return Attribute::get(
+            fn () =>
             app(AdministrativeDivision::class)->inlineAddress(
                 alpha2CountryCode: $this->country,
                 subdivision: $this->subdivision,

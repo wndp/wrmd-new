@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class OilConditioning extends Model implements Summarizable
+class OilWaterproofingAssessment extends Model implements Summarizable
 {
     use HasFactory;
     use HasVersion7Uuids;
@@ -29,9 +29,8 @@ class OilConditioning extends Model implements Summarizable
         'buoyancy_id',
         'hauled_out_id',
         'preening_id',
-        'self_feeding_id',
-        'flighted_id',
         'areas_wet_to_skin',
+        'areas_surface_wet',
         'comments',
         'examiner',
     ];
@@ -43,9 +42,8 @@ class OilConditioning extends Model implements Summarizable
         'buoyancy_id' => 'integer',
         'hauled_out_id' => 'integer',
         'preening_id' => 'integer',
-        'self_feeding_id' => 'integer',
-        'flighted_id' => 'integer',
         'areas_wet_to_skin' => 'array',
+        'areas_surface_wet' => 'array',
         'comments' => 'string',
         'examiner' => 'string',
     ];
@@ -74,16 +72,6 @@ class OilConditioning extends Model implements Summarizable
         return $this->belongsTo(AttributeOption::class, 'preening_id');
     }
 
-    public function selfFeeding()
-    {
-        return $this->belongsTo(AttributeOption::class, 'self_feeding_id');
-    }
-
-    public function flighted()
-    {
-        return $this->belongsTo(AttributeOption::class, 'flighted_id');
-    }
-
     protected function evaluatedAt(): Attribute
     {
         return Attribute::get(function () {
@@ -97,15 +85,15 @@ class OilConditioning extends Model implements Summarizable
     public function summaryBody(): Attribute
     {
         return Attribute::get(function () {
-                $keys = ['buoyancy_id', 'hauled_out_id', 'preening_id', 'comments', 'examiner'];
+            $keys = ['buoyancy_id', 'hauled_out_id', 'preening_id', 'comments', 'examiner'];
 
-                $details[] = $this->areas_wet_to_skin ? '<strong>Areas WTS:</strong> '.implode(', ', $this->areas_wet_to_skin) : '';
+            $details[] = $this->areas_wet_to_skin ? '<strong>Areas WTS:</strong> '.implode(', ', $this->areas_wet_to_skin) : '';
 
-                foreach ($keys as $key) {
-                    $details[] = $this->$key ? '<strong>'.ucwords(str_replace('_', ' ', $key)).':</strong> '.$this->$key : '';
-                }
+            foreach ($keys as $key) {
+                $details[] = $this->$key ? '<strong>'.ucwords(str_replace('_', ' ', $key)).':</strong> '.$this->$key : '';
+            }
 
-                return implode(', ', array_filter($details));
+            return implode(', ', array_filter($details));
         });
     }
 

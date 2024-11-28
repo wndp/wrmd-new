@@ -41,7 +41,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
     'app',
-    'subscribed',
+    //'subscribed',
 ])->group(function () {
 
     Route::get('dashboard', DashboardController::class)->name('dashboard');

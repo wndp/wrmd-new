@@ -13,6 +13,8 @@ enum Entity: string
     case MORPHOMETRIC = 'morphometrics';
     case NECROPSY = 'necropsies';
     case LAB_REPORT = 'lab_reports';
+    case NUTRITION_PLAN = 'nutrition_plans';
+    case NUTRITION_PLAN_INGREDIENT = 'nutrition_plan_ingredient';
 
     public function label(): string
     {
@@ -25,6 +27,8 @@ enum Entity: string
             self::MORPHOMETRIC => __('Morphometrics'),
             self::NECROPSY => __('Necropsy'),
             self::LAB_REPORT => __('Lab Reports'),
+            self::NUTRITION_PLAN => __('Nutrition Plan'),
+            self::NUTRITION_PLAN_INGREDIENT => __('Nutrition Plan Ingredient'),
         };
     }
 
@@ -39,6 +43,8 @@ enum Entity: string
             self::MORPHOMETRIC => 'morphometric',
             self::NECROPSY => 'necropsy',
             self::LAB_REPORT => 'labReports',
+            self::NUTRITION_PLAN => 'nutritionPlans',
+            self::NUTRITION_PLAN_INGREDIENT => null
         };
     }
 
@@ -47,10 +53,12 @@ enum Entity: string
         return match ($this) {
             self::PATIENT,
             self::MORPHOMETRIC,
-            self::NECROPSY => false,
+            self::NECROPSY,
+            self::NUTRITION_PLAN_INGREDIENT => false,
             self::CARE_LOGS,
             self::PATIENT_LOCATIONS,
             self::PRESCRIPTIONS,
+            self::NUTRITION_PLAN,
             self::EXAMS,
             self::LAB_REPORT => true,
         };

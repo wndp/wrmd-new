@@ -47,7 +47,7 @@ const doSubmit = () => emit('submitted');
       {{ __('Evidence') }}
     </template>
     <template #content>
-      <div class="col-span-3">
+      <div class="col-span-6 lg:col-span-3">
         <MediaUploader
           :resource="MediaResource.PATIENT"
           :resourceId="patientId"
@@ -58,14 +58,12 @@ const doSubmit = () => emit('submitted');
           :media="media"
           :resource="MediaResource.PATIENT"
           :resourceId="patientId"
-          class="mt-8"
         />
       </div>
-      <div class="col-span-3 space-y-4">
+      <div class="col-span-6 lg:col-span-3 space-y-4">
         <FormRow
           id="evidence_collected"
           :required="true"
-          class=""
         >
           <div class="flex flex-wrap gap-x-4 gap-y-3 sapce-between">
             <div
@@ -98,7 +96,6 @@ const doSubmit = () => emit('submitted');
           id="evidence_collected_by"
           :label="__('Evidence Collected By')"
           :required="true"
-          class="col-span-6 md:col-span-3"
         >
           <TextInput
             v-model="form.evidence_collected_by"
@@ -113,7 +110,6 @@ const doSubmit = () => emit('submitted');
           id="processed_at"
           :label="__('Date Processed')"
           :required="true"
-          class="col-span-6 md:col-span-3"
         >
           <DatePicker
             id="processed_at"

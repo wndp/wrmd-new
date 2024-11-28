@@ -6,6 +6,7 @@ use App\Collections\ExpenseTransactionCollection;
 use App\Models\ExpenseTransaction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ExpenseTransactionCollectionTest extends TestCase
 {

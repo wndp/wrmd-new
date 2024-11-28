@@ -1,5 +1,5 @@
 <script setup>
-import {ref, computed} from 'vue';
+import {ref, computed, inject} from 'vue';
 import {usePage, router} from '@inertiajs/vue3';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/24/outline';
@@ -17,7 +17,7 @@ import {
   TagIcon,
   CakeIcon,
   PhotoIcon,
-  ClipboardDocumentListIcon,
+  LifebuoyIcon,
   BeakerIcon,
   ScissorsIcon,
   SwatchIcon,
@@ -31,8 +31,7 @@ import {
   ArrowDownTrayIcon,
   AtSymbolIcon,
   ShareIcon,
-  TruckIcon,
-  ChatBubbleBottomCenterIcon
+  TruckIcon
 } from "@heroicons/vue/24/outline";
 import {__} from '@/Composables/Translate';
 import {can} from '@/Composables/Can';
@@ -40,6 +39,8 @@ import {Abilities} from '@/Enums/Abilities';
 import {active} from '@/Composables/Extensions';
 import {Extension} from '@/Enums/Extension';
 import axios from 'axios';
+
+const route = inject('route');
 
 const props = defineProps({
   patientId: {
@@ -59,10 +60,10 @@ const showEmailModal = ref(false);
 const currentRoute = ref(route().current());
 
 const tabs = active(Extension.OIL_SPILL) ? ref([
-  { name: __('Field Stabilization'), route: 'oiled.field.edit', can: true },
-  { name: __('Processing'), route: 'oiled.processing.edit', can: true },
-  { name: __('Wash'), route: 'oiled.wash.index', can: true },
-  { name: __('Conditioning'), route: 'oiled.conditioning.index', can: true },
+  { name: __('Case Summary'), route: 'oiled.summary.edit', can: usePage().props.subscription.isProPlan && active(Extension.OIL_SPILL), current: route().current('oiled.summary.edit'), },
+  { name: __('Exams'), route: 'patients.exam.index', can: active(Extension.DAILY_EXAM), current: route().current('patients.exam.*') },
+  { name: __('Processing'), route: 'oiled.processing.edit', can: true, current: route().current('oiled.processing.*') },
+  { name: __('Wash'), route: 'oiled.wash.index', can: true, current: route().current('oiled.wash.*') },
 ].filter(o => o.can)) : ref([
   { name: __('Rescuer'), route: 'patients.rescuer.edit', can: can(Abilities.COMPUTED_VIEW_RESCUER) },
   { name: __('Initial Care'), route: 'patients.initial.edit', can: true },
@@ -86,9 +87,8 @@ const dailyTasksOptionGroups = ref([
 
 const moreOptionGroups = ref([
     [
-      { name: __('Case Summary'), route: 'oiled.summary.edit', icon: ChatBubbleBottomCenterIcon, can: usePage().props.subscription.isProPlan && active(Extension.OIL_SPILL) },
+      { name: __('Waterproofing Assessment'), icon: LifebuoyIcon, route: 'oiled.waterproofing_assessment.index', can: true },
       { name: __('Attachments'), route: 'patients.attachments.edit', icon: PhotoIcon, can: usePage().props.subscription.isProPlan && active(Extension.ATTACHMENTS) },
-      { name: __('Daily Exams'), route: 'patients.exam.index', icon: ClipboardDocumentListIcon, can: active(Extension.DAILY_EXAM) },
       { name: __('Lab Reports'), route: 'patients.lab-reports.index', icon: BeakerIcon, can: active(Extension.LAB_REPORTS) },
       { name: __('Necropsy'), route: 'patients.necropsy.edit', icon: ScissorsIcon, can: active(Extension.NECROPSY) },
       { name: __('Banding and Morphometrics'), route: 'patients.banding_morphometrics.edit', icon: SwatchIcon, can: active(Extension.BANDING_MORPHOMETRICS) },
@@ -245,8 +245,8 @@ const handleMore = (action) => {
           v-for="tab in tabs"
           :key="tab.name"
           :href="route(tab.route, caseQueryString)"
-          :class="[tab.route === currentRoute ? 'bg-blue-400 text-gray-800 rounded-md' : 'border-transparent text-gray-600 hover:border-blue-400 hover:text-gray-900', 'px-3 py-2 font-bold text-sm whitespace-nowrap border-b-2']"
-          :aria-current="tab.route === currentRoute ? 'page' : undefined"
+          :class="[tab.current ? 'bg-blue-400 text-gray-800 rounded-md' : 'border-transparent text-gray-600 hover:border-blue-400 hover:text-gray-900', 'px-3 py-2 font-bold text-sm whitespace-nowrap border-b-2']"
+          :aria-current="tab.current ? 'page' : undefined"
         >
           {{ tab.name }}
         </Link>

@@ -217,6 +217,11 @@ class Patient extends Model implements HasMedia
         return $this->hasMany(Prescription::class);
     }
 
+    public function nutritionPlans(): HasMany
+    {
+        return $this->hasMany(NutritionPlan::class);
+    }
+
     public function oilProcessing(): HasOne
     {
         return $this->hasOne(OilProcessing::class);
@@ -227,9 +232,9 @@ class Patient extends Model implements HasMedia
         return $this->hasMany(OilWash::class);
     }
 
-    public function oilConditionings(): HasMany
+    public function oilWaterproofingAssessments(): HasMany
     {
-        return $this->hasMany(OilConditioning::class);
+        return $this->hasMany(OilWaterproofingAssessment::class);
     }
 
     public function labReports(): HasMany
@@ -241,7 +246,7 @@ class Patient extends Model implements HasMedia
     {
         return $this->morphedByMany(LabFecalResult::class, 'lab_result', 'lab_reports')->withPivot([
             'accession_number',
-            'analysis_facility_id',
+            'analysis_facility',
             'analysis_date_at',
             'technician',
             'comments',
@@ -252,7 +257,7 @@ class Patient extends Model implements HasMedia
     {
         return $this->morphedByMany(LabCbcResult::class, 'lab_result', 'lab_reports')->withPivot([
             'accession_number',
-            'analysis_facility_id',
+            'analysis_facility',
             'analysis_date_at',
             'technician',
             'comments',
@@ -263,7 +268,7 @@ class Patient extends Model implements HasMedia
     {
         return $this->morphedByMany(LabCytologyResult::class, 'lab_result', 'lab_reports')->withPivot([
             'accession_number',
-            'analysis_facility_id',
+            'analysis_facility',
             'analysis_date_at',
             'technician',
             'comments',
@@ -274,7 +279,7 @@ class Patient extends Model implements HasMedia
     {
         return $this->morphedByMany(LabChemistryResult::class, 'lab_result', 'lab_reports')->withPivot([
             'accession_number',
-            'analysis_facility_id',
+            'analysis_facility',
             'analysis_date_at',
             'technician',
             'comments',
@@ -285,7 +290,7 @@ class Patient extends Model implements HasMedia
     {
         return $this->morphedByMany(LabUrinalysisResult::class, 'lab_result', 'lab_reports')->withPivot([
             'accession_number',
-            'analysis_facility_id',
+            'analysis_facility',
             'analysis_date_at',
             'technician',
             'comments',
@@ -296,7 +301,7 @@ class Patient extends Model implements HasMedia
     {
         return $this->morphedByMany(LabToxicologyResult::class, 'lab_result', 'lab_reports')->withPivot([
             'accession_number',
-            'analysis_facility_id',
+            'analysis_facility',
             'analysis_date_at',
             'technician',
             'comments',

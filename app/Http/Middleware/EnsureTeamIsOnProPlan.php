@@ -16,6 +16,9 @@ class EnsureTeamIsOnProPlan
      */
     public function handle(Request $request, Closure $next): Response
     {
+        //temp
+        return $next($request);
+
         abort_unless(
             $request->user()->currentTeam->sparkPlan()?->name === Plan::PRO->value,
             Response::HTTP_FORBIDDEN

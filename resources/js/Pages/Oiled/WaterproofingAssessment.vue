@@ -3,8 +3,8 @@ import {ref} from 'vue'
 import { PlusIcon } from '@heroicons/vue/24/solid';
 import PatientLayout from '@/Layouts/PatientLayout.vue';
 import Panel from '@/Components/Panel.vue';
-import ConditioningModal from './Partials/ConditioningModal.vue';
-import ConditioningCard from './Partials/ConditioningCard.vue';
+import WaterproofingAssessmentModal from './Partials/WaterproofingAssessmentModal.vue';
+import WaterproofingAssessmentCard from './Partials/WaterproofingAssessmentCard.vue';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
 import {__} from '@/Composables/Translate';
 
@@ -13,7 +13,7 @@ defineProps({
     type: Object,
     required: true
   },
-  conditionings: {
+  assessments: {
     type: Array,
     required: true
   },
@@ -27,22 +27,22 @@ defineProps({
   // },
 });
 
-const showConditioningModal = ref(false);
+const showWaterproofingAssessmentModal = ref(false);
 </script>
 
 <template>
   <PatientLayout title="Conditioning">
-    <Panel v-if="conditionings.length === 0">
+    <Panel v-if="assessments.length === 0">
       <template #title>
-        {{ __('No Conditioning Records Entered') }}
+        {{ __('No Waterproofing Assessments Entered') }}
       </template>
       <template #content>
         <div class="col-span-3">
           <PrimaryButton
             class="flex items-center"
-            @click="showConditioningModal = true"
+            @click="showWaterproofingAssessmentModal = true"
           >
-            <PlusIcon class="h-5 w-5 mr-2" /> Add Conditioning
+            <PlusIcon class="h-5 w-5 mr-2" /> {{ __('Add New Waterproofing Assessment') }}
           </PrimaryButton>
         </div>
       </template>
@@ -53,22 +53,22 @@ const showConditioningModal = ref(false);
     >
       <PrimaryButton
         class="flex items-center"
-        @click="showConditioningModal = true"
+        @click="showWaterproofingAssessmentModal = true"
       >
-        <PlusIcon class="h-5 w-5 mr-2" /> Add New Conditioning Evaluation
+        <PlusIcon class="h-5 w-5 mr-2" /> {{ __('Add New Waterproofing Assessment') }}
       </PrimaryButton>
-      <ConditioningCard
-        v-for="conditioning in conditionings"
-        :key="conditioning.id"
-        :conditioning="conditioning"
+      <WaterproofingAssessmentCard
+        v-for="assessment in assessments"
+        :key="assessment.id"
+        :assessment="assessment"
         :patientId="patient.id"
       />
     </div>
-    <ConditioningModal
-      v-if="showConditioningModal"
+    <WaterproofingAssessmentModal
+      v-if="showWaterproofingAssessmentModal"
       :show="true"
       :patientId="patient.id"
-      @close="showConditioningModal = false"
+      @close="showWaterproofingAssessmentModal = false"
     />
   </PatientLayout>
 </template>

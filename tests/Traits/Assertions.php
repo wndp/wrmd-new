@@ -3,6 +3,7 @@
 namespace Tests\Traits;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 trait Assertions
 {
@@ -16,7 +17,7 @@ trait Assertions
         );
 
         $this->assertEquals(
-            get_class($revisionable),
+            Relation::getMorphAlias(get_class($revisionable)),
             $actual->subject_type
         );
 

@@ -29,7 +29,7 @@ final class ExpenseCategoryTest extends TestCase
     }
 
     #[Test]
-    public function anExpenseCategoryHasMayTransactions(): void
+    public function anExpenseCategoryHasManyTransactions(): void
     {
         $category = ExpenseCategory::factory()->has(ExpenseTransaction::factory()->count(3))->create();
 

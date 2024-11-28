@@ -31,14 +31,19 @@ class OilProcessing extends Model
         'time_collected_at',
         'is_individual_oiled_animal',
         'collection_condition_id',
+        'date_received_at_primary_care_at',
+        'time_received_at_primary_care_at',
+        'received_at_primary_care_by',
+        'species_confirmed_by',
         'date_processed_at',
         'time_processed_at',
-        'processor',
+        'processed_by',
         'oiling_status_id',
         'oiling_percentage_id',
         'oiling_depth_id',
         'oiling_location_id',
-        'type_of_oil_id',
+        'color_of_oil_id',
+        'oil_condition_id',
         'evidence_collected',
         'evidence_collected_by',
         'carcass_condition_id',
@@ -52,14 +57,19 @@ class OilProcessing extends Model
         'time_collected_at' => 'string',
         'is_individual_oiled_animal' => 'boolean',
         'collection_condition_id' => 'integer',
+        'date_received_at_primary_care_at' => 'date:Y-m-d',
+        'time_received_at_primary_care_at' => 'string',
+        'received_at_primary_care_by' => 'string',
+        'species_confirmed_by' => 'string',
         'date_processed_at' => 'date:Y-m-d',
         'time_processed_at' => 'string',
-        'processor' => 'string',
+        'processed_by' => 'string',
         'oiling_status_id' => 'integer',
         'oiling_percentage_id' => 'integer',
         'oiling_depth_id' => 'integer',
         'oiling_location_id' => 'integer',
-        'type_of_oil_id' => 'integer',
+        'color_of_oil_id' => 'integer',
+        'oil_condition_id' => 'integer',
         'evidence_collected' => 'array',
         'evidence_collected_by' => 'string',
         'carcass_condition_id' => 'integer',
@@ -83,6 +93,16 @@ class OilProcessing extends Model
                 return $this->date_collected_at?->toFormattedDayDateString();
             }
             return $this->date_collected_at?->setTimeFromTimeString($this->time_collected_at);
+        });
+    }
+
+    protected function receivedAtPrimaryCareAt(): Attribute
+    {
+        return Attribute::get(function () {
+            if (is_null($this->time_received_at_primary_care_at)) {
+                return $this->date_received_at_primary_care_at?->toFormattedDayDateString();
+            }
+            return $this->date_received_at_primary_care_at?->setTimeFromTimeString($this->time_received_at_primary_care_at);
         });
     }
 

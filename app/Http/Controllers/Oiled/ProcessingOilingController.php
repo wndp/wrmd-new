@@ -17,31 +17,36 @@ class ProcessingOilingController extends Controller
     public function __invoke(Request $request, Patient $patient)
     {
         $request->validate([
-            'processor' => 'required|string',
-            'oiling_status' => [
+            'processed_by' => 'required|string',
+            'oiling_status_id' => [
                 'nullable',
                 'integer',
                 new AttributeOptionExistsRule(AttributeOptionName::OILED_PROCESSING_STATUSES),
             ],
-            'oiling_percentage' => [
+            'oiling_percentage_id' => [
                 'nullable',
                 'integer',
                 new AttributeOptionExistsRule(AttributeOptionName::OILED_PROCESSING_OILING_PERCENTAGES),
             ],
-            'oiling_depth' => [
+            'oiling_depth_id' => [
                 'nullable',
                 'integer',
                 new AttributeOptionExistsRule(AttributeOptionName::OILED_PROCESSING_OILING_DEPTHS),
             ],
-            'oiling_location' => [
+            'oiling_location_id' => [
                 'nullable',
                 'integer',
                 new AttributeOptionExistsRule(AttributeOptionName::OILED_PROCESSING_OILING_LOCATIONS),
             ],
-            'type_of_oil' => [
+            'color_of_oil_id' => [
                 'nullable',
                 'integer',
-                new AttributeOptionExistsRule(AttributeOptionName::OILED_PROCESSING_OIL_TYPES),
+                new AttributeOptionExistsRule(AttributeOptionName::OILED_PROCESSING_OIL_COLORS),
+            ],
+            'oil_condition_id' => [
+                'nullable',
+                'integer',
+                new AttributeOptionExistsRule(AttributeOptionName::OILED_PROCESSING_OIL_CONDITIONS),
             ],
         ]);
 
@@ -50,12 +55,13 @@ class ProcessingOilingController extends Controller
         OilProcessing::store(
             $patient->id,
             [
-                'processor' => $request->input('processor'),
+                'processed_by' => $request->input('processed_by'),
                 'oiling_status_id' => $request->input('oiling_status_id'),
                 'oiling_percentage_id' => $request->input('oiling_percentage_id'),
                 'oiling_depth_id' => $request->input('oiling_depth_id'),
                 'oiling_location_id' => $request->input('oiling_location_id'),
-                'type_of_oil_id' => $request->input('type_of_oil_id'),
+                'color_of_oil_id' => $request->input('color_of_oil_id'),
+                'oil_condition_id' => $request->input('oil_condition_id'),
             ],
             isIndividualOiledAnimal: ExtensionManager::isActivated(Extension::OWCN_MEMBER_ORGANIZATION, Auth::user()->currentTeam)
         );

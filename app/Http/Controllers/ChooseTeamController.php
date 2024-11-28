@@ -47,7 +47,7 @@ class ChooseTeamController extends Controller
     public function update(Request $request): RedirectResponse
     {
         $usersTeams = Auth::user()
-            ->teams
+            ->allTeams()
             ->where('status', AccountStatus::ACTIVE)
             ->pluck('id')
             ->implode(',');

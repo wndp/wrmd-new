@@ -2,48 +2,29 @@
 
 namespace Tests\Unit\Extensions;
 
-use App\Domain\Accounts\Account;
-use App\Domain\Users\User;
-use App\Extensions\Extension;
-use App\Extensions\ExtensionManager;
+use App\Enums\Extension;
+use App\Models\Team;
+use App\Support\ExtensionManager;
 use DirectoryIterator;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
+use Tests\Traits\AssistsWithExtensions;
 
 final class ExtensionManagerTest extends TestCase
 {
-    protected $extensionManager;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->extensionManager = new ExtensionManager();
-    }
-
-    #[Test]
-    public function itGetsAllTheExtensions(): void
-    {
-        Extension::factory()->create(['name' => 'Lab']);
-        Extension::factory()->create(['name' => 'Prescriptions']);
-
-        cache()->forget('allExtensions');
-
-        $extensions = $this->extensionManager->getAll()->pluck('name')->all();
-
-        $this->assertContains('Lab', $extensions);
-        $this->assertContains('Prescriptions', $extensions);
-    }
+    use RefreshDatabase;
+    use AssistsWithExtensions;
 
     #[Test]
     public function itGetsTheActivatedExtensions(): void
     {
-        $activated = $this->activateExtension('Foo');
+        $team = $this->activateExtension(Extension::ATTACHMENTS);
 
-        $result = $this->extensionManager->getActivated($activated['account']);
+        $result = ExtensionManager::getActivated($team->fresh());
 
         $this->assertCount(1, $result);
     }
@@ -51,52 +32,53 @@ final class ExtensionManagerTest extends TestCase
     #[Test]
     public function itActivatesAnExtension(): void
     {
-        $activated = $this->activateExtension('Foo', null, ['name' => 'Foo']);
+        $team = $this->activateExtension(Extension::ATTACHMENTS);
 
-        $result = $this->extensionManager->getActivated($activated['account']);
+        $result = ExtensionManager::getActivated($team->fresh());
 
-        $this->assertEquals('Foo', $result[0]->name);
+        $this->assertEquals('Attachments', $result[0]->extension->label());
     }
 
     #[Test]
     public function activatedExtensionsCanNotBeActivatedMultipleTimes(): void
     {
-        $account = Account::factory()->create();
-        $extension = Extension::factory()->create();
+        $team = Team::factory()->create();
 
-        $this->assertCount(0, $this->extensionManager->getActivated($account));
+        $this->assertCount(0, ExtensionManager::getActivated($team));
 
-        $this->extensionManager->activate($account, $extension->id);
-        $this->assertCount(1, $this->extensionManager->getActivated($account));
+        ExtensionManager::activate($team, Extension::ATTACHMENTS);
+        $this->assertCount(1, ExtensionManager::getActivated($team->fresh()));
 
-        $this->extensionManager->activate($account, $extension->id);
-        $this->assertCount(1, $this->extensionManager->getActivated($account));
+        ExtensionManager::activate($team, Extension::ATTACHMENTS);
+        $this->assertCount(1, ExtensionManager::getActivated($team->fresh()));
     }
 
     #[Test]
     public function dependentExtensionsAreActivatedWhenAnExtensionIsActivated(): void
     {
-        $dependentA = Extension::factory()->create(['name' => 'Foo']);
-        $dependentB = Extension::factory()->create(['name' => 'Zip']);
-        $dependentC = Extension::factory()->create(['name' => 'Bar', 'dependents' => [$dependentA->id, $dependentB->id]]);
-        $activated = $this->activateExtension('Zap', null, ['name' => 'Zap', 'dependents' => [$dependentC->id]]);
+        $team = Team::factory()->create();
+        ExtensionManager::activate($team, Extension::OIL_SPILL_PROCESSING);
 
-        $result = $this->extensionManager->getActivated($activated['account']);
+        $result = ExtensionManager::getActivated($team->fresh());
 
-        $this->assertEquals('Bar', $result[0]->name);
-        $this->assertEquals('Foo', $result[1]->name);
-        $this->assertEquals('Zap', $result[2]->name);
-        $this->assertEquals('Zip', $result[3]->name);
+        $this->assertSame(
+            [
+                Extension::ATTACHMENTS,
+                Extension::BANDING_MORPHOMETRICS,
+                Extension::OIL_SPILL_PROCESSING
+            ],
+            $result->pluck('extension')->sort()->values()->toArray()
+        );
     }
 
     #[Test]
     public function itDeactivatesAnExtension(): void
     {
-        $activated = $this->activateExtension('Bar');
+        $team = $this->activateExtension(Extension::ATTACHMENTS);
 
-        $this->extensionManager->deactivate($activated['account'], $activated['extension']->id);
+        ExtensionManager::deactivate($team, Extension::ATTACHMENTS);
 
-        $result = $this->extensionManager->getActivated($activated['account']);
+        $result = ExtensionManager::getActivated($team->fresh());
 
         $this->assertCount(0, $result);
     }
@@ -104,12 +86,12 @@ final class ExtensionManagerTest extends TestCase
     #[Test]
     public function dependentExtensionsAreDeactivatedWhenAParentIsDeactivated(): void
     {
-        $dependent = Extension::factory()->create(['name' => 'Foo']);
-        $activated = $this->activateExtension('Bar', null, ['dependents' => [$dependent->id], 'name' => 'BarZap']);
+        $team = Team::factory()->create();
+        ExtensionManager::activate($team, Extension::OIL_SPILL_PROCESSING);
 
-        $this->extensionManager->deactivate($activated['account'], $activated['extension']->id);
+        ExtensionManager::deactivate($team->fresh(), Extension::OIL_SPILL_PROCESSING);
 
-        $result = $this->extensionManager->getActivated($activated['account']);
+        $result = ExtensionManager::getActivated($team);
 
         $this->assertCount(0, $result);
     }
@@ -118,24 +100,24 @@ final class ExtensionManagerTest extends TestCase
     public function aDependentExtensionCanNotBeDeactivatedWhenItsParentIsActivated(): void
     {
         $this->expectException(\DomainException::class);
-        $this->expectExceptionMessage('Can not deactivate extension because of active parent: BarZap');
+        $this->expectExceptionMessage('Can not deactivate extension because of active parent extension: '.Extension::OIL_SPILL_PROCESSING->label());
 
-        $dependent = Extension::factory()->create(['name' => 'Foo']);
-        $activated = $this->activateExtension('Bar', null, ['dependents' => [$dependent->id], 'name' => 'BarZap']);
+        $team = Team::factory()->create();
+        ExtensionManager::activate($team, Extension::OIL_SPILL_PROCESSING);
 
-        $this->extensionManager->deactivate($activated['account'], $dependent->id);
+        ExtensionManager::deactivate($team->fresh(), Extension::ATTACHMENTS);
     }
 
     #[Test]
     public function itDeterminesIfTheExtensionIsActivated(): void
     {
-        $account = Account::factory()->create();
+        $team = Team::factory()->create();
 
-        $this->assertFalse($this->extensionManager->isActivated('FooBar', $account));
+        $this->assertFalse(ExtensionManager::isActivated(Extension::ATTACHMENTS, $team));
         Cache::clear();
 
-        $activated = $this->activateExtension('FooBar', $account);
+        $activated = $this->activateExtension(Extension::ATTACHMENTS, $team);
 
-        $this->assertTrue($this->extensionManager->isActivated('FooBar', $account));
+        $this->assertTrue(ExtensionManager::isActivated(Extension::ATTACHMENTS, $team->fresh()));
     }
 }

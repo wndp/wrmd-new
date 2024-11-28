@@ -7,6 +7,7 @@ use App\Enums\Entity;
 use App\Models\CareLog;
 use App\Models\Exam;
 use App\Models\LabReport;
+use App\Models\NutritionPlan;
 use App\Models\Patient;
 use App\Models\PatientLocation;
 use App\Models\Prescription;
@@ -28,6 +29,7 @@ trait GetsCareLogs
         $records[] = PatientLocation::where('patient_id', $patient->id)->get();
         $records[] = Exam::where('patient_id', $patient->id)->get();
         $records[] = Prescription::where('patient_id', $patient->id)->get();
+        $records[] = NutritionPlan::where('patient_id', $patient->id)->get();
         $records[] = LabReport::where('patient_id', $patient->id)->get();
 
         return collect($records)

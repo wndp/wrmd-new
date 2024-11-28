@@ -53,8 +53,6 @@ enum Ability: string
     case VIEW_HOTLINE = 'VIEW_HOTLINE';
     case VIEW_OIL_PROCESSING = 'VIEW_OIL_PROCESSING';
     case MANAGE_OIL_PROCESSING = 'MANAGE_OIL_PROCESSING';
-    // case VIEW_OIL_PREWASH = 'VIEW_OIL_PREWASH';
-    // case MANAGE_OIL_PREWASH = 'MANAGE_OIL_PREWASH';
     case VIEW_OIL_WASH = 'VIEW_OIL_WASH';
     case MANAGE_OIL_WASH = 'MANAGE_OIL_WASH';
     case VIEW_OIL_CONDITIONING = 'VIEW_OIL_CONDITIONING';
@@ -110,14 +108,12 @@ enum Ability: string
             self::VIEW_ANALYTICS => 'View Analytics',
             self::VIEW_PATIENTS => 'View Patients',
             self::VIEW_HOTLINE => 'View Hotline',
-            self::VIEW_EVENT_PROCESSING => 'View Event Processing',
-            self::MANAGE_EVENT_PROCESSING => 'Manage Event Processing',
-            self::VIEW_EVENT_PREWASH => 'View Event Prewash',
-            self::MANAGE_EVENT_PREWASH => 'Manage Event Prewash',
-            self::VIEW_EVENT_WASH => 'View Event Wash',
-            self::MANAGE_EVENT_WASH => 'Manage Event Wash',
-            self::VIEW_EVENT_CONDITIONING => 'View Event Conditioning',
-            self::MANAGE_EVENT_CONDITIONING => 'Manage Event Conditioning'
+            self::VIEW_OIL_PROCESSING => 'View Event Processing',
+            self::MANAGE_OIL_PROCESSING => 'Manage Event Processing',
+            self::VIEW_OIL_WASH => 'View Event Wash',
+            self::MANAGE_OIL_WASH => 'Manage Event Wash',
+            self::VIEW_OIL_CONDITIONING => 'View Event Conditioning',
+            self::MANAGE_OIL_CONDITIONING => 'Manage Event Conditioning'
         };
     }
 
@@ -168,14 +164,12 @@ enum Ability: string
             self::VIEW_ANALYTICS,
             self::VIEW_PATIENTS,
             self::VIEW_HOTLINE,
-            self::VIEW_EVENT_PROCESSING,
-            self::MANAGE_EVENT_PROCESSING,
-            self::VIEW_EVENT_PREWASH,
-            self::MANAGE_EVENT_PREWASH,
-            self::VIEW_EVENT_WASH,
-            self::MANAGE_EVENT_WASH,
-            self::VIEW_EVENT_CONDITIONING,
-            self::MANAGE_EVENT_CONDITIONING,
+            self::VIEW_OIL_PROCESSING,
+            self::MANAGE_OIL_PROCESSING,
+            self::VIEW_OIL_WASH,
+            self::MANAGE_OIL_WASH,
+            self::VIEW_OIL_CONDITIONING,
+            self::MANAGE_OIL_CONDITIONING,
         ];
     }
 }

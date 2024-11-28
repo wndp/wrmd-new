@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Search;
 
-use App\Domain\Taxonomy\CommonName;
 use App\Http\Controllers\Controller;
+use App\Models\CommonName;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\OilConditioning>
  */
-class OilConditioningFactory extends Factory
+class OilWaterproofingAssessmentFactory extends Factory
 {
     /**
      * Define the model's default state.

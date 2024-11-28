@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Oiled;
 
 use App\Enums\AttributeOptionName;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SaveOilConditioningRequest;
+use App\Http\Requests\SaveOilWaterproofingAssessmentRequest;
 use App\Models\AttributeOption;
-use App\Models\OilConditioning;
+use App\Models\OilWaterproofingAssessment;
 use App\Models\Patient;
 use App\Repositories\OptionsStore;
 use App\Support\Timezone;
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class ConditioningController extends Controller
+class WaterproofingAssessmentController extends Controller
 {
     public function index()
     {
@@ -31,39 +31,35 @@ class ConditioningController extends Controller
             ])
         ]);
 
-        $conditionings = $admission
+        $assessments = $admission
             ->patient
             ->load([
-                'oilConditionings' => fn ($q) => $q->orderByDesc('date_evaluated_at')->orderByDesc('time_evaluated_at'),
-                'oilConditionings.buoyancy',
-                'oilConditionings.hauledOut',
-                'oilConditionings.preening',
-                'oilConditionings.selfFeeding',
-                'oilConditionings.flighted',
+                'oilWaterproofingAssessments' => fn ($q) => $q->orderByDesc('date_evaluated_at')->orderByDesc('time_evaluated_at'),
+                'oilWaterproofingAssessments.buoyancy',
+                'oilWaterproofingAssessments.hauledOut',
+                'oilWaterproofingAssessments.preening',
             ])
-            ->oilConditionings
-            ->transform(fn ($conditioning) => [
-                ...$conditioning->toArray(),
-                'evaluated_at_for_humans' => Timezone::convertFromUtcToLocal($conditioning->evaluated_at)->translatedFormat(config('wrmd.date_time_format')),
-                'buoyancy' => $conditioning->Buoyancy?->value,
-                'hauled_out' => $conditioning->hauledOut?->value,
-                'preening' => $conditioning->preening?->value,
-                'self_feeding' => $conditioning->selfFeeding?->value,
-                'flighted' => $conditioning->flighted?->value,
-                'area_wet_to_skin_for_humans' => implode(', ', $conditioning->areas_wet_to_skin ?? []),
+            ->oilWaterproofingAssessments
+            ->transform(fn ($assessments) => [
+                ...$assessments->toArray(),
+                'evaluated_at_for_humans' => Timezone::convertFromUtcToLocal($assessments->evaluated_at)->translatedFormat(config('wrmd.date_time_format')),
+                'buoyancy' => $assessments->Buoyancy?->value,
+                'hauled_out' => $assessments->hauledOut?->value,
+                'preening' => $assessments->preening?->value,
+                'area_wet_to_skin_for_humans' => implode(', ', $assessments->areas_wet_to_skin ?? []),
             ]);
 
-        return Inertia::render('Oiled/Conditioning', [
+        return Inertia::render('Oiled/WaterproofingAssessment', [
             'patient' => $admission->patient,
-            'conditionings' => $conditionings,
+            'assessments' => $assessments,
         ]);
     }
 
-    public function store(SaveOilConditioningRequest $request, Patient $patient)
+    public function store(SaveOilWaterproofingAssessmentRequest $request, Patient $patient)
     {
         $patient->validateOwnership(Auth::user()->current_team_id);
 
-        tap(new OilConditioning($this->formatRequestInput($request)), function ($wash) use ($patient) {
+        tap(new OilWaterproofingAssessment($this->formatRequestInput($request)), function ($wash) use ($patient) {
             $wash->patient()->associate($patient);
             $wash->save();
         });
@@ -71,38 +67,26 @@ class ConditioningController extends Controller
         return back();
     }
 
-    /**
-     * Update a conditioning in storage.
-     */
-    public function update(SaveOilConditioningRequest $request, Patient $patient, OilConditioning $conditioning)
+    public function update(SaveOilWaterproofingAssessmentRequest $request, Patient $patient, OilWaterproofingAssessment $assessment)
     {
-        $conditioning->validateOwnership(Auth::user()->current_team_id)
+        $assessment->validateOwnership(Auth::user()->current_team_id)
             ->validateRelationshipWithPatient($patient);
 
-        $conditioning->update($this->formatRequestInput($request));
+        $assessment->update($this->formatRequestInput($request));
 
         return back();
     }
 
-    /**
-     * Delete conditioning from storage.
-    */
-    public function destroy(Request $request, Patient $patient, OilConditioning $conditioning)
+    public function destroy(Request $request, Patient $patient, OilWaterproofingAssessment $assessment)
     {
-        $conditioning->validateOwnership(Auth::user()->current_team_id)
+        $assessment->validateOwnership(Auth::user()->current_team_id)
             ->validateRelationshipWithPatient($patient);
 
-        $conditioning->delete();
+        $assessment->delete();
 
         return back();
     }
 
-    /**
-     * Format the request input for safe database storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
     private function formatRequestInput($request)
     {
         $evaluatedAt = Timezone::convertFromLocalToUtc($request->input('evaluated_at'));

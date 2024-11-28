@@ -23,7 +23,8 @@ class ClonePatientRelations
             'prescriptions',
             'rechecks',
             'necropsy',
-            'oilConditionings',
+            'nutritionPlans',
+            'oilWaterproofingAssessments',
             'oilProcessing',
             'labReports'
         ]);

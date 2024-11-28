@@ -16,7 +16,7 @@ enum Extension: string
     case QUICK_ADMIT = 'QUICK_ADMIT';
     case OIL_SPILL_PROCESSING = 'OIL_SPILL_PROCESSING';
     case OIL_SPILL_WASH = 'OIL_SPILL_WASH';
-    case OIL_SPILL_CONDITIONING = 'OIL_SPILL_CONDITIONING';
+    case OIL_SPILL_WATERPROOFING_ASSESSMENT = 'OIL_SPILL_WATERPROOFING_ASSESSMENT';
     case OIL_SPILL = 'OIL_SPILL';
     case OWCN_OWRMD = 'OWCN_OWRMD';
     case OWCN_IOA = 'OWCN_IOA';
@@ -37,7 +37,7 @@ enum Extension: string
             self::QUICK_ADMIT => __('Quick Admit'),
             self::OIL_SPILL_PROCESSING => __('Oil Spill Patient Processing'),
             self::OIL_SPILL_WASH => __('Oil Spill Patient Wash'),
-            self::OIL_SPILL_CONDITIONING => __('Oil Spill Patient Conditioning'),
+            self::OIL_SPILL_WATERPROOFING_ASSESSMENT => __('Oil Spill Patient Waterproofing Assessment'),
             self::OIL_SPILL => __('Oil Spill'),
             self::OWCN_OWRMD => __('O-WRMD'),
             self::OWCN_IOA => __('OWCN IOA'),
@@ -61,7 +61,7 @@ enum Extension: string
             self::OIL_SPILL => __('Specialized features to manage patients during an oil spill event.'),
             self::OIL_SPILL_PROCESSING => __('Collect evidence processing data for you oil spill patients.'),
             self::OIL_SPILL_WASH => __('Record wash related data for you oil spill patients.'),
-            self::OIL_SPILL_CONDITIONING => __('Record pre-release conditioning related data for you oil spill patients.'),
+            self::OIL_SPILL_WATERPROOFING_ASSESSMENT => __('Record waterproofing assessment data for you oil spill patients.'),
             self::OWCN_OWRMD => 'Oil spill extension exclusive to the Oiled Wildlife Care Network at UC Davis.',
             self::OWCN_IOA => 'Individual oiled animal extension exclusive to the Oiled Wildlife Care Network at UC Davis.',
             self::OWCN_MEMBER_ORGANIZATION => 'Oil spill extension exclusive to the Oiled Wildlife Care Network member organizations.',
@@ -83,7 +83,7 @@ enum Extension: string
             self::QUICK_ADMIT => 'ClockIcon',
             self::OIL_SPILL_PROCESSING,
             self::OIL_SPILL_WASH,
-            self::OIL_SPILL_CONDITIONING,
+            self::OIL_SPILL_WATERPROOFING_ASSESSMENT,
             self::OIL_SPILL,
             self::OWCN_OWRMD,
             self::OWCN_IOA,
@@ -106,7 +106,7 @@ enum Extension: string
             self::QUICK_ADMIT => '640ae303a0408f7cb1037718',
             self::OIL_SPILL_PROCESSING,
             self::OIL_SPILL_WASH,
-            self::OIL_SPILL_CONDITIONING,
+            self::OIL_SPILL_WATERPROOFING_ASSESSMENT,
             self::OIL_SPILL,
             self::OWCN_OWRMD,
             self::OWCN_IOA,
@@ -129,7 +129,7 @@ enum Extension: string
             self::QUICK_ADMIT => true,
             self::OIL_SPILL_PROCESSING,
             self::OIL_SPILL_WASH,
-            self::OIL_SPILL_CONDITIONING,
+            self::OIL_SPILL_WATERPROOFING_ASSESSMENT,
             self::OIL_SPILL,
             self::OWCN_OWRMD,
             self::OWCN_IOA,
@@ -152,7 +152,7 @@ enum Extension: string
             self::CUSTOM_FIELD,
             self::OIL_SPILL_PROCESSING,
             self::OIL_SPILL_WASH,
-            self::OIL_SPILL_CONDITIONING,
+            self::OIL_SPILL_WATERPROOFING_ASSESSMENT,
             self::OIL_SPILL,
             self::OWCN_OWRMD,
             self::OWCN_IOA,
@@ -174,7 +174,7 @@ enum Extension: string
             self::PAPER_FORMS,
             self::QUICK_ADMIT,
             self::OIL_SPILL_WASH,
-            self::OIL_SPILL_CONDITIONING => [],
+            self::OIL_SPILL_WATERPROOFING_ASSESSMENT => [],
             self::OIL_SPILL_PROCESSING => [
                 self::ATTACHMENTS,
                 self::BANDING_MORPHOMETRICS,
@@ -185,7 +185,7 @@ enum Extension: string
                 self::DAILY_EXAM,
                 self::OIL_SPILL_PROCESSING,
                 self::OIL_SPILL_WASH,
-                self::OIL_SPILL_CONDITIONING
+                self::OIL_SPILL_WATERPROOFING_ASSESSMENT
             ],
             self::OWCN_OWRMD => [
                 self::OIL_SPILL,

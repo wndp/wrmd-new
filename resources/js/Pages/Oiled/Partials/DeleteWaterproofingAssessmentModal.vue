@@ -1,6 +1,6 @@
 <script setup>
-import { inject, computed } from 'vue';
-import { useForm, usePage } from '@inertiajs/vue3';
+import {inject} from 'vue';
+import {useForm} from '@inertiajs/vue3';
 import ConfirmationModal from '@/Components/ConfirmationModal.vue';
 import DangerButton from '@/Components/FormElements/DangerButton.vue';
 import SecondaryButton from '@/Components/FormElements/SecondaryButton.vue';
@@ -13,7 +13,7 @@ const props = defineProps({
     type: String,
     required: true
   },
-  conditioning: {
+  assessment: {
     type: Object,
     required: true
   },
@@ -23,14 +23,12 @@ const props = defineProps({
 const emit = defineEmits(['close']);
 const form = useForm({});
 
-const close = () => {
-  emit('close');
-};
+const close = () => emit('close');
 
 const destroy = () => {
-  form.delete(route('oiled.conditioning.destroy', {
+  form.delete(route('oiled.waterproofing_assessment.destroy', {
     patient: props.patientId,
-    conditioning: props.conditioning.id
+    assessment: props.assessment.id
   }), {
     preserveScroll: true,
     onSuccess: () => close()
@@ -45,12 +43,12 @@ const destroy = () => {
     @close="close"
   >
     <template #title>
-      {{ __('Delete Conditioning') }}
+      {{ __('Delete Waterproofing Assessment') }}
     </template>
     <template #content>
-      <strong class="font-bold text-red-500">{{ __('Are you sure you want to delete this conditioning record?') }}</strong>
+      <strong class="font-bold text-red-500">{{ __('Are you sure you want to delete this waterproofing assessment?') }}</strong>
       <p class="text-sm mt-4">
-        <strong class="font-bold">Date</strong> {{ conditioning.evaluated_at_for_humans }}
+        <strong class="font-bold">Date</strong> {{ assessment.evaluated_at_for_humans }}
       </p>
     </template>
     <template #footer>
@@ -63,7 +61,7 @@ const destroy = () => {
         :disabled="form.processing"
         @click="destroy"
       >
-        {{ __('Delete Conditioning') }}
+        {{ __('Delete Assessment') }}
       </DangerButton>
     </template>
   </ConfirmationModal>

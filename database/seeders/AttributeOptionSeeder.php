@@ -1377,18 +1377,20 @@ class AttributeOptionSeeder extends Seeder
             '99' => __('(99) Not evaluated'),
         ]);
 
-        $this->createOrUpdateAttributes(AttributeOptionName::OILED_PROCESSING_OIL_CONDITION, [
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_PROCESSING_OIL_CONDITIONS, [
             __('Fresh'),
-            __('Weathered'),
+            __('Mousse / Frothy'),
+            __('Slightly Weathered'),
+            __('Highly Weathered'),
+            __('Other - Specify'),
         ]);
 
-        $this->createOrUpdateAttributes(AttributeOptionName::OILED_PROCESSING_OIL_TYPES, [
-            __('Crude'),
-            __('Refined'),
-            __('Motor'),
-            __('Bitumen'),
-            __('Vegetable / Fish'),
-            __('Other'),
+        $this->createOrUpdateAttributes(AttributeOptionName::OILED_PROCESSING_OIL_COLORS, [
+            __('Black'),
+            __('Brown'),
+            __('Yellow'),
+            __('Clear'),
+            __('Other - Specify'),
         ]);
 
         $this->createOrUpdateAttributes(AttributeOptionName::OILED_WASH_PRE_TREATMENTS, [

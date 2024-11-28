@@ -3,6 +3,7 @@ import {computed} from 'vue';
 import {useForm} from '@inertiajs/vue3';
 import PatientLayout from '@/Layouts/PatientLayout.vue';
 import CollectionCard from './Partials/CollectionCard.vue';
+import ReceivingCard from './Partials/ReceivingCard.vue';
 import EvidenceCard from './Partials/EvidenceCard.vue';
 import ProcessingCommentsCard from './Partials/ProcessingCommentsCard.vue';
 import OilingDataCard from './Partials/OilingDataCard.vue';
@@ -50,6 +51,12 @@ const collectionForm = useForm({
   lng_found: props.patient.lng_found
 });
 
+const receivingForm = useForm({
+  received_at_primary_care_at: props.patient.oil_processing?.received_at_primary_care_at || [],
+  received_at_primary_care_by: props.patient.oil_processing?.received_at_primary_care_by,
+  species_confirmed_by: props.patient.oil_processing?.species_confirmed_by
+});
+
 const evidenceForm = useForm({
   evidence_collected: props.patient.oil_processing?.evidence_collected || [],
   evidence_collected_by: props.patient.oil_processing?.evidence_collected_by,
@@ -61,17 +68,18 @@ const commentsForm = useForm({
 });
 
 const oilingDataForm = useForm({
-  processor: props.patient.oil_processing?.processor,
+  processed_by: props.patient.oil_processing?.processed_by,
   oiling_depth_id: props.patient.oil_processing?.oiling_depth_id,
   oiling_status_id: props.patient.oil_processing?.oiling_status_id,
   oiling_location_id: props.patient.oil_processing?.oiling_location_id,
   oiling_percentage_id: props.patient.oil_processing?.oiling_percentage_id,
-  type_of_oil_id: props.patient.oil_processing?.type_of_oil_id
+  color_of_oil_id: props.patient.oil_processing?.color_of_oil_id,
+  oil_condition_id: props.patient.oil_processing?.oil_condition_id,
 });
 
 const carcassConditionForm = useForm({
   carcass_condition_id: props.patient.oil_processing?.carcass_condition_id,
-  extent_of_scavenging_id: props.patient.oil_processing?.extent_of_scavenging_id
+  extent_of_scavenging_id: props.patient.oil_processing?.extent_of_scavenging_id,
 });
 
 const outcomeForm = useForm({
@@ -88,7 +96,7 @@ const outcomeForm = useForm({
   disposition_lng: props.patient.disposition_lng,
   reason_for_disposition: props.patient.reason_for_disposition,
   dispositioned_by: props.patient.dispositioned_by,
-  is_carcass_saved: props.patient.is_carcass_saved
+  is_carcass_saved: props.patient.is_carcass_saved,
 });
 
 const dispositionIsReleasedOrTransferred = computed(() => {
@@ -99,6 +107,14 @@ const dispositionIsReleasedOrTransferred = computed(() => {
         Number(outcomeForm.disposition_id)
     );
 });
+
+const updateReceiving = () => {
+  receivingForm.put(route('oiled.processing.receiving.update', {
+    patient: props.patient,
+  }), {
+    preserveScroll: true,
+  });
+};
 
 const updateCollection = () => {
   collectionForm.put(route('oiled.processing.collection.update', {
@@ -162,6 +178,13 @@ const updateOutcome = () => {
       class="mt-4"
       @submitted="updateCollection"
     />
+    <ReceivingCard
+      :form="receivingForm"
+      :patientId="patient.id"
+      :canSubmit="can(Abilities.MANAGE_OIL_PROCESSING) && patient.locked_at === null"
+      class="mt-8"
+      @submitted="updateReceiving"
+    />
     <EvidenceCard
       :form="evidenceForm"
       :media="media"
@@ -183,7 +206,7 @@ const updateOutcome = () => {
       @submitted="updateOilingData"
     />
     <CarcassConditionCard
-      v-if="patient.oil_processing.collection_condition_id === props.collectionConditionDeadId"
+      v-if="patient.oil_processing?.collection_condition_id === props.collectionConditionDeadId"
       :form="carcassConditionForm"
       :canSubmit="can(Abilities.MANAGE_OIL_PROCESSING) && patient.locked_at === null"
       class="mt-8"

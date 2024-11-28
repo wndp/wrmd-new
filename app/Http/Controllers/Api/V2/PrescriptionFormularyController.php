@@ -27,10 +27,10 @@ class PrescriptionFormularyController extends Controller
             $patient->validateOwnership(Auth::user()->current_team_id);
         }
 
-        $formulas = Formula::where([
-            'team_id' => Auth::user()->current_team_id,
-            'type' => FormulaType::PRESCRIPTION->value,
-        ])
+        $formulas = Formula::whereIn('team_id', [
+            Auth::user()->current_team_id,
+            Auth::user()->currentTeam->isSubAccount() ? Auth::user()->currentTeam->master_account_id : 0
+        ])->where('type', FormulaType::PRESCRIPTION->value)
             ->search($request->input('search'))
             ->get()
             ->map(fn ($formula) => [

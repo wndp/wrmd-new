@@ -186,7 +186,7 @@ const copyFromMasterAccount = () => {
       :disabled="form.processing"
       @click="store"
     >
-      {{ __('Save New Sub-Account') }}
+      {{ __('Create New Sub-Account') }}
     </PrimaryButton>
   </AppLayout>
 </template>

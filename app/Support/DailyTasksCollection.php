@@ -61,10 +61,10 @@ class DailyTasksCollection extends Collection
 
         if ($this->filters->facility === 'anywhere') {
             $query->leftJoinCurrentLocation()->whereNotNull('facility_id');
-        } else if ($this->filters->facility === 'none-assigned') {
+        } elseif ($this->filters->facility === 'none-assigned') {
             $query->leftJoinCurrentLocation()->whereNull('facility_id');
         } else {
-            $query->leftJoinCurrentLocation()->where('facility_id', $this->filters->facility);
+            $query->leftJoinCurrentLocation()->where('facility_i', $this->filters->facility);
         }
 
         if (!$this->filters->include_non_pending) {
@@ -238,6 +238,7 @@ class DailyTasksCollection extends Collection
     public function dailyTask($model, Carbon $date)
     {
         $admission = Admission::custody($this->team, $model->patient);
+        $lastLocation = $model->patient->locations->first();
 
         return [
             'type' => Wrmd::uriKey($model),
@@ -264,8 +265,8 @@ class DailyTasksCollection extends Collection
                 ->orderBy('occurrence_at')
                 ->pluck('occurrence'),
             'body' => nl2br($model->summary_body),
-            'area' => $model->patient->locations->first()?->area,
-            'enclosure' => $model->patient->current_location,
+            'area' => $lastLocation?->area,
+            'enclosure' => "{$lastLocation?->area} {$lastLocation?->enclosure}",
             'assignment' => $model->assigned_to,
             'model' => $model->toArray(),
         ];

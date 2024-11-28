@@ -2,7 +2,6 @@
 import {ref} from 'vue';
 import {router} from '@inertiajs/vue3';
 import {
-  HomeIcon,
   UserCircleIcon,
   UsersIcon,
   BriefcaseIcon,
@@ -17,7 +16,6 @@ import {
 import {__} from '@/Composables/Translate';
 
 const navigation = [
-  { name: __('Dashboard'), route: 'dashboard', icon: HomeIcon },
   { name: __('Account Profile'), route: 'account.profile.edit', icon: UserCircleIcon },
   { name: __('Users & Staff'), route: 'users.index', icon: UsersIcon },
   { name: __('Veterinarians'), route: 'veterinarians.index', icon: BriefcaseIcon },

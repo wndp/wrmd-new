@@ -94,7 +94,9 @@ class ExtensionManager
     {
         $activatedParents = Collection::make(Extension::cases())
             ->filter(
-                fn ($filterExtension) => static::isActivated($filterExtension, $team) && in_array($extension, $filterExtension->dependencies())
+                fn ($filterExtension) => static::isActivated($filterExtension, $team)
+                    && count($filterExtension->dependencies()) > 0
+                    && in_array($extension, $filterExtension->dependencies())
             );
 
         throw_if(
@@ -107,9 +109,10 @@ class ExtensionManager
 
         $team->extensions()->where('extension', $extension->value)->delete();
 
+        //$team->without('extensions');  // drop extensions relationship
         Cache::forget('activatedExtensions.'.$team->id);
 
-        static::deactivateDependents($team, $extension);
+        static::deactivateDependents($team->fresh(), $extension);
     }
 
     /**
@@ -131,7 +134,7 @@ class ExtensionManager
             return false;
         }
 
-        return static::getActivated($team)->contains('extension', $extension->value);
+        return static::getActivated($team)->contains('extension.value', $extension->value);
     }
 
     /**

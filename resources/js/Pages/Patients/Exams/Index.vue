@@ -42,10 +42,10 @@ const caseQueryString = computed(() => {
     <div class="mt-4 sm:flex sm:items-center sm:justify-between">
       <div>
         <h3 class="text-lg leading-6 font-medium text-gray-900">
-          {{ __('Daily Exams') }}
+          {{ __('Exams') }}
         </h3>
         <p class="mt-1 text-sm text-gray-500">
-          {{ __('Record daily exams on your patients.') }}
+          {{ __('Record field, intake, daily and release exams on your patients.') }}
         </p>
       </div>
       <div class="mt-3 sm:mt-0 sm:ml-4">

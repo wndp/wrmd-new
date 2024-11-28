@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\NutritionPlan;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,9 @@ class NutritionPlanIngredientFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'nutrition_plan_id' => NutritionPlan::factory(),
+            'quantity' => $this->faker->randomDigitNotZero(),
+            'ingredient' => $this->faker->words(3, true)
         ];
     }
 }

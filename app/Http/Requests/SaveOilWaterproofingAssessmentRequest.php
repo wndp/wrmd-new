@@ -6,7 +6,7 @@ use App\Enums\AttributeOptionName;
 use App\Rules\AttributeOptionExistsRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class SaveOilConditioningRequest extends FormRequest
+class SaveOilWaterproofingAssessmentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

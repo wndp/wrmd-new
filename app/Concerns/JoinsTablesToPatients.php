@@ -5,6 +5,7 @@ namespace App\Concerns;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 trait JoinsTablesToPatients
 {
@@ -28,16 +29,15 @@ trait JoinsTablesToPatients
     public function scopeLeftJoinCurrentLocation(Builder $query): Builder
     {
         return $query->leftJoin('patient_locations', function ($join) {
-            $join->on('patients.id', '=', 'patient_locations.patient_id')
+            $lastLocation = DB::table('patient_locations')
+                ->select('id')
+                ->whereRaw('patient_locations.patient_id = `patients`.`id`')
                 ->whereNull('patient_locations.deleted_at')
-                ->where(
-                    'patient_locations.id',
-                    fn ($builder) => $builder
-                        ->select('id')
-                        ->from('patient_locations as i')
-                        ->orderBy('moved_in_at', 'desc')
-                        ->limit(1)
-                );
+                ->orderBy('moved_in_at', 'desc')
+                ->limit(1)
+                ->toSql();
+
+            $join->on(DB::raw("($lastLocation)"), '=', 'patient_locations.id');
         });
     }
 }
