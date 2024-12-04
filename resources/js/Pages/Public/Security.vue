@@ -6,7 +6,7 @@
           <span class="mt-2 block text-3xl text-center leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">Security</span>
         </h1>
         <p class="mt-8 text-xl text-gray-500 leading-8">
-          Aliquet nec orci mattis amet quisque ullamcorper neque, nibh sem. At arcu, sit dui mi, nibh dui, diam eget aliquam. Quisque id at vitae feugiat egestas ac. Diam nulla orci at in viverra scelerisque eget. Eleifend egestas fringilla sapien.
+          In today’s digital world, protecting online data is essential because personal, financial, and sensitive information is often stored and shared on the internet. Without strong security measures, this data can be at risk of being hacked, stolen, or accessed by unauthorized people. To keep your information safe, Wildlife Rehabilitation MD uses strong encryption, multi-factor authentication (MFA), and strict user permissions. We also regularly conduct security audits and back up data. We also make sure to follow privacy laws like GDPR and CCPA to protect your privacy.
         </p>
       </div>
       <div class="mt-6 prose prose-xl prose-blue text-gray-500 mx-auto">

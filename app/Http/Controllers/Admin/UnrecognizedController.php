@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Domain\Admissions\Admission;
 use App\Http\Controllers\Controller;
+use App\Models\Admission;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -17,9 +17,11 @@ class UnrecognizedController extends Controller
     {
         $unrecognizedPatients = Admission::select('admissions.*')
             ->whereUnrecognized()
-            ->when($request->input('common_name'), function ($query, $commonName) {
-                $query->where('common_name', 'like', "%{$commonName}%");
-            })
+            ->when(
+                $request->input('common_name'),
+                fn ($query, $commonName) =>
+                $query->where('common_name', 'like', "%{$commonName}%")
+            )
             ->orderBy('common_name')
             ->with('patient', 'account')
             ->paginate()

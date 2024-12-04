@@ -174,7 +174,6 @@ class AdmitPatient
 
             $patient->team_possession_id = $this->team->id;
             $patient->rescuer_id = $this->rescuer->id;
-            //$patient->taxon_id = null;
             $patient->disposition_id = $dispositionPendingId;
             $patient->date_admitted_at = $admittedAt->toDateString();
             $patient->time_admitted_at = $admittedAt->toTimeString();

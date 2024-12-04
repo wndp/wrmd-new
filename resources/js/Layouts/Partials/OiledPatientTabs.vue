@@ -1,18 +1,18 @@
 <script setup>
-import {ref, computed} from 'vue';
-import {usePage, router} from '@inertiajs/vue3';
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
-import { ChevronDownIcon } from '@heroicons/vue/24/outline';
-import DailyTasksMenu from '@/Layouts/Partials/DailyTasksMenu.vue';
-import PrintPatientModal from '@/Pages/Patients/Partials/PrintPatientModal.vue';
-import ExportPatientModal from '@/Pages/Patients/Partials/ExportPatientModal.vue';
-import EmailPatientModal from '@/Pages/Patients/Partials/EmailPatientModal.vue';
-import {
-  PrinterIcon, ArrowDownTrayIcon, AtSymbolIcon, IdentificationIcon,
-  ClipboardDocumentListIcon, BeakerIcon, PhotoIcon, SwatchIcon, DevicePhoneMobileIcon, ScissorsIcon
-} from '@heroicons/vue/24/outline';
-import {__} from '@/Composables/Translate';
-import axios from 'axios';
+// import {ref, computed} from 'vue';
+// import {usePage, router} from '@inertiajs/vue3';
+// import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
+// import { ChevronDownIcon } from '@heroicons/vue/24/outline';
+// import DailyTasksMenu from '@/Layouts/Partials/DailyTasksMenu.vue';
+// import PrintPatientModal from '@/Pages/Patients/Partials/PrintPatientModal.vue';
+// import ExportPatientModal from '@/Pages/Patients/Partials/ExportPatientModal.vue';
+// import EmailPatientModal from '@/Pages/Patients/Partials/EmailPatientModal.vue';
+// import {
+//   PrinterIcon, ArrowDownTrayIcon, AtSymbolIcon, IdentificationIcon,
+//   ClipboardDocumentListIcon, BeakerIcon, PhotoIcon, SwatchIcon, DevicePhoneMobileIcon, ScissorsIcon
+// } from '@heroicons/vue/24/outline';
+// import {__} from '@/Composables/Translate';
+// import axios from 'axios';
 
 const isCollectedAlive = usePage().props.admission.patient?.event_processing.collection_condition === 'Alive';
 

@@ -1,178 +1,64 @@
-<script>
-import VueComboBlocks from 'vue-combo-blocks';
-import TextInput from '@/Components/FormElements/TextInput.vue';
-import { ArrowPathIcon } from '@heroicons/vue/24/solid';
-import LocalStorage from '@/Composables/LocalStorage';
+<script setup>
+import {ref, watch} from 'vue';
+import Autocomplete from 'primevue/autocomplete';
+import {__} from '@/Composables/Translate';
 import debounce from 'lodash/debounce';
+import axios from 'axios';
 
-const localStorage = LocalStorage();
+defineProps({
+    commonName: {
+        type: String,
+        default: null
+    },
+    taxonId: {
+        type: [String, Number],
+        default: null
+    },
+});
 
-export default {
-    components: {
-        VueComboBlocks,
-        TextInput,
-        ArrowPathIcon
-    },
-    props: ['modelValue'],
-    emits: ['update:modelValue', 'select'],
-    data() {
-        return {
-            // selected: {
-            //     common_name: this.modelValue
-            // },
-            selected: this.modelValue,
-            fetching: false,
-            prefetchedList: [],
-            searchedList: [],
-            text: ''
-            //filteredList: []
-        };
-    },
-    computed: {
-        filteredList() {
-            return this.prefetchedList.filter(item => {
-                return this.text.toLowerCase().split(/[\s|-]/).every(word => {
-                    return item.label.toLowerCase().includes(word);
-                });
-            })
-            .concat(this.searchedList)
-            // .concat({
-            //     common_name: this.modelValue,
-            // })
-            .map(item => item.label)
-            .slice(0, 10);
-        }
-    },
-    mounted() {
-        this.prefetchCommonNames();
-    },
-    methods: {
-        itemToString(item) {
-            return item;//? item.common_name : '';
-        },
-        stateReducer(state, actionAndChanges) {
-          const { changes, type } = actionAndChanges;
-          switch (type) {
-            case VueComboBlocks.stateChangeTypes.InputBlur:
-              //this.text = state.inputValue;
-              return {
-                ...changes,
-                inputValue: state.inputValue, // Allow selection of item that's not in the options array
-                selectedItem: state.inputValue // Allow selection of item that's not in the options array
-              };
-            default:
-              return changes;
-          }
-        },
-        updateList(text) {
-            if (text.trim().length > 0) {
-                this.fetchCommonNames(text);
-            }
-        },
-        onChange() {
-            this.$emit('update:modelValue', this.selected);
-        },
-        onSelect() {
-            this.$emit('select', this.prefetchedList.find((item) => item.label === this.selected));
-        },
-        prefetchCommonNames() {
-            let cacheStatus = localStorage.status('wrmdCommonNames');
+const emit = defineEmits(['update:commonName', 'update:taxonId']);
 
-            // Has Data
-            if (cacheStatus === 1) {
-                this.prefetchedList = localStorage.get('wrmdCommonNames');
+const selectedTaxon = ref({
+    label: '',
+    value: 0,
+    data: {}
+});
 
-            // Expired or Empty Cache
-            } else {
-                window.axios.get('/internal-api/search/common-names-prefetch').then(response => {
-                    localStorage.store('wrmdCommonNames', response.data, 7200); // 2 hours
-                    this.prefetchedList = response.data;
-                });
-            }
-        },
-        fetchCommonNames: debounce(function (text) {
-            this.fetching = true;
-            window.axios.get('/internal-api/search/common-names/?q=' + text).then(response => {
-                this.searchedList = response.data;
-                this.fetching = false;
-            });
-        }, 500),
-    },
-};
+const filteredOptions = ref([]);
+
+const searchTaxa = debounce(function({query}) {
+  if (query.length < 2) {
+      return filteredOptions.value = [];
+    }
+  axios.get('/internal-api/search/common-names/?search=' + query).then(response => {
+    filteredOptions.value = response.data;
+  });
+}, 500);
+
+watch(selectedTaxon, (newValue) => {
+  if (newValue.value) {
+    emit('update:taxonId', newValue.value);
+    emit('update:commonName', newValue.label);
+  } else if (typeof newValue === 'string') {
+    emit('update:taxonId', null);
+    emit('update:commonName', newValue);
+  }
+});
 </script>
 
 <template>
-  <div class="relative">
-    <VueComboBlocks
-      v-slot="{
-        getInputProps,
-        getInputEventListeners,
-        hoveredIndex,
-        isOpen,
-        getMenuProps,
-        getMenuEventListeners,
-        getItemProps,
-        getItemEventListeners,
-        getComboboxProps,
-        reset,
-        inputValue
-      }"
-      v-model="selected"
-      :itemToString="itemToString"
-      :items="filteredList"
-      :stateReducer="stateReducer"
-      @input-value-change="updateList"
-      @update:model-value="onChange"
-      @select="onSelect"
-    >
-      <div v-bind="getComboboxProps()">
-        <TextInput
-          v-bind="getInputProps(), $attrs"
-          v-model="text"
-          placeholder="Search"
-          name="common_name"
-          v-on="getInputEventListeners()"
-        />
-        <Transition
-          leaveActiveClass="transition duration-100 ease-in"
-          leaveFromClass="opacity-100"
-          leaveToClass="opacity-0"
-        >
-          <ul
-            v-show="isOpen"
-            v-bind="getMenuProps()"
-            class="absolute z-20 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-            v-on="getMenuEventListeners()"
-          >
-            <li
-              v-for="(item, index) in filteredList"
-              :key="item.id"
-              v-bind="getItemProps({ item, index })"
-              :class="[
-                hoveredIndex === index ? 'text-blue-900 bg-blue-100' : 'text-gray-900',
-                'cursor-default select-none relative py-2 px-4',
-              ]"
-              v-on="getItemEventListeners({ item, index })"
-            >
-              <span
-                :class="[
-                  selected === item ? 'font-medium' : 'font-normal',
-                  'block truncate',
-                ]"
-              >{{ item }}</span>
-            </li>
-            <li
-              v-show="fetching"
-              class="text-green-600 font-medium cursor-default select-none relative py-2 px-4"
-            >
-              <div class="flex items-center">
-                <ArrowPathIcon class="mr-3 flex-shrink-0 h-4 w-4" />
-                Fetching New Results
-              </div>
-            </li>
-          </ul>
-        </Transition>
-      </div>
-    </VueComboBlocks>
-  </div>
+  <Autocomplete
+    v-model="selectedTaxon"
+    :suggestions="filteredOptions"
+    optionLabel="label"
+    :placeholder="__('Search species')"
+    :showEmptyMessage="false"
+    appendTo="self"
+    inputClass="focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md py-1.5 px-2 shadow-sm"
+    pt:overlay="w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+    pt:loader="absolute top-[50%] right-[0.5rem] -mt-2 animate-spin"
+    pt:option="cursor-default select-none relative py-2 px-4"
+    pt:emptyMessage="cursor-default select-none relative py-2 px-4"
+    @complete="searchTaxa"
+  />
 </template>

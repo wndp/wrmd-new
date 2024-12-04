@@ -21,4 +21,7 @@ sail artisan view:clear
 echo "Linking storage..."
 sail artisan storage:link
 
+echo "Import common names into Meilisearch..."
+sail artisan scout:import "App\Models\CommonName"
+
 echo "All done :)"

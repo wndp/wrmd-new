@@ -1,3 +1,15 @@
+<script setup>
+import PatientLayout from '@/Layouts/PatientLayout.vue';
+import Alert from '@/Components/Alert.vue';
+
+defineProps({
+  wildlifeRecoveryData: {
+    type: Object,
+    default: () => ({})
+  }
+})
+</script>
+
 <template>
   <PatientLayout title="WRAPP">
     <template #tabs>
@@ -40,16 +52,3 @@
     </div>
   </PatientLayout>
 </template>
-
-<script setup>
-import PatientLayout from '@/Layouts/PatientLayout.vue';
-import OiledPatientTabs from '@/Pages/Oiled/Partials/OiledPatientTabs.vue';
-import Alert from '@/Components/Alert.vue';
-
-defineProps({
-  wildlifeRecoveryData: {
-    type: Object,
-    default: () => ({})
-  }
-})
-</script>

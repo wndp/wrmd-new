@@ -69,7 +69,8 @@ let casesToCreate = range(1, 51);
       >
         <CommonName
           id="common_name"
-          v-model="form.common_name"
+          v-model:commonName="form.common_name"
+          v-model:taxonId="form.taxon_id"
           required
         />
         <InputError

@@ -55,7 +55,7 @@ class HandleInertiaRequests extends Middleware
 
         if (Auth::check()) {
             $user = $request->user();
-            $team = $user->current_team_id ? $user->currentTeam : null;
+            $team = $user->currentTeam;
 
             $abilities = Collection::make(app(Gate::class)->forUser($user)->abilities())
                 ->keys()

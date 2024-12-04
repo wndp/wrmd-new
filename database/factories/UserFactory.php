@@ -62,7 +62,7 @@ class UserFactory extends Factory
 
         return $this->has(
             Team::factory()
-                ->withProSubscription()
+                //->withProSubscription()
                 ->state(function (array $attributes, User $user) {
                     // To prevent api request to Paddle
                     // https://github.com/laravel/cashier-paddle/issues/280

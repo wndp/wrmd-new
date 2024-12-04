@@ -8,6 +8,7 @@ use App\Concerns\AsAction;
 use App\Enums\AccountStatus;
 use App\Enums\Extension;
 use App\Enums\Role;
+use App\Enums\SettingKey;
 use App\Models\Setting;
 use App\Models\Team;
 use App\Models\User;
@@ -87,12 +88,18 @@ class RegisterSubAccount
      */
     public function cloneSettings(Team $subAccount)
     {
-        if ($this->request->boolean('clone_settings')) {
-            $subAccountSettings = $subAccount->settingsStore();
+        $masterAccountSettings = $this->masterAccount->settingsStore();
+        $subAccountSettings = $subAccount->settingsStore();
 
-            Collection::make($this->masterAccount->settingsStore()->all())->map(
+        if ($this->request->boolean('clone_settings')) {
+            Collection::make($masterAccountSettings->all())->map(
                 fn ($value, $key) => $subAccountSettings->set([$key => $value])
             );
+        } else {
+            $subAccountSettings->set([
+                SettingKey::TIMEZONE->value => $masterAccountSettings->get(SettingKey::TIMEZONE, 'America/Los_Angeles'),
+                SettingKey::LANGUAGE->value => $masterAccountSettings->get(SettingKey::LANGUAGE, 'en')
+            ]);
         }
     }
 

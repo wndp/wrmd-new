@@ -11,14 +11,20 @@ use Silber\Bouncer\BouncerFacade;
 
 trait CreatesTeamUser
 {
-    public function createTeamUser(array $teamOverrides = [], array $userOverrides = [])
+    public function createTeamUser(array $teamOverrides = [], array $userOverrides = [], Role $role = null)
     {
-        $role = isset($userOverrides['role']) ? $userOverrides['role'] : Role::ADMIN->value;
-        unset($userOverrides['role']);
+        $role = $role?->value ?? Role::ADMIN->value;
+
+        // $role = isset($userOverrides['role']) ? $userOverrides['role'] : Role::ADMIN->value;
+        // unset($userOverrides['role']);
 
         if (isset($userOverrides['email'])) {
             $teamOverrides = array_merge($teamOverrides, ['contact_email' => $userOverrides['email']]);
         }
+
+        $user = User::factory()->create($userOverrides);
+
+        $teamOverrides['user_id'] = $user->id;
 
         $team = Team::factory()->createQuietly($teamOverrides);
         $team->settingsStore()->set(SettingKey::TIMEZONE, 'America/Los_Angeles');
@@ -28,8 +34,6 @@ trait CreatesTeamUser
 
         //$userOverrides['parent_account_id'] = $team->id;
         $userOverrides['current_team_id'] = $team->id;
-
-        $user = User::factory()->create($userOverrides);
 
         $team->users()->attach($user);
         BouncerFacade::scope()->to($team->id)->onlyRelations()->dontScopeRoleAbilities();

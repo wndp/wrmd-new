@@ -39,6 +39,7 @@ class AppServiceProvider extends ServiceProvider
             if (Auth::check()) {
                 return new AdministrativeDivision(App::getLocale(), Auth::user()->currentTeam->country);
             }
+            return new AdministrativeDivision(config('app.locale'), 'US');
         });
 
         $this->app->singleton(PdfApiInterface::class, function () {
@@ -71,6 +72,7 @@ class AppServiceProvider extends ServiceProvider
             'formula' => \App\Models\Formula::class,
             'incident' => \App\Models\Incident::class,
             'labReport' => \App\Models\LabReport::class,
+            'location' => \App\Models\Location::class,
             'media' => \App\Models\Media::class,
             'morphometric' => \App\Models\Morphometric::class,
             'necropsy' => \App\Models\Necropsy::class,
@@ -88,7 +90,8 @@ class AppServiceProvider extends ServiceProvider
             'urinalysis' => \App\Models\LabUrinalysisResult::class,
             'user' => \App\Models\User::class,
             'oil_spill_event' => \App\Models\OilSpillEvent::class,
-            'oil_waterproofing_assessment' => \App\Models\OilWaterproofingAssessment::class
+            'oil_waterproofing_assessment' => \App\Models\OilWaterproofingAssessment::class,
+            'veterinarian' => \App\Models\Veterinarian::class
         ]);
 
         Route::bind('voidedPatient', fn ($value) => Patient::onlyVoided()->findOrFail($value));
@@ -105,9 +108,8 @@ class AppServiceProvider extends ServiceProvider
             return ['data' => $jobData];
         });
 
-        // Policies
+        // Policies, ie: computed permissions
         foreach ([
-            \App\Policies\AdminPolicy::class,
             \App\Policies\PrivacyPolicy::class,
             \App\Policies\OperationsPolicy::class,
         ] as $policy) {

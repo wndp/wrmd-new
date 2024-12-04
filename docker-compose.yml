@@ -124,6 +124,9 @@ services:
             - 'host.docker.internal:host-gateway'
         volumes:
             - '/dev/shm:/dev/shm'
+        ports:
+            - '${FORWARD_SELENIUM_PORT:-4444}:4444'
+            - '${FORWARD_SELENIUM_HEADFUL_PORT:-7900}:7900'
         networks:
             - sail
 networks:

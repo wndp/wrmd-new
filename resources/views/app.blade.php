@@ -38,7 +38,7 @@
         <meta property="description" content="A free on-line medical database designed specifically for wildlife rehabilitators to collect, manage and analyze data for our patients." />
     </head>
     <body class="font-sans antialiased bg-gray-100">
-        <noscript>You need to enable JavaScript to run WRMD.</noscript>
+        <noscript>You must enable JavaScript to use Wildlife Rehabilitation MD (WRMD).</noscript>
         @inertia
     </body>
     @production

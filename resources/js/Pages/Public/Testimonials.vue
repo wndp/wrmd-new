@@ -1,12 +1,23 @@
+<script setup>
+import PublicLayout from '@/Layouts/PublicLayout.vue';
+
+defineProps({
+  testimonials: {
+    type: Array,
+    required: true
+  }
+})
+</script>
+
 <template>
   <PublicLayout title="Testimonials">
     <div class="relative py-8 px-4 sm:px-6 lg:px-8 bg-white">
       <div class="prose prose-lg mx-auto">
         <h1>
-          <span class="mt-2 block text-3xl text-center leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">Testimonials</span>
+          <span class="mt-2 block text-3xl text-center leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">We <span class="text-red-500">LOVE</span> Getting Testimonials!</span>
         </h1>
         <p class="mt-8 text-xl text-gray-500 leading-8">
-          We LOVE getting feedback from our users! Thank you for sharing with us how WRMD has improved your day-to-day wildlife rehabilitation.
+          Thank you for sharing how Wildlife Rehabilitation MD has improved your day-to-day wildlife rehabilitation.
         </p>
       </div>
       <div class="mt-6 pros pros-xl pros-blue max-w-none text-gray-500 mx-auto">
@@ -35,7 +46,7 @@
                   <div class="flex-shrink-0 inline-flex rounded-full border-2 border-white">
                     <img
                       class="h-12 w-12 rounded-full"
-                      :src="testimonial.account.profile_photo_url"
+                      :src="testimonial.team.profile_photo_url"
                       alt="Logo"
                     >
                   </div>
@@ -44,8 +55,8 @@
                       {{ testimonial.name }}
                     </div>
                     <div class="text-base font-medium text-gray-600">
-                      {{ testimonial.account.organization }},
-                      {{ testimonial.account.locale }}
+                      {{ testimonial.team.name }},
+                      {{ testimonial.team.locale }}
                     </div>
                   </div>
                 </div>
@@ -57,14 +68,3 @@
     </div>
   </PublicLayout>
 </template>
-
-<script setup>
-import PublicLayout from '@/Layouts/PublicLayout.vue';
-
-defineProps({
-  testimonials: {
-    type: Array,
-    required: true
-  }
-})
-</script>

@@ -12,7 +12,6 @@ Route::inertia('about', 'Public/About')->name('about');
 Route::inertia('the-wild-neighbors-database-project', 'Public/Wndp')->name('about.wndp');
 Route::inertia('security', 'Public/Security')->name('about.security');
 Route::inertia('data-integrity', 'Public/DataIntegrity')->name('about.data-integrity');
-Route::inertia('agencies', 'Public/Agencies')->name('about.agencies');
 Route::inertia('support-us', 'Public/SupportUs')->name('about.support-us');
 Route::inertia('pricing', 'Public/Pricing')->name('about.pricing');
 Route::inertia('terms-and-conditions', 'Public/Terms')->name('about.terms');
@@ -33,4 +32,5 @@ Route::controller(PublicController::class)->group(function () {
     Route::get('features', 'features')->name('about.features');
     Route::get('importing', 'importing')->name('about.importing');
     Route::get('whats-new', 'new')->name('about.new');
+    Route::get('agencies', 'agencies')->name('about.agencies');
 });

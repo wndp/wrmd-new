@@ -1,3 +1,14 @@
+<script setup>
+import PublicLayout from '@/Layouts/PublicLayout.vue';
+
+defineProps({
+  annualReports: {
+    type: Array,
+    required: true
+  },
+})
+</script>
+
 <template>
   <PublicLayout title="Regulatory Agencies">
     <div class="relative py-8 px-4 sm:px-6 lg:px-8 bg-white">
@@ -13,17 +24,19 @@
         <h4>Annual Reports</h4>
         <p>Part of what makes Wildlife Rehabilitation MD so special is it's ability to produce customized annual reports at the push of a button. The customization is the real trick. Each state, province or subdivision has their own idea of what should be report at the end of the year and how it should be organized.</p>
         <p>
-          For a list of all the annual reports that Wildlife Rehabilitation MD is currently able to create visit the <Link href="/">
-            annual reports page
-          </Link>. If your state, province or subdivision is not listed then don't fret. Send us the actual report as created by your government and we'll recreate it as soon as possible.
+          View the list below of all the annual reports that Wildlife Rehabilitation MD is currently able to create. If your state, province or subdivision is not listed then don't fret. Send us the actual report as created by your government and we'll recreate it as soon as possible.
         </p>
+        <ol>
+          <li
+            v-for="report in annualReports"
+            :key="report.name"
+          >
+            {{ report.name }}
+          </li>
+        </ol>
         <h4>Missing or Updated Annual Reports</h4>
         <p>Send missing or updated annual reports to <a href="mailto:support@wildneighborsdp.org?subject=Annual Report">support@wildneighborsdp.org</a> and please indicate in the subject that you are including an annual report.</p>
       </div>
     </div>
   </PublicLayout>
 </template>
-
-<script setup>
-import PublicLayout from '@/Layouts/PublicLayout.vue';
-</script>

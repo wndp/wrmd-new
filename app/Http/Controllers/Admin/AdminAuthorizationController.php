@@ -24,7 +24,7 @@ class AdminAuthorizationController extends Controller
             ->orderBy('id')
             ->get();
 
-        $abilities = Ability::get();
+        $abilities = Ability::orderBy('name')->get();
 
         return Inertia::render('Admin/Authorization', compact('roles', 'abilities'));
     }
@@ -62,8 +62,8 @@ class AdminAuthorizationController extends Controller
         BouncerFacade::refresh();
 
         return redirect()->route('admin.authorization')
-            ->with('flash.notificationHeading', 'Success')
-            ->with('flash.notification', "Default $association role abilities saved.");
+            ->with('notification.heading', 'Success')
+            ->with('notification.text', "Default $association role abilities saved.");
     }
 
     /**

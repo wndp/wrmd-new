@@ -45,7 +45,7 @@ export default {
                 { name: __('Analytics'), route: 'analytics.index', icon: ChartBarIcon, can: can(Abilities.VIEW_ANALYTICS) },
                 { name: __('People'), route: 'people.rescuers.index', icon: UsersIcon, can: can(Abilities.COMPUTED_VIEW_PEOPLE) },
                 { name: __('Forum'), route: 'forum.index', icon: ChatBubbleOvalLeftEllipsisIcon, can: true },
-                { name: __('Admin'), route: 'admin.dashboard', icon: CommandLineIcon, can: can(Abilities.COMPUTED_VIEW_WRMD_ADMIN) },
+                { name: __('Admin'), route: 'admin.dashboard', icon: CommandLineIcon, can: can(Abilities.VIEW_WRMD_ADMIN) },
             ]
         };
     },

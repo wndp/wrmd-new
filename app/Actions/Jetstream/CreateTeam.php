@@ -2,6 +2,7 @@
 
 namespace App\Actions\Jetstream;
 
+use App\Enums\SettingKey;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
@@ -32,9 +33,8 @@ class CreateTeam implements CreatesTeams
             'personal_team' => false,
         ]));
 
-        $team->settingsStore()->set([
-            'timezone' => $input['timezone'] ?: 'America/Los_Angeles'
-        ]);
+        $team->settingsStore()->set(SettingKey::TIMEZONE, $input['timezone'] ?: 'America/Los_Angeles');
+        $team->settingsStore()->set(SettingKey::LANGUAGE, 'en');
 
         return $team;
     }

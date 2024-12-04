@@ -43,14 +43,14 @@ class AttributeOption extends Model
         return new AttributeOptionsCollection($models);
     }
 
-    public static function getDropdownOptions(array $attributeOptionNames): AttributeOptionsCollection
+    public static function getDropdownOptions(AttributeOptionName|array $attributeOptionNames): AttributeOptionsCollection
     {
         return static::select([
                     'name',
                     'id',
                     'value',
                 ])
-                ->whereIn('name', $attributeOptionNames)
+                ->whereIn('name', Arr::wrap($attributeOptionNames))
                 ->orderBy('sort_order')
                 ->orderBy('value')
                 ->get()

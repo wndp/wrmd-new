@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\AccountStatus;
-use App\Events\AccountUpdated;
+use App\Events\TeamUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateTeamProfileRequest;
-use App\Jobs\DeleteAccount;
+use App\Jobs\DeleteTeam;
 use App\Models\Team;
 use App\Options\LocaleOptions;
 use App\Options\Options;
@@ -28,24 +28,17 @@ class AccountsController extends Controller
      */
     public function index(Request $request)
     {
-        // OptionsStore::merge($accountOptions);
-        // OptionsStore::merge($localeOptions);
-
         OptionsStore::add([
             new LocaleOptions(),
             'accountStatusOptions' => Options::enumsToSelectable(AccountStatus::cases()),
-            //'subdivisionOptions' => Options::arrayToSelectable($locale->countrySubdivisions()),
-            //'timezoneOptions' => Options::arrayToSelectable($locale->countryTimeZones()),
         ]);
 
         $teams = Team::query()
-            ->when($request->get('status'), function ($query, $status) {
-                if ($status !== 'All') {
-                    $query->where('status', $status);
-                }
-            }, function ($query) {
-                $query->where('status', 'Active');
-            })
+            ->when(
+                $request->get('status'),
+                fn ($query, $status) => $query->where('status', $status),
+                fn ($query) => $query->where('status', AccountStatus::ACTIVE->value)
+            )
             ->when($request->only([
                 'name',
                 'federal_permit_number',
@@ -180,7 +173,7 @@ class AccountsController extends Controller
             'notes',
         ]));
 
-        //event(new AccountUpdated($team));
+        event(new TeamUpdated($team));
 
         return redirect()->route('teams.edit', $team);
     }
@@ -198,21 +191,21 @@ class AccountsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Team $team): RedirectResponse
+    public function destroy(Request $request, Team $team): RedirectResponse
     {
-        request()->offsetSet('organization', Str::slug(request('organization')));
+        $request->offsetSet('name', Str::slug(request('name')));
 
-        request()->validate([
-            'organization' => 'required|in:'.Str::slug($team->organization),
+        $request->validate([
+            'name' => 'required|in:'.Str::slug($team->name),
             'password' => ['required', 'confirmed', 'current_password'],
         ], [
-            'organization.in' => 'The provided organization name does not match the displayed account organization name.',
+            'name.in' => 'The provided organization name does not match the displayed account organization name.',
         ]);
 
-        DeleteAccount::dispatch($team);
+        DeleteTeam::dispatch($team);
 
-        return redirect()->route('teams.index')
-            ->with('flash.notificationHeading', 'I Hope You Meant That!')
-            ->with('flash.notification', "$team->name is in the queue to be deleted.");
+        return redirect()->route('admin.dashboard')
+            ->with('notification.heading', 'I Hope You Meant That!')
+            ->with('notification.text', "$team->name is in the queue to be deleted.");
     }
 }

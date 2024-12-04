@@ -5,6 +5,7 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -22,8 +23,6 @@ class ContactEmail extends Mailable
     public function __construct(public array $data)
     {
         $this->data = $data;
-
-        $this->from($this->data['email'], $this->data['name']);
     }
 
     /**
@@ -33,6 +32,7 @@ class ContactEmail extends Mailable
     {
         return new Envelope(
             subject: $this->data['subject'],
+            from: new Address($this->data['email'], $this->data['name']),
         );
     }
 

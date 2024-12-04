@@ -1,3 +1,37 @@
+<script setup>
+import {onMounted} from 'vue';
+import PublicLayout from '@/Layouts/PublicLayout.vue';
+
+defineProps({
+  organizations: {
+    type: Number,
+    required: true
+  },
+  countries: {
+    type: Number,
+    required: true
+  },
+})
+
+onMounted(() => {
+  const plugin = document.createElement("script");
+  plugin.setAttribute("src", "//wildneighborsdatabaseproject-bloom.kindful.com/embeds/71726ac5-2c95-4015-8e7f-f2ad47744fb5/init.js?type=form");
+  plugin.setAttribute("data-embed-id", "71726ac5-2c95-4015-8e7f-f2ad47744fb5");
+  plugin.setAttribute("data-lookup-type", "jquery-selector");
+  plugin.setAttribute("data-lookup-value", "#kindful-donate-form-71726ac5-2c95-4015-8e7f-f2ad47744fb5");
+  plugin.async = true;
+  document.head.appendChild(plugin);
+});
+</script>
+
+
+<!-- <style scoped>
+  div.kindful-embed-wrapper {
+    height: auto !important;
+    /*max-height: 650px;*/
+  }
+</style> -->
+
 <template>
   <PublicLayout title="Help Support Wildlife Rehabilitation MD">
     <div class="max-w-5xl mx-auto">
@@ -97,33 +131,3 @@
     </div>
   </PublicLayout>
 </template>
-
-<script setup>
-import PublicLayout from '@/Layouts/PublicLayout.vue';
-</script>
-
-<script>
-export default {
-    props: {
-      organizations: Number,
-      countries: Number
-    },
-    mounted() {
-      const plugin = document.createElement("script");
-
-      plugin.setAttribute("src", "//wildneighborsdatabaseproject-bloom.kindful.com/embeds/71726ac5-2c95-4015-8e7f-f2ad47744fb5/init.js?type=form");
-      plugin.setAttribute("data-embed-id", "71726ac5-2c95-4015-8e7f-f2ad47744fb5");
-      plugin.setAttribute("data-lookup-type", "jquery-selector");
-      plugin.setAttribute("data-lookup-value", "#kindful-donate-form-71726ac5-2c95-4015-8e7f-f2ad47744fb5");
-      plugin.async = true;
-      document.head.appendChild(plugin);
-    },
-};
-</script>
-
-<!-- <style scoped>
-  div.kindful-embed-wrapper {
-    height: auto !important;
-    /*max-height: 650px;*/
-  }
-</style> -->

@@ -332,7 +332,7 @@ const loginUser = () => {
                 <div class="flex-shrink-0 inline-flex rounded-full border-2 border-white">
                   <img
                     class="h-12 w-12 rounded-full"
-                    :src="testimonials[0].account.profile_photo_url"
+                    :src="testimonials[0].team.profile_photo_url"
                     alt="Logo"
                   >
                 </div>
@@ -341,8 +341,8 @@ const loginUser = () => {
                     {{ testimonials[0].name }}
                   </div>
                   <div class="text-base font-medium text-gray-600">
-                    {{ testimonials[0].account.organization }}
-                    <br>{{ testimonials[0].account.locale }}
+                    {{ testimonials[0].team.name }}
+                    <br>{{ testimonials[0].team.locale }}
                   </div>
                 </div>
               </div>
@@ -368,7 +368,7 @@ const loginUser = () => {
                 <div class="flex-shrink-0 inline-flex rounded-full border-2 border-white">
                   <img
                     class="h-12 w-12 rounded-full"
-                    :src="testimonials[1].account.profile_photo_url"
+                    :src="testimonials[1].team.profile_photo_url"
                     alt="Logo"
                   >
                 </div>
@@ -377,8 +377,8 @@ const loginUser = () => {
                     {{ testimonials[1].name }}
                   </div>
                   <div class="text-base font-medium text-gray-600">
-                    {{ testimonials[1].account.organization }}
-                    <br>{{ testimonials[1].account.locale }}
+                    {{ testimonials[1].team.name }}
+                    <br>{{ testimonials[1].team.locale }}
                   </div>
                 </div>
               </div>

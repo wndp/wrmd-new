@@ -65,9 +65,9 @@ const tabs = active(Extension.OIL_SPILL) ? ref([
   { name: __('Processing'), route: 'oiled.processing.edit', can: true, current: route().current('oiled.processing.*') },
   { name: __('Wash'), route: 'oiled.wash.index', can: true, current: route().current('oiled.wash.*') },
 ].filter(o => o.can)) : ref([
-  { name: __('Rescuer'), route: 'patients.rescuer.edit', can: can(Abilities.COMPUTED_VIEW_RESCUER) },
-  { name: __('Initial Care'), route: 'patients.initial.edit', can: true },
-  { name: __('Continued Care'), route: 'patients.continued.edit', can: true },
+  { name: __('Rescuer'), route: 'patients.rescuer.edit', can: can(Abilities.COMPUTED_VIEW_RESCUER), current: route().current('patients.rescuer.*') },
+  { name: __('Initial Care'), route: 'patients.initial.edit', can: true, current: route().current('patients.initial.*') },
+  { name: __('Continued Care'), route: 'patients.continued.edit', can: true, current: route().current('patients.continued.*') },
 ].filter(o => o.can));
 
 const dailyTasksOptionGroups = ref([

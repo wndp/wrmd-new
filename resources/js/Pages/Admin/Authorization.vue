@@ -1,17 +1,23 @@
 <script setup>
-import {ref} from 'vue';
+import {shallowRef} from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import AllowedAuthorizations from './Partials/AllowedAuthorizations.vue';
 //import ForbiddenAuthorizations from './Partials/ForbiddenAuthorizations.vue';
 import AdminNavigation from './Partials/AdminNavigation.vue';
-import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
+import {TabGroup, TabList, Tab, TabPanels, TabPanel} from '@headlessui/vue';
 
 defineProps({
-  roles: Array,
-  abilities: Array
-})
+  roles: {
+    type: Array,
+    required: true
+  },
+  abilities: {
+    type: Array,
+    required: true
+  }
+});
 
-const tabs = ref([
+const tabs = shallowRef([
   {name: 'Allowed', component: AllowedAuthorizations},
   // {name: 'Forbidden', component: 'ForbiddenAuthorizations'},
 ]);

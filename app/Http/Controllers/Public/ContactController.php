@@ -30,7 +30,7 @@ class ContactController extends Controller
             'message' => 'required',
         ]);
 
-        Mail::to('support@wildneighborsdp.org')->send(new ContactEmail($data));
+        Mail::to('support@wildneighborsdp.org')->queue(new ContactEmail($data));
 
         return back()->with(
             'status',

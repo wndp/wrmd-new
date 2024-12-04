@@ -13,7 +13,7 @@ export default {
       default: null
     },
     source: {
-      type: [Array, String],
+      type: [Array, String, Function],
       required: true
     },
     optionFormat: {
@@ -47,6 +47,8 @@ export default {
     search(text) {
       if (typeof this.source === 'string') {
         this.debounceSearch(text);
+      } else if (typeof this.source === 'function') {
+        this.options = this.source(text)
       } else if (Array.isArray(this.source)) {
         this.arrayLikeSearch(text);
       }
@@ -93,19 +95,29 @@ export default {
           throw new TypeError()
       }
     },
-    onChange() {
-      this.$emit('selected', this.selected);
-      this.$emit('update:modelValue', this.formatValue(this.selected));
+    onSelect() {
+      this.$nextTick(() => {
+        this.$emit('selected', this.selected);
+        //this.$emit('update:modelValue', this.formatValue(this.selected));
+      });
     },
     stateReducer(state, actionAndChanges) {
       const { changes, type,  } = actionAndChanges;
       switch (type) {
         case VueComboBlocks.stateChangeTypes.InputBlur:
-        return {
-          ...changes,
-          inputValue: state.inputValue, // Allow selection of item that's not in the options array
-          selectedItem: state.inputValue // Allow selection of item that's not in the options array
-        };
+          return {
+            ...changes,
+            inputValue: state.inputValue, // Allow selection of item that's not in the options array
+            selectedItem: state.inputValue // Allow selection of item that's not in the options array
+          };
+        // case VueComboBlocks.stateChangeTypes.ItemClick:
+        //   console.log(state)
+        //   return {
+        //     ...changes,
+        //     //isOpen: true, // keep menu open after selection.
+        //     hoveredIndex: state.hoveredIndex,
+        //     inputValue: '', // don't add the item string as input value at selection.
+        //   };
         default:
           return changes;
       }
@@ -133,8 +145,8 @@ export default {
       :items="options"
       :stateReducer="stateReducer"
       :inputId="`${name}_id`"
+      @select="onSelect"
       @input-value-change="search"
-      @update:model-value="onChange"
     >
       <div v-bind="getComboboxProps()">
         <slot

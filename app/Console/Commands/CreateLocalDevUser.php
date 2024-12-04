@@ -39,7 +39,7 @@ class CreateLocalDevUser extends Command
         ]);
 
         BouncerFacade::scope()->to($user->personalTeam()->id)->onlyRelations()->dontScopeRoleAbilities();
-        BouncerFacade::assign(Role::ADMIN->value)->to($user);
+        BouncerFacade::assign(Role::WNDP_SUPER_ADMIN->value)->to($user);
 
         $user->personalTeam()->settingsStore()->set([
             SettingKey::TIMEZONE->value => 'America/Los_Angeles',

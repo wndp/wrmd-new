@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Oiled\CaseSummaryController;
-use App\Http\Controllers\Oiled\IntakeExamController;
 use App\Http\Controllers\Oiled\ProcessingCarcassConditionController;
 use App\Http\Controllers\Oiled\ProcessingCollectionController;
 use App\Http\Controllers\Oiled\ProcessingCommentsController;
@@ -14,7 +13,6 @@ use App\Http\Controllers\Oiled\WaterproofingAssessmentController;
 
 Route::prefix('patients/oiled')->name('oiled.')->group(function () {
     Route::get('case-summary', CaseSummaryController::class)->name('summary.edit');
-    Route::get('intake', IntakeExamController::class)->name('intake.edit');
 
     Route::get('wash', [WashController::class, 'index'])->name('wash.index');
     Route::post('{patient}/wash', [WashController::class, 'store'])->name('wash.store');

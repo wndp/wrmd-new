@@ -15,13 +15,13 @@ const props = defineProps({
 const password = ref(null);
 
 const form = useForm({
-  organization: '',
+  name: '',
   password: '',
   password_confirmation: '',
 });
 
 const deleteTeam = () => {
-    form.delete(route('accounts.destroy', {
+    form.delete(route('teams.destroy', {
         team: props.team
     }), {
         preserveScroll: true,
@@ -45,7 +45,7 @@ const deleteTeam = () => {
       </div>
       <div class="px-4 py-5 sm:p-6 prose max-w-none">
         <p><strong>Unexpected bad things will happen if you do not read this!</strong></p>
-        <p>Once you delete an account, there is no going back. Please be certain. This action <span class="text-red-600">CANNOT be undone</span>. This will permanently delete the account and all of its associated database records.</p>
+        <p>Once you delete an account, there is no going back. <strong>Please be certain.</strong> This action <span class="text-red-600">CANNOT be undone</span>. This will permanently delete the account and all of its associated database records.</p>
       </div>
     </div>
 
@@ -68,15 +68,15 @@ const deleteTeam = () => {
                 <div class="col-span-3 sm:col-span-2">
                   <InputLabel
                     value="Account Organization Name"
-                    for="organization"
+                    for="name"
                   />
                   <TextInput
-                    v-model="form.organization"
-                    name="organization"
+                    v-model="form.name"
+                    name="name"
                     autofill="off"
                   />
                   <InputError
-                    :message="form.errors.organization"
+                    :message="form.errors.name"
                     class="mt-2"
                   />
                 </div>

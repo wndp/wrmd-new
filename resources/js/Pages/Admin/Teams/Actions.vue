@@ -34,7 +34,7 @@ const canSpoof = computed(() => can(Abilities.COMPUTED_SPOOF_ACCOUNTS) && props.
                   Spoof this account
                 </Link>
               </li> -->
-              <li v-if="canSpoof">
+              <li>
                 <Link
                   :href="route('teams.delete', team)"
                   class="text-red-600"

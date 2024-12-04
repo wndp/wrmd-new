@@ -42,6 +42,7 @@ const form = useForm({
   custom_values: {},
   case_year: usePage().props.lastCaseId.year,
   admitted_at: formatISO9075(new Date()),
+  taxon_id: '',
   common_name: props.incident.suspected_species || '',
   morph_id: '',
   cases_to_create: 1,

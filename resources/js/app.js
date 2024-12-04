@@ -7,6 +7,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import Notifications from 'notiwind'
 import mitt from 'mitt';
+import PrimeVue from 'primevue/config';
 import Vapor from 'laravel-vapor'
 
 const emitter = mitt();
@@ -22,6 +23,11 @@ createInertiaApp({
             .use(ZiggyVue)
             .provide('emitter', emitter)
             .use(Notifications)
+            .use(PrimeVue, {
+                theme: 'none',
+                unstyled: true,
+                //pt: PrimeCETO
+            })
             .component('Link', Link)
             .mount(el);
     },

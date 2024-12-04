@@ -1,3 +1,24 @@
+<script setup>
+import PublicLayout from '@/Layouts/PublicLayout.vue';
+import * as heroIcons from "@heroicons/vue/24/outline";
+import {InformationCircleIcon, EnvelopeIcon} from '@heroicons/vue/24/outline';
+
+defineProps({
+  standardExtensions: {
+    type: Array,
+    required: true
+  },
+  proExtensions: {
+    type: Array,
+    required: true
+  },
+});
+
+const showExtensionDetails = (extension) => {
+  window.Beacon('article', extension.help_scout_article_id, { type: 'sidebar' })
+}
+</script>
+
 <template>
   <PublicLayout title="Features">
     <div class="py-16 bg-gray-50 overflow-hidden lg:py-24">
@@ -7,7 +28,7 @@
             Out-of-the-box simple;
           </h2>
           <p class="mt-4 max-w-3xl mx-auto text-center text-xl text-gray-500">
-            WRMD is designed to be used by any wildlife rehabilitator. Whether you rehab from home or at a large organization or university, WRMD can meet your needs. It works  by customizing the features that work for you.
+            Wildlife Rehabilitation MD (WRMD) is designed for all wildlife rehabilitators, from home-based caregivers to large organizations and universities. Its flexible features can be tailored to fit your workflow, ensuring it meets the diverse needs of any organization.
           </p>
         </div>
         <div class="relative mt-12 sm:mt-16 lg:mt-24 lg:grid lg:grid-flow-row-dense lg:grid-cols-2 lg:gap-8 lg:items-center">
@@ -16,7 +37,7 @@
             <p>
               Wildlife Rehabilitation MD has the benefit of being able to adapt to many circumstances including the reporting needs of different agencies. We are able to create customized annual reports at the push of a button. The customization is the real trick. Each state, province or territory has their own idea of what should be report on at the end of the year and how it should be organized.
             </p>
-            <p>Below is a list of all the annual reports that Wildlife Rehabilitation MD is currently able to create. If your state, province or territory is not listed then don't fret. Send us the actual report as created by your government and we'll recreate it as soon as possible. Send missing or updated annual reports to <a href="mailto:support@wildneighborsdp.org">support@wildneighborsdp.org</a> and please indicate in the subject that you are including an annual report.</p>
+            <p><Link :href="route('about.agencies')">View the list of all the annual reports</Link> that Wildlife Rehabilitation MD is currently able to create.  If your state, province or territory is not listed then don't fret. Send us the actual report as created by your government and we'll recreate it as soon as possible. Send missing or updated annual reports to <a href="mailto:support@wildneighborsdp.org">support@wildneighborsdp.org</a> and please indicate in the subject that you are including an annual report.</p>
           </div>
           <div class="mt-10 -mx-4 relative lg:mt-0 lg:col-start-1">
             <img
@@ -111,26 +132,26 @@
       </div>
     </div>
     <div class="relative bg-white py-16 sm:py-24 lg:py-32">
-      <div class="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl">
-        <h2 class="text-3xl font-semibold tracking-wider text-green-600 uppercase">
+      <div class="mx-auto max-w-md px-4 sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl">
+        <h2 class="text-3xl font-semibold tracking-wider text-green-600 uppercase text-center">
           Extend Your WRMD
         </h2>
-        <!-- <p class="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
-                    All the tools needed to be as detailed as you want
-                </p> -->
         <p class="mt-5 max-w-prose mx-auto text-xl text-gray-500">
           Wildlife Rehabilitation MD has many built in features that you can choose to activate. Prescriptions, Attachments, Lab results and Hotline just to name a few.
         </p>
+        <h3 class="text-2xl leading-6 font-medium text-gray-700 mt-8">
+          Pro Extensions
+        </h3>
         <div class="mt-12">
           <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             <div
-              v-for="extension in extensions"
-              :key="extension.namespace"
+              v-for="extension in proExtensions"
+              :key="extension.value"
               class="pt-6"
             >
-              <div class="flow-root bg-gray-50 rounded-lg px-6 pb-8 h-full">
+              <div class="flow-root bg-gray-100 shadow rounded-lg px-6 pb-8 h-full">
                 <div class="-mt-6">
-                  <div>
+                  <div class="text-center">
                     <span class="inline-flex items-center justify-center p-3 bg-green-500 rounded-md shadow-lg">
                       <component
                         :is="heroIcons[extension.icon]"
@@ -139,19 +160,71 @@
                       />
                     </span>
                   </div>
-                  <h3 class="mt-8 text-lg font-medium text-gray-900 tracking-tight">
-                    {{ extension.name }}
-                  </h3>
-                  <p class="mt-5 text-base text-gray-500">
-                    {{ extension.tagline }}
-                  </p>
+                  <h4 class="mt-8 text-lg font-medium text-gray-900 tracking-tight text-center">
+                    {{ extension.label }}
+                  </h4>
+                  <div class="flex mt-4">
+                    <div class="mr-4 shrink-0">
+                      <a
+                        href="javascript:void(0)"
+                        @click="showExtensionDetails(extension)"
+                      >
+                        <InformationCircleIcon class="size-6 text-gray-500" />
+                      </a>
+                    </div>
+                    <p class="text-base text-gray-500">
+                      {{ extension.description }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h3 class="text-2xl leading-6 font-medium text-gray-700 mt-8">
+          Standard Extensions
+        </h3>
+        <div class="mt-12">
+          <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            <div
+              v-for="extension in standardExtensions"
+              :key="extension.value"
+              class="pt-6"
+            >
+              <div class="flow-root bg-gray-100 shadow rounded-lg px-6 pb-8 h-full">
+                <div class="-mt-6">
+                  <div class="text-center">
+                    <span class="inline-flex items-center justify-center p-3 bg-green-500 rounded-md shadow-lg">
+                      <component
+                        :is="heroIcons[extension.icon]"
+                        class="h-6 w-6 text-white"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </div>
+                  <h4 class="mt-8 text-lg font-medium text-gray-900 tracking-tight text-center">
+                    {{ extension.label }}
+                  </h4>
+                  <div class="flex mt-4">
+                    <div class="mr-4 shrink-0">
+                      <a
+                        href="javascript:void(0)"
+                        @click="showExtensionDetails(extension)"
+                      >
+                        <InformationCircleIcon class="size-6 text-gray-500" />
+                      </a>
+                    </div>
+                    <p class="text-base text-gray-500">
+                      {{ extension.description }}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
             <div class="pt-6">
-              <div class="flow-root bg-gray-50 rounded-lg px-6 pb-8 h-full">
+              <div class="flow-root bg-gray-100 shadow rounded-lg px-6 pb-8 h-full">
                 <div class="-mt-6">
-                  <div>
+                  <div class="text-center">
                     <span class="inline-flex items-center justify-center p-3 bg-orange-500 rounded-md shadow-lg">
                       <component
                         :is="heroIcons['MegaphoneIcon']"
@@ -160,12 +233,19 @@
                       />
                     </span>
                   </div>
-                  <h3 class="mt-8 text-lg font-medium text-gray-900 tracking-tight">
-                    tell us
-                  </h3>
-                  <p class="mt-5 text-base text-gray-500">
-                    Let us know what amazing feature you want added!
-                  </p>
+                  <h4 class="mt-8 text-lg font-medium text-gray-900 tracking-tight text-center">
+                    Tell Us!
+                  </h4>
+                  <div class="flex mt-4">
+                    <div class="mr-4 shrink-0">
+                      <Link :href="route('contact.create')">
+                        <EnvelopeIcon class="size-6 text-gray-500" />
+                      </Link>
+                    </div>
+                    <p class="text-base text-gray-500">
+                      Let us know what amazing feature you want added. We grow when you grow.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -175,22 +255,3 @@
     </div>
   </PublicLayout>
 </template>
-
-<script>
-import PublicLayout from '@/Layouts/PublicLayout.vue';
-import * as heroIcons from "@heroicons/vue/24/outline";
-
-export default {
-    components: {
-        PublicLayout
-    },
-    props: {
-        extensions: Array
-    },
-    data() {
-        return {
-            heroIcons: heroIcons
-        };
-    }
-};
-</script>

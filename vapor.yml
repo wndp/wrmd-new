@@ -1,0 +1,22 @@
+id: 54366
+name: WRMD
+environments:
+    staging:
+        memory: 1024
+        timeout: 20
+        cli-memory: 1024
+        cli-timeout: 900
+        tmp-storage: 1024
+        cli-tmp-storage: 512
+        queue-tmp-storage: 10240
+        runtime: docker-arm
+        octane: true
+        octane-database-session-persist: true
+        octane-database-session-ttl: 10
+        storage: vapor-wrmd-storage-staging
+        build:
+            - 'composer install --no-dev'
+            - 'php artisan event:cache'
+            - 'npm ci && npm run build && rm -rf node_modules'
+        deploy:
+

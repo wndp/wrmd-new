@@ -30,19 +30,19 @@ class AdministrativeDivision
     }
 
     /**
-     * Get an array of the words countries.
+     * Get an array of the worlds countries.
      *
      * @return array
      */
     public function countries(): array
     {
-        return Arr::mapWithKeys($this->isoCodes->getCountries()->toArray(),  fn ($country) => [
+        return Arr::mapWithKeys($this->isoCodes->getCountries()->toArray(), fn ($country) => [
             $country->getAlpha2() => $country->getLocalName()
         ]);
     }
 
     /**
-     * Get an array of a countries subdivisions.
+     * Get an array of a country's subdivisions.
      *
      * @param  string|null $alpha2CountryCode
      * @return array
@@ -51,7 +51,7 @@ class AdministrativeDivision
     {
         $subdivisions = $this->isoCodes->getSubdivisions()->getAllByCountryCode($alpha2CountryCode ?? $this->alpha2CountryCode);
 
-        return Arr::mapWithKeys($subdivisions,  fn ($country) => [
+        return Arr::mapWithKeys($subdivisions, fn ($country) => [
             $country->getCode() => $country->getLocalName()
         ]);
     }
@@ -106,7 +106,9 @@ class AdministrativeDivision
     {
         $country = $this->isoCodes->getCountries()->getByAlpha2($alpha2CountryCode ?? $this->alpha2CountryCode);
 
-        if (is_null($country)) return '';
+        if (is_null($country)) {
+            return '';
+        }
 
         $currency = $this->isoCodes->getCurrencies()->getByNumericCode($country->getNumericCode());
 
@@ -200,8 +202,7 @@ class AdministrativeDivision
         string $postalCode = null,
         string $organization = null,
         string $name = null
-    ): string
-    {
+    ): string {
         $address = (new Address())
             ->withLocale($this->locale)
             ->withCountryCode($alpha2CountryCode ?? $this->alpha2CountryCode)
@@ -229,7 +230,7 @@ class AdministrativeDivision
      * @param string $phoneNumber
      * @return string
      */
-    function phoneNumber($phoneNumber, string $alpha2CountryCode = null)
+    public function phoneNumber($phoneNumber, string $alpha2CountryCode = null)
     {
         $phoneUtil = PhoneNumberUtil::getInstance();
 

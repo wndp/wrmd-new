@@ -1,5 +1,5 @@
 <script setup>
-import PersonForm from '@/Components/Forms/PersonForm.vue';
+import PersonCard from '@/Components/FormCards/PersonCard.vue';
 
 defineProps({
   person: Object,
@@ -8,7 +8,7 @@ defineProps({
 </script>
 
 <template>
-  <PersonForm
+  <PersonCard
     :person="person"
     :subdivisions="subdivisions"
     class="mt-4"

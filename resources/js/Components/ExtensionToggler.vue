@@ -33,7 +33,7 @@ const toggle = () => {
 };
 
 const showDetails = () => {
-  window.Beacon('article', props.extension.knowledge_base_id, { type: 'sidebar' })
+  window.Beacon('article', props.extension.help_scout_article_id, { type: 'sidebar' })
 }
 </script>
 

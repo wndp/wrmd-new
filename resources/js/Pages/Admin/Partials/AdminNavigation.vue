@@ -5,6 +5,7 @@ import {
   Cog6ToothIcon,
   AdjustmentsVerticalIcon,
   UserGroupIcon,
+  BugAntIcon,
   CheckBadgeIcon,
   ChatBubbleBottomCenterTextIcon,
 } from '@heroicons/vue/24/outline';
@@ -13,6 +14,7 @@ import {__} from '@/Composables/Translate';
 const navigation = [
   { name: 'Admin Dashboard', route: 'admin.dashboard', icon: Cog6ToothIcon },
   { name: 'Accounts', route: 'teams.index', icon: UserGroupIcon },
+  { name: 'Taxa', route: 'taxa.index', icon: BugAntIcon },
   { name: 'Authorizations', route: 'admin.authorization', icon: CheckBadgeIcon },
   { name: 'Testimonials', route: 'admin.testimonials.index', icon: ChatBubbleBottomCenterTextIcon },
   { name: 'Maintenance', route: 'admin.maintenance', icon: AdjustmentsVerticalIcon },

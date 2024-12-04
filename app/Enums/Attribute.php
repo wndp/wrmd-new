@@ -2,11 +2,19 @@
 
 namespace App\Enums;
 
+use App\Models\AttributeOption;
+use App\Support\AttributeOptionsCollection;
+
 enum Attribute: string
 {
+    case PATIENTS_DATE_ADMITTED_AT = 'patients.date_admitted_at';
     case PATIENTS_NAME = 'patients.name';
     case PATIENTS_BAND = 'patients.band';
+    case PATIENTS_COMMON_NAME = 'patients.common_name';
     case PATIENTS_DISPOSITION_ID = 'patients.disposition_id';
+    case PATIENTS_TRANSFER_TYPE_ID = 'patients.transfer_type_id';
+    case PATIENTS_RELEASE_TYPE_ID = 'patients.release_type_id';
+    case PATIENTS_IS_CARCASS_SAVED = 'patients.is_carcass_saved';
     case PATIENTS_DISPOSITIONED_AT = 'patients.dispositioned_at';
 
     case PATIENT_LOCATIONS_FACILITY_ID = 'patient_locations.facility_id';
@@ -29,13 +37,27 @@ enum Attribute: string
     case PEOPLE_IS_VOLUNTEER = 'people.is_volunteer';
     case PEOPLE_IS_MEMBER = 'people.is_member';
 
+    case EXAMS_SEX_ID = 'exams.sex_id';
+    case EXAMS_WEIGHT_UNIT_ID = 'exams.weight_unit_id';
+    case EXAMS_BODY_CONDITION_ID = 'exams.body_condition_id';
+    case EXAMS_ATTITUDE_ID = 'exams.attitude_id';
+    case EXAMS_DEHYDRATION_ID = 'exams.dehydration_id';
+    case EXAMS_MUCOUS_MEMBRANE_COLOR_ID = 'exams.mucous_membrane_color_id';
+    case EXAMS_MUCOUS_MEMBRANE_TEXTURE_ID = 'exams.mucous_membrane_texture_id';
+
     public function label(): string
     {
         return match ($this) {
+            self::PATIENTS_DATE_ADMITTED_AT => __('Date Admitted'),
             self::PATIENTS_NAME => __('Name'),
             self::PATIENTS_BAND => __('Band'),
             self::PATIENTS_DISPOSITION_ID => __('Disposition'),
+            self::PATIENTS_COMMON_NAME => __('Common Name'),
+            self::PATIENTS_TRANSFER_TYPE_ID => __('Transfer Type'),
+            self::PATIENTS_RELEASE_TYPE_ID => __('Release Type'),
+            self::PATIENTS_IS_CARCASS_SAVED => __('Is_Carcass_Saved'),
             self::PATIENTS_DISPOSITIONED_AT => __('Disposition Date'),
+
             self::PATIENT_LOCATIONS_FACILITY_ID => __('Facility'),
 
             self::PEOPLE_ENTITY_ID => __('Entity Type'),
@@ -55,6 +77,15 @@ enum Attribute: string
             self::PEOPLE_NO_SOLICITATIONS => __('No Solicitations'),
             self::PEOPLE_IS_VOLUNTEER => __('Is a Volunteer'),
             self::PEOPLE_IS_MEMBER => __('Is a Member'),
+
+            self::EXAMS_SEX_ID => __('Sex'),
+            self::EXAMS_WEIGHT_UNIT_ID => __('Weight Unit'),
+            self::EXAMS_BODY_CONDITION_ID => __('Bcs'),
+            self::EXAMS_ATTITUDE_ID => __('Attitude'),
+            self::EXAMS_DEHYDRATION_ID => __('Dehydration'),
+            self::EXAMS_MUCOUS_MEMBRANE_COLOR_ID => __('Mucous Membrane Color'),
+            self::EXAMS_MUCOUS_MEMBRANE_TEXTURE_ID => __('Mucous Membrane Texture'),
+
         };
     }
 
@@ -62,7 +93,30 @@ enum Attribute: string
     {
         return match ($this) {
             self::PATIENT_LOCATIONS_FACILITY_ID,
-            self::PATIENTS_DISPOSITION_ID => true,
+            self::PATIENTS_DISPOSITION_ID,
+            self::EXAMS_SEX_ID,
+            self::EXAMS_WEIGHT_UNIT_ID,
+            self::EXAMS_BODY_CONDITION_ID,
+            self::EXAMS_ATTITUDE_ID,
+            self::EXAMS_DEHYDRATION_ID,
+            self::EXAMS_MUCOUS_MEMBRANE_COLOR_ID,
+            self::EXAMS_MUCOUS_MEMBRANE_TEXTURE_ID => true,
+            default => false,
+        };
+    }
+
+    public function options(): AttributeOptionsCollection
+    {
+        return match ($this) {
+            self::PATIENT_LOCATIONS_FACILITY_ID => AttributeOption::getDropdownOptions(AttributeOptionName::PATIENT_LOCATION_FACILITIES),
+            self::PATIENTS_DISPOSITION_ID => AttributeOption::getDropdownOptions(AttributeOptionName::PATIENT_DISPOSITIONS),
+            self::EXAMS_SEX_ID => AttributeOption::getDropdownOptions(AttributeOptionName::EXAM_SEXES),
+            self::EXAMS_WEIGHT_UNIT_ID => AttributeOption::getDropdownOptions(AttributeOptionName::EXAM_WEIGHT_UNITS),
+            self::EXAMS_BODY_CONDITION_ID => AttributeOption::getDropdownOptions(AttributeOptionName::EXAM_BODY_CONDITIONS),
+            self::EXAMS_ATTITUDE_ID => AttributeOption::getDropdownOptions(AttributeOptionName::EXAM_ATTITUDES),
+            self::EXAMS_DEHYDRATION_ID => AttributeOption::getDropdownOptions(AttributeOptionName::EXAM_DEHYDRATIONS),
+            self::EXAMS_MUCOUS_MEMBRANE_COLOR_ID => AttributeOption::getDropdownOptions(AttributeOptionName::EXAM_MUCUS_MEMBRANE_COLORS),
+            self::EXAMS_MUCOUS_MEMBRANE_TEXTURE_ID => AttributeOption::getDropdownOptions(AttributeOptionName::EXAM_MUCUS_MEMBRANE_TEXTURES),
             default => false,
         };
     }

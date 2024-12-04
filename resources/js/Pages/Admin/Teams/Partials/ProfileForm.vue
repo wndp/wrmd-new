@@ -56,6 +56,7 @@ const updateProfile = () => {
       <SelectInput
         v-model="form.status"
         :options="$page.props.options.accountStatusOptions"
+        name="status"
         required
         class="mt-1"
       />

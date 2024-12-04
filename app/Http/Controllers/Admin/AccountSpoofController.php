@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Domain\Accounts\Account;
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
+use App\Models\Team;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,15 +13,15 @@ class AccountSpoofController extends Controller
     /**
      * Spoof an account
      */
-    public function __invoke(Account $account): RedirectResponse
+    public function __invoke(Team $team): RedirectResponse
     {
-        Auth::user()->joinAccount($account);
-        Auth::user()->switchToAccount($account);
+        Auth::user()->joinTeam($team, Role::ADMIN);
+        Auth::user()->switchTeam($team);
 
         session()->put('isSpoofing', true);
 
         return redirect()->route('dashboard')
-            ->with('flash.notificationHeading', 'Signed In!')
-            ->with('flash.notification', "You are now signed into $account->organization.");
+            ->with('notification.heading', 'Signed In!')
+            ->with('notification.text', "You are now signed into $team->name.");
     }
 }

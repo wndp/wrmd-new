@@ -16,7 +16,7 @@ trait FacilitatesImporting
     private $requiredFields = [
         'patients.common_name',
         'patients.date_admitted_at',
-        'patients.disposition',
+        'patients.disposition_id',
     ];
 
     /**
@@ -39,14 +39,23 @@ trait FacilitatesImporting
      */
     public function importableEntities(): Collection
     {
-        return collect(array_merge([
+        return collect([
             'patients' => __('Patients with their rescuer and initial exam'),
             'treatment_logs' => __('Treatment logs'),
             'patient_locations' => __('Location / Enclosure history'),
             'prescriptions' => __('Prescriptions'),
             'donations' => __('Rescuer donations'),
             'people' => __('Volunteers and Members'),
-        ], flatten_preserve(event('import.whatImporting'))));
+        ]);
+
+        // return collect(array_merge([
+        //     'patients' => __('Patients with their rescuer and initial exam'),
+        //     'treatment_logs' => __('Treatment logs'),
+        //     'patient_locations' => __('Location / Enclosure history'),
+        //     'prescriptions' => __('Prescriptions'),
+        //     'donations' => __('Rescuer donations'),
+        //     'people' => __('Volunteers and Members'),
+        // ], flatten_preserve(event('import.whatImporting'))));
     }
 
     /**

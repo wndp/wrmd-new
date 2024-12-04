@@ -23,8 +23,8 @@ class WelcomeController extends Controller
         $organizations = $accounts->count();
         $countries = $accounts->unique('country')->pluck('country')->count();
         $usStates = $accounts->where('country', 'US')->unique('subdivision')->count();
-        $testimonials = Testimonial::with('account')->inRandomOrder()->limit(2)->get()->pad(2, ['account' => (object) []]);
-        $avatars = $accounts->filter(fn ($account) => $account->profile_photo_path)->shuffle()->take(6);
+        $testimonials = Testimonial::with('team')->inRandomOrder()->limit(2)->get()->pad(2, ['team' => (object) []]);
+        $avatars = $accounts->filter(fn ($team) => $team->profile_photo_url)->shuffle()->take(6);
 
         $analyticFiltersForThisYear = [
             'segments' => ['All Patients'],

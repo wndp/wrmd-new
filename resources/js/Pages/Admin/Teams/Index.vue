@@ -28,8 +28,8 @@ const uriObj = new URI().query(true);
 const showOtherFilters = ref(false);
 
 const form = useForm({
-    status: uriObj.status || 'Active',
-    organization: uriObj.organization,
+    status: uriObj.status || 'ACTIVE',
+    name: uriObj.name,
     federal_permit_number: uriObj.federal_permit_number,
     subdivision_permit_number: uriObj.subdivision_permit_number,
     country: uriObj.country,
@@ -87,8 +87,8 @@ const filterAccounts = () => {
               Organization
             </InputLabel>
             <TextInput
-              v-model="form.organization"
-              name="organization"
+              v-model="form.name"
+              name="name"
               class="mt-1"
             />
           </div>

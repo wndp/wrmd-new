@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Team;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -12,14 +13,16 @@ use Illuminate\Queue\SerializesModels;
 
 class TeamUpdated
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public function __construct(public Team $team)
     {
-        //
+        $this->team = $team;
     }
 
     /**

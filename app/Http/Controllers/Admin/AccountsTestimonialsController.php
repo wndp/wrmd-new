@@ -90,7 +90,7 @@ class AccountsTestimonialsController extends Controller
         $testimonial->delete();
 
         return redirect()->route('admin.testimonials.index')
-            ->with('flash.notificationHeading', 'I Hope You Meant That!')
-            ->with('flash.notification', "{$testimonial->name}'s testimonial was deleted.");
+            ->with('notification.heading', 'Success!')
+            ->with('notification.text', "{$testimonial->name}'s testimonial was deleted.");
     }
 }

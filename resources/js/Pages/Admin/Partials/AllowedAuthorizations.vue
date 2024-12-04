@@ -1,42 +1,34 @@
-<script>
+<script setup>
+import {computed} from 'vue';
+import {useForm} from '@inertiajs/vue3';
 import Checkbox from '@/Components/FormElements/Checkbox.vue';
 import PrimaryButton from '@/Components/FormElements/PrimaryButton.vue';
+import snakeCase from 'lodash/snakeCase';
 
-export default {
-  components: {
-    Checkbox,
-    PrimaryButton
+const props = defineProps({
+  roles: {
+    type: Array,
+    required: true
   },
-  props: {
-    roles: Array,
-    abilities: Array
-  },
-  data() {
-    const obj = {};
+  abilities: {
+    type: Array,
+    required: true
+  }
+});
 
-    for (let role of this.roles) {
-      obj[role.name] = role.abilities.filter(
-        ability => ability.forbidden === 0
-        ).map(
-        role => role.name
-        );
-      }
+const obj = {};
 
-      return {
-        form: this.$inertia.form(obj),
-      };
-    },
-    computed: {
-      width() {
-        return 100 / (this.roles.length + 1);
-      }
-    },
-    methods: {
-      saveAuthorizations() {
-        this.form.put(this.route('admin.authorization.update', 'allowed'));
-      }
-    }
-  };
+for (let role of props.roles) {
+  obj[role.name] = role.abilities.filter(
+    ability => ability.forbidden === 0
+  ).map(role => role.name);
+}
+
+const form = useForm(obj);
+
+const width = computed(() => 100 / (props.roles.length + 1));
+
+const saveAuthorizations = () => form.put(route('admin.authorization.update', 'allowed'));
 </script>
 
 <template>
@@ -80,7 +72,7 @@ export default {
                   class="px-2 py-2 whitespace-nowrap text-center"
                 >
                   <Checkbox
-                    :id="`allowed-${ability.name}-${role.name}`"
+                    :id="snakeCase(`allowed-${ability.name}-${role.name}`)"
                     v-model="form[role.name]"
                     :value="ability.name"
                   />

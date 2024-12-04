@@ -73,14 +73,49 @@ class Team extends JetstreamTeam
         return $this->hasMany(Admission::class);
     }
 
+    public function customFields(): HasMany
+    {
+        return $this->hasMany(CustomField::class);
+    }
+
+    public function expenseCategories(): HasMany
+    {
+        return $this->hasMany(ExpenseCategory::class);
+    }
+
     public function extensions(): HasMany
     {
         return $this->hasMany(TeamExtension::class);
     }
 
+    public function formulas(): HasMany
+    {
+        return $this->hasMany(Formula::class);
+    }
+
+    public function locations(): HasMany
+    {
+        return $this->hasMany(Location::class);
+    }
+
+    public function incidents(): HasMany
+    {
+        return $this->hasMany(Incident::class);
+    }
+
+    public function people(): HasMany
+    {
+        return $this->hasMany(Person::class);
+    }
+
     public function settings(): HasMany
     {
         return $this->hasMany(Setting::class);
+    }
+
+    public function veterinarians(): HasMany
+    {
+        return $this->hasMany(Veterinarian::class);
     }
 
     public function settingsStore(): SettingsStore

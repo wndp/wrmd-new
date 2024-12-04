@@ -160,6 +160,11 @@ class Patient extends Model implements HasMedia
         return $this->hasMany(Exam::class);
     }
 
+    public function expenseTransactions(): HasMany
+    {
+        return $this->hasMany(ExpenseTransaction::class);
+    }
+
     public function incident(): HasOne
     {
         return $this->hasOne(Incident::class);

@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "algolia/algoliasearch-client-php": "^4.9",
         "api2pdf/api2pdf.php": "^2.0",
         "commerceguys/addressing": "^2.2",
         "geocodio/geocodio-library-php": "^1.7",
@@ -16,6 +17,7 @@
         "laravel/jetstream": "^5.1",
         "laravel/octane": "^2.5",
         "laravel/sanctum": "^4.0",
+        "laravel/scout": "^10.11",
         "laravel/spark-paddle": "^5.0",
         "laravel/tinker": "^2.9",
         "laravel/vapor-core": "^2.37",
@@ -31,15 +33,19 @@
         "spatie/laravel-honeypot": "^4.5",
         "spatie/laravel-medialibrary": "^11.9",
         "spatie/laravel-sluggable": "^3.6",
+        "symfony/mailer": "~7.1.0",
         "tightenco/ziggy": "^2.0",
         "vemcogroup/laravel-translation": "^3.0"
     },
     "require-dev": {
         "dompdf/dompdf": "^3.0",
         "fakerphp/faker": "^1.23",
+        "http-interop/http-factory-guzzle": "^1.2",
         "knuckleswtf/scribe": "^4.37",
+        "laravel/dusk": "^8.2",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.32",
+        "meilisearch/meilisearch-php": "^1.11",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.0",
         "phpunit/phpunit": "^11.0.1"
