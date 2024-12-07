@@ -61,7 +61,24 @@ class DuplicationController extends Controller
             Auth::user()->currentTeam,
             $request->input('case_year'),
             $patient->rescuer,
-            array_merge($request->all(), [
+            array_merge($request->only([
+                'reference_number',
+                'microchip_number',
+                'admitted_at',
+                'admitted_by',
+                'transported_by',
+                'found_at',
+                'address_found',
+                'city_found',
+                'county_found',
+                'subdivision_found',
+                'postal_code_found',
+                'lat_found',
+                'lng_found',
+                'reason_for_admission',
+                'care_by_rescuer',
+                'notes_about_rescue',
+            ]), [
                 'common_name' => $patient->common_name,
             ]),
             $request->input('duplicates_to_make', 1)

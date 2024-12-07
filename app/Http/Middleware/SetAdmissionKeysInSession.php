@@ -21,7 +21,10 @@ class SetAdmissionKeysInSession
     {
         if (is_numeric($request->a)) {
             try {
-                $request->user()->switchTeam(Team::find($request->a));
+                abort_unless(
+                    $request->user()->switchTeam(Team::find($request->a)),
+                    404
+                );
             } catch (\InvalidArgumentException $e) {
                 abort('404');
             }

@@ -9,6 +9,7 @@ use App\PdfApiInterface;
 use App\Repositories\AdministrativeDivision;
 use App\Repositories\SettingsStore;
 use App\Services\DomPdfEngine;
+use App\SingleStoreSpatial\SingleStorePoint;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Query\Builder;

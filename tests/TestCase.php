@@ -6,14 +6,19 @@ use App\Caches\PatientSelector;
 use App\Caches\QueryCache;
 use App\Repositories\AdministrativeDivision;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\Cache;
 use Silber\Bouncer\BouncerFacade;
+use Tests\Traits\FeatureMacros;
 
 abstract class TestCase extends BaseTestCase
 {
+    use FeatureMacros;
+
     protected function setUp(): void
     {
         parent::setUp();
 
+        Cache::flush();
         BouncerFacade::dontCache();
         QueryCache::empty();
         PatientSelector::empty();

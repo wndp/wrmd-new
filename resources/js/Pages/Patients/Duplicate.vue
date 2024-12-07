@@ -41,6 +41,7 @@ const form = useForm({
   city_found: props.patient.city_found,
   county_found: props.patient.county_found,
   subdivision_found: props.patient.subdivision_found,
+  postal_code_found: props.patient.postal_code_found,
   lat_found: '',
   lng_found: '',
   reason_for_admission: props.patient.reason_for_admission,

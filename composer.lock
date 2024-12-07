@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c9ecdfd5533717296c00956f60ded49e",
+    "content-hash": "ad94c19a9a80542fc597cd72c23e2775",
     "packages": [
         {
             "name": "algolia/algoliasearch-client-php",
@@ -3933,66 +3933,6 @@
                 "source": "https://github.com/MarkBaker/PHPMatrix/tree/3.0.1"
             },
             "time": "2022-12-02T22:17:43+00:00"
-        },
-        {
-            "name": "matanyadaev/laravel-eloquent-spatial",
-            "version": "4.3.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/MatanYadaev/laravel-eloquent-spatial.git",
-                "reference": "da936d6c85bb7fe41bebb6dc5fb6000ab3b53ed2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/MatanYadaev/laravel-eloquent-spatial/zipball/da936d6c85bb7fe41bebb6dc5fb6000ab3b53ed2",
-                "reference": "da936d6c85bb7fe41bebb6dc5fb6000ab3b53ed2",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "ext-pdo": "*",
-                "laravel/framework": "^10.0|^11.0",
-                "phayes/geophp": "^1.2",
-                "php": "^8.1"
-            },
-            "require-dev": {
-                "doctrine/dbal": "^3.5.3",
-                "larastan/larastan": "^1.0|^2.4",
-                "laravel/pint": "^1.14",
-                "orchestra/testbench": "^8.0|^9.0",
-                "pestphp/pest": "^2.0",
-                "pestphp/pest-plugin-laravel": "^2.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "MatanYadaev\\EloquentSpatial\\EloquentSpatialServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "MatanYadaev\\EloquentSpatial\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Matan Yadaev",
-                    "email": "matan.yed@gmail.com"
-                }
-            ],
-            "description": "Spatial library for Laravel",
-            "homepage": "https://github.com/matanyadaev/laravel-eloquent-spatial",
-            "support": {
-                "issues": "https://github.com/MatanYadaev/laravel-eloquent-spatial/issues",
-                "source": "https://github.com/MatanYadaev/laravel-eloquent-spatial/tree/4.3.2"
-            },
-            "time": "2024-08-07T20:53:50+00:00"
         },
         {
             "name": "mobiledetect/mobiledetectlib",

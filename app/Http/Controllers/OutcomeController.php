@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\SettingKey;
+use App\Casts\SingleStorePoint;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
+use App\Enums\SettingKey;
 use App\Events\PatientUpdated;
 use App\Models\Patient;
 use App\Rules\AttributeOptionExistsRule;
 use App\Support\Wrmd;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use MatanYadaev\EloquentSpatial\Objects\Point;
 
 class OutcomeController extends Controller
 {
@@ -69,8 +69,7 @@ class OutcomeController extends Controller
             ]));
 
         if ($request->filled('disposition_lat', 'disposition_lng')) {
-            $patient::$disableGeoLocation = true;
-            $patient->disposition_coordinates = new Point($request->disposition_lat, $request->disposition_lng);
+            $patient->disposition_coordinates = new SingleStorePoint($request->disposition_lat, $request->disposition_lng);
             $patient->save();
         }
 

@@ -5,9 +5,18 @@ namespace Tests\Traits;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
 use App\Models\AttributeOption;
+use App\Models\AttributeOptionUiBehavior as AttributeOptionUiBehaviorModel;
 
 trait CreatesUiBehavior
 {
+    public function createUiBehavior(AttributeOptionName $attributeOptionName, AttributeOptionUiBehavior $behavior): AttributeOptionUiBehaviorModel
+    {
+        return AttributeOptionUiBehaviorModel::factory()->create([
+            'attribute_option_id' => AttributeOption::factory()->create(['name' => $attributeOptionName])->id,
+            'behavior' => $behavior->value
+        ]);
+    }
+
     public function pendingDispositionId()
     {
         $pendingDispositionId = AttributeOption::factory()->create([

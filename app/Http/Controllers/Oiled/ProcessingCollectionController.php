@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Oiled;
 
+use App\Casts\SingleStorePoint;
 use App\Enums\AttributeOptionName;
 use App\Enums\Extension;
 use App\Http\Controllers\Controller;
@@ -12,7 +13,6 @@ use App\Support\ExtensionManager;
 use App\Support\Timezone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use MatanYadaev\EloquentSpatial\Objects\Point;
 
 class ProcessingCollectionController extends Controller
 {
@@ -33,7 +33,7 @@ class ProcessingCollectionController extends Controller
         $patient->validateOwnership(Auth::user()->current_team_id);
 
         $patient->address_found = $request->input('address_found');
-        $patient->coordinates_found = $request->filled('lat_found', 'lng_found') ? new Point($request->input('lat_found'), $request->input('lng_found')) : null;
+        $patient->coordinates_found = $request->filled('lat_found', 'lng_found') ? new SingleStorePoint($request->input('lat_found'), $request->input('lng_found')) : null;
         $patient->save();
 
         $patient->rescuer->update([

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\SingleStorePoint;
 use App\Concerns\InteractsWithMedia;
 use App\Concerns\QueriesDateRange;
 use App\Concerns\QueriesOneOfMany;
@@ -12,7 +13,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use MatanYadaev\EloquentSpatial\Objects\Point;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
@@ -76,7 +76,7 @@ class Incident extends Model implements HasMedia
         'incident_city' => 'string',
         'incident_subdivision' => 'string',
         'incident_postal_code' => 'string',
-        'incident_coordinates' => Point::class,
+        'incident_coordinates' => SingleStorePoint::class,
         'description' => 'string',
         'resolved_at' => 'datetime',
         'resolution' => 'string',

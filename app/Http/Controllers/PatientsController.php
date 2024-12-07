@@ -110,6 +110,7 @@ class PatientsController extends Controller
                 'is_member',
             ]),
             $request->only([
+                'admitted_at',
                 'admitted_by',
                 'transported_by',
                 'found_at',

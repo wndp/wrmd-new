@@ -29,6 +29,7 @@ class PatientFactory extends Factory
             'voided_at' => null,
             'common_name' => 'Example Critter',
             'date_admitted_at' => $this->faker->date(),
+            'time_admitted_at' => $this->faker->time(),
             'admitted_by' => $this->faker->firstName(),
             'found_at' => $this->faker->date(),
             'address_found' => $this->faker->streetAddress(),

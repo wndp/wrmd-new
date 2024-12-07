@@ -8,17 +8,12 @@ use App\Support\ExtensionManager;
 
 trait AssistsWithExtensions
 {
-    public function activateExtension(Extension $extension, Team|array $team = [], $attributes = [])
+    public function activateExtension(Extension $extension, Team|array $team = [])
     {
         $team = $team instanceof Team ? $team : Team::factory()->create((array) $team);
 
         ExtensionManager::activate($team, $extension);
 
         return $team;
-
-        // return [
-        //     'team' => $team,
-        //     'extension' => $extension,
-        // ];
     }
 }

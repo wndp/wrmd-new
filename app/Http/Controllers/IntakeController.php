@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Casts\SingleStorePoint;
 use App\Enums\SettingKey;
 use App\Events\PatientUpdated;
 use App\Models\Patient;
@@ -9,7 +10,6 @@ use App\Support\Wrmd;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use MatanYadaev\EloquentSpatial\Objects\Point;
 
 class IntakeController extends Controller
 {
@@ -55,7 +55,7 @@ class IntakeController extends Controller
             ]));
 
         if ($request->filled('lat_found', 'lng_found')) {
-            $patient->coordinates_found = new Point($request->lat_found, $request->lng_found);
+            $patient->coordinates_found = new SingleStorePoint($request->lat_found, $request->lng_found);
             $patient->save();
         }
 

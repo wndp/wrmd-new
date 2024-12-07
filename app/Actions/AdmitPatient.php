@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Casts\SingleStorePoint;
 use App\Concerns\AsAction;
 use App\Concerns\PersistsAdmission;
 use App\Enums\AttributeOptionName;
@@ -20,7 +21,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use LogicException;
-use MatanYadaev\EloquentSpatial\Objects\Point;
 use TypeError;
 
 class AdmitPatient
@@ -90,17 +90,14 @@ class AdmitPatient
         $this->year = $year;
         $this->casesToCreate = $casesToCreate;
 
-        //DB::beginTransaction();
         $admissions = $this->processInTransaction($rescuer, $patient);
-        try {
-        } catch (TypeError $e) {
-            //DB::rollback();
-            throw new UnprocessableAdmissionException($e->getMessage());
-        } catch (Exception $e) {
-            //DB::rollback();
-            throw new UnprocessableAdmissionException($e->getMessage());
-        }
-        //DB::commit();
+        // DB::beginTransaction();
+        // try {
+        // } catch (Exception $e) {
+        //     DB::rollback();
+        //     throw new UnprocessableAdmissionException($e->getMessage());
+        // }
+        // DB::commit();
 
         return $admissions;
     }
@@ -179,7 +176,7 @@ class AdmitPatient
             $patient->time_admitted_at = $admittedAt->toTimeString();
 
             if (isset($patientData['lat_found'], $patientData['lng_found'])) {
-                $patient->coordinates_found = new Point($patientData['lat_found'], $patientData['lng_found']);
+                $patient->coordinates_found = new SingleStorePoint($patientData['lat_found'], $patientData['lng_found']);
             }
 
             if ($this->withoutEvents) {

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Actions\ClonePatientRelations;
+use App\Casts\SingleStorePoint;
+use App\Concerns\HasSpatial;
 use App\Concerns\InteractsWithMedia;
 use App\Concerns\JoinsTablesToPatients;
 use App\Concerns\LocksPatient;
@@ -27,8 +29,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use MatanYadaev\EloquentSpatial\Objects\Point;
-use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
@@ -118,7 +118,7 @@ class Patient extends Model implements HasMedia
         'subdivision_found' => 'string',
         'postal_code_found' => 'string',
         'county_found' => 'string',
-        'coordinates_found' => Point::class,
+        'coordinates_found' => SingleStorePoint::class,
         'reason_for_admission' => 'string',
         'care_by_rescuer' => 'string',
         'notes_about_rescue' => 'string',
@@ -136,7 +136,7 @@ class Patient extends Model implements HasMedia
         'disposition_subdivision' => 'string',
         'disposition_postal_code' => 'string',
         'disposition_county' => 'string',
-        'disposition_coordinates' => Point::class,
+        'disposition_coordinates' => SingleStorePoint::class,
         'reason_for_disposition' => 'string',
         'dispositioned_by' => 'string',
         'is_carcass_saved' => 'boolean',
