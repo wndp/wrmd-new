@@ -20,6 +20,6 @@ trait QueriesDateRange
 
         //$field = protect_identifiers($field);
 
-        return $query->whereRaw("$field between '$start' and '$end 23:59:59.999999'");
+        return $query->whereRaw("$field between '$start' and '$end'");
     }
 }

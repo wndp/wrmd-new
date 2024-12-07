@@ -19,17 +19,10 @@ trait CreatesUiBehavior
 
     public function pendingDispositionId()
     {
-        $pendingDispositionId = AttributeOption::factory()->create([
-            'name' => AttributeOptionName::PATIENT_DISPOSITIONS,
-            'value' => 'Pending',
-        ])->id;
-
-        \App\Models\AttributeOptionUiBehavior::factory()->create([
-            'attribute_option_id' => $pendingDispositionId,
-            'behavior' => AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_PENDING,
-        ]);
-
-        return $pendingDispositionId;
+        return $this->createUiBehavior(
+            AttributeOptionName::PATIENT_DISPOSITIONS,
+            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_PENDING
+        )->attribute_option_id;
     }
 
     public function weightUnits()

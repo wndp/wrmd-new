@@ -32,7 +32,7 @@ abstract class Table extends Analytic
     public function baseCompareQuery()
     {
         return Admission::where('team_id', $this->team->id)
-            ->select('patients.taxon_id', 'disposition', 'admissions.patient_id')
+            ->select('patients.taxon_id', 'disposition_id', 'admissions.patient_id')
             ->joinPatients()
             ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at');
     }
