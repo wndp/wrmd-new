@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
+
 use function Illuminate\Events\queueable;
 
 class NutritionPlan extends Model implements Schedulable
@@ -116,6 +117,16 @@ class NutritionPlan extends Model implements Schedulable
         return Attribute::get(
             fn () => Str::of($body)->trim()->squish().'. '.__('From').' '.$this->started_at->toFormattedDateString().' '.__('to').' '.$end
         );
+    }
+
+    public function hasOccurrenceWindowChanged(): bool
+    {
+        return $this->wasChanged([
+            'frequency',
+            'frequency_unit_id',
+            'started_at',
+            'ended_at',
+        ]);
     }
 
     public function badgeText(): Attribute

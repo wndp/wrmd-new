@@ -14,7 +14,7 @@ enum DailyTaskSchedulable: string
 {
     case RECHECKS = 'RECHECKS';
     case PRESCRIPTIONS = 'PRESCRIPTIONS';
-    case NUTRITION = 'Nutrition';
+    case NUTRITION = 'NUTRITION';
 
     public function label(): string
     {

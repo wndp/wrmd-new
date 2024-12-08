@@ -9,10 +9,14 @@ use App\Models\AttributeOptionUiBehavior as AttributeOptionUiBehaviorModel;
 
 trait CreatesUiBehavior
 {
-    public function createUiBehavior(AttributeOptionName $attributeOptionName, AttributeOptionUiBehavior $behavior): AttributeOptionUiBehaviorModel
+    public function createUiBehavior(AttributeOptionName|int $attributeOptionName, AttributeOptionUiBehavior $behavior): AttributeOptionUiBehaviorModel
     {
+        $attributeOptionId = is_int($attributeOptionName)
+            ? $attributeOptionName
+            : AttributeOption::factory()->create(['name' => $attributeOptionName])->id;
+
         return AttributeOptionUiBehaviorModel::factory()->create([
-            'attribute_option_id' => AttributeOption::factory()->create(['name' => $attributeOptionName])->id,
+            'attribute_option_id' => $attributeOptionId,
             'behavior' => $behavior->value
         ]);
     }

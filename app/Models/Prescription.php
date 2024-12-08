@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Concerns\HasDailyTasks;
 use App\Concerns\LocksPatient;
 use App\Concerns\ValidatesOwnership;
+use App\Enums\AttributeOptionName;
+use App\Enums\AttributeOptionUiBehavior;
 use App\Schedulable;
 use App\Support\Wrmd;
 use Carbon\Carbon;
@@ -14,6 +16,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -153,6 +156,15 @@ class Prescription extends Model implements Schedulable
         );
     }
 
+    public function hasOccurrenceWindowChanged(): bool
+    {
+        return $this->wasChanged([
+            'frequency_id',
+            'rx_started_at',
+            'rx_ended_at',
+        ]);
+    }
+
     public function badgeText(): Attribute
     {
         return Attribute::get(
@@ -195,7 +207,8 @@ class Prescription extends Model implements Schedulable
         $instructions = empty($this->instructions) ? '' : ' '.trim($this->instructions, '.').'.';
 
         return Attribute::get(
-            fn () => Str::of("$dose
+            fn () => Str::of(
+                "$dose
                 $this->full_concentration
                 {$this->drug}
                 $this->full_dosage
@@ -211,5 +224,136 @@ class Prescription extends Model implements Schedulable
             ->logAll()
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
+    }
+
+    public function getTotalAdministrationsAttribute()
+    {
+        [
+            $frequencySingleDoseId,
+            $frequencyPrnId,
+            $frequency1DailyId,
+            $frequency2DailyId,
+            $frequency3DailyId,
+            $frequency4DailyId,
+            $frequency5DailyId,
+            $frequency6DailyId,
+            $frequencyQ2DaysId,
+            $frequencyQ3DaysId,
+            $frequencyQ4DaysId,
+            $frequencyQ5DaysId,
+            $frequencyQ7DaysId,
+            $frequencyQ14DaysId,
+            $frequencyQ21DaysId,
+            $frequencyQ28DaysId,
+        ] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_SINGLE_DOSE->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_PRN->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_1_DAILY->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_2_DAILY->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_3_DAILY->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_4_DAILY->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_5_DAILY->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_6_DAILY->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_2_DAYS->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_3_DAYS->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_4_DAYS->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_5_DAYS->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_7_DAYS->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_14_DAYS->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_21_DAYS->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_28_DAYS->value],
+        ]);
+
+        if ($this->frequency_id === $frequencySingleDoseId) {
+            return 1;
+        }
+
+        if (is_null($this->rx_ended_at) || $this->frequency_id === $frequencyPrnId) {
+            return INF;
+        }
+
+        $days = $this->rx_started_at->diffInDays($this->rx_ended_at) + 1;
+
+        switch ($this->frequency_id) {
+            case $frequency2DailyId: return intval($days * 2);
+            case $frequency3DailyId: return intval($days * 3);
+            case $frequency4DailyId: return intval($days * 4);
+            case $frequency5DailyId: return intval($days * 5);
+            case $frequency6DailyId: return intval($days * 6);
+            case $frequencyQ2DaysId: return intval(ceil($days / 2));
+            case $frequencyQ3DaysId: return intval(ceil($days / 3));
+            case $frequencyQ4DaysId: return intval(ceil($days / 4));
+            case $frequencyQ5DaysId: return intval(ceil($days / 5));
+            case $frequencyQ7DaysId: return intval(ceil($days / 7));
+            case $frequencyQ14DaysId: return intval(ceil($days / 14));
+            case $frequencyQ21DaysId: return intval(ceil($days / 21));
+            case $frequencyQ28DaysId: return intval(ceil($days / 28));
+            default: return intval($days);
+        }
+    }
+
+    /**
+     * Get a collection of all the administrations for the prescription.
+     */
+    public function getAdministrationsAttribute(): Collection
+    {
+        [
+            $frequencyQ2DaysId,
+            $frequencyQ3DaysId,
+            $frequencyQ4DaysId,
+            $frequencyQ5DaysId,
+            $frequencyQ7DaysId,
+            $frequencyQ14DaysId,
+            $frequencyQ21DaysId,
+            $frequencyQ28DaysId,
+        ] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_2_DAYS->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_3_DAYS->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_4_DAYS->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_5_DAYS->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_7_DAYS->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_14_DAYS->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_21_DAYS->value],
+            [AttributeOptionName::DAILY_TASK_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_28_DAYS->value],
+        ]);
+
+        $administrations = collect();
+
+        if ($this->total_administrations === INF) {
+            $this->administered_at = $this->rx_started_at;
+
+            return $administrations->push($this);
+        }
+
+        for ($i = 0; $i < $this->total_administrations / $this->administrationsPerDay(); $i++) {
+            for ($n = 0; $n < $this->administrationsPerDay(); $n++) {
+                $clone = $this->replicate();
+
+                switch ($this->frequency_id) {
+                    case $frequencyQ2DaysId: $clone->administered_at = $this->rx_started_at->copy()->addDays($i * 2);
+                        break;
+                    case $frequencyQ3DaysId: $clone->administered_at = $this->rx_started_at->copy()->addDays($i * 3);
+                        break;
+                    case $frequencyQ4DaysId: $clone->administered_at = $this->rx_started_at->copy()->addDays($i * 4);
+                        break;
+                    case $frequencyQ5DaysId: $clone->administered_at = $this->rx_started_at->copy()->addDays($i * 5);
+                        break;
+                    case $frequencyQ7DaysId: $clone->administered_at = $this->rx_started_at->copy()->addDays($i * 7);
+                        break;
+                    case $frequencyQ14DaysId: $clone->administered_at = $this->rx_started_at->copy()->addDays($i * 14);
+                        break;
+                    case $frequencyQ21DaysId: $clone->administered_at = $this->rx_started_at->copy()->addDays($i * 21);
+                        break;
+                    case $frequencyQ28DaysId: $clone->administered_at = $this->rx_started_at->copy()->addDays($i * 28);
+                        break;
+                    default: $clone->administered_at = $this->rx_started_at->copy()->addDays($i);
+                        break;
+                }
+
+                $administrations->push($clone);
+            }
+        }
+
+        return $administrations;
     }
 }

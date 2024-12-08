@@ -25,7 +25,7 @@ class PrescriptionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'drug' => 'required',
+            'drug' => 'required|string',
             'rx_started_at' => 'required|date',
             'rx_ended_at' => 'nullable|date|after_or_equal:rx_started_at',
             'concentration' => 'nullable|numeric',
@@ -66,7 +66,7 @@ class PrescriptionRequest extends FormRequest
             'instructions' => 'nullable|string',
             'veterinarian_id' => [
                 'nullable',
-                'integer',
+                'string',
                 Rule::exists('veterinarians', 'id')->where('team_id', $this->user()->current_team_id)
             ]
         ];

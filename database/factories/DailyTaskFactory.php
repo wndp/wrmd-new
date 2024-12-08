@@ -17,7 +17,9 @@ class DailyTaskFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'occurrence' => 1,
+            'occurrence_at' => $this->faker->dateTimeBetween('1 days', '90 days')->format('Y-m-d'),
+            'summary' => $this->faker->sentence()
         ];
     }
 }

@@ -6,7 +6,7 @@ use App\Concerns\GetSchedulableFromResource;
 use App\Events\DailyTaskCompleted;
 use App\Http\Controllers\Controller;
 use App\Models\Patient;
-use App\Support\DailyTasksCollection;
+use App\Collections\DailyTasksCollection;
 use App\Support\DailyTasksFilters;
 use App\Support\Timezone;
 use App\Wrmd;

@@ -2,13 +2,14 @@
 
 namespace App\Concerns;
 
-use App\Enums\SettingKey;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
+use App\Enums\SettingKey;
 use App\Jobs\DeleteRecordedDailyTasks;
 use App\Jobs\UpdateRecordedDailyTasks;
 use App\Models\DailyTask;
 use App\Support\Wrmd;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait HasDailyTasks
@@ -106,15 +107,6 @@ trait HasDailyTasks
             $frequencyIds['bidId'] =>  2,
             default => 1
         };
-    }
-
-    public function hasOccurrenceWindowChanged()
-    {
-        return $this->wasChanged([
-            'frequency_id',
-            'recheck_start_at',
-            'recheck_end_at',
-        ]);
     }
 
     public function getOccurrencesAttribute(): int

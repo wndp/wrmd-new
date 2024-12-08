@@ -13,7 +13,8 @@ class AttributeOptionExistsRule implements ValidationRule
     private static array $attributeOptionIds = [];
 
     public function __construct(private AttributeOptionName|array $attributeOptionName)
-    {}
+    {
+    }
 
     public static function clearCache(): void
     {

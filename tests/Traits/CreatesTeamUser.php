@@ -7,6 +7,7 @@ use App\Enums\SettingKey;
 use App\Models\Team;
 use App\Models\User;
 use App\Repositories\SettingsStore;
+use Illuminate\Support\Facades\App;
 use Silber\Bouncer\BouncerFacade;
 
 trait CreatesTeamUser
@@ -80,5 +81,10 @@ trait CreatesTeamUser
         app()->singleton(SettingsStore::class, fn () => $team->settingsStore());
 
         $team->settingsStore()->set($key, $value);
+    }
+
+    public function registerSettingsContainer(Team $team)
+    {
+        App::singleton(SettingsStore::class, fn () => new SettingsStore($team));
     }
 }

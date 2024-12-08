@@ -5,7 +5,7 @@ namespace App\Jobs\PatientNotifications;
 use App\Events\NotifyPatient;
 use App\Models\Patient;
 use App\Models\Team;
-use App\Support\DailyTasksCollection;
+use App\Collections\DailyTasksCollection;
 use App\Support\DailyTasksFilters;
 use Carbon\Carbon;
 use Illuminate\Bus\Batchable;

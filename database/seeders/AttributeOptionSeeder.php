@@ -519,6 +519,11 @@ class AttributeOptionSeeder extends Seeder
         );
         $this->createOrUpdateAttributeOptionUiBehaviors(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
+            __('Once daily (sid)'),
+            AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_1_DAILY,
+        );
+        $this->createOrUpdateAttributeOptionUiBehaviors(
+            AttributeOptionName::DAILY_TASK_FREQUENCIES,
             __('2 times daily (bid)'),
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_2_DAILY,
         );
@@ -541,6 +546,11 @@ class AttributeOptionSeeder extends Seeder
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             __('6 times daily (6xd)'),
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_6_DAILY,
+        );
+        $this->createOrUpdateAttributeOptionUiBehaviors(
+            AttributeOptionName::DAILY_TASK_FREQUENCIES,
+            __('As Needed (prn)'),
+            AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_PRN,
         );
 
         $this->createOrUpdateAttributes(AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS, [
@@ -618,6 +628,11 @@ class AttributeOptionSeeder extends Seeder
         );
         $this->createOrUpdateAttributeOptionUiBehaviors(
             AttributeOptionName::DAILY_TASK_DOSAGE_UNITS,
+            __('ml/kg'),
+            AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_ML_PER_KG,
+        );
+        $this->createOrUpdateAttributeOptionUiBehaviors(
+            AttributeOptionName::DAILY_TASK_DOSAGE_UNITS,
             __('IU/kg'),
             AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_IU_PER_KG,
         );
@@ -625,6 +640,11 @@ class AttributeOptionSeeder extends Seeder
             AttributeOptionName::DAILY_TASK_DOSAGE_UNITS,
             __('mg/lb'),
             AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_MG_PER_LB,
+        );
+        $this->createOrUpdateAttributeOptionUiBehaviors(
+            AttributeOptionName::DAILY_TASK_DOSAGE_UNITS,
+            __('ml/lb'),
+            AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_ML_PER_LB,
         );
         $this->createOrUpdateAttributeOptionUiBehaviors(
             AttributeOptionName::DAILY_TASK_DOSAGE_UNITS,
@@ -658,11 +678,17 @@ class AttributeOptionSeeder extends Seeder
             'milligrams (mg)',
             'tab',
             'cap',
+            'IU'
         ]);
         $this->createOrUpdateAttributeOptionUiBehaviors(
             AttributeOptionName::DAILY_TASK_DOSE_UNITS,
             'milliliters (ml)',
             AttributeOptionUiBehavior::DAILY_TASK_DOSE_UNIT_IS_ML,
+        );
+        $this->createOrUpdateAttributeOptionUiBehaviors(
+            AttributeOptionName::DAILY_TASK_DOSE_UNITS,
+            'grams (g)',
+            AttributeOptionUiBehavior::DAILY_TASK_DOSE_UNIT_IS_GRAM,
         );
         $this->createOrUpdateAttributeOptionUiBehaviors(
             AttributeOptionName::DAILY_TASK_DOSE_UNITS,
@@ -673,11 +699,6 @@ class AttributeOptionSeeder extends Seeder
             AttributeOptionName::DAILY_TASK_DOSE_UNITS,
             'tab',
             AttributeOptionUiBehavior::DAILY_TASK_DOSE_UNIT_IS_TAB,
-        );
-        $this->createOrUpdateAttributeOptionUiBehaviors(
-            AttributeOptionName::DAILY_TASK_DOSE_UNITS,
-            'grams (g)',
-            AttributeOptionUiBehavior::DAILY_TASK_DOSE_UNIT_IS_GRAM,
         );
 
         $this->createOrUpdateAttributes(AttributeOptionName::DAILY_TASK_ROUTES, [
@@ -695,6 +716,11 @@ class AttributeOptionSeeder extends Seeder
             __('Right eye (od)'),
             __('Left eye (os)'),
         ]);
+        $this->createOrUpdateAttributeOptionUiBehaviors(
+            AttributeOptionName::DAILY_TASK_ROUTES,
+            'Oral (po)',
+            AttributeOptionUiBehavior::DAILY_TASK_ROUTE_IS_ORAL,
+        );
 
         $this->createOrUpdateAttributes(AttributeOptionName::DAILY_TASK_NUTRITION_ROUTES, [
             __('Leave in enclosure'),

@@ -14,7 +14,7 @@ use App\Models\AttributeOption;
 use App\Options\Options;
 use App\Paginators\SearchResultPaginator;
 use App\Repositories\OptionsStore;
-use App\Support\DailyTasksCollection;
+use App\Collections\DailyTasksCollection;
 use App\Support\DailyTasksFilters;
 use App\Support\ExtensionManager;
 use App\Support\Timezone;

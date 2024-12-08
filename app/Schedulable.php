@@ -45,4 +45,9 @@ interface Schedulable extends Summarizable, Badgeable
      * @param  sting|\DateTime  $date
      */
     public function isDueOn($date): bool;
+
+    /**
+     * Determine if the schedulable's occurrence time frame window has changed
+     */
+    public function hasOccurrenceWindowChanged(): bool;
 }

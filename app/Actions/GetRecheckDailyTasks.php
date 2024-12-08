@@ -19,11 +19,11 @@ class GetRecheckDailyTasks
 
         return Recheck::select('rechecks.*')
             ->whereIn('patient_id', $patientIds)
-            ->where('recheck_start_at', '<=', $filters->date->format('Y-m-d'))
-            ->where(
-                fn ($query) => $query->whereNull('recheck_end_at')
-                    ->orWhere('recheck_end_at', '>=', $filters->date->format('Y-m-d'))
-            )
+            // ->where('recheck_start_at', '<=', $filters->date->format('Y-m-d'))
+            // ->where(
+            //     fn ($query) => $query->whereNull('recheck_end_at')
+            //         ->orWhere('recheck_end_at', '>=', $filters->date->format('Y-m-d'))
+            // )
             ->with('patient.admissions')
             ->get()
             ->filter->isDueOn($filters->date);

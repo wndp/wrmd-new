@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AttributeOption;
 use App\Options\Options;
 use App\Repositories\OptionsStore;
-use App\Support\DailyTasksCollection;
+use App\Collections\DailyTasksCollection;
 use App\Support\DailyTasksFilters;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

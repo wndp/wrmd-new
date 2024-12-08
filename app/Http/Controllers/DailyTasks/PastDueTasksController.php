@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\DailyTasks;
 
 use App\Http\Controllers\Controller;
-use App\Support\DailyTasksCollection;
+use App\Collections\DailyTasksCollection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;

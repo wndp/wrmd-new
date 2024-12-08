@@ -118,4 +118,13 @@ class Recheck extends Model implements Schedulable
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
     }
+
+    public function hasOccurrenceWindowChanged(): bool
+    {
+        return $this->wasChanged([
+            'frequency_id',
+            'recheck_start_at',
+            'recheck_end_at',
+        ]);
+    }
 }

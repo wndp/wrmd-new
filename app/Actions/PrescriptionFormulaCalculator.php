@@ -23,6 +23,7 @@ class PrescriptionFormulaCalculator implements JsonSerializable, Arrayable
     protected $dosageUnitIsPerKgIds;
     protected $dosageUnitIsPerLbIds;
     protected $dosageUnitIsMgPerKgId;
+    protected $dosageUnitIsMlPerKgId;
     protected $dosageUnitIsIuPerKgId;
     protected $dosageUnitIsMgPerLbId;
     protected $dosageUnitIsIuPerLbId;
@@ -37,9 +38,9 @@ class PrescriptionFormulaCalculator implements JsonSerializable, Arrayable
     protected $concentrationUnitIsIuPerMlId;
 
     protected $doseUnitIsMlId;
-    protected $oseUnitIsCapId;
-    protected $oseUnitIsTabId;
-    protected $oseUnitIsGramId;
+    protected $doseUnitIsCapId;
+    protected $doseUnitIsTabId;
+    protected $doseUnitIsGramId;
 
     protected $defaults;
     protected $patient;
@@ -53,6 +54,7 @@ class PrescriptionFormulaCalculator implements JsonSerializable, Arrayable
             $this->dosageUnitIsPerKgIds,
             $this->dosageUnitIsPerLbIds,
             $this->dosageUnitIsMgPerKgId,
+            $this->dosageUnitIsMlPerKgId,
             $this->dosageUnitIsIuPerKgId,
             $this->dosageUnitIsMgPerLbId,
             $this->dosageUnitIsIuPerLbId,
@@ -74,6 +76,7 @@ class PrescriptionFormulaCalculator implements JsonSerializable, Arrayable
             [AttributeOptionName::DAILY_TASK_DOSAGE_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_PER_KG->value],
             [AttributeOptionName::DAILY_TASK_DOSAGE_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_PER_LB->value],
             [AttributeOptionName::DAILY_TASK_DOSAGE_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_MG_PER_KG->value],
+            [AttributeOptionName::DAILY_TASK_DOSAGE_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_ML_PER_KG->value],
             [AttributeOptionName::DAILY_TASK_DOSAGE_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_IU_PER_KG->value],
             [AttributeOptionName::DAILY_TASK_DOSAGE_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_MG_PER_LB->value],
             [AttributeOptionName::DAILY_TASK_DOSAGE_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_IU_PER_LB->value],
@@ -137,11 +140,13 @@ class PrescriptionFormulaCalculator implements JsonSerializable, Arrayable
 
         if (is_null($weightObj)) {
             return null;
-        } elseif (in_array($this->defaults->get('dosage_unit_id'), $this->dosageUnitIsPerKgIds)) {
+        } elseif (in_array($this->defaults->get('dosage_unit_id'), (array) $this->dosageUnitIsPerKgIds)) {
             return $this->calculateDoseForKg($weightObj);
-        } elseif (in_array($this->defaults->get('dosage_unit_id'), $this->dosageUnitIsPerLbIds)) {
+        } elseif (in_array($this->defaults->get('dosage_unit_id'), (array) $this->dosageUnitIsPerLbIds)) {
             return $this->calculateDoseForLb($weightObj);
         }
+
+        return null;
     }
 
     /**
@@ -150,7 +155,7 @@ class PrescriptionFormulaCalculator implements JsonSerializable, Arrayable
     public function calculateDoseUnitId(): ?int
     {
         if (! $this->defaults->get('auto_calculate_dose')) {
-            return $this->defaults->get('dosage_unit_id');
+            return $this->defaults->get('dose_unit_id');
         }
 
         // Dosage in Kg
@@ -159,7 +164,7 @@ class PrescriptionFormulaCalculator implements JsonSerializable, Arrayable
 
         if (
             $this->defaults->get('concentration_unit_id') === null
-            && in_array($this->defaults->get('dosage_unit_id'), $this->dosageUnitIsPerKgIds)
+            && in_array($this->defaults->get('dosage_unit_id'), (array) $this->dosageUnitIsPerKgIds)
         ) {
             return null;
             //return str_replace('/kg', '', $this->defaults->get('dosage_unit_id'));
@@ -190,7 +195,7 @@ class PrescriptionFormulaCalculator implements JsonSerializable, Arrayable
 
         if (
             $this->defaults->get('concentration_unit_id') === null
-            && in_array($this->defaults->get('dosage_unit_id'), $this->dosageUnitIsPerLbIds)
+            && in_array($this->defaults->get('dosage_unit_id'), (array) $this->dosageUnitIsPerLbIds)
         ) {
             return null;
             //return str_replace('/lb', '', $this->defaults->get('dosage_unit_id'));
@@ -269,7 +274,7 @@ class PrescriptionFormulaCalculator implements JsonSerializable, Arrayable
         $volumeOfDrug = Weight::toKilograms($weightObj->weight, $weightObj->unit_id) * $this->defaults->get('dosage');
 
         if (
-            in_array($this->defaults->get('dosage_unit_id'), $this->dosageUnitIsPerKgIds)
+            in_array($this->defaults->get('dosage_unit_id'), (array) $this->dosageUnitIsPerKgIds)
             && $this->defaults->get('concentration_unit_id') === null
         ) {
             return round($volumeOfDrug, 2);
@@ -277,14 +282,14 @@ class PrescriptionFormulaCalculator implements JsonSerializable, Arrayable
 
         if (
             $this->defaults->get('dosage_unit_id') == $this->dosageUnitIsMgPerKgId
-            && in_array($this->defaults->get('concentration_unit_id'), $this->concentrationUnitIsMgIds)
+            && in_array($this->defaults->get('concentration_unit_id'), (array) $this->concentrationUnitIsMgIds)
         ) {
             return round($volumeOfDrug / $this->defaults->get('concentration'), 2);
         }
 
         if (
             $this->defaults->get('dosage_unit_id') == $this->dosageUnitIsIuPerKgId
-            && in_array($this->defaults->get('concentration_unit_id'), $this->concentrationUnitIsIuIds)
+            && in_array($this->defaults->get('concentration_unit_id'), (array) $this->concentrationUnitIsIuIds)
         ) {
             return round($volumeOfDrug / $this->defaults->get('concentration'), 2);
         }
@@ -295,12 +300,12 @@ class PrescriptionFormulaCalculator implements JsonSerializable, Arrayable
     /**
      * Calculate the formula dose in pounds.
      */
-    private function calculateDoseForLb($weightObj): float
+    private function calculateDoseForLb($weightObj): ?float
     {
         $volumeOfDrug = Weight::toPounds($weightObj->weight, $weightObj->unit_id) * $this->defaults->get('dosage');
 
         if (
-            in_array($this->defaults->get('dosage_unit_id'), $this->dosageUnitIsPerLbIds)
+            in_array($this->defaults->get('dosage_unit_id'), (array) $this->dosageUnitIsPerLbIds)
             && $this->defaults->get('concentration_unit_id') === null
         ) {
             return round($volumeOfDrug, 2);
@@ -308,16 +313,18 @@ class PrescriptionFormulaCalculator implements JsonSerializable, Arrayable
 
         if (
             $this->defaults->get('dosage_unit_id') == $this->dosageUnitIsMgPerLbId
-            && in_array($this->defaults->get('concentration_unit_id'), $this->concentrationUnitIsMgIds)
+            && in_array($this->defaults->get('concentration_unit_id'), (array) $this->concentrationUnitIsMgIds)
         ) {
             return round($volumeOfDrug / $this->defaults->get('concentration'), 2);
         }
 
         if (
             $this->defaults->get('dosage_unit_id') == $this->dosageUnitIsIuPerLbId
-            && in_array($this->defaults->get('concentration_unit_id'), $this->concentrationUnitIsIuIds)
+            && in_array($this->defaults->get('concentration_unit_id'), (array) $this->concentrationUnitIsIuIds)
         ) {
             return round($volumeOfDrug / $this->defaults->get('concentration'), 2);
         }
+
+        return null;
     }
 }

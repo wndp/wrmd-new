@@ -11,7 +11,7 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('patient_locations', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->uuid('id');
             $table->unsignedBigInteger('legacy_id')->nullable()->index();
             $table->foreignUuid('patient_id')->index();
             $table->foreignUuid('location_id')->nullable()->index();
@@ -23,6 +23,9 @@ return new class () extends Migration {
             $table->text('comments')->nullable();
             $table->softDeletes();
             $table->timestamps();
+
+            $table->sortKey('moved_in_at');
+            $table->shardKey('patient_id');
         });
     }
 

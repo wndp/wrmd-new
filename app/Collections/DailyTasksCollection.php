@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support;
+namespace App\Collections;
 
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
@@ -11,6 +11,8 @@ use App\Models\Patient;
 use App\Models\PatientLocation;
 use App\Models\Team;
 use App\Schedulable;
+use App\Support\DailyTasksFilters;
+use App\Support\Wrmd;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Arr;
@@ -64,7 +66,7 @@ class DailyTasksCollection extends Collection
         } elseif ($this->filters->facility === 'none-assigned') {
             $query->leftJoinCurrentLocation()->whereNull('facility_id');
         } else {
-            $query->leftJoinCurrentLocation()->where('facility_i', $this->filters->facility);
+            $query->leftJoinCurrentLocation()->where('facility_id', $this->filters->facility);
         }
 
         if (!$this->filters->include_non_pending) {

@@ -12,7 +12,7 @@ class RecordNotOwned extends Exception implements Responsable
 {
     public function __construct(public string|null $failedMessage = null)
     {
-        $this->failedMessage = $failedMessage ?: __('There was a problem accessing that record. Please try again or contact support for help.');
+        $this->failedMessage = $failedMessage ?: static::message();
     }
 
     public function toResponse($request)
@@ -25,5 +25,10 @@ class RecordNotOwned extends Exception implements Responsable
             ->with('notification.heading', 'Oops!')
             ->with('notification.text', $this->failedMessage)
             ->with('notification.style', 'danger');
+    }
+
+    public static function message()
+    {
+        return __('There was a problem accessing that record. Please try again or contact support for help.');
     }
 }

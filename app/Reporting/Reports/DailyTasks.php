@@ -2,7 +2,7 @@
 
 namespace App\Reporting\Reports;
 
-use App\DailyTasks\DailyTasks as DailyTasksCollection;
+use App\Collections\DailyTasksCollection;
 use App\DailyTasks\DailyTasksFilters;
 use App\Reporting\Contracts\Report;
 
