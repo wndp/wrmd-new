@@ -38,7 +38,7 @@ class UpdateRecordedDailyTasks implements ShouldQueue
     {
         $this->model->recordedTasks()->where(
             fn ($query) => $query->where('occurrence_at', '<', $this->model->start_date)
-                ->orWhere('occurrence_at', '>', $this->model->end_date)
+                ->unless(is_null($this->model->end_date), fn ($query) => $query->orWhere('occurrence_at', '>', $this->model->end_date))
         )->delete();
     }
 
