@@ -14,6 +14,7 @@ environments:
         cli-tmp-storage: 512
         queue-tmp-storage: 10240
         storage: vapor-wrmd-storage-staging
+        cache: WRMD-Cache
         build:
             - 'composer install --no-dev'
             - 'php artisan event:cache'
