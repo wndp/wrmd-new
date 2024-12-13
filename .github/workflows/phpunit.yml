@@ -1,0 +1,50 @@
+name: PHPUnit Tests
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  phpunit-tests:
+    name: PHPUnit
+    runs-on: ubuntu-latest
+    services:
+      singlestoredb:
+        image: ghcr.io/singlestore-labs/singlestoredb-dev
+        ports:
+          - 3306:3306
+          - 8080:8080
+          - 9000:9000
+        env:
+          ROOT_PASSWORD: test
+          SINGLESTORE_LICENSE: ${{secrets.SINGLESTORE_LICENSE} } steps:
+      - name: sanity check using mysql client
+        run: |
+          mysql -u root -ptest -e "SELECT 1" -h 127.0.0.1
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          extensions: dom, curl, libxml, mbstring, zip, soap, exif, pcntl, bcmath, xdebug
+          ini-values: error_reporting=E_ALL
+          tools: composer:v2
+          coverage: xdebug
+      - name: Restore PDF conversion for Imagick
+        run: sudo sed -i 's/^.*policy.*coder.*none.*PDF.*//' /etc/ImageMagick-6/policy.xml
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.ci', '.env');"
+      - name: Install Composer Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Install NPM Dependencies
+        run: npm install
+      - name: Generate key
+        run: php artisan key:generate
+      - name: Directory Permissions
+        run: chmod -R 777 storage bootstrap/cache
+      - name: Build frontend components
+        run: npm run build
+      - name: PHPUnit
+        run: vendor/bin/phpunit --coverage-clover ./coverage.xml
