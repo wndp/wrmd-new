@@ -425,19 +425,19 @@ const loginUser = () => {
           </div>
           <div class="mt-8 grid grid-cols-2 gap-0.5 md:grid-cols-3 lg:mt-0 lg:grid-cols-2">
             <div
-              v-for="account in avatars"
-              :key="account.id"
+              v-for="team in avatars"
+              :key="team.data.id"
               class="col-span-1 flex justify-center py-8 px-8 bg-gray-50"
             >
               <a
-                :href="account.website"
+                :href="team.data.website"
                 target="_blank"
               >
                 <img
                   class="max-h-16"
-                  :src="account.profile_photo_url"
-                  :alt="account.organization"
-                  :title="account.organization"
+                  :src="team.data.profile_photo_url"
+                  :alt="team.data.name"
+                  :title="team.data.name"
                 >
               </a>
             </div>
