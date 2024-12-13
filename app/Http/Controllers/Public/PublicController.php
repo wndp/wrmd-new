@@ -8,6 +8,7 @@ use App\Importing\FacilitatesImporting;
 use App\Models\Testimonial;
 use App\Repositories\RecentNews;
 use App\Support\ExtensionManager;
+use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -20,8 +21,8 @@ class PublicController extends Controller
 
     public function testimonials()
     {
-        $testimonials = Cache::remember('testimonials', now()->addHours(6), function () {
-            return Testimonial::with('team')->get()->shuffle();
+        $testimonials = Cache::remember('testimonials', Carbon::now()->addHours(2), function () {
+            return Testimonial::with('team')->limit(10)->get()->shuffle();
         });
 
         return Inertia::render('Public/Testimonials', compact('testimonials'));

@@ -14,7 +14,7 @@ class RecentNews
      */
     public static function collect(): Collection
     {
-        return Cache::remember('recentNews', now()->addDay(), function () {
+        return Cache::remember('recentNews', Carbon::now()->addHours(2), function () {
             try {
                 $posts = Http::get('https://www.wildneighborsdp.org/stories-and-updates?category=WRMD&format=json')
                     ->collect()
