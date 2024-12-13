@@ -64,7 +64,7 @@ const loginUser = () => {
             </div>
           </h1>
           <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-            A <strong class="font-bold">free</strong> on-line medical database designed specifically <strong class="font-bold">for wildlife rehabilitators</strong> to collect, manage and analyze data for our patients.
+            An online medical database designed <strong class="font-bold">for wildlife rehabilitators</strong> to efficiently collect, manage, and analyze patient data.
           </p>
           <template v-if="whatsNew">
             <a
