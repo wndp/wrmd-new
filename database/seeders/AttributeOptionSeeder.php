@@ -723,12 +723,11 @@ class AttributeOptionSeeder extends Seeder
         );
 
         $this->createOrUpdateAttributes(AttributeOptionName::DAILY_TASK_NUTRITION_ROUTES, [
-            __('Leave in enclosure'),
+            __('Self feed'),
             __('Hand feed'),
             __('Force feed'),
             __('Tube feed'),
             __('Gavage'),
-
         ]);
 
         $this->createOrUpdateAttributes(AttributeOptionName::DAILY_TASK_NUTRITION_FREQUENCIES, [
@@ -745,13 +744,6 @@ class AttributeOptionSeeder extends Seeder
             __('Hours'),
             AttributeOptionUiBehavior::DAILY_TASK_NUTRITION_FREQUENCY_IS_HOURS,
         );
-
-        $this->createOrUpdateAttributes(AttributeOptionName::DAILY_TASK_NUTRITION_ROUTES, [
-            __('Leave in enclosure'),
-            __('Hand feed'),
-            __('Force feed'),
-            __('Gavage'),
-        ]);
 
         $this->createOrUpdateAttributes(AttributeOptionName::DAILY_TASK_NUTRITION_INGREDIENT_UNITS, [
             __('Milliliters'),
