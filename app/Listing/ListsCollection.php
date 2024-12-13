@@ -22,7 +22,7 @@ class ListsCollection extends Collection
 {
     public static $lists = null;
 
-    public function clearCache()
+    public static function clearCache()
     {
         static::$lists = null;
     }
