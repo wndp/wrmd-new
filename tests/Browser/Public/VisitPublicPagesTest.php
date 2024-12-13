@@ -172,16 +172,6 @@ final class VisitPublicPagesTest extends DuskTestCase
     }
 
     #[Test]
-    public function visitCookiesPage(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(route('about.cookies'))
-                ->assertTitleContains('Cookies Policy')
-                ->assertSee('Cookies Policy');
-        });
-    }
-
-    #[Test]
     public function visitSlaPage(): void
     {
         $this->browse(function (Browser $browser) {

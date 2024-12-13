@@ -267,14 +267,6 @@ const year = format(new Date(), 'yyyy');
                 </li>
                 <li>
                   <Link
-                    :href="route('about.cookies')"
-                    class="text-base text-gray-300 hover:text-gray-100"
-                  >
-                    Cookies Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link
                     :href="route('about.sla')"
                     class="text-base text-gray-300 hover:text-gray-100"
                   >

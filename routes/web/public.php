@@ -16,7 +16,6 @@ Route::inertia('support-us', 'Public/SupportUs')->name('about.support-us');
 Route::inertia('pricing', 'Public/Pricing')->name('about.pricing');
 Route::inertia('terms-and-conditions', 'Public/Terms')->name('about.terms');
 Route::inertia('privacy-policy', 'Public/Privacy')->name('about.privacy');
-Route::inertia('cookies-policy', 'Public/Cookies')->name('about.cookies');
 Route::inertia('inactive-account-policy', 'Public/InactiveAccount')->name('about.inactive-account');
 Route::inertia('sla', 'Public/Sla')->name('about.sla');
 Route::controller(DonateController::class)->group(function () {
