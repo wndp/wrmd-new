@@ -1,24 +1,124 @@
 <script setup>
 import PublicLayout from '@/Layouts/PublicLayout.vue';
+import {CheckIcon} from '@heroicons/vue/20/solid'
+
+const tiers = [
+  {
+    name: 'Standard',
+    id: 'tier-standard',
+    href: '#',
+    priceMonthly: '$0',
+    description: 'Yes actually free. One of our mottoes is "Keep it Free." Not only this service to our community but the animals we dedicate our lives to.',
+    features: [
+      'Unlimited users',
+      'Daily tasks',
+      'Agency annual reports',
+      'Basic analytics',
+      '48-hour support response time',
+      'and so much more!'
+    ],
+  },
+  {
+    name: 'Pro',
+    id: 'tier-pro',
+    href: '#',
+    priceMonthly: '$250',
+    description: 'Unlock WRMD\'s full potential with Pro features, advanced tools and priority support to help you work smarter and achieve more.',
+    features: [
+      'All the standard features',
+      'File Uploads',
+      'Patient Batch Updating',
+      'Custom Classification Tags',
+      'Custom Fields',
+      'Sub Accounts',
+    ],
+  },
+];
 </script>
 
 <template>
   <PublicLayout title="Pricing">
-    <div class="relative py-8 px-4 sm:px-6 lg:px-8 bg-white">
-      <div class="prose prose-lg mx-auto">
-        <h1>
-          <span class="mt-2 block text-3xl text-center leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">Pricing</span>
-          <span class="block text-2xl text-center text-green-600 font-semibold tracking-wide uppercase">It's FREE</span>
-        </h1>
-        <h3 class="mt-8 block text-base text-center font-semibold tracking-wide uppercase">
-          How about that for a pricing plan?
-        </h3>
-        <p class="text-xl text-gray-500 leading-8">
-          One of our mottoes is "Keep it Free." Not only this service to our community but the animals we dedicate our lives to.
-        </p>
+    <div class="py-16 bg-gray-50 overflow-hidden lg:py-24">
+      <div class="relative max-w-xl mx-auto px-4 sm:px-6 lg:px-8 lg:max-w-7xl">
+        <div class="relative">
+          <h1 class="text-center text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+            Simple no-tricks pricing
+          </h1>
+          <p class="mt-4 max-w-3xl mx-auto text-center text-xl text-gray-500">
+            No matter how well established your organization is, we are sure that your funds are limited and as wildlife rehabilitators ourselves we know that paying for food is a priority. Our Pricing is simple. The free plan includes all the essential features you need, while the pro plan offers additional advanced tools and priority support, which require extra resources for us to maintain.
+          </p>
+        </div>
       </div>
-      <div class="mt-6 prose prose-xl prose-blue text-gray-500 mx-auto">
-        <p>No matter how well established your organization is, we are sure that your funds are limited and as wildlife rehabilitators ourselves we know that paying for food is a priority. In respect to your financial challenges and in the spirit of wildlife rehabilitation, we will do all that we can to keep this service free and available for as long as possible. In exchange for this offer we have a few requests:</p>
+      <div class="mt-12 mx-auto grid max-w-md grid-cols-1 gap-8 lg:max-w-4xl lg:grid-cols-2">
+        <div
+          v-for="tier in tiers"
+          :key="tier.id"
+          class="flex flex-col justify-between rounded-lg bg-white p-8 shadow-lg sm:p-10"
+        >
+          <div>
+            <h3
+              :id="tier.id"
+              class="text-lg font-semibold text-blue-600"
+            >
+              {{ tier.name }}
+            </h3>
+            <div class="mt-4 flex items-baseline gap-x-2">
+              <span class="text-5xl font-semibold tracking-tight text-gray-900">{{ tier.priceMonthly }}</span>
+              <span class="text-base/7 font-semibold text-gray-600">/year</span>
+            </div>
+            <p class="mt-6 text-base/7 text-gray-600">
+              {{ tier.description }}
+            </p>
+            <ul
+              role="list"
+              class="mt-10 space-y-4 text-sm/6 text-gray-600"
+            >
+              <li
+                v-for="feature in tier.features"
+                :key="feature"
+                class="flex gap-x-3"
+              >
+                <CheckIcon
+                  class="h-6 w-5 flex-none text-blue-600"
+                  aria-hidden="true"
+                />
+                {{ feature }}
+              </li>
+            </ul>
+          </div>
+          <Link
+            :href="route('register')"
+            :aria-describedby="tier.id"
+            class="mt-8 block rounded-md bg-green-600 px-3.5 py-2 text-center text-sm/6 font-semibold text-white uppercase shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+          >
+            Get started today
+          </Link>
+        </div>
+        <div class="bg-white flex flex-col items-start gap-x-8 gap-y-6 rounded-lg p-8 ring-1 ring-gray-900/10 sm:gap-y-10 sm:p-10 lg:col-span-2 lg:flex-row lg:items-center">
+          <div class="lg:min-w-0 lg:flex-1">
+            <h3 class="text-base/7 font-semibold text-blue-600">
+              Wildlife Rehabilitation MD (WRMD) Community Scholarship
+            </h3>
+            <p class="mt-1 text-base/7 text-gray-600">
+              We understand that some organizations may face budget constraints, which is why we offer a scholarship subscription for those who need access to our Pro features but cannot afford the full cost. This special program provides qualified organizations with free or discounted access to advanced tools, helping them maximize their impact without the financial burden. To apply, simply reach out and let us know how our platform can support your mission.
+            </p>
+          </div>
+          <div class="w-full lg:w-auto">
+            <img
+              class="object-cover h-48 w-full"
+              src="https://picsum.photos/id/237/200/300"
+            >
+            <Link
+              :href="route('contact.create')"
+              class="mt-4 flex items-center justify-center px-4 py-2 bg-green-300 border border-transparent rounded-md font-semibold text-xs text-green-800 uppercase tracking-widest hover:bg-green-500 active:bg-green-500 focus:outline-none focus:border-green-500 focus:ring focus:ring-green-300 transition"
+            >
+              Apply for the WRMD Scholarship
+            </Link>
+          </div>
+        </div>
+      </div>
+      <div class="mt-12 prose prose-lg prose-blue text-gray-500 mx-auto max-w-4xl">
+        <h4>In Exchange For Wildlife Rehabilitation MD (WRMD) We Have A Few Requests</h4>
         <ol>
           <li>
             Share Wildlife Rehabilitation MD (WRMD) with as many wildlife rehabilitation organizations as you can. The more broad our reach, the better we will grow.
@@ -88,8 +188,6 @@ import PublicLayout from '@/Layouts/PublicLayout.vue';
             </Link>. <strong>Yes this service is free to you but it's not free to us.</strong> This database is entirely community driven and each year we must collectively support its growth. Any donation you are able to make will help to ensure our longevity and support other rehabilitators across the world.
           </li>
         </ol>
-        <h4>How are We Able to Keep it Free?</h4>
-        <p>A lot of passion and fortunately our expenses are not too much. We have also been very fortunate to receive donations from users who want to help our growth.</p>
       </div>
     </div>
   </PublicLayout>

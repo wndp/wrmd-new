@@ -24,9 +24,9 @@ const showExtensionDetails = (extension) => {
     <div class="py-16 bg-gray-50 overflow-hidden lg:py-24">
       <div class="relative max-w-xl mx-auto px-4 sm:px-6 lg:px-8 lg:max-w-7xl">
         <div class="relative">
-          <h2 class="text-center text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+          <h1 class="text-center text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
             Out-of-the-box simple;
-          </h2>
+          </h1>
           <p class="mt-4 max-w-3xl mx-auto text-center text-xl text-gray-500">
             Wildlife Rehabilitation MD (WRMD) is designed for all wildlife rehabilitators, from home-based caregivers to large organizations and universities. Its flexible features can be tailored to fit your workflow, ensuring it meets the diverse needs of any organization.
           </p>
@@ -60,9 +60,9 @@ const showExtensionDetails = (extension) => {
             aria-hidden="true"
           >
             <img
-              class="relative mx-auto shadow-lg rounded-lg"
+              class="object-cover h-72 w-fit relative mx-auto shadow-lg rounded-lg"
               width="490"
-              src="https://tailwindui.com/img/features/feature-example-1.png"
+              src="https://picsum.photos/id/237/200/300"
               alt=""
             >
           </div>
@@ -76,7 +76,7 @@ const showExtensionDetails = (extension) => {
               </p>
               <p>Wildlife Rehabilitation MD offers unmatched analytical abilities to drill down into your data and discover rich insights in your daily wildlife rehabilitation routines. All you need to do is visit the analytics section and let Wildlife Rehabilitation MD do the rest.</p>
             </div>
-            <div class="mt-10 -mx-4 relative lg:mt-0 lg:col-start-1">
+            <div class="mt-10 relative lg:mt-0 lg:col-start-1">
               <img
                 class="relative mx-auto shadow-lg rounded-lg"
                 width="490"
@@ -98,9 +98,9 @@ const showExtensionDetails = (extension) => {
             aria-hidden="true"
           >
             <img
-              class="relative mx-auto shadow-lg rounded-lg"
+              class="object-cover h-72 w-fit relative mx-auto shadow-lg rounded-lg"
               width="490"
-              src="https://tailwindui.com/img/features/feature-example-1.png"
+              src="https://picsum.photos/id/237/200/300"
               alt=""
             >
           </div>
@@ -122,9 +122,9 @@ const showExtensionDetails = (extension) => {
             aria-hidden="true"
           >
             <img
-              class="relative mx-auto shadow-lg rounded-lg"
+              class="object-cover h-72 w-fit relative mx-auto shadow-lg rounded-lg"
               width="490"
-              src="https://tailwindui.com/img/features/feature-example-1.png"
+              src="https://picsum.photos/id/237/200/300"
               alt=""
             >
           </div>
@@ -169,7 +169,7 @@ const showExtensionDetails = (extension) => {
                         href="javascript:void(0)"
                         @click="showExtensionDetails(extension)"
                       >
-                        <InformationCircleIcon class="size-6 text-gray-500" />
+                        <InformationCircleIcon class="size-6 text-blue-600" />
                       </a>
                     </div>
                     <p class="text-base text-gray-500">
@@ -211,7 +211,7 @@ const showExtensionDetails = (extension) => {
                         href="javascript:void(0)"
                         @click="showExtensionDetails(extension)"
                       >
-                        <InformationCircleIcon class="size-6 text-gray-500" />
+                        <InformationCircleIcon class="size-6 text-blue-600" />
                       </a>
                     </div>
                     <p class="text-base text-gray-500">
@@ -239,7 +239,7 @@ const showExtensionDetails = (extension) => {
                   <div class="flex mt-4">
                     <div class="mr-4 shrink-0">
                       <Link :href="route('contact.create')">
-                        <EnvelopeIcon class="size-6 text-gray-500" />
+                        <EnvelopeIcon class="size-6 text-blue-600" />
                       </Link>
                     </div>
                     <p class="text-base text-gray-500">

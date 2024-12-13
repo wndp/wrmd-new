@@ -33,8 +33,8 @@ class PublicController extends Controller
             ...$extension->toArray(),
         ]);
 
-        $standardExtensions = Arr::where($extensions, fn ($extension) => !$extension['pro']);
-        $proExtensions = Arr::where($extensions, fn ($extension) => $extension['pro']);
+        $standardExtensions = array_values(Arr::where($extensions, fn ($extension) => !$extension['pro']));
+        $proExtensions = array_values(Arr::where($extensions, fn ($extension) => $extension['pro']));
 
         return Inertia::render('Public/Features', compact('standardExtensions', 'proExtensions'));
     }
