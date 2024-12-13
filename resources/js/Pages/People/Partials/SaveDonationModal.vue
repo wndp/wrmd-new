@@ -4,7 +4,7 @@ import {formatISO} from 'date-fns';
 import DialogModal from '@/Components/DialogModal.vue';
 import InputLabel from '@/Components/FormElements/InputLabel.vue';
 import TextInput from '@/Components/FormElements/TextInput.vue';
-import TextAreaInput from '@/Components/FormElements/TextAreaInput.vue';
+import TextareaInput from '@/Components/FormElements/TextareaInput.vue';
 import SelectInput from '@/Components/FormElements/SelectInput.vue';
 import DatePicker from '@/Components/FormElements/DatePicker.vue';
 import InputError from '@/Components/FormElements/InputError.vue';
@@ -142,7 +142,7 @@ const update = () => {
             {{ __('Comments') }}
           </InputLabel>
           <div class="col-span-5 mt-1 sm:mt-0">
-            <TextAreaInput
+            <TextareaInput
               v-model="form.comments"
               name="comments"
             />
