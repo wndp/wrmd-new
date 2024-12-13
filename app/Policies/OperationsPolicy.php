@@ -26,12 +26,12 @@ class OperationsPolicy
             }
         }
 
-        return $user->isA(Role::ADMIN->value);
+        return $user->can(Ability::VIEW_ACCOUNT_SETTINGS);
     }
 
     public function viewMaintenance($user)
     {
-        return $user->isA(Role::ADMIN->value);
+        return $user->can(Ability::VIEW_ACCOUNT_SETTINGS);
     }
 
     public function viewTransferPatient($user)
@@ -45,6 +45,6 @@ class OperationsPolicy
 
     public function viewSubAccounts($user)
     {
-        return $user->currentTeam?->is_master_account && $user->isA(Role::ADMIN->value);
+        return $user->currentTeam?->is_master_account && $user->can(Ability::VIEW_ACCOUNT_SETTINGS);
     }
 }
