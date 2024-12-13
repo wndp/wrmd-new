@@ -42,3 +42,6 @@ jobs:
         run: vapor deploy ${{ github.event.inputs.environment }}
         env:
           VAPOR_API_TOKEN: ${{ secrets.VAPOR_API_TOKEN }}
+          VITE_APP_NAME: "WRMD"
+          VITE_PUSHER_APP_KEY: "5772823adf126e1d9bf3"
+          VITE_PUSHER_APP_CLUSTER: "mt1"
