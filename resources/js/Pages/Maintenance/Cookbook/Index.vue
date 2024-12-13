@@ -27,7 +27,7 @@ const search = () => debounce(function() {
     } else {
         form.get(route('maintenance.cookbook.index'));
     }
-}, 500)();
+}, 700)();
 </script>
 
 <template>
