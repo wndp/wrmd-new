@@ -18,7 +18,6 @@ class Transfer extends Model
         'cloned_patient_id',
         'from_team_id',
         'to_team_id',
-        //'thread_id',
         'is_collaborative',
         'is_accepted',
         'responded_at',
@@ -30,7 +29,6 @@ class Transfer extends Model
         'cloned_patient_id' => 'integer',
         'from_team_id' => 'integer',
         'to_team_id' => 'integer',
-        //'thread_id' => 'integer',
         'is_collaborative' => 'boolean',
         'is_accepted' => 'boolean',
         'responded_at' => 'datetime',
@@ -54,11 +52,6 @@ class Transfer extends Model
     public function toTeam(): BelongsTo
     {
         return $this->belongsTo(Team::class, 'to_team_id');
-    }
-
-    public function thread(): BelongsTo
-    {
-        return $this->belongsTo(Thread::class);
     }
 
     public function fromTeamAdmission()

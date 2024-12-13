@@ -16,7 +16,6 @@ return new class () extends Migration {
             $table->unsignedBigInteger('cloned_patient_id')->index()->nullable();
             $table->unsignedBigInteger('from_team_id')->index();
             $table->unsignedBigInteger('to_team_id')->index();
-            //$table->unsignedBigInteger('thread_id')->index();
             $table->boolean('is_collaborative')->default(0);
             $table->boolean('is_accepted')->nullable();
             $table->datetime('responded_at')->nullable();
