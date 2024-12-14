@@ -6,6 +6,8 @@ use App\Enums\Attribute;
 use App\Http\Controllers\Controller;
 use App\Importing\FacilitatesImporting;
 use App\Models\Testimonial;
+use App\Reporting\AnnualReports;
+use App\Repositories\AdministrativeDivision;
 use App\Repositories\RecentNews;
 use App\Support\ExtensionManager;
 use Carbon\Carbon;
@@ -92,7 +94,20 @@ class PublicController extends Controller
 
     public function agencies()
     {
-        $annualReports  = [];
+        $annualReports = AnnualReports::locales()->map(function ($locale) {
+            $alpha2CountryCode = Str::before($locale, '-');
+            $administrativeDivision = new AdministrativeDivision('en', $alpha2CountryCode);
+            $countryName = $administrativeDivision->countryName();
+
+            if (Str::contains($locale, '-')) {
+                $subdivision = $administrativeDivision->countrySubdivisions()[$locale];
+                return "$countryName - $subdivision";
+            }
+
+            return $countryName;
+        })
+        ->sort()
+        ->values();
 
         return Inertia::render('Public/Agencies', compact('annualReports'));
     }
