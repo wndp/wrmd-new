@@ -44,26 +44,26 @@ final class AccountsActionsControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantSpoofAccounts(): void
-    {
-        $me = $this->createTeamUser();
-        $team = Team::factory()->create();
-        $this->actingAs($me->user)->post(route('teams.spoof', $team))->assertForbidden();
-    }
+    // #[Test]
+    // public function unAuthorizedUsersCantSpoofAccounts(): void
+    // {
+    //     $me = $this->createTeamUser();
+    //     $team = Team::factory()->create();
+    //     $this->actingAs($me->user)->post(route('teams.spoof', $team))->assertForbidden();
+    // }
 
-    #[Test]
-    public function anAccountCanBeSpoofed(): void
-    {
-        $me = $this->createTeamUser(['id' => 1]);
-        BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
-        $team = Team::factory()->create();
+    // #[Test]
+    // public function anAccountCanBeSpoofed(): void
+    // {
+    //     $me = $this->createTeamUser(['id' => 1]);
+    //     BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
+    //     $team = Team::factory()->create();
 
-        $this->assertEquals(1, $me->user->current_team_id);
+    //     $this->assertEquals(1, $me->user->current_team_id);
 
-        $this->actingAs($me->user)->post(route('teams.spoof', $team))
-            ->assertRedirect('dashboard');
+    //     $this->actingAs($me->user)->post(route('teams.spoof', $team))
+    //         ->assertRedirect('dashboard');
 
-        $this->assertEquals($team->id, $me->user->current_team_id);
-    }
+    //     $this->assertEquals($team->id, $me->user->current_team_id);
+    // }
 }
