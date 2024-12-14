@@ -42,6 +42,14 @@ class AdministrativeDivision
     }
 
     /**
+     * Get a country's name.
+     */
+    public function countryName(string $alpha2CountryCode = null): string
+    {
+        return $this->isoCodes->getCountries()->getByAlpha2($alpha2CountryCode ?? $this->alpha2CountryCode)->getLocalName();
+    }
+
+    /**
      * Get an array of a country's subdivisions.
      *
      * @param  string|null $alpha2CountryCode
