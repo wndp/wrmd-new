@@ -49,19 +49,6 @@ const social = [
 ];
 
 const year = format(new Date(), 'yyyy');
-
-// export default {
-//   setup() {
-//     return {
-//       social,
-//     };
-//   },
-//   data() {
-//     return {
-//       year: format(new Date(), 'yyyy')
-//     };
-//   },
-// };
 </script>
 
 <template>
@@ -117,15 +104,7 @@ const year = format(new Date(), 'yyyy');
                     :href="route('about.security')"
                     class="text-base text-gray-300 hover:text-gray-100"
                   >
-                    Security
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    :href="route('about.data-integrity')"
-                    class="text-base text-gray-300 hover:text-gray-100"
-                  >
-                    Data Integrity
+                    Security and Data Integrity
                   </Link>
                 </li>
                 <li>
@@ -138,12 +117,28 @@ const year = format(new Date(), 'yyyy');
                 </li>
                 <li>
                   <Link
+                    :href="route('about.oil-spills')"
+                    class="text-base text-gray-300 hover:text-gray-100"
+                  >
+                    Oil Spills
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    :href="route('about.wildalert')"
+                    class="text-base text-gray-300 hover:text-gray-100"
+                  >
+                    WildAlert
+                  </Link>
+                </li>
+                <!-- <li>
+                  <Link
                     :href="route('about.support-us')"
                     class="text-base text-gray-300 hover:text-gray-100"
                   >
                     Support Us
                   </Link>
-                </li>
+                </li> -->
               </ul>
             </div>
             <div class="mt-12 md:mt-0">

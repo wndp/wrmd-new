@@ -5,7 +5,7 @@ import PublicLayout from '@/Layouts/PublicLayout.vue';
 <template>
   <PublicLayout title="About Wildlife Rehabilitation MD">
     <div class="relative py-8 px-4 sm:px-6 lg:px-8 bg-white">
-      <div class="prose prose-lg mx-auto">
+      <div class="prose prose-blue prose-lg mx-auto">
         <div class="sm:flex">
           <div class="mr-4 flex-shrink-0 self-end">
             <img
