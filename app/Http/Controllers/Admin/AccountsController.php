@@ -194,12 +194,15 @@ class AccountsController extends Controller
     public function destroy(Request $request, Team $team): RedirectResponse
     {
         $request->offsetSet('name', Str::slug(request('name')));
+        $request->offsetSet('status', $team->status->value);
 
         $request->validate([
             'name' => 'required|in:'.Str::slug($team->name),
             'password' => ['required', 'confirmed', 'current_password'],
+            'status' => 'required|in:'.AccountStatus::SUSPENDED->value
         ], [
             'name.in' => 'The provided organization name does not match the displayed account organization name.',
+            'status.in' => 'The account status must be '.AccountStatus::SUSPENDED->label().' before it can be deleted.',
         ]);
 
         DeleteTeam::dispatch($team);

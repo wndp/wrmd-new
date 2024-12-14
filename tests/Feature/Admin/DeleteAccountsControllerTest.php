@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin;
 
 use App\Enums\Ability;
+use App\Enums\AccountStatus;
 use App\Jobs\DeleteAccount;
 use App\Jobs\DeleteTeam;
 use App\Models\Team;
@@ -63,6 +64,17 @@ final class DeleteAccountsControllerTest extends TestCase
     }
 
     #[Test]
+    public function theAccountStatusMustBeSuspendedToDeleteAnAccount(): void
+    {
+        $me = $this->createTeamUser();
+        BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
+        $team = Team::factory()->create();
+
+        $this->actingAs($me->user)->delete(route('teams.destroy', $team))
+            ->assertInvalid(['status' => 'The account status must be Suspended before it can be deleted.']);
+    }
+
+    #[Test]
     public function theAuthenticatedUsersPasswordMustBeConfirmedToDeleteAnAccount(): void
     {
         $me = $this->createTeamUser();
@@ -92,14 +104,16 @@ final class DeleteAccountsControllerTest extends TestCase
 
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
-        $team = Team::factory()->create();
+        $team = Team::factory()->create([
+            'status' => AccountStatus::SUSPENDED
+        ]);
 
         $this->actingAs($me->user)->delete(route('teams.destroy', $team), [
             'name' => $team->name,
             'password' => 'password',
             'password_confirmation' => 'password',
         ])
-            ->assertRedirect('admin/teams')
+            ->assertRedirect('admin/dashboard')
             ->assertSessionHas('notification.text', "$team->name is in the queue to be deleted.");
 
         Queue::assertPushed(DeleteTeam::class, function ($job) use ($team) {
