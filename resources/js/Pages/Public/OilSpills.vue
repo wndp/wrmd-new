@@ -32,7 +32,7 @@ import PublicLayout from '@/Layouts/PublicLayout.vue';
         <h4>Is there a cost to use the oil spill extension?</h4>
         <p>Yes. There is a one-time activation fee of $500. No further charge until the extension is used during a response, then $1 / per patient billed annually.</p>
         <h4>How does the oil spill extension relate to WRMD Pro?</h4>
-        <p>ALong with the oil spill extension, users will also receive all the benefits of WRMD Pro.</p>
+        <p>Along with the oil spill extension, users will also receive all the benefits of WRMD Pro.</p>
       </div>
     </div>
   </PublicLayout>
