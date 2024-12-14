@@ -131,14 +131,6 @@ const year = format(new Date(), 'yyyy');
                     WildAlert
                   </Link>
                 </li>
-                <!-- <li>
-                  <Link
-                    :href="route('about.support-us')"
-                    class="text-base text-gray-300 hover:text-gray-100"
-                  >
-                    Support Us
-                  </Link>
-                </li> -->
               </ul>
             </div>
             <div class="mt-12 md:mt-0">

@@ -11,7 +11,6 @@ Route::inertia('style-guide', 'StyleGuide');
 Route::inertia('about', 'Public/About')->name('about');
 Route::inertia('the-wild-neighbors-database-project', 'Public/Wndp')->name('about.wndp');
 Route::inertia('security-and-data-integrity', 'Public/Security')->name('about.security');
-Route::inertia('support-us', 'Public/SupportUs')->name('about.support-us');
 Route::inertia('wildalert', 'Public/WildAlert')->name('about.wildalert');
 Route::inertia('oil-spills', 'Public/OilSpills')->name('about.oil-spills');
 Route::inertia('pricing', 'Public/Pricing')->name('about.pricing');
