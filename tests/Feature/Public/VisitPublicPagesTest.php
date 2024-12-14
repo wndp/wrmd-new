@@ -12,7 +12,7 @@ final class VisitPublicPagesTest extends TestCase
     #[Test]
     public function visitHome(): void
     {
-        $this->get('/')->assertOk()->assertInertia(function ($page) {
+        $this->get(route('home'))->assertOk()->assertInertia(function ($page) {
             $page->component('Welcome');
         });
     }
@@ -20,7 +20,7 @@ final class VisitPublicPagesTest extends TestCase
     #[Test]
     public function visitTestimonials(): void
     {
-        $this->get('/testimonials')->assertOk()->assertInertia(function ($page) {
+        $this->get(route('about.testimonials'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Testimonials');
         });
     }
@@ -28,16 +28,16 @@ final class VisitPublicPagesTest extends TestCase
     #[Test]
     public function visitFeatures(): void
     {
-        $this->get('/features')->assertOk()->assertInertia(function ($page) {
+        $this->get(route('about.features'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Features')
-                ->has('extensions');
+                ->hasAll(['standardExtensions', 'proExtensions']);
         });
     }
 
     #[Test]
     public function visitPrice(): void
     {
-        $this->get('pricing')->assertOk()->assertInertia(function ($page) {
+        $this->get(route('about.pricing'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Pricing');
         });
     }
@@ -45,7 +45,7 @@ final class VisitPublicPagesTest extends TestCase
     #[Test]
     public function visitDonate(): void
     {
-        $this->get('donate')->assertOk()->assertInertia(function ($page) {
+        $this->get(route('donate.index'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Donate');
         });
     }
@@ -53,7 +53,7 @@ final class VisitPublicPagesTest extends TestCase
     #[Test]
     public function visitThankYou(): void
     {
-        $this->get('thank-you')->assertOk()->assertInertia(function ($page) {
+        $this->get(route('donate.thanks'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Thanks');
         });
     }
@@ -61,7 +61,7 @@ final class VisitPublicPagesTest extends TestCase
     #[Test]
     public function visitAbout(): void
     {
-        $this->get('about')->assertOk()->assertInertia(function ($page) {
+        $this->get(route('about'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/About');
         });
     }
@@ -69,40 +69,40 @@ final class VisitPublicPagesTest extends TestCase
     #[Test]
     public function visitWhatsNew(): void
     {
-        $this->get('whats-new')->assertOk()->assertInertia(function ($page) {
+        $this->get(route('about.new'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/WhatsNew');
         });
     }
 
     #[Test]
-    public function visitSecurity(): void
+    public function visitSecurityAndDataIntegrity(): void
     {
-        $this->get('security')->assertOk()->assertInertia(function ($page) {
+        $this->get(route('about.security'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Security');
-        });
-    }
-
-    #[Test]
-    public function visitData(): void
-    {
-        $this->get('data-integrity')->assertOk()->assertInertia(function ($page) {
-            $page->component('Public/DataIntegrity');
         });
     }
 
     #[Test]
     public function visitAgencies(): void
     {
-        $this->get('agencies')->assertOk()->assertInertia(function ($page) {
+        $this->get(route('about.agencies'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Agencies');
         });
     }
 
     #[Test]
-    public function visitSupportUs(): void
+    public function visitOilSpills(): void
     {
-        $this->get('support-us')->assertOk()->assertInertia(function ($page) {
-            $page->component('Public/SupportUs');
+        $this->get(route('about.oil-spills'))->assertOk()->assertInertia(function ($page) {
+            $page->component('Public/OilSpills');
+        });
+    }
+
+    #[Test]
+    public function visitWildAlert(): void
+    {
+        $this->get(route('about.wildalert'))->assertOk()->assertInertia(function ($page) {
+            $page->component('Public/WildAlert');
         });
     }
 
@@ -115,7 +115,7 @@ final class VisitPublicPagesTest extends TestCase
     #[Test]
     public function visitTerms(): void
     {
-        $this->get('terms-and-conditions')->assertOk()->assertInertia(function ($page) {
+        $this->get(route('about.terms'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Terms');
         });
     }
@@ -123,23 +123,23 @@ final class VisitPublicPagesTest extends TestCase
     #[Test]
     public function visitPrivacy(): void
     {
-        $this->get('privacy-policy')->assertOk()->assertInertia(function ($page) {
+        $this->get(route('about.privacy'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Privacy');
         });
     }
 
     #[Test]
-    public function visitCookies(): void
+    public function visitInactiveAccountPolicy(): void
     {
-        $this->get('cookies-policy')->assertOk()->assertInertia(function ($page) {
-            $page->component('Public/Cookies');
+        $this->get(route('about.inactive-account'))->assertOk()->assertInertia(function ($page) {
+            $page->component('Public/InactiveAccount');
         });
     }
 
     #[Test]
     public function visitSla(): void
     {
-        $this->get('sla')->assertOk()->assertInertia(function ($page) {
+        $this->get(route('about.sla'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Sla');
         });
     }
@@ -156,7 +156,7 @@ final class VisitPublicPagesTest extends TestCase
         AttributeOption::factory()->create(['name' => AttributeOptionName::EXAM_MUCUS_MEMBRANE_COLORS]);
         AttributeOption::factory()->create(['name' => AttributeOptionName::EXAM_MUCUS_MEMBRANE_TEXTURES]);
 
-        $this->get('importing')->assertOk()->assertInertia(function ($page) {
+        $this->get(route('about.importing'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Importing');
         });
     }
@@ -164,7 +164,7 @@ final class VisitPublicPagesTest extends TestCase
     #[Test]
     public function visitContact(): void
     {
-        $this->get('/contact')->assertOk()->assertInertia(function ($page) {
+        $this->get(route('contact.create'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Contact');
         });
     }

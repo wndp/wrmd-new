@@ -92,22 +92,12 @@ final class VisitPublicPagesTest extends DuskTestCase
     }
 
     #[Test]
-    public function visitSecurityPage(): void
+    public function visitSecurityAndDataIntegrityPage(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('about.security'))
                 ->assertTitleContains('Security')
-                ->assertSee('Security');
-        });
-    }
-
-    #[Test]
-    public function visitDataPage(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(route('about.data-integrity'))
-                ->assertTitleContains('Data Integrity')
-                ->assertSee('Data Integrity');
+                ->assertSee('Security and Data Integrity');
         });
     }
 
@@ -122,12 +112,22 @@ final class VisitPublicPagesTest extends DuskTestCase
     }
 
     #[Test]
-    public function visitSupportUsPage(): void
+    public function visitOilSpillPage(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(route('about.support-us'))
-                ->assertTitleContains('Support Us')
-                ->assertSee('Support Us');
+            $browser->visit(route('about.oil-spills'))
+                ->assertTitleContains('Oil Spills')
+                ->assertSee('Oil Spills');
+        });
+    }
+
+    #[Test]
+    public function visitWildAlertPage(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(route('about.wildalert'))
+                ->assertTitleContains('WildAlert')
+                ->assertSee('WildAlert');
         });
     }
 
