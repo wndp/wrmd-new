@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Extensions;
+namespace Tests\Unit\Support;
 
 use App\Enums\Extension;
 use App\Models\Team;
@@ -67,7 +67,7 @@ final class ExtensionManagerTest extends TestCase
                 Extension::BANDING_MORPHOMETRICS,
                 Extension::OIL_SPILL_PROCESSING
             ],
-            $result->pluck('extension')->sort()->values()->toArray()
+            $result->pluck('extension')->sortBy('value')->values()->toArray()
         );
     }
 

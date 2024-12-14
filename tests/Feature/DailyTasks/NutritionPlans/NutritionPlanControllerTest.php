@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\DailyTasks\Prescriptions;
+namespace Tests\Feature\DailyTasks\NutritionPlans;
 
 use App\Enums\Ability;
 use App\Enums\AttributeOptionName;
