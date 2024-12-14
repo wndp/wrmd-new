@@ -3,7 +3,7 @@ import {computed} from 'vue';
 import {useForm, usePage} from '@inertiajs/vue3';
 import PublicLayout from '@/Layouts/PublicLayout.vue';
 import {ChevronRightIcon} from '@heroicons/vue/24/solid';
-import {CheckIcon, ArrowRightOnRectangleIcon, HomeIcon} from '@heroicons/vue/24/outline';
+import {CheckIcon, ArrowRightOnRectangleIcon, HomeIcon, ArrowRightIcon} from '@heroicons/vue/24/outline';
 import Checkbox from '@/Components/FormElements/Checkbox.vue';
 import InputError from '@/Components/FormElements/InputError.vue';
 import DonateHeader from '@/Layouts/Partials/DonateHeader.vue';
@@ -388,9 +388,9 @@ const loginUser = () => {
       </div>
       <Link
         :href="route('about.testimonials')"
-        class="text-blue-600 hover:text-blue-700"
+        class="text-blue-600 hover:text-blue-700 flex items-center"
       >
-        Read more testimonials from our users.
+        <ArrowRightIcon class="w-5 h-5 mr-4" /> Read more testimonials from our users.
       </Link>
     </section>
     <!-- Account Logo Cloud -->
