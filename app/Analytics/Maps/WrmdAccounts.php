@@ -15,7 +15,7 @@ class WrmdAccounts extends Map
 
         $this->series->push(
             [
-                'name' => 'Active Accounts',
+                'name' => AccountStatus::ACTIVE->label(),
                 'data' => Team::where('status', AccountStatus::ACTIVE)
                     ->get()
                     ->map([$this, 'formatMarkers'])
@@ -26,7 +26,7 @@ class WrmdAccounts extends Map
 
         $this->series->push(
             [
-                'name' => 'Stale Accounts',
+                'name' => AccountStatus::STALE->label(),
                 'data' => Team::where('status', AccountStatus::STALE)
                     ->get()
                     ->map([$this, 'formatMarkers'])
@@ -37,8 +37,8 @@ class WrmdAccounts extends Map
 
         $this->series->push(
             [
-                'name' => 'Banned Accounts',
-                'data' => Team::where('status', AccountStatus::BANNED)
+                'name' => AccountStatus::SUSPENDED->label(),
+                'data' => Team::where('status', AccountStatus::SUSPENDED)
                     ->get()
                     ->map([$this, 'formatMarkers'])
                     ->filter()

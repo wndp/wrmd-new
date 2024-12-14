@@ -68,8 +68,8 @@ class DeleteableAccounts extends ExportableReport
      */
     public function query(): Builder
     {
-        // Account has been marked as inactive and the organization name is similar to an active accounts name.
-        $query = Team::where('status', AccountStatus::BANNED)
+        // Account has been marked as suspended and the organization name is similar to an active accounts name.
+        $query = Team::where('status', AccountStatus::SUSPENDED)
             ->whereExists(function ($query) {
                 $query->select(DB::raw(1))
                     ->from('accounts as a2')
