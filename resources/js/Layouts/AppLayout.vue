@@ -57,7 +57,10 @@ if (typeof window !== 'undefined' && typeof window.Beacon !== 'undefined') {
         {{ __('Your trial period will expire on :genericTrialEndsAt. Subscribe to a FREE account to continue using WRMD.', {
           genericTrialEndsAt: usePage().props.subscription.genericTrialEndsAt
         }) }}
-        <AlertAction v-if="can(Abilities.COMPUTED_VIEW_BILLING)" color="yellow">
+        <AlertAction
+          v-if="can(Abilities.COMPUTED_VIEW_BILLING)"
+          color="yellow"
+        >
           <Link :href="route('spark.portal')">
             {{ __('Start a WRMD subscription') }}
           </Link>
