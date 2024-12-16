@@ -2,6 +2,8 @@
 
 namespace App\Jobs\PatientNotifications;
 
+use App\Enums\AttributeOptionName;
+use App\Enums\AttributeOptionUiBehavior;
 use App\Events\NotifyPatient;
 use App\Models\Patient;
 use App\Models\Team;
@@ -36,9 +38,14 @@ class ExcessiveDaysInCare implements ShouldQueue
      */
     public function handle(): void
     {
+        [$dispositionPendingId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
+            AttributeOptionName::PATIENT_DISPOSITIONS->value,
+            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_PENDING->value,
+        ]);
+
         $daysInCare = $this->patient->days_in_care;
 
-        if ($this->patient->disposition === 'Pending' && $daysInCare > 180) {
+        if ($this->patient->disposition_id === $dispositionPendingId && $daysInCare > 180) {
             NotifyPatient::dispatch(
                 $this->patient,
                 __('Days in Care'),

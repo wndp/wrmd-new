@@ -2,6 +2,7 @@
 
 namespace App\Jobs\PatientNotifications;
 
+use App\Enums\SettingKey;
 use App\Events\NotifyPatient;
 use App\Models\Admission;
 use App\Models\Patient;
@@ -39,7 +40,7 @@ class MultipleCollaborators implements ShouldQueue
      */
     public function handle(): void
     {
-        $tomorrow = Carbon::tomorrow($this->team->settingsStore()->get('timezone'));
+        $tomorrow = Carbon::tomorrow($this->team->settingsStore()->get(SettingKey::TIMEZONE));
 
         Cache::remember($this->fingerPrint(), $tomorrow, function () {
             return Admission::where('patient_id', $this->patient->id)
