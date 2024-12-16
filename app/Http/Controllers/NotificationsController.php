@@ -15,7 +15,7 @@ class NotificationsController extends Controller
     {
         return Inertia::render('Notifications', [
             'notifications' => Auth::user()
-                ->currentAccount()
+                ->currentTeam
                 ->readNotifications()
                 ->paginate()
                 ->onEachSide(1)
