@@ -111,7 +111,7 @@ class ReportRequest extends FormRequest
             })->values();
         }
 
-        return collect($filters)->map(function ($filter) use ($availableFilters) {
+        return Collection::make($filters)->map(function ($filter) use ($availableFilters) {
             $matchingFilter = $availableFilters->first(function ($availableFilter) use ($filter) {
                 return $filter['class'] === get_class($availableFilter);
             });

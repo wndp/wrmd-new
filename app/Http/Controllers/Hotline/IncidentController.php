@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateIncidentRequest;
 use App\Http\Resources\IncidentResource;
 use App\Jobs\GeocodeAddress;
 use App\Models\AttributeOption;
+use App\Models\Communication;
 use App\Models\Incident;
 use App\Models\Person;
 use App\Options\LocaleOptions;
@@ -146,12 +147,12 @@ class IncidentController extends Controller
         $incident->responder_id = $reportingParty->id;
         $incident->save();
 
-        if ($request->filled('communication.communication_at', 'communication.communication')) {
+        if ($request->filled('communication_at', 'communication')) {
             Communication::create([
                 'incident_id' => $incident->id,
-                'communication' => $request->input('communication.communication'),
-                'communication_at' => $request->convertDateFromLocal('communication.communication_at'),
-                'communication_by' => $request->input('communication.communication_by'),
+                'communication' => $request->input('communication'),
+                'communication_at' => Timezone::convertFromLocalToUtc($request->input('communication_at')),
+                'communication_by' => $request->input('communication_by'),
             ]);
         }
 

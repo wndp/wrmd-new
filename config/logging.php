@@ -127,6 +127,12 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        'vapor' => [
+            'driver' => 'stack',
+            'channels' => ['rollbar', 'stderr'],
+            'ignore_exceptions' => false,
+        ],
+
     ],
 
 ];

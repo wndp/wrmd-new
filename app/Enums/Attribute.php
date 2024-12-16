@@ -7,6 +7,12 @@ use App\Support\AttributeOptionsCollection;
 
 enum Attribute: string
 {
+    case INCIDENT_STATUS_ID = 'incidents.incident_status_id';
+    case INCIDENT_CATEGORY_ID = 'incidents.category_id';
+    case INCIDENT_SUBDIVISION = 'incidents.incident_subdivision';
+    case INCIDENT_REPORTED_AT = 'incidents.reported_at';
+    case INCIDENT_OCCURRED_AT = 'incidents.occurred_at';
+
     case PATIENTS_DATE_ADMITTED_AT = 'patients.date_admitted_at';
     case PATIENTS_NAME = 'patients.name';
     case PATIENTS_BAND = 'patients.band';
@@ -48,6 +54,12 @@ enum Attribute: string
     public function label(): string
     {
         return match ($this) {
+            self::INCIDENT_STATUS_ID => '',
+            self::INCIDENT_CATEGORY_ID => '',
+            self::INCIDENT_SUBDIVISION => '',
+            self::INCIDENT_REPORTED_AT => '',
+            self::INCIDENT_OCCURRED_AT => '',
+
             self::PATIENTS_DATE_ADMITTED_AT => __('Date Admitted'),
             self::PATIENTS_NAME => __('Name'),
             self::PATIENTS_BAND => __('Band'),
@@ -92,6 +104,9 @@ enum Attribute: string
     public function hasAttributeOptions(): bool
     {
         return match ($this) {
+            self::INCIDENT_STATUS_ID,
+            self::INCIDENT_CATEGORY_ID,
+            self::INCIDENT_SUBDIVISION,
             self::PATIENT_LOCATIONS_FACILITY_ID,
             self::PATIENTS_DISPOSITION_ID,
             self::EXAMS_SEX_ID,
@@ -105,9 +120,35 @@ enum Attribute: string
         };
     }
 
+    public function isDateAttribute(): bool
+    {
+        return match ($this) {
+            self::INCIDENT_REPORTED_AT,
+            self::INCIDENT_OCCURRED_AT,
+            self::PATIENTS_DATE_ADMITTED_AT,
+            self::PATIENTS_DISPOSITIONED_AT => true,
+            default => false,
+        };
+    }
+
+    public function isNumberAttribute(): bool
+    {
+        return match ($this) {
+
+            default => false,
+        };
+    }
+
     public function options(): AttributeOptionsCollection
     {
         return match ($this) {
+            self::INCIDENT_STATUS_ID => AttributeOption::getDropdownOptions(AttributeOptionName::HOTLINE_STATUSES),
+            self::INCIDENT_CATEGORY_ID => AttributeOption::getDropdownOptions([
+                AttributeOptionName::HOTLINE_WILDLIFE_CATEGORIES,
+                AttributeOptionName::HOTLINE_ADMINISTRATIVE_CATEGORIES,
+                AttributeOptionName::HOTLINE_OTHER_CATEGORIES,
+            ]),
+            self::INCIDENT_SUBDIVISION => new AttributeOptionsCollection(),
             self::PATIENT_LOCATIONS_FACILITY_ID => AttributeOption::getDropdownOptions(AttributeOptionName::PATIENT_LOCATION_FACILITIES),
             self::PATIENTS_DISPOSITION_ID => AttributeOption::getDropdownOptions(AttributeOptionName::PATIENT_DISPOSITIONS),
             self::EXAMS_SEX_ID => AttributeOption::getDropdownOptions(AttributeOptionName::EXAM_SEXES),

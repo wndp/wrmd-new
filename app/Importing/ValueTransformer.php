@@ -2,6 +2,7 @@
 
 namespace App\Importing;
 
+use App\Enums\Attribute;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -133,7 +134,7 @@ class ValueTransformer
      *
      * @return mixed
      */
-    public static function handle(string $key, string $value)
+    public static function handle(string $key, string|null $value)
     {
         return (new static($key, $value))
             ->trimStrings()
@@ -146,22 +147,22 @@ class ValueTransformer
     /**
      * Set the date attributes.
      */
-    public static function setDateAttributes()
+    public static function setDateAttributes(): void
     {
-        self::$dateAttributes = fields('us')
-            ->byType('date')
-            ->keys()
-            ->values();
+        self::$dateAttributes = Collection::make(Attribute::cases())->filter(
+            fn ($attribute) => $attribute->isDateAttribute()
+        )
+        ->pluck('value');
     }
 
     /**
      * Set the number attributes.
      */
-    public static function setNumberAttributes()
+    public static function setNumberAttributes(): void
     {
-        self::$numberAttributes = fields('us')
-            ->byType('number')
-            ->keys()
-            ->values();
+        self::$numberAttributes = Collection::make(Attribute::cases())->filter(
+            fn ($attribute) => $attribute->isNumberAttribute()
+        )
+        ->pluck('value');
     }
 }

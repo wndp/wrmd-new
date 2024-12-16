@@ -4,6 +4,8 @@ namespace App\Http\Controllers\People;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReportRequest;
+use App\Reporting\Filters\DateFrom;
+use App\Reporting\Filters\DateTo;
 use Illuminate\Support\Str;
 
 class PersonExportController extends Controller

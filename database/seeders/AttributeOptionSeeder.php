@@ -50,6 +50,11 @@ class AttributeOptionSeeder extends Seeder
             __('Illegal activity'),
             __('Undiagnosed illness'),
         ]);
+        $this->createOrUpdateAttributeOptionUiBehaviors(
+            AttributeOptionName::HOTLINE_WILDLIFE_CATEGORIES,
+            __('Injured'),
+            AttributeOptionUiBehavior::HOTLINE_WILDLIFE_CATEGORY_IS_INJURED,
+        );
 
         $this->createOrUpdateAttributes(AttributeOptionName::HOTLINE_ADMINISTRATIVE_CATEGORIES, [
             __('General information'),

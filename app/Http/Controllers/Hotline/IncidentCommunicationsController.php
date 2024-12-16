@@ -23,8 +23,6 @@ class IncidentCommunicationsController extends Controller
     {
         $incident->validateOwnership(Auth::user()->current_team_id);
 
-        $incident->load('communications', 'status');
-
         [
             $statusOpenId,
             $statusUnresolvedId,

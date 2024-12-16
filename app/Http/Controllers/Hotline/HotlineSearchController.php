@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Hotline;
 
-use App\Domain\Hotline\HotlineOptions;
-use App\Domain\Hotline\HotlineSearch;
-use App\Domain\OptionsStore;
+use App\Actions\IncidentSearch;
+use App\Enums\AttributeOptionName;
 use App\Http\Controllers\Controller;
+use App\Models\AttributeOption;
+use App\Options\LocaleOptions;
+use App\Repositories\IncidentRepository;
+use App\Repositories\OptionsStore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -16,9 +19,18 @@ class HotlineSearchController extends Controller
     /**
      * Return the view to search hotline records.
      */
-    public function create(HotlineOptions $options): Response
+    public function create(): Response
     {
-        OptionsStore::add($options, 'hotline');
+        OptionsStore::add([
+            new LocaleOptions(),
+            AttributeOption::getDropdownOptions([
+                AttributeOptionName::PERSON_ENTITY_TYPES->value,
+                AttributeOptionName::HOTLINE_WILDLIFE_CATEGORIES->value,
+                AttributeOptionName::HOTLINE_ADMINISTRATIVE_CATEGORIES->value,
+                AttributeOptionName::HOTLINE_OTHER_CATEGORIES->value,
+                AttributeOptionName::HOTLINE_STATUSES->value,
+            ])
+        ]);
 
         return Inertia::render('Hotline/Search/Create');
     }
@@ -28,7 +40,7 @@ class HotlineSearchController extends Controller
      */
     public function search(Request $request): Response
     {
-        $incidents = HotlineSearch::run(Auth::user()->current_account, $request);
+        $incidents = IncidentSearch::run(Auth::user()->currentTeam, $request);
 
         return Inertia::render('Hotline/Search/Index', compact('incidents'));
     }

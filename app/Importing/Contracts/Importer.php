@@ -2,15 +2,14 @@
 
 namespace App\Importing\Contracts;
 
-use App\Domain\Accounts\Account;
-use App\Domain\Admissions\Admission;
-use App\Domain\Importing\Declarations;
-use App\Domain\Importing\FailedImport;
-use App\Domain\Importing\ImportFrequency;
-use App\Domain\Importing\ImportValueBinder;
-use App\Domain\Importing\ValueTransformer;
-use App\Domain\Patients\Patient;
-use App\Domain\Users\User;
+use App\Enums\Attribute;
+use App\Enums\ImportFrequency;
+use App\Importing\Declarations;
+use App\Importing\ImportValueBinder;
+use App\Importing\ValueTransformer;
+use App\Models\FailedImport;
+use App\Models\Team;
+use App\Models\User;
 use App\Notifications\ImportHasFailedNotification;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -27,7 +26,7 @@ use Maatwebsite\Excel\Events\ImportFailed;
 
 abstract class Importer implements WithEvents, ShouldQueue, SkipsOnError, WithHeadingRow, WithChunkReading, WithCustomValueBinder
 {
-    use Importable;
+    //use Importable;
     use ImportValueBinder;
 
     /**
@@ -45,7 +44,7 @@ abstract class Importer implements WithEvents, ShouldQueue, SkipsOnError, WithHe
     /**
      * @var \App\Domain\Accounts\Account
      */
-    protected $account;
+    protected $team;
 
     /**
      * Import session declarations set by the user.
@@ -57,11 +56,11 @@ abstract class Importer implements WithEvents, ShouldQueue, SkipsOnError, WithHe
     /**
      * Constructor.
      */
-    public function __construct(User $user, Account $account, Declarations $declarations)
+    public function __construct(User $user, Team $team, Declarations $declarations)
     {
         $this->translatableAttributes = $this->getTranslateableAttributes();
         $this->user = $user;
-        $this->account = $account;
+        $this->team = $team;
         $this->declarations = $declarations;
 
         ValueTransformer::setDateAttributes();
@@ -82,7 +81,7 @@ abstract class Importer implements WithEvents, ShouldQueue, SkipsOnError, WithHe
      */
     public function chunkSize(): int
     {
-        return ImportFrequency::RECORDS_PER_CHUNK;
+        return ImportFrequency::RECORDS_PER_CHUNK->value;
     }
 
     /**
@@ -90,7 +89,7 @@ abstract class Importer implements WithEvents, ShouldQueue, SkipsOnError, WithHe
      */
     public function batchSize(): int
     {
-        return ImportFrequency::BATCHES_PER_CHUNK;
+        return ImportFrequency::BATCHES_PER_CHUNK->value;
     }
 
     public function onError(\Throwable $e)
@@ -101,12 +100,12 @@ abstract class Importer implements WithEvents, ShouldQueue, SkipsOnError, WithHe
     /**
      * Get the translatable attributes.
      */
-    public function getTranslateableAttributes()
+    public function getTranslateableAttributes(): Collection
     {
-        return fields('us')
-            ->byType(['select', 'boolean'])
-            ->keys()
-            ->values();
+        return Collection::make(Attribute::cases())->filter(
+            fn ($attribute) => $attribute->hasAttributeOptions()
+        )
+        ->pluck('value');
     }
 
     /**
@@ -173,26 +172,41 @@ abstract class Importer implements WithEvents, ShouldQueue, SkipsOnError, WithHe
      * @param  string  $untranslatedValue
      * @return string
      */
-    public function getTranslation($wrmdColumn, $untranslatedValue)
+    public function getTranslation($wrmdColumn, $untranslatedValue): ?string
     {
-        return $this->isTranslateable($wrmdColumn, $untranslatedValue)
-            ? $this->declarations->translatedValues[$wrmdColumn][$untranslatedValue]
-            : $untranslatedValue;
+        if ($this->isTranslateable($wrmdColumn)) {
+            if ($this->hasTranslation($wrmdColumn, $untranslatedValue)) {
+                return $this->declarations->translatedValues[$wrmdColumn][$untranslatedValue];
+            }
+
+            return null;
+        }
+
+        return $untranslatedValue;
     }
 
     /**
-     * Determine if the provided column is a translatable field and a translated value is set.
+     * Determine if the provided attribute is a translatable field.
      *
-     * @param  string  $column
+     * @param  string  $attribute
+     */
+    public function isTranslateable($attribute): bool
+    {
+        return $this->translatableAttributes->contains($attribute);
+    }
+
+    /**
+     * Determine if a translated value is set for the provided attribute.
+     *
+     * @param  string  $attribute
      * @param  string  $untranslatedValue
      */
-    public function isTranslateable($wrmdColumn, $untranslatedValue): bool
+    public function hasTranslation($attribute, $untranslatedValue): bool
     {
-        return $this->translatableAttributes->contains($wrmdColumn)
-            && isset(
-                $this->declarations->translatedValues[$wrmdColumn],
-                $this->declarations->translatedValues[$wrmdColumn][$untranslatedValue]
-            );
+        return isset(
+            $this->declarations->translatedValues[$attribute],
+            $this->declarations->translatedValues[$attribute][$untranslatedValue]
+        );
     }
 
     /**
@@ -202,7 +216,7 @@ abstract class Importer implements WithEvents, ShouldQueue, SkipsOnError, WithHe
     {
         $foreignValue = $this->composeValue($this->declarations->wrmdExistingColumn, $this->declarations->spreadsheetExistingColumn, $row);
 
-        $query = Admission::owner($this->account->id);
+        $query = Admission::owner($this->team->id);
 
         switch ($this->declarations->wrmdExistingColumn) {
             case 'case_number':
@@ -249,7 +263,7 @@ abstract class Importer implements WithEvents, ShouldQueue, SkipsOnError, WithHe
     public function logFailedImport(Collection $row, $exception)
     {
         FailedImport::create([
-            'team_id' => $this->account->id,
+            'team_id' => $this->team->id,
             'user_id' => $this->user->id,
             'session_id' => $this->declarations->sessionId,
             'disclosures' => $this->declarations,

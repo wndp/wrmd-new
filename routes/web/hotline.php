@@ -45,7 +45,7 @@ Route::prefix('hotline')->name('hotline.')->scopeBindings()->group(function () {
     Route::delete('deleted/{incident}', [DeletedIncidentController::class, 'destroy'])
         ->name('deleted.destroy')
         ->middleware(Authorize::using(Ability::MANAGE_HOTLINE->value));
-    Route::controller(HotlineSearchController::class)->middleware('can:display-hotline')->group(function () {
+    Route::controller(HotlineSearchController::class)->middleware(Authorize::using(Ability::VIEW_HOTLINE->value))->group(function () {
         Route::get('search', 'create')->name('search.create');
         Route::post('search', 'search')->name('search.search');
     });
