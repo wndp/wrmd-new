@@ -23,13 +23,13 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Prescription extends Model implements Schedulable
 {
-    use HasFactory;
-    use SoftDeletes;
     use HasDailyTasks;
+    use HasFactory;
     use HasVersion7Uuids;
-    use ValidatesOwnership;
-    use LogsActivity;
     use LocksPatient;
+    use LogsActivity;
+    use SoftDeletes;
+    use ValidatesOwnership;
 
     protected $fillable = [
         'drug',

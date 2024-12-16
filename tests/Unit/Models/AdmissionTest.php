@@ -2,14 +2,11 @@
 
 namespace Tests\Unit\Models;
 
-use App\Enums\AttributeOptionName;
-use App\Enums\AttributeOptionUiBehavior;
 use App\Models\Admission;
 use App\Models\AttributeOption;
 use App\Models\Patient;
 use App\Models\Team;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
@@ -20,8 +17,8 @@ use Tests\Traits\CreatesUiBehavior;
 final class AdmissionTest extends TestCase
 {
     use CreateCase;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     #[Test]
     public function anAdmissionBelongsToATeam(): void
@@ -98,27 +95,27 @@ final class AdmissionTest extends TestCase
 
         // false
         $this->createCase($team, patientOverrides: [
-            'date_admitted_at' => '2018-01-01', 'dispositioned_at' => '2018-01-02', 'disposition_id' => AttributeOption::factory()
+            'date_admitted_at' => '2018-01-01', 'dispositioned_at' => '2018-01-02', 'disposition_id' => AttributeOption::factory(),
         ]);
 
         // true
         $this->createCase($team, patientOverrides: [
-            'date_admitted_at' => '2018-01-01', 'dispositioned_at' => '2018-01-03', 'disposition_id' => AttributeOption::factory()
+            'date_admitted_at' => '2018-01-01', 'dispositioned_at' => '2018-01-03', 'disposition_id' => AttributeOption::factory(),
         ]);
 
         // true
         $this->createCase($team, patientOverrides: [
-            'date_admitted_at' => '2018-01-02', 'dispositioned_at' => '2018-01-04', 'disposition_id' => AttributeOption::factory()
+            'date_admitted_at' => '2018-01-02', 'dispositioned_at' => '2018-01-04', 'disposition_id' => AttributeOption::factory(),
         ]);
 
         // true
         $this->createCase($team, patientOverrides: [
-            'date_admitted_at' => '2018-01-03', 'dispositioned_at' => '2018-01-03', 'disposition_id' => AttributeOption::factory()
+            'date_admitted_at' => '2018-01-03', 'dispositioned_at' => '2018-01-03', 'disposition_id' => AttributeOption::factory(),
         ]);
 
         // false
         $this->createCase($team, patientOverrides: [
-            'date_admitted_at' => '2018-01-04', 'dispositioned_at' => '2018-01-04', 'disposition_id' => AttributeOption::factory()
+            'date_admitted_at' => '2018-01-04', 'dispositioned_at' => '2018-01-04', 'disposition_id' => AttributeOption::factory(),
         ]);
 
         $this->assertCount(3, Admission::inCareOnDate($team, Carbon::createFromDate(2018, 1, 3)));
@@ -133,22 +130,22 @@ final class AdmissionTest extends TestCase
 
         // true
         $this->createCase($team, patientOverrides: [
-            'date_admitted_at' => '2018-01-01', 'dispositioned_at' => null, 'disposition_id' => $pendingDispositionId
+            'date_admitted_at' => '2018-01-01', 'dispositioned_at' => null, 'disposition_id' => $pendingDispositionId,
         ]);
 
         // true
         $this->createCase($team, patientOverrides: [
-            'date_admitted_at' => '2018-01-02', 'dispositioned_at' => null, 'disposition_id' => $pendingDispositionId
+            'date_admitted_at' => '2018-01-02', 'dispositioned_at' => null, 'disposition_id' => $pendingDispositionId,
         ]);
 
         // true
         $this->createCase($team, patientOverrides: [
-            'date_admitted_at' => '2018-01-03', 'dispositioned_at' => null, 'disposition_id' => $pendingDispositionId
+            'date_admitted_at' => '2018-01-03', 'dispositioned_at' => null, 'disposition_id' => $pendingDispositionId,
         ]);
 
         // false
         $this->createCase($team, patientOverrides: [
-            'date_admitted_at' => '2018-01-04', 'dispositioned_at' => null, 'disposition_id' => $pendingDispositionId
+            'date_admitted_at' => '2018-01-04', 'dispositioned_at' => null, 'disposition_id' => $pendingDispositionId,
         ]);
 
         $this->assertCount(3, Admission::inCareOnDate($team, Carbon::createFromDate(2018, 1, 3)));
@@ -163,17 +160,17 @@ final class AdmissionTest extends TestCase
 
         // true
         $this->createCase($team, patientOverrides: [
-            'date_admitted_at' => '2018-01-01', 'dispositioned_at' => null, 'disposition_id' => $pendingDispositionId
+            'date_admitted_at' => '2018-01-01', 'dispositioned_at' => null, 'disposition_id' => $pendingDispositionId,
         ]);
 
         // false
         $this->createCase($team, patientOverrides: [
-            'date_admitted_at' => '2018-01-01', 'dispositioned_at' => null, 'disposition_id' => AttributeOption::factory()
+            'date_admitted_at' => '2018-01-01', 'dispositioned_at' => null, 'disposition_id' => AttributeOption::factory(),
         ]);
 
         // true
         $this->createCase($team, patientOverrides: [
-            'date_admitted_at' => '2018-01-02', 'dispositioned_at' => '2018-01-04', 'disposition_id' => AttributeOption::factory()
+            'date_admitted_at' => '2018-01-02', 'dispositioned_at' => '2018-01-04', 'disposition_id' => AttributeOption::factory(),
         ]);
 
         $this->assertCount(2, Admission::inCareOnDate($team, Carbon::createFromDate(2018, 1, 3)));

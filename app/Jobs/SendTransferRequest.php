@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Jobs\RecordSharedCases;
 use App\Models\Patient;
 use App\Models\Team;
 use App\Models\Transfer;
@@ -14,7 +13,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Str;
 
 class SendTransferRequest implements ShouldQueue
 {

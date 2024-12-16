@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers\Oiled;
 
-use App\Enums\AttributeOptionName;
 use App\Enums\Extension;
 use App\Http\Controllers\Controller;
 use App\Models\OilProcessing;
 use App\Models\Patient;
-use App\Rules\AttributeOptionExistsRule;
 use App\Support\ExtensionManager;
 use App\Support\Timezone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use MatanYadaev\EloquentSpatial\Objects\Point;
 
 class ProcessingReceivingController extends Controller
 {
@@ -21,7 +18,7 @@ class ProcessingReceivingController extends Controller
         $request->validate([
             'received_at_primary_care_at' => 'required|date',
             'received_at_primary_care_by' => 'required|string',
-            'species_confirmed_by' => 'nullable|string'
+            'species_confirmed_by' => 'nullable|string',
         ], [
             'received_at_primary_care_at.required' => 'The date received field is required.',
             'received_at_primary_care_at.date' => 'The date received field is not a valid date.',

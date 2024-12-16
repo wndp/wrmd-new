@@ -43,9 +43,9 @@ class AdmissionsByLocationFound extends Report
      */
     public function filters(): Collection
     {
-        return collect(array_merge((new DateRange())->toArray(), [
-            new LocationFoundFilter(),
-            new SpeciesGrouping(),
+        return collect(array_merge((new DateRange)->toArray(), [
+            new LocationFoundFilter,
+            new SpeciesGrouping,
         ]));
     }
 
@@ -54,7 +54,7 @@ class AdmissionsByLocationFound extends Report
      */
     protected function data(): array
     {
-        $locationOptions = (new LocationFoundFilter())->options();
+        $locationOptions = (new LocationFoundFilter)->options();
 
         $query = Admission::where('team_id', $this->team->id)
             ->select('common_name', 'taxon_id', ...array_keys($locationOptions))

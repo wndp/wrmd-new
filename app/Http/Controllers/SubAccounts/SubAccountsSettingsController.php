@@ -10,7 +10,6 @@ use App\Models\Setting;
 use App\Models\Team;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -21,14 +20,14 @@ class SubAccountsSettingsController extends Controller
     {
         abort_unless(
             Auth::user()->currentTeam->hasSubAccount($subAccount),
-            new RecordNotOwned()
+            new RecordNotOwned
         );
 
         $store = $subAccount->settingsStore();
 
         $subAccountSettings = [
             'subAccountAllowManageSettings' => (bool) $store->get(SettingKey::SUB_ACCOUNT_ALLOW_MANAGE_SETTINGS, true),
-            'subAccountAllowTransferPatients' => (bool) $store->get(SettingKey::SUB_ACCOUNT_ALLOW_TRANSFER_PATIENTS, true)
+            'subAccountAllowTransferPatients' => (bool) $store->get(SettingKey::SUB_ACCOUNT_ALLOW_TRANSFER_PATIENTS, true),
         ];
 
         $settings = Setting::where('team_id', $subAccount->id)->get()->transform(fn ($setting) => [
@@ -44,12 +43,12 @@ class SubAccountsSettingsController extends Controller
     {
         abort_unless(
             Auth::user()->currentTeam->hasSubAccount($subAccount),
-            new RecordNotOwned()
+            new RecordNotOwned
         );
 
         $subAccount->settingsStore()->set([
             SettingKey::SUB_ACCOUNT_ALLOW_MANAGE_SETTINGS->value => request()->input('sub_account_allow_manage_settings'),
-            SettingKey::SUB_ACCOUNT_ALLOW_TRANSFER_PATIENTS->value => request()->input('sub_account_allow_transfer_patients')
+            SettingKey::SUB_ACCOUNT_ALLOW_TRANSFER_PATIENTS->value => request()->input('sub_account_allow_transfer_patients'),
         ]);
 
         //event(new AccountUpdated($subAccount));

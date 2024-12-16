@@ -24,7 +24,7 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Events\ImportFailed;
 
-abstract class Importer implements WithEvents, ShouldQueue, SkipsOnError, WithHeadingRow, WithChunkReading, WithCustomValueBinder
+abstract class Importer implements ShouldQueue, SkipsOnError, WithChunkReading, WithCustomValueBinder, WithEvents, WithHeadingRow
 {
     //use Importable;
     use ImportValueBinder;
@@ -71,7 +71,7 @@ abstract class Importer implements WithEvents, ShouldQueue, SkipsOnError, WithHe
     {
         return [
             ImportFailed::class => function (ImportFailed $event) {
-                $this->user->notify(new ImportHasFailedNotification());
+                $this->user->notify(new ImportHasFailedNotification);
             },
         ];
     }
@@ -94,7 +94,7 @@ abstract class Importer implements WithEvents, ShouldQueue, SkipsOnError, WithHe
 
     public function onError(\Throwable $e)
     {
-        $this->logFailedImport(new Collection(), $e);
+        $this->logFailedImport(new Collection, $e);
     }
 
     /**
@@ -105,7 +105,7 @@ abstract class Importer implements WithEvents, ShouldQueue, SkipsOnError, WithHe
         return Collection::make(Attribute::cases())->filter(
             fn ($attribute) => $attribute->hasAttributeOptions()
         )
-        ->pluck('value');
+            ->pluck('value');
     }
 
     /**
@@ -149,10 +149,9 @@ abstract class Importer implements WithEvents, ShouldQueue, SkipsOnError, WithHe
      *
      * @param  string  $wrmdColumn
      * @param  string|\Illuminate\Support\Collection  $importColumn
-     * @param  \Illuminate\Support\Collection  $row
      * @return mixed
      */
-    public function composeValue($wrmdColumn, $importColumn, Collection $row = null)
+    public function composeValue($wrmdColumn, $importColumn, ?Collection $row = null)
     {
         if ($importColumn instanceof Collection) {
             $row = $importColumn;
@@ -170,7 +169,6 @@ abstract class Importer implements WithEvents, ShouldQueue, SkipsOnError, WithHe
      *
      * @param  string  $wrmdColumn
      * @param  string  $untranslatedValue
-     * @return string
      */
     public function getTranslation($wrmdColumn, $untranslatedValue): ?string
     {

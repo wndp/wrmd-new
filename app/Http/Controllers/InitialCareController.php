@@ -37,7 +37,7 @@ class InitialCareController extends Controller
         };
 
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             'bodyPartOptions' => Options::enumsToSelectable(ExamBodyPart::cases()),
             'taxaClassAgeUnits' => [],
             // Options::arrayToSelectable(AttributeOption::getDropdownOptions([
@@ -58,7 +58,7 @@ class InitialCareController extends Controller
                 AttributeOptionName::PATIENT_DISPOSITIONS->value,
                 AttributeOptionName::PATIENT_RELEASE_TYPES->value,
                 AttributeOptionName::PATIENT_TRANSFER_TYPES->value,
-            ])
+            ]),
         ]);
 
         if (Wrmd::settings(SettingKey::SHOW_TAGS)) {
@@ -88,7 +88,7 @@ class InitialCareController extends Controller
                 ->exams()
                 ->where('exam_type_id', $intakeExamTypeId)
                 ->first(),
-            'abnormalBodyPartFindingID' => $abnormalBodyPartFindingID
+            'abnormalBodyPartFindingID' => $abnormalBodyPartFindingID,
         ]);
     }
 }

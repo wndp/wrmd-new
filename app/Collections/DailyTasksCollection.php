@@ -8,7 +8,6 @@ use App\Enums\DailyTaskSchedulable;
 use App\Enums\SettingKey;
 use App\Models\Admission;
 use App\Models\Patient;
-use App\Models\PatientLocation;
 use App\Models\Team;
 use App\Schedulable;
 use App\Support\DailyTasksFilters;
@@ -35,7 +34,7 @@ class DailyTasksCollection extends Collection
 
     public function __construct($items = [])
     {
-        $this->filters = new DailyTasksFilters();
+        $this->filters = new DailyTasksFilters;
 
         parent::__construct($items);
     }
@@ -69,7 +68,7 @@ class DailyTasksCollection extends Collection
             $query->leftJoinCurrentLocation()->where('facility_id', $this->filters->facility);
         }
 
-        if (!$this->filters->include_non_pending) {
+        if (! $this->filters->include_non_pending) {
             [$dispositionPendingId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
                 AttributeOptionName::PATIENT_DISPOSITIONS->value,
                 AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_PENDING->value,
@@ -78,7 +77,7 @@ class DailyTasksCollection extends Collection
             $query->where('patients.disposition_id', $dispositionPendingId);
         }
 
-        if (!$this->filters->include_non_possession) {
+        if (! $this->filters->include_non_possession) {
             $query->where('team_possession_id', $team->id);
         }
 
@@ -98,7 +97,7 @@ class DailyTasksCollection extends Collection
         return data_get(
             $this->getNormalizedTasks(),
             '0.patients.0.tasks',
-            new self()
+            new self
         );
     }
 
@@ -162,29 +161,29 @@ class DailyTasksCollection extends Collection
                 'taskGroup' => $this->getNormalizedTasks(),
             ];
         })
-        ->filter(function ($dateGroup) {
-            return $dateGroup['taskGroup']->filter(function ($locationGroup) {
-                return $locationGroup['patients']->filter(function ($patient) {
-                    return $patient['tasks']->filter(function ($task) {
-                        return $task['number_of_occurrences'] > $task['completed_occurrences']->count();
+            ->filter(function ($dateGroup) {
+                return $dateGroup['taskGroup']->filter(function ($locationGroup) {
+                    return $locationGroup['patients']->filter(function ($patient) {
+                        return $patient['tasks']->filter(function ($task) {
+                            return $task['number_of_occurrences'] > $task['completed_occurrences']->count();
+                        })
+                            ->isNotEmpty();
                     })
                         ->isNotEmpty();
                 })
                     ->isNotEmpty();
             })
-                ->isNotEmpty();
-        })
-        ->map(function ($dateGroup) {
-            return [
-                'date' => $dateGroup['date'],
-                'tasks' => data_get(
-                    $dateGroup,
-                    'taskGroup.0.patients.0.tasks',
-                    []
-                ),
-            ];
-        })
-        ->values();
+            ->map(function ($dateGroup) {
+                return [
+                    'date' => $dateGroup['date'],
+                    'tasks' => data_get(
+                        $dateGroup,
+                        'taskGroup.0.patients.0.tasks',
+                        []
+                    ),
+                ];
+            })
+            ->values();
     }
 
     /**

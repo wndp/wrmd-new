@@ -29,7 +29,7 @@ class AdvancedSearchController extends Controller
             'fields' => Options::arrayToSelectable($fields),
         ], 'search');
 
-        $filters = new AnalyticFilters();
+        $filters = new AnalyticFilters;
 
         return Inertia::render('Search/AdvancedCreate', [
             'datePeriod' => $filters->defaultDatePeriod(),

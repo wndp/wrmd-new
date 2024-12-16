@@ -7,14 +7,13 @@ use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\AssistsWithAuthentication;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 
 final class UserTest extends TestCase
 {
-    use RefreshDatabase;
     use Assertions;
+    use RefreshDatabase;
 
     #[Test]
     public function aUserIsRevisionable(): void

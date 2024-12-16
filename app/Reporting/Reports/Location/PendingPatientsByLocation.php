@@ -38,8 +38,8 @@ class PendingPatientsByLocation extends Report
     public function filters(): Collection
     {
         return parent::filters()->merge(array_merge((new DateRange('moved_in_at'))->toArray(), [
-            new WhereHolding(),
-            new LocationArea(),
+            new WhereHolding,
+            new LocationArea,
         ]));
     }
 
@@ -65,7 +65,7 @@ class PendingPatientsByLocation extends Report
     {
         [$pendingPatientId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::PATIENT_DISPOSITIONS->value,
-            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_PENDING->value
+            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_PENDING->value,
         ]);
 
         return ListingQuery::run()

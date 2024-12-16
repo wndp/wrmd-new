@@ -19,7 +19,7 @@ class Taxon extends Model
         'binomen',
         'bow_url',
         'iucn_url',
-        'inaturalist_url'
+        'inaturalist_url',
     ];
 
     public function metas(): HasMany

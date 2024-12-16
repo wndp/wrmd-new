@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\SettingKey;
 use App\Enums\AttributeOptionName;
+use App\Enums\SettingKey;
 use App\Models\Patient;
 use App\Models\PatientLocation;
 use App\Rules\AttributeOptionExistsRule;
@@ -27,7 +27,7 @@ class PatientLocationsController extends Controller
             'moved_in_at' => [
                 'required',
                 'date',
-                'after_or_equal:'.$admittedAt
+                'after_or_equal:'.$admittedAt,
             ],
             'facility_id' => [
                 'required',
@@ -93,7 +93,7 @@ class PatientLocationsController extends Controller
             'moved_in_at' => [
                 'required',
                 'date',
-                'after_or_equal:'.$admittedAt
+                'after_or_equal:'.$admittedAt,
             ],
             'facility_id' => [
                 'required',

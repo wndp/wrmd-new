@@ -77,7 +77,7 @@ class SurvivalRate extends Chart
             [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_TRANSFERRED->value],
             [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_DOA->value],
             [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_DIED->value],
-            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_EUTHANIZED->value]
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_EUTHANIZED->value],
         ]);
 
         $query = Admission::where('team_id', $this->team->id)
@@ -86,8 +86,8 @@ class SurvivalRate extends Chart
             ->addSelect(DB::raw("sum(if(`disposition_id` = $releasedPatientId, 1, 0)) as `released`"))
             ->addSelect(DB::raw("sum(if(`disposition_id` = $transferredPatientId, 1, 0)) as `transferred`"))
             ->addSelect(DB::raw("sum(if(`disposition_id` = $doaPatientId, 1, 0)) as `doa`"))
-            ->addSelect(DB::raw("sum(if(`disposition_id` in (".implode(',', $diedPatientId)."), 1, 0)) as `died`"))
-            ->addSelect(DB::raw("sum(if(`disposition_id` in (".implode(',', $euthanizedPatientId)."), 1, 0)) as `euthanized`"))
+            ->addSelect(DB::raw('sum(if(`disposition_id` in ('.implode(',', $diedPatientId).'), 1, 0)) as `died`'))
+            ->addSelect(DB::raw('sum(if(`disposition_id` in ('.implode(',', $euthanizedPatientId).'), 1, 0)) as `euthanized`'))
             ->joinPatients();
 
         if ($this->filters->date_period !== 'all-dates') {
@@ -114,7 +114,7 @@ class SurvivalRate extends Chart
             [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_TRANSFERRED->value],
             [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_DOA->value],
             [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_DIED->value],
-            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_EUTHANIZED->value]
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_EUTHANIZED->value],
         ]);
 
         $query = Admission::where('team_id', $this->team->id)
@@ -123,8 +123,8 @@ class SurvivalRate extends Chart
             ->addSelect(DB::raw("sum(if(`disposition_id` = $releasedPatientId, 1, 0)) as `released`"))
             ->addSelect(DB::raw("sum(if(`disposition_id` = $transferredPatientId, 1, 0)) as `transferred`"))
             ->addSelect(DB::raw("sum(if(`disposition_id` = $doaPatientId, 1, 0)) as `doa`"))
-            ->addSelect(DB::raw("sum(if(`disposition_id` in (".implode(',', $diedPatientId)."), 1, 0)) as `died`"))
-            ->addSelect(DB::raw("sum(if(`disposition_id` in (".implode(',', $euthanizedPatientId)."), 1, 0)) as `euthanized`"))
+            ->addSelect(DB::raw('sum(if(`disposition_id` in ('.implode(',', $diedPatientId).'), 1, 0)) as `died`'))
+            ->addSelect(DB::raw('sum(if(`disposition_id` in ('.implode(',', $euthanizedPatientId).'), 1, 0)) as `euthanized`'))
             ->joinPatients()
             ->dateRange($this->filters->compare_date_from, $this->filters->compare_date_to, 'date_admitted_at');
 

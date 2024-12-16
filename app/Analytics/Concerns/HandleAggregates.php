@@ -10,7 +10,7 @@ trait HandleAggregates
     /**
      * Get the sum of the segmented aggregate values.
      */
-    public function sumSeriesGroup(callable $valueExtractor = null): static
+    public function sumSeriesGroup(?callable $valueExtractor = null): static
     {
         return new static(
             $this->map(function ($group, $name) use ($valueExtractor) {
@@ -22,7 +22,7 @@ trait HandleAggregates
         );
     }
 
-    public function sumSeriesGroups(callable $valueExtractor = null)
+    public function sumSeriesGroups(?callable $valueExtractor = null)
     {
         return new static(
             $this->map(function ($collection, $name) use ($valueExtractor) {

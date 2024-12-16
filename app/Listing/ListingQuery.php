@@ -7,10 +7,8 @@ use App\Concerns\JoinsTablesToPatients;
 use App\Enums\Attribute;
 use App\Enums\Entity;
 use App\Models\Admission;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ListingQuery
@@ -22,7 +20,7 @@ class ListingQuery
 
     public function handle()
     {
-        $this->query = Admission::query();//->joinPatients();
+        $this->query = Admission::query(); //->joinPatients();
 
         return $this;
     }
@@ -41,7 +39,7 @@ class ListingQuery
                     $with,
                     implode('.', [
                         'patient',
-                        Entity::tryFrom($table)->patientRelationshipName()
+                        Entity::tryFrom($table)->patientRelationshipName(),
                     ])
                 );
             });
@@ -56,7 +54,7 @@ class ListingQuery
                         implode('.', array_filter([
                             'patient',
                             Entity::tryFrom($table)->patientRelationshipName(),
-                            Attribute::from($tableDotField)->attributeOptionOwningModelRelationship()
+                            Attribute::from($tableDotField)->attributeOptionOwningModelRelationship(),
                         ]))
                     );
                 }

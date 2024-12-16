@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\AttributeOption;
 use App\Models\Person;
-use App\Models\Taxon;
 use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

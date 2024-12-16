@@ -56,8 +56,8 @@ class MultipleCollaborators implements ShouldQueue
 
             if (! empty($collaborators)) {
                 $title = __('Multiple Collaborators!');
-                $text =  __('This patient is shared with :collaborators', [
-                    'collaborators' => $collaborators->join(', ', ', '.__('and').' ')
+                $text = __('This patient is shared with :collaborators', [
+                    'collaborators' => $collaborators->join(', ', ', '.__('and').' '),
                 ]);
 
                 NotifyPatient::dispatch($this->patient, $title, $text);

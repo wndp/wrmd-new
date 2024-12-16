@@ -7,7 +7,6 @@ use App\Enums\AttributeOptionName;
 use App\Http\Controllers\Controller;
 use App\Models\AttributeOption;
 use App\Options\LocaleOptions;
-use App\Repositories\IncidentRepository;
 use App\Repositories\OptionsStore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,14 +21,14 @@ class HotlineSearchController extends Controller
     public function create(): Response
     {
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::PERSON_ENTITY_TYPES->value,
                 AttributeOptionName::HOTLINE_WILDLIFE_CATEGORIES->value,
                 AttributeOptionName::HOTLINE_ADMINISTRATIVE_CATEGORIES->value,
                 AttributeOptionName::HOTLINE_OTHER_CATEGORIES->value,
                 AttributeOptionName::HOTLINE_STATUSES->value,
-            ])
+            ]),
         ]);
 
         return Inertia::render('Hotline/Search/Create');

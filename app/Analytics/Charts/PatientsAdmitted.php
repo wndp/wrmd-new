@@ -2,11 +2,11 @@
 
 namespace App\Analytics\Charts;
 
-use App\Models\Admission;
 use App\Analytics\ChronologicalCollection;
 use App\Analytics\Concerns\HandleChronologicalData;
 use App\Analytics\Contracts\Chart;
 use App\Analytics\DataSet;
+use App\Models\Admission;
 
 class PatientsAdmitted extends Chart
 {

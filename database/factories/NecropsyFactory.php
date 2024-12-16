@@ -18,7 +18,7 @@ class NecropsyFactory extends Factory
     public function definition(): array
     {
         return [
-            'patient_id' => Patient::factory()
+            'patient_id' => Patient::factory(),
         ];
     }
 }

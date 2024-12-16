@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Settings;
 
 use App\Enums\Ability as AbilityEnum;
 use App\Enums\Role as RoleEnum;
-use App\Events\NewUser;
 use App\Exceptions\RecordNotOwned;
 use App\Http\Controllers\Controller;
 use App\Mail\WelcomeEmail;
@@ -44,6 +43,7 @@ class UsersController extends Controller
             ->values()
             ->transform(function ($user) {
                 $user->role_name_for_humans = $user->getRoleNameOnTeamForHumans(Auth::user()->currentTeam);
+
                 return $user;
             });
 
@@ -66,7 +66,7 @@ class UsersController extends Controller
     public function create(): Response
     {
         OptionsStore::add([
-            'roles' => Options::enumsToSelectable(RoleEnum::publicRoles())
+            'roles' => Options::enumsToSelectable(RoleEnum::publicRoles()),
         ]);
 
         return Inertia::render('Settings/Users/Create');
@@ -79,7 +79,7 @@ class UsersController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'role' => new Role()
+            'role' => new Role,
         ]);
 
         $user = User::whereEmail($request->email)->first();
@@ -120,10 +120,10 @@ class UsersController extends Controller
     public function edit(User $user): Response
     {
         OptionsStore::add([
-            'roles' => Options::enumsToSelectable(RoleEnum::publicRoles())
+            'roles' => Options::enumsToSelectable(RoleEnum::publicRoles()),
         ]);
 
-        abort_unless($user->belongsToTeam(Auth::user()->currentTeam), new RecordNotOwned());
+        abort_unless($user->belongsToTeam(Auth::user()->currentTeam), new RecordNotOwned);
 
         $user->role_name = $user->roleOn(Auth::user()->currentTeam)?->name;
         $abilities = Ability::whereIn('name', AbilityEnum::publicAbilities())->get();
@@ -145,7 +145,7 @@ class UsersController extends Controller
      */
     public function update(Request $request, User $user): RedirectResponse
     {
-        abort_unless($user->belongsToTeam(Auth::user()->currentTeam), new RecordNotOwned());
+        abort_unless($user->belongsToTeam(Auth::user()->currentTeam), new RecordNotOwned);
 
         if ($user->parent_account_id === Auth::user()->current_team_id) {
             $request->validate([
@@ -181,7 +181,7 @@ class UsersController extends Controller
      */
     public function destroy(User $user): RedirectResponse
     {
-        abort_unless($user->inAccount(Auth::user()->currentTeam), new RecordNotOwned());
+        abort_unless($user->inAccount(Auth::user()->currentTeam), new RecordNotOwned);
 
         $user->leaveAccount(Auth::user()->currentTeam);
 

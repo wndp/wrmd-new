@@ -4,7 +4,6 @@ namespace Tests\Feature\Admin;
 
 use App\Enums\Ability;
 use App\Enums\AccountStatus;
-use App\Jobs\DeleteAccount;
 use App\Jobs\DeleteTeam;
 use App\Models\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -105,7 +104,7 @@ final class DeleteAccountsControllerTest extends TestCase
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
         $team = Team::factory()->create([
-            'status' => AccountStatus::SUSPENDED
+            'status' => AccountStatus::SUSPENDED,
         ]);
 
         $this->actingAs($me->user)->delete(route('teams.destroy', $team), [

@@ -19,13 +19,13 @@ use App\Http\Controllers\Expenses\ExpensesController;
 use App\Http\Controllers\InitialCareController;
 use App\Http\Controllers\IntakeController;
 use App\Http\Controllers\IntakeExamController;
-use App\Http\Controllers\Labs\LabToxicologyResultsController;
-use App\Http\Controllers\Labs\LabFecalResultsController;
 use App\Http\Controllers\Labs\LabCbcResultsController;
 use App\Http\Controllers\Labs\LabChemistryResultsController;
 use App\Http\Controllers\Labs\LabCytologyResultsController;
-use App\Http\Controllers\Labs\LabUrinalysisResultsController;
+use App\Http\Controllers\Labs\LabFecalResultsController;
 use App\Http\Controllers\Labs\LabReportsController;
+use App\Http\Controllers\Labs\LabToxicologyResultsController;
+use App\Http\Controllers\Labs\LabUrinalysisResultsController;
 use App\Http\Controllers\Necropsy\NecropsyController;
 use App\Http\Controllers\Necropsy\NecropsyMorphometricsController;
 use App\Http\Controllers\Necropsy\NecropsySummaryController;
@@ -37,9 +37,9 @@ use App\Http\Controllers\PatientLocationsController;
 use App\Http\Controllers\PatientMetaController;
 use App\Http\Controllers\PatientNotificationsController;
 use App\Http\Controllers\PatientRevisionsController;
-use App\Http\Controllers\PatientUnVoidController;
 use App\Http\Controllers\PatientsController;
 use App\Http\Controllers\PatientsQuickAdmitController;
+use App\Http\Controllers\PatientUnVoidController;
 use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\RecheckController;
 use App\Http\Controllers\RescuerController;
@@ -182,7 +182,7 @@ Route::prefix('patients')->name('patients.')->group(function () {
 
     Route::controller(BatchUpdateController::class)->middleware([
         'pro',
-        Authorize::using(Ability::BATCH_UPDATE->value)
+        Authorize::using(Ability::BATCH_UPDATE->value),
     ])->group(function () {
         Route::get('batch', 'edit')->name('batch.edit');
         Route::put('batch', 'update')->name('batch.update');

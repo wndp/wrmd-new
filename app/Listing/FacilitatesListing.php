@@ -2,7 +2,6 @@
 
 namespace App\Listing;
 
-use App\Listing\LiveList;
 use Illuminate\Support\Arr;
 
 trait FacilitatesListing

@@ -2,10 +2,9 @@
 
 namespace App\Analytics\Numbers;
 
-use App\Enums\SettingKey;
 use App\Analytics\Contracts\Number;
+use App\Enums\SettingKey;
 use App\Models\Admission;
-use App\Repositories\SettingsStore;
 use App\Support\Wrmd;
 use Carbon\Carbon;
 

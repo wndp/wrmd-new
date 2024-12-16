@@ -17,18 +17,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class CareLog extends Model implements Summarizable, Weighable
 {
     use HasFactory;
-    use ValidatesOwnership;
     use HasVersion7Uuids;
-    use SoftDeletes;
-    use LogsActivity;
     use LocksPatient;
+    use LogsActivity;
+    use SoftDeletes;
+    use ValidatesOwnership;
 
     protected $fillable = [
         'date_care_at',
@@ -101,7 +100,7 @@ class CareLog extends Model implements Summarizable, Weighable
     protected function fullWeight(): Attribute
     {
         return Attribute::get(
-            fn () => empty($this->weight_unit_id) || !is_numeric($this->weight) || $this->weight == 0
+            fn () => empty($this->weight_unit_id) || ! is_numeric($this->weight) || $this->weight == 0
                 ? ''
                 : "$this->weight".$this->weightUnit?->value
         );
@@ -110,7 +109,7 @@ class CareLog extends Model implements Summarizable, Weighable
     protected function fullTemperature(): Attribute
     {
         return Attribute::get(
-            fn () => empty($this->temperature_unit_id) || !is_numeric($this->temperature) || $this->temperature == 0
+            fn () => empty($this->temperature_unit_id) || ! is_numeric($this->temperature) || $this->temperature == 0
                 ? ''
                 : $this->temperature.$this->temperatureUnit?->value
         );

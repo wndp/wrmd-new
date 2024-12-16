@@ -42,7 +42,7 @@ class DailyTask extends Model implements Summarizable
     protected $appends = [
         'occurrence_at_for_humans',
         'completed_at_for_humans',
-        'created_at_for_humans'
+        'created_at_for_humans',
     ];
 
     public function task()

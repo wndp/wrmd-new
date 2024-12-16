@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\SettingKey;
 use App\Enums\AttributeOptionName;
+use App\Enums\SettingKey;
 use App\Rules\AttributeOptionExistsRule;
 use App\Support\Wrmd;
 use Carbon\Carbon;
@@ -51,7 +51,7 @@ class UpdateIncidentRequest extends FormRequest
             ],
             'is_priority' => 'required|boolean',
             'number_of_animals' => 'nullable|integer',
-            'suspected_species' => 'required_with:number_of_animals'
+            'suspected_species' => 'required_with:number_of_animals',
         ];
     }
 

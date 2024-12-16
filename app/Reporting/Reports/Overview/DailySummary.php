@@ -41,7 +41,7 @@ class DailySummary extends Report
     public function filters(): Collection
     {
         return collect([
-            new DateOn(),
+            new DateOn,
         ]);
     }
 

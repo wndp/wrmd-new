@@ -59,7 +59,7 @@ class ExpensesController extends Controller
         return Inertia::render('Patients/Expenses/Index', [
             'patient' => $admission->patient,
             'expenseTransactions' => $admission->patient->expenseTransactions,
-            'expenseTotals' => $expenseTotals
+            'expenseTotals' => $expenseTotals,
         ]);
     }
 
@@ -113,7 +113,7 @@ class ExpensesController extends Controller
             ->with('notification.heading', __('Transaction Deleted'))
             ->with('notification.text', __(':categoryName transaction on :transactionDate was deleted.', [
                 'categoryName' => $transaction->category->name,
-                'transactionDate' => $transaction->transacted_at_for_humans
+                'transactionDate' => $transaction->transacted_at_for_humans,
             ]));
     }
 }

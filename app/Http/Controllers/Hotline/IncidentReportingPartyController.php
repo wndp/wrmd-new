@@ -20,10 +20,10 @@ class IncidentReportingPartyController extends Controller
         $incident->validateOwnership(Auth::user()->current_team_id);
 
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             AttributeOption::getDropdownOptions([
-                AttributeOptionName::PERSON_ENTITY_TYPES->value
-            ])
+                AttributeOptionName::PERSON_ENTITY_TYPES->value,
+            ]),
         ]);
 
         [
@@ -33,7 +33,7 @@ class IncidentReportingPartyController extends Controller
         ] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             [AttributeOptionName::HOTLINE_STATUSES->value, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_OPEN->value],
             [AttributeOptionName::HOTLINE_STATUSES->value, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_UNRESOLVED->value],
-            [AttributeOptionName::HOTLINE_STATUSES->value, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED->value]
+            [AttributeOptionName::HOTLINE_STATUSES->value, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED->value],
         ]);
 
         $incident->load('status');
@@ -43,7 +43,7 @@ class IncidentReportingPartyController extends Controller
             'reportingParty' => $incident->reportingParty,
             'statusOpenId' => $statusOpenId,
             'statusUnresolvedId' => $statusUnresolvedId,
-            'statusResolvedId' => $statusResolvedId
+            'statusResolvedId' => $statusResolvedId,
         ]);
     }
 }

@@ -2,14 +2,14 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\SettingKey;
-use App\Enums\AttributeOptionName;
-use App\Rules\AttributeOptionExistsRule;
 use App\Actions\AdmitPatient;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
+use App\Enums\AttributeOptionName;
+use App\Enums\SettingKey;
+use App\Rules\AttributeOptionExistsRule;
 use App\Support\Wrmd;
 use Carbon\Carbon;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StorePatientRequest extends FormRequest
 {
@@ -81,10 +81,10 @@ class StorePatientRequest extends FormRequest
                 'integer',
                 new AttributeOptionExistsRule(AttributeOptionName::DONATION_METHODS),
             ],
-            "donation_value" => 'nullable|numeric',
-            "donation_comments" => 'nullable|string',
+            'donation_value' => 'nullable|numeric',
+            'donation_comments' => 'nullable|string',
             'action_after_store' => 'required',
-            'custom_values' => 'nullable|array'
+            'custom_values' => 'nullable|array',
         ];
     }
 

@@ -37,7 +37,7 @@ trait Assertions
         /**
          * Assert that the response has an ownership validation error.
          */
-        TestResponse::macro('assertOwnershipValidationError', function (string|null $message = null) {
+        TestResponse::macro('assertOwnershipValidationError', function (?string $message = null) {
             $message = $message ?: RecordNotOwned::message();
 
             if ($this->session()->has('notification.text')) {

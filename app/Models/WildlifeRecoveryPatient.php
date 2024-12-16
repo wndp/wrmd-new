@@ -19,9 +19,9 @@ class WildlifeRecoveryPatient extends Model implements Summarizable
 {
     use HasFactory;
     use HasVersion7Uuids;
-    use ValidatesOwnership;
-    use LogsActivity;
     use LocksPatient;
+    use LogsActivity;
+    use ValidatesOwnership;
 
     protected $fillable = [
         'surveyid',
@@ -95,7 +95,7 @@ class WildlifeRecoveryPatient extends Model implements Summarizable
                 'photo_1_url',
                 'photo_2_url',
                 'created_at',
-                'updated_at'
+                'updated_at',
             ])
             ->transform(function ($value, $key) {
                 if (is_array($value)) {
@@ -147,7 +147,7 @@ class WildlifeRecoveryPatient extends Model implements Summarizable
     {
         return Attribute::get(
             fn () => is_array($this->photos) && array_key_exists(0, $this->photos)
-                ? Storage::url("wildlife-recovery/".mb_strtoupper($this->spillname)."/photos/{$this->photos[0]}")
+                ? Storage::url('wildlife-recovery/'.mb_strtoupper($this->spillname)."/photos/{$this->photos[0]}")
                 : ''
         );
     }
@@ -158,7 +158,7 @@ class WildlifeRecoveryPatient extends Model implements Summarizable
 
         return Attribute::get(
             fn () => is_array($this->photos) && array_key_exists(1, $this->photos)
-                ? Storage::url("wildlife-recovery/".mb_strtoupper($this->spillname)."/photos/{$this->photos[1]}")
+                ? Storage::url('wildlife-recovery/'.mb_strtoupper($this->spillname)."/photos/{$this->photos[1]}")
                 : ''
         );
     }

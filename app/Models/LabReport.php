@@ -4,14 +4,12 @@ namespace App\Models;
 
 use App\Concerns\LocksPatient;
 use App\Concerns\ValidatesOwnership;
-use App\Enums\LabReportType;
 use App\Summarizable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
@@ -22,11 +20,11 @@ use function Illuminate\Events\queueable;
 class LabReport extends Model implements Summarizable
 {
     use HasFactory;
-    use SoftDeletes;
     use HasVersion7Uuids;
-    use ValidatesOwnership;
-    use LogsActivity;
     use LocksPatient;
+    use LogsActivity;
+    use SoftDeletes;
+    use ValidatesOwnership;
 
     protected $fillable = [
         'patient_id',

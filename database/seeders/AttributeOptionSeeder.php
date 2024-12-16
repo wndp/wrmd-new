@@ -6,7 +6,6 @@ use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
 use App\Models\AttributeOption;
 use App\Models\AttributeOptionUiBehavior as AttributeOptionUiBehaviorModel;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
 
@@ -21,7 +20,7 @@ class AttributeOptionSeeder extends Seeder
             __('Aves'),
             __('Mammalia'),
             __('Amphibia'),
-            __('Reptilia')
+            __('Reptilia'),
         ]);
 
         $this->createOrUpdateAttributes(AttributeOptionName::TAXA_MORPHS, [
@@ -164,7 +163,7 @@ class AttributeOptionSeeder extends Seeder
             __('Education or scientific research (institute)'),
             __('Falconry or raptor propagation'),
             __('Other'),
-         ]);
+        ]);
 
         $this->createOrUpdateAttributes(AttributeOptionName::PATIENT_LOCATION_FACILITIES, [
             __('Clinic'),
@@ -683,7 +682,7 @@ class AttributeOptionSeeder extends Seeder
             'milligrams (mg)',
             'tab',
             'cap',
-            'IU'
+            'IU',
         ]);
         $this->createOrUpdateAttributeOptionUiBehaviors(
             AttributeOptionName::DAILY_TASK_DOSE_UNITS,
@@ -1497,11 +1496,8 @@ class AttributeOptionSeeder extends Seeder
         $this->createOrUpdateAttributes(AttributeOptionName::OILED_CONDITIONING_UNKNOWN_BOOL, [
             __('Unknown'),
             __('Yes'),
-            __('No')
+            __('No'),
         ]);
-
-
-
 
         $this->createOrUpdateAttributes(AttributeOptionName::LAB_BOOLEAN, [
             __('Negative'),
@@ -1578,7 +1574,7 @@ class AttributeOptionSeeder extends Seeder
             $attributeOption = AttributeOption::firstOrCreate([
                 'name' => $attributeName,
                 'value' => $value,
-                'code' => $isAssoc ? $key : null
+                'code' => $isAssoc ? $key : null,
             ], [
                 'value_lowercase' => strtolower($value),
                 'sort_order' => $index + 1,

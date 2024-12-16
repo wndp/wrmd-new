@@ -29,7 +29,7 @@ class LabReportsController extends Controller
                 AttributeOptionName::LAB_URINE_ODORS->value,
                 AttributeOptionName::LAB_TOXINS->value,
                 AttributeOptionName::LAB_TOXIN_LEVEL_UNITS->value,
-            ])
+            ]),
         ]);
 
         return Inertia::render('Patients/Labs/Index', [
@@ -39,14 +39,14 @@ class LabReportsController extends Controller
                 'analysis_date_at' => $labReport->analysis_date_at,
                 'analysis_date_at_for_humans' => $labReport->analysis_date_at?->translatedFormat(config('wrmd.date_format')),
                 'technician' => $labReport->technician,
-                'accession_number'  => $labReport->accession_number,
-                'analysis_facility'  => $labReport->analysis_facility,
+                'accession_number' => $labReport->accession_number,
+                'analysis_facility' => $labReport->analysis_facility,
                 'comments' => $labReport->comments,
                 'analysis_type' => $labReport->lab_result_type,
                 'badge_text' => $labReport->labResult->badge_text,
                 'badge_color' => $labReport->labResult->badge_color,
                 'lab_result' => $labReport->labResult,
-            ])
+            ]),
         ]);
     }
 

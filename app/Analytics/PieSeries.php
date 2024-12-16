@@ -16,7 +16,7 @@ class PieSeries
     {
         $this->data = $data;
         $this->seriesName = $seriesName;
-        $this->series = new Collection();
+        $this->series = new Collection;
     }
 
     public function valueFillSeriesArrays()

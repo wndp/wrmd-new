@@ -13,7 +13,6 @@ use App\Options\LocaleOptions;
 use App\Repositories\OptionsStore;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -30,7 +29,7 @@ class SubAccountsController extends Controller
             ->transform(fn ($team) => [
                 ...$team->toArray(),
                 'locale' => $team->formatted_inline_address,
-                'created_at_for_humans' => $team->created_at->translatedFormat(config('wrmd.date_format'))
+                'created_at_for_humans' => $team->created_at->translatedFormat(config('wrmd.date_format')),
             ]);
 
         return Inertia::render('SubAccounts/Index', compact('subAccounts'));
@@ -42,7 +41,7 @@ class SubAccountsController extends Controller
     public function create(): Response
     {
         OptionsStore::add([
-            new LocaleOptions()
+            new LocaleOptions,
         ]);
 
         $users = Auth::user()
@@ -72,7 +71,7 @@ class SubAccountsController extends Controller
     {
         abort_unless(
             Auth::user()->currentTeam->hasSubAccount($subAccount),
-            new RecordNotOwned()
+            new RecordNotOwned
         );
 
         $analyticFiltersForAllYears = [
@@ -128,11 +127,11 @@ class SubAccountsController extends Controller
     {
         abort_unless(
             Auth::user()->currentTeam->hasSubAccount($subAccount),
-            new RecordNotOwned()
+            new RecordNotOwned
         );
 
         OptionsStore::add([
-            new LocaleOptions()
+            new LocaleOptions,
         ]);
 
         return Inertia::render('SubAccounts/Edit', compact('subAccount'));
@@ -145,7 +144,7 @@ class SubAccountsController extends Controller
     {
         abort_unless(
             Auth::user()->currentTeam->hasSubAccount($subAccount),
-            new RecordNotOwned()
+            new RecordNotOwned
         );
 
         $subAccount->update($request->only([

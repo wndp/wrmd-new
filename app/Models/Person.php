@@ -6,8 +6,6 @@ use App\Concerns\LocksPatient;
 use App\Concerns\QueriesDateRange;
 use App\Concerns\QueriesOneOfMany;
 use App\Concerns\ValidatesOwnership;
-use App\Models\Patient;
-use App\Models\Team;
 use App\Repositories\AdministrativeDivision;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
@@ -22,13 +20,13 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Person extends Model
 {
     use HasFactory;
-    use SoftDeletes;
-    use ValidatesOwnership;
+    use HasVersion7Uuids;
+    use LocksPatient;
+    use LogsActivity;
     use QueriesDateRange;
     use QueriesOneOfMany;
-    use HasVersion7Uuids;
-    use LogsActivity;
-    use LocksPatient;
+    use SoftDeletes;
+    use ValidatesOwnership;
 
     protected $fillable = [
         'team_id',

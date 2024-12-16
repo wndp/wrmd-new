@@ -22,7 +22,7 @@ class FormulaFactory extends Factory
             'team_id' => Team::factory()->createQuietly(),
             'name' => $this->faker->word(),
             'type' => FormulaType::PRESCRIPTION,
-            'defaults' => []
+            'defaults' => [],
         ];
     }
 }

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ExportController extends Controller
 {
-    public function store(Request $request, Patient $patient = null): RedirectResponse
+    public function store(Request $request, ?Patient $patient = null): RedirectResponse
     {
         $fields = $request->input('fields') ?: '*';
 

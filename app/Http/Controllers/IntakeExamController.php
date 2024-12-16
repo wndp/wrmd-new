@@ -5,11 +5,9 @@ namespace App\Http\Controllers;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
 use App\Events\ExamUpdated;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\ExamRequest;
 use App\Models\Exam;
 use App\Models\Patient;
-use Inertia\Inertia;
 
 class IntakeExamController extends Controller
 {

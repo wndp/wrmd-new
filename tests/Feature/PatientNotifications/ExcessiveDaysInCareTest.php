@@ -8,8 +8,6 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\AssistsWithAuthentication;
-use Tests\Support\AssistsWithCases;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;
@@ -19,10 +17,11 @@ final class ExcessiveDaysInCareTest extends TestCase
 {
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     public const EXESIVE_DAYS = 200;
+
     public const LIMITED_DAYS = 100;
 
     #[Test]

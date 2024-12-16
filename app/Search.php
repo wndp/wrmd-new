@@ -4,7 +4,6 @@ namespace App;
 
 use App\Enums\Attribute;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -91,7 +90,7 @@ abstract class Search
             $dateFields = Collection::make(Attribute::cases())->filter(
                 fn ($attribute) => $attribute->isDateAttribute()
             )
-            ->pluck('value');
+                ->pluck('value');
         }
 
         return $dateFields;
@@ -110,7 +109,7 @@ abstract class Search
             $selectableFields = Collection::make(Attribute::cases())->filter(
                 fn ($attribute) => $attribute->hasAttributeOptions()
             )
-            ->pluck('value');
+                ->pluck('value');
         }
 
         return $selectableFields;

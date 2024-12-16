@@ -5,8 +5,6 @@ namespace Tests\Feature\Admissions;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
 use App\Jobs\AssociatePatientToIncident;
-use App\Models\AttributeOption;
-use App\Models\AttributeOptionUiBehavior as AttributeOptionUiBehaviorModel;
 use App\Models\Incident;
 use App\Models\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -18,8 +16,8 @@ use Tests\Traits\CreatesUiBehavior;
 final class AssociatePatientToIncidentTest extends TestCase
 {
     use CreateCase;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     #[Test]
     public function aPatientIsAssociatedToAnIncident(): void

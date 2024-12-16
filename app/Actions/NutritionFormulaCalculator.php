@@ -2,25 +2,21 @@
 
 namespace App\Actions;
 
-use App\Enums\SettingKey;
-use App\Actions\GetPatientWeights;
 use App\Concerns\AsAction;
-use App\Enums\AttributeOptionName;
-use App\Enums\AttributeOptionUiBehavior;
+use App\Enums\SettingKey;
 use App\Models\Formula;
 use App\Models\Patient;
-use App\Support\Weight;
 use App\Support\Wrmd;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Str;
 use JsonSerializable;
 
-class NutritionFormulaCalculator implements JsonSerializable, Arrayable
+class NutritionFormulaCalculator implements Arrayable, JsonSerializable
 {
     use AsAction;
 
     protected $defaults;
+
     protected $patient;
 
     public function handle(Formula $formula, Patient $patient)

@@ -16,7 +16,7 @@ class PatientAdmitted
     /**
      * Create a new event instance.
      */
-    public function __construct(public Team $team, public Patient $patient, public array|null $requestData = null)
+    public function __construct(public Team $team, public Patient $patient, public ?array $requestData = null)
     {
         $this->team = $team;
         $this->patient = $patient;

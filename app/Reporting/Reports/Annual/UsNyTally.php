@@ -2,8 +2,8 @@
 
 namespace App\Reporting\Reports\Annual;
 
-use App\Models\Admission;
 use App\Classifications\UsNyCauseOfDistress;
+use App\Models\Admission;
 use App\Reporting\Contracts\AnnualReport;
 use App\Reporting\Contracts\Generator;
 use App\Reporting\Generators\Mpdf;

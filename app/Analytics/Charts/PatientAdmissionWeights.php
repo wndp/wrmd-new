@@ -2,13 +2,13 @@
 
 namespace App\Analytics\Charts;
 
-use App\Models\Admission;
 use App\Analytics\AreaRangeCollection;
 use App\Analytics\Categories;
 use App\Analytics\Concerns\HandleChartPeriod;
 use App\Analytics\Concerns\HandleSeriesNames;
 use App\Analytics\Contracts\Chart;
 use App\Analytics\DataSet;
+use App\Models\Admission;
 use App\Weight;
 use Illuminate\Support\Collection;
 
@@ -23,7 +23,7 @@ class PatientAdmissionWeights extends Chart
     public function compute()
     {
         $period = $this->chartPeriod($this->filters);
-        $this->categories = (new Categories())->forTimePeriod($period, $this->filters);
+        $this->categories = (new Categories)->forTimePeriod($period, $this->filters);
 
         $colors = ['#74ABD4', '#AFCD6D', '#E6BB5F', '#F196A5', '#3B87C0', '#8DB13D', '#D79D22', '#EF8999', '#FCD02B'];
 
@@ -42,7 +42,7 @@ class PatientAdmissionWeights extends Chart
 
             $this->series->addSeries(
                 $this->formatSeriesName($segment, 'Average', $this->filters->compare, $this->filters->date_from, $this->filters->date_to),
-                $data->sumSeriesGroup([new AreaRangeCollection(), 'averageFromAggregate']),
+                $data->sumSeriesGroup([new AreaRangeCollection, 'averageFromAggregate']),
                 [
                     'zIndex' => 1,
                     'color' => $colors[$i],
@@ -51,7 +51,7 @@ class PatientAdmissionWeights extends Chart
 
             $this->series->addSeries(
                 $this->formatSeriesName($segment, 'Range', $this->filters->compare, $this->filters->date_from, $this->filters->date_to),
-                $data->sumSeriesGroup([new AreaRangeCollection(), 'rangeFromAggregate']),
+                $data->sumSeriesGroup([new AreaRangeCollection, 'rangeFromAggregate']),
                 [
                     'type' => 'arearange',
                     'linkedTo' => ':previous',
@@ -81,7 +81,7 @@ class PatientAdmissionWeights extends Chart
 
                 $this->series->addSeries(
                     $this->formatSeriesName($segment, 'Average', $this->filters->compare, $this->filters->compare_date_from, $this->filters->compare_date_to),
-                    $data->sumSeriesGroup([new AreaRangeCollection(), 'averageFromAggregate']),
+                    $data->sumSeriesGroup([new AreaRangeCollection, 'averageFromAggregate']),
                     [
                         'zIndex' => 1,
                         'color' => $colors[$i],
@@ -90,7 +90,7 @@ class PatientAdmissionWeights extends Chart
 
                 $this->series->addSeries(
                     $this->formatSeriesName($segment, 'Range', $this->filters->compare, $this->filters->compare_date_from, $this->filters->compare_date_to),
-                    $data->sumSeriesGroup([new AreaRangeCollection(), 'rangeFromAggregate']),
+                    $data->sumSeriesGroup([new AreaRangeCollection, 'rangeFromAggregate']),
                     [
                         'type' => 'arearange',
                         'linkedTo' => ':previous',

@@ -23,8 +23,8 @@ final class GetRecheckDailyTasksTest extends TestCase
 {
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     #[Test]
     public function nothingIsReturnedIfRechecksAreNotIncluded(): void
@@ -59,7 +59,7 @@ final class GetRecheckDailyTasksTest extends TestCase
         ]);
 
         $result = GetRecheckDailyTasks::handle(
-            new DailyTasksFilters(),
+            new DailyTasksFilters,
             [$admission->patient_id]
         );
 

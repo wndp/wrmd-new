@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Extensions\Owcn;
 
-use App\Domain\Accounts\Account;
 use App\Domain\Patients\Exam;
 use App\Extensions\Labs\Lab;
 use Mockery;

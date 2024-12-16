@@ -36,8 +36,8 @@ class PatientsDaysInCare extends Report
      */
     public function filters(): Collection
     {
-        return parent::filters()->merge(array_merge((new DateRange())->toArray(), [
-            new IncludedTaxonomies(),
+        return parent::filters()->merge(array_merge((new DateRange)->toArray(), [
+            new IncludedTaxonomies,
         ]));
     }
 
@@ -72,7 +72,6 @@ class PatientsDaysInCare extends Report
             ->orderBy('admissions.case_year')
             ->orderBy('admissions.case_id')
             ->with('patient');
-
 
         // return Admission::where('team_id', $this->team->id)
         //     ->joinPatients()

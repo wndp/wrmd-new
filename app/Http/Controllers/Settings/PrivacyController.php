@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Enums\SettingKey;
-use App\Events\AccountUpdated;
 use App\Events\TeamUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -73,7 +72,7 @@ class PrivacyController extends Controller
         $this->allowPeopleAbilities($teammates, $abilities);
 
         Wrmd::settings([
-            SettingKey::FULL_PEOPLE_ACCESS => $request->input('fullPeopleAccess')
+            SettingKey::FULL_PEOPLE_ACCESS => $request->input('fullPeopleAccess'),
         ]);
 
         event(new TeamUpdated(auth()->user()->currentTeam));

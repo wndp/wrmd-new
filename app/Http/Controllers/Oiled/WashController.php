@@ -28,7 +28,7 @@ class WashController extends Controller
                 AttributeOptionName::OILED_WASH_TYPES->value,
                 AttributeOptionName::OILED_WASH_DETERGENTS->value,
                 AttributeOptionName::OILED_WASH_DRYING_METHODS->value,
-            ])
+            ]),
         ]);
 
         [
@@ -36,7 +36,7 @@ class WashController extends Controller
             $washTypeIsInitialId,
         ] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             [AttributeOptionName::OILED_WASH_PRE_TREATMENTS->value, AttributeOptionUiBehavior::OILED_WASH_PRE_TREATMENT_IS_NONE->value],
-            [AttributeOptionName::OILED_WASH_TYPES->value, AttributeOptionUiBehavior::OILED_WASH_TYPE_IS_INITIAL->value]
+            [AttributeOptionName::OILED_WASH_TYPES->value, AttributeOptionUiBehavior::OILED_WASH_TYPE_IS_INITIAL->value],
         ]);
 
         $washes = $admission
@@ -46,7 +46,7 @@ class WashController extends Controller
                 'oilWashes.preTreatment',
                 'oilWashes.washType',
                 'oilWashes.detergent',
-                'oilWashes.dryingMethod'
+                'oilWashes.dryingMethod',
             ])
             ->oilWashes
             ->transform(fn ($wash) => [
@@ -93,7 +93,7 @@ class WashController extends Controller
 
     /**
      * Delete wash from storage.
-    */
+     */
     public function destroy(Request $request, Patient $patient, OilWash $wash)
     {
         $wash->validateOwnership(Auth::user()->current_team_id)

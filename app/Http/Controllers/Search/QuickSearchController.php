@@ -110,7 +110,7 @@ class QuickSearchController extends Controller
             return false;
         }
 
-        $speciesSearch = (new TaxaPreciseSearchQuery())($search, false)->pluck('taxon_id')->unique();
+        $speciesSearch = (new TaxaPreciseSearchQuery)($search, false)->pluck('taxon_id')->unique();
 
         return $speciesSearch->count() === 1 ? $speciesSearch->first() : false;
     }

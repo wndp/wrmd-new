@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\DailyTasks;
 
-use App\Domain\Taxonomy\Taxon;
 use App\Enums\Ability;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;

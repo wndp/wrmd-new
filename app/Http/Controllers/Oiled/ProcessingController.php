@@ -26,7 +26,7 @@ class ProcessingController extends Controller
         }
 
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::OILED_PROCESSING_CONDITIONS->value,
                 AttributeOptionName::OILED_PROCESSING_STATUSES->value,
@@ -41,7 +41,7 @@ class ProcessingController extends Controller
                 AttributeOptionName::PATIENT_DISPOSITIONS->value,
                 AttributeOptionName::PATIENT_RELEASE_TYPES->value,
                 AttributeOptionName::PATIENT_TRANSFER_TYPES->value,
-            ])
+            ]),
         ]);
 
         [
@@ -49,7 +49,7 @@ class ProcessingController extends Controller
             $collectionConditionDeadId,
         ] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             [AttributeOptionName::OILED_PROCESSING_CONDITIONS->value, AttributeOptionUiBehavior::OILED_PROCESSING_CONDITION_IS_ALIVE->value],
-            [AttributeOptionName::OILED_PROCESSING_CONDITIONS->value, AttributeOptionUiBehavior::OILED_PROCESSING_CONDITION_IS_DEAD->value]
+            [AttributeOptionName::OILED_PROCESSING_CONDITIONS->value, AttributeOptionUiBehavior::OILED_PROCESSING_CONDITION_IS_DEAD->value],
         ]);
 
         return Inertia::render('Oiled/Processing', [

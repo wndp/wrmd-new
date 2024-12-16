@@ -13,7 +13,7 @@ trait InteractsWithMedia
     /*
      * Register the media conversions.
      */
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('preview')
             ->fit(Fit::Contain, 368, 232)

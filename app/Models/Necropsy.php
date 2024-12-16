@@ -18,11 +18,11 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Necropsy extends Model implements Summarizable, Weighable
 {
     use HasFactory;
-    use SoftDeletes;
     use HasVersion7Uuids;
-    use ValidatesOwnership;
-    use LogsActivity;
     use LocksPatient;
+    use LogsActivity;
+    use SoftDeletes;
+    use ValidatesOwnership;
 
     protected $fillable = [
         'date_necropsied_at',
@@ -170,6 +170,7 @@ class Necropsy extends Model implements Summarizable, Weighable
             if (is_null($this->time_necropsied_at)) {
                 return $this->date_necropsied_at;
             }
+
             return $this->date_necropsied_at->setTimeFromTimeString($this->time_necropsied_at);
         });
     }
@@ -180,6 +181,7 @@ class Necropsy extends Model implements Summarizable, Weighable
             if (is_null($this->time_necropsied_at)) {
                 return $this->date_necropsied_at->translatedFormat(config('wrmd.date_format'));
             }
+
             return Timezone::convertFromUtcToLocal($this->date_necropsied_at->setTimeFromTimeString($this->time_necropsied_at))
                 ?->translatedFormat(config('wrmd.date_time_format'));
         });

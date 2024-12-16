@@ -23,7 +23,7 @@ class AdmissionFactory extends Factory
             'case_year' => null,
             'case_id' => 1,
             'patient_id' => Patient::factory(),
-            'hash' => null
+            'hash' => null,
         ];
     }
 }

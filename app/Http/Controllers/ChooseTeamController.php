@@ -24,7 +24,7 @@ class ChooseTeamController extends Controller
             ->sortBy('name')
             ->transform(fn ($team) => [
                 ...$team->toArray(),
-                'locale' => $team->formatted_inline_address
+                'locale' => $team->formatted_inline_address,
             ])
             ->values();
 
@@ -72,7 +72,7 @@ class ChooseTeamController extends Controller
             return redirect()->route('dashboard')
                 ->with('notification.heading', __('Welcome Back!'))
                 ->with('notification.text', __('You are now signed into :organizationName.', [
-                    'organizationName' => $team->name
+                    'organizationName' => $team->name,
                 ]));
         }
 

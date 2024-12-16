@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\AttributeOptionName;
-use App\Options\Options;
 use App\Support\AttributeOptionsCollection;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -46,29 +45,28 @@ class AttributeOption extends Model
     public static function getDropdownOptions(AttributeOptionName|array $attributeOptionNames): AttributeOptionsCollection
     {
         return static::select([
-                    'name',
-                    'id',
-                    'value',
-                ])
-                ->whereIn('name', Arr::wrap($attributeOptionNames))
-                ->orderBy('sort_order')
-                ->orderBy('value')
-                ->get()
-                ->groupBy('name')
+            'name',
+            'id',
+            'value',
+        ])
+            ->whereIn('name', Arr::wrap($attributeOptionNames))
+            ->orderBy('sort_order')
+            ->orderBy('value')
+            ->get()
+            ->groupBy('name')
                 //->map(fn ($attributeOptions) => $attributeOptions->pluck('value', 'id')->toArray())
-                ->map(fn ($attributeOptions) => $attributeOptions->mapWithKeys(fn ($attributeOption) => [
-                    $attributeOption->id => __($attributeOption->value)
-                ])->toArray());
+            ->map(fn ($attributeOptions) => $attributeOptions->mapWithKeys(fn ($attributeOption) => [
+                $attributeOption->id => __($attributeOption->value),
+            ])->toArray());
 
         return Cache::remember(
             'getDropdownOptions.'.App::getLocale().'.'.md5(json_encode($attributeOptionNames)),
             Carbon::now()->addMinutes(10),
-            fn () =>
-                static::select([
-                    'name',
-                    'id',
-                    'value',
-                ])
+            fn () => static::select([
+                'name',
+                'id',
+                'value',
+            ])
                 ->whereIn('name', $attributeOptionNames)
                 ->orderBy('sort_order')
                 ->orderBy('value')
@@ -76,7 +74,7 @@ class AttributeOption extends Model
                 ->groupBy('name')
                 //->map(fn ($attributeOptions) => $attributeOptions->pluck('value', 'id')->toArray())
                 ->map(fn ($attributeOptions) => $attributeOptions->mapWithKeys(fn ($attributeOption) => [
-                    $attributeOption->id => __($attributeOption->value)
+                    $attributeOption->id => __($attributeOption->value),
                 ])->toArray())
         );
     }

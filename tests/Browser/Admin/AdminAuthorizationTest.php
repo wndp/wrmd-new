@@ -3,7 +3,6 @@
 namespace Tests\Browser\Admin;
 
 use App\Enums\Ability;
-use App\Enums\WrmdStaff;
 use Illuminate\Foundation\Testing\DatabaseTruncation;
 use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;

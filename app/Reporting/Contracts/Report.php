@@ -91,7 +91,7 @@ abstract class Report implements Arrayable, Jsonable, JsonSerializable
 
         $this->setTeam($team);
 
-        $this->appliedFilters = new Collection();
+        $this->appliedFilters = new Collection;
     }
 
     /**
@@ -166,7 +166,7 @@ abstract class Report implements Arrayable, Jsonable, JsonSerializable
      */
     public function filters(): Collection
     {
-        return (new Collection())->when($this->team?->is_master_account, function ($collection) {
+        return (new Collection)->when($this->team?->is_master_account, function ($collection) {
             return $collection->prepend($this->teamFilter);
         });
     }
@@ -339,7 +339,7 @@ abstract class Report implements Arrayable, Jsonable, JsonSerializable
             return $appliedFilter->value ?? $appliedFilter->filter->default();
         }
 
-        return $default ?? (new $filter())->default();
+        return $default ?? (new $filter)->default();
     }
 
     /**
@@ -482,8 +482,6 @@ abstract class Report implements Arrayable, Jsonable, JsonSerializable
 
     /**
      * Make the PDF version of the report.
-     *
-     * @return \App\Reporting\Contracts\Generator
      */
     protected function pdf(): Generator
     {
@@ -494,8 +492,6 @@ abstract class Report implements Arrayable, Jsonable, JsonSerializable
 
     /**
      * Make the Excel version of the report.
-     *
-     * @return \App\Reporting\Contracts\Generator
      */
     protected function export(): Generator
     {
@@ -506,8 +502,6 @@ abstract class Report implements Arrayable, Jsonable, JsonSerializable
 
     /**
      * Make the Zebra report.
-     *
-     * @return \App\Reporting\Contracts\Generator
      */
     protected function zpl(): Generator
     {
@@ -518,8 +512,6 @@ abstract class Report implements Arrayable, Jsonable, JsonSerializable
 
     /**
      * Get the generator used to create the pdf version the report.
-     *
-     * @return \App\Reporting\Contracts\Generator
      */
     protected function pdfGenerator(): Generator
     {
@@ -528,8 +520,6 @@ abstract class Report implements Arrayable, Jsonable, JsonSerializable
 
     /**
      * Get the generator used to create the spreadsheet version the report.
-     *
-     * @return \App\Reporting\Contracts\Generator
      */
     protected function exportGenerator(): Generator
     {

@@ -7,7 +7,6 @@ use App\Concerns\LocksPatient;
 use App\Concerns\ValidatesOwnership;
 use App\Schedulable;
 use App\Support\Wrmd;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,13 +18,13 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Recheck extends Model implements Schedulable
 {
-    use HasFactory;
-    use SoftDeletes;
     use HasDailyTasks;
-    use ValidatesOwnership;
+    use HasFactory;
     use HasVersion7Uuids;
     use LocksPatient;
     use LogsActivity;
+    use SoftDeletes;
+    use ValidatesOwnership;
 
     protected $fillable = [
         'patient_id',

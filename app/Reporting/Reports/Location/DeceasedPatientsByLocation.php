@@ -38,8 +38,8 @@ class DeceasedPatientsByLocation extends Report
     public function filters(): Collection
     {
         return parent::filters()->merge(array_merge((new DateRange('moved_in_at'))->toArray(), [
-            new WhereHolding(),
-            new LocationArea(),
+            new WhereHolding,
+            new LocationArea,
         ]));
     }
 
@@ -65,7 +65,7 @@ class DeceasedPatientsByLocation extends Report
     {
         [$deadPatientIds] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::PATIENT_DISPOSITIONS->value,
-            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_DEAD->value
+            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_DEAD->value,
         ]);
 
         return ListingQuery::run()

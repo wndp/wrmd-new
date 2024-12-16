@@ -20,11 +20,11 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class PatientLocation extends Model implements Summarizable
 {
     use HasFactory;
+    use HasVersion7Uuids;
+    use LocksPatient;
+    use LogsActivity;
     use SoftDeletes;
     use ValidatesOwnership;
-    use HasVersion7Uuids;
-    use LogsActivity;
-    use LocksPatient;
 
     protected $fillable = [
         'moved_in_at',
@@ -77,7 +77,7 @@ class PatientLocation extends Model implements Summarizable
     {
         return Attribute::get(
             fn () => __('Moved to :location.', [
-                'location' => $this->location_for_humans
+                'location' => $this->location_for_humans,
             ])." $this->comments"
         );
     }
@@ -86,7 +86,7 @@ class PatientLocation extends Model implements Summarizable
     {
         [$homeCareId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::PATIENT_LOCATION_FACILITIES->value,
-            AttributeOptionUiBehavior::PATIENT_LOCATION_FACILITIES_IS_HOMECARE->value
+            AttributeOptionUiBehavior::PATIENT_LOCATION_FACILITIES_IS_HOMECARE->value,
         ]);
 
         return Attribute::get(

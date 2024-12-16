@@ -9,20 +9,19 @@ use App\Models\Team;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\AssistsWithAuthentication;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 
 final class ExpenseCategoryTest extends TestCase
 {
-    use RefreshDatabase;
     use Assertions;
+    use RefreshDatabase;
 
     #[Test]
     public function anExpenseCategoryBelongsToATeam(): void
     {
         $category = ExpenseCategory::factory()->make([
-            'team_id' => Team::Factory()
+            'team_id' => Team::Factory(),
         ]);
 
         $this->assertInstanceOf(Team::class, $category->team);

@@ -26,7 +26,7 @@ class ProcessingCarcassConditionController extends Controller
                 'nullable',
                 'integer',
                 new AttributeOptionExistsRule(AttributeOptionName::OILED_PROCESSING_EXTENT_OF_SCAVENGINGS),
-            ]
+            ],
         ]);
 
         $patient->validateOwnership(Auth::user()->current_team_id);

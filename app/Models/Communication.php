@@ -13,10 +13,10 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Communication extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use HasVersion7Uuids;
-    use ValidatesOwnership;
     use LogsActivity;
+    use SoftDeletes;
+    use ValidatesOwnership;
 
     protected $fillable = [
         'incident_id',

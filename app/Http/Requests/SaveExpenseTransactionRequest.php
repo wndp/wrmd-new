@@ -3,8 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Enums\SettingKey;
-use App\Enums\AttributeOptionName;
-use App\Rules\AttributeOptionExistsRule;
 use App\Support\Wrmd;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;

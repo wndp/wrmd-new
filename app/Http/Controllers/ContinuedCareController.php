@@ -33,14 +33,14 @@ class ContinuedCareController extends Controller
         }
 
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::PATIENT_DISPOSITIONS->value,
                 AttributeOptionName::PATIENT_RELEASE_TYPES->value,
                 AttributeOptionName::PATIENT_TRANSFER_TYPES->value,
                 AttributeOptionName::EXAM_WEIGHT_UNITS->value,
-                AttributeOptionName::EXAM_TEMPERATURE_UNITS->value
-            ])
+                AttributeOptionName::EXAM_TEMPERATURE_UNITS->value,
+            ]),
         ]);
 
         if (Wrmd::settings(SettingKey::SHOW_TAGS)) {
@@ -56,7 +56,7 @@ class ContinuedCareController extends Controller
             ]),
             'teamIsInPossession' => $teamIsInPossession,
             'patient' => $admission->patient,
-            'logs' => fn () => $this->getCareLogs($admission->patient, Auth::user(), (Wrmd::settings(SettingKey::LOG_ORDER) === 'desc'))
+            'logs' => fn () => $this->getCareLogs($admission->patient, Auth::user(), (Wrmd::settings(SettingKey::LOG_ORDER) === 'desc')),
         ]);
     }
 

@@ -17,7 +17,7 @@ class PrintController extends Controller
      * @param  \Illuminate\Http\Request request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Patient $patient = null)
+    public function store(Request $request, ?Patient $patient = null)
     {
         $result = $patient instanceof Patient
             ? Admission::where(['team_id' => Auth::user()->currentTeam->id, 'patient_id' => $patient->id])->get()

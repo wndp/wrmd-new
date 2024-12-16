@@ -34,11 +34,11 @@ class BandingMorphometricsController extends Controller
                 AttributeOptionName::BANDING_AUXILLARY_CODE_COLOR->value,
                 AttributeOptionName::BANDING_AUXILLARY_SIDE_OF_BIRD->value,
                 AttributeOptionName::BANDING_PLACEMENT_ON_LEG->value,
-            ])
+            ]),
         ]);
 
         return Inertia::render('Patients/BandingMorphometrics/Edit', [
-            'patient' => $admission->patient
+            'patient' => $admission->patient,
         ]);
     }
 }

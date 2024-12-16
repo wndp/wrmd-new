@@ -10,7 +10,6 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\AssistsWithAuthentication;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreatesTeamUser;
@@ -19,10 +18,10 @@ use Tests\Traits\CreatesUiBehavior;
 final class PatientLocationTest extends TestCase
 {
     use Assertions;
-    use RefreshDatabase;
+    use CreatesTeamUser;
     use CreatesUiBehavior;
     use GetsCareLogs;
-    use CreatesTeamUser;
+    use RefreshDatabase;
 
     public function aPatientLocationBelongsToAPatient(): void
     {

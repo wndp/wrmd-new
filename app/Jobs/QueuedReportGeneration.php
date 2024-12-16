@@ -6,10 +6,7 @@ use App\Events\ReportGenerated;
 use App\Events\ReportGenerating;
 use App\Reporting\Contracts\Report;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
 class QueuedReportGeneration implements ShouldQueue
 {

@@ -36,7 +36,6 @@ class VoidedScope implements Scope
     /**
      * Add the restore extension to the builder.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
      * @return void
      */
     protected function addUnVoid(Builder $builder)

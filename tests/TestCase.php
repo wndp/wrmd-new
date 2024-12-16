@@ -35,7 +35,7 @@ abstract class TestCase extends BaseTestCase
                     'id' => fn () => \Illuminate\Support\Str::random(),
                     'name' => '',
                     'email' => '',
-                ]]
+                ]],
             ]),
         ]);
     }

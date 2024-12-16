@@ -2,7 +2,6 @@
 
 namespace App\Listing\Lists;
 
-use App\Domain\Admissions\Admission;
 use App\Listing\ListingQuery;
 use App\Listing\LiveList;
 use Illuminate\Support\Collection;

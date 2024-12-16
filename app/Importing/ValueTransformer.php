@@ -134,7 +134,7 @@ class ValueTransformer
      *
      * @return mixed
      */
-    public static function handle(string $key, string|null $value)
+    public static function handle(string $key, ?string $value)
     {
         return (new static($key, $value))
             ->trimStrings()
@@ -152,7 +152,7 @@ class ValueTransformer
         self::$dateAttributes = Collection::make(Attribute::cases())->filter(
             fn ($attribute) => $attribute->isDateAttribute()
         )
-        ->pluck('value');
+            ->pluck('value');
     }
 
     /**
@@ -163,6 +163,6 @@ class ValueTransformer
         self::$numberAttributes = Collection::make(Attribute::cases())->filter(
             fn ($attribute) => $attribute->isNumberAttribute()
         )
-        ->pluck('value');
+            ->pluck('value');
     }
 }

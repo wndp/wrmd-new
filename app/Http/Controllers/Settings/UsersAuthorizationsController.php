@@ -17,7 +17,7 @@ class UsersAuthorizationsController extends Controller
      */
     public function update(Request $request, User $user): RedirectResponse
     {
-        abort_unless($user->inAccount(Auth::user()->currentAccount), new RecordNotOwnedResponse());
+        abort_unless($user->inAccount(Auth::user()->currentAccount), new RecordNotOwnedResponse);
 
         $data = $request->validate([
             'userAbilities' => 'required|array',

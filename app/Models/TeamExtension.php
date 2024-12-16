@@ -17,6 +17,6 @@ class TeamExtension extends Model
 
     protected $casts = [
         'team_id' => 'integer',
-        'extension' => Extension::class
+        'extension' => Extension::class,
     ];
 }

@@ -15,7 +15,7 @@ class SubAccountsUsersController extends Controller
     {
         abort_unless(
             Auth::user()->currentTeam->hasSubAccount($subAccount),
-            new RecordNotOwned()
+            new RecordNotOwned
         );
 
         $users = $subAccount
@@ -25,7 +25,7 @@ class SubAccountsUsersController extends Controller
             ->values()
             ->transform(fn ($user) => [
                 ...$user->toArray(),
-                'role_name_for_humans' => $user->getRoleNameOnTeamForHumans($subAccount)
+                'role_name_for_humans' => $user->getRoleNameOnTeamForHumans($subAccount),
             ]);
 
         return Inertia::render('SubAccounts/Users', compact('subAccount', 'users'));

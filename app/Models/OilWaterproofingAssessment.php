@@ -17,9 +17,9 @@ class OilWaterproofingAssessment extends Model implements Summarizable
 {
     use HasFactory;
     use HasVersion7Uuids;
-    use SoftDeletes;
-    use LogsActivity;
     use LocksPatient;
+    use LogsActivity;
+    use SoftDeletes;
     use ValidatesOwnership;
 
     protected $fillable = [
@@ -78,6 +78,7 @@ class OilWaterproofingAssessment extends Model implements Summarizable
             if (is_null($this->time_evaluated_at)) {
                 return $this->date_evaluated_at?->toFormattedDayDateString();
             }
+
             return $this->date_evaluated_at?->setTimeFromTimeString($this->time_evaluated_at);
         });
     }

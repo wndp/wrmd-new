@@ -27,16 +27,16 @@ abstract class Analytic implements Jsonable, JsonSerializable
     /**
      * Constructor.
      *
-     * @param  \App\Models\Team $team
-     * @param  \App\Domain\Analytics\AnalyticFilters $filters
+     * @param  \App\Models\Team  $team
+     * @param  \App\Domain\Analytics\AnalyticFilters  $filters
      */
     public function __construct($team, $filters)
     {
         $this->team = $team;
         $this->filters = $filters;
 
-        $this->categories = new Categories();
-        $this->series = new Series();
+        $this->categories = new Categories;
+        $this->series = new Series;
 
         $this->addSegmentationMacros();
     }

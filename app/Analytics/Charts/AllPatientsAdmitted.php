@@ -26,7 +26,7 @@ class AllPatientsAdmitted extends Chart
     /**
      * Query for the requested data.
      */
-    public function query(string $segment, CarbonPeriod $period = null): ChronologicalCollection
+    public function query(string $segment, ?CarbonPeriod $period = null): ChronologicalCollection
     {
         $query = Admission::joinPatients()
             ->join('teams', 'admissions.team_id', '=', 'teams.id')

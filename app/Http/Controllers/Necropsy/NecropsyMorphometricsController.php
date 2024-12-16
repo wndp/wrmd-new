@@ -24,7 +24,7 @@ class NecropsyMorphometricsController extends Controller
             ],
             'weight' => [
                 'nullable',
-                'numeric'
+                'numeric',
             ],
             'weight_unit_id' => [
                 'nullable',
@@ -38,7 +38,7 @@ class NecropsyMorphometricsController extends Controller
             ],
             'age' => [
                 'nullable',
-                'numeric'
+                'numeric',
             ],
             'age_unit_id' => [
                 'nullable',
@@ -47,23 +47,23 @@ class NecropsyMorphometricsController extends Controller
             ],
             'wing' => [
                 'nullable',
-                'numeric'
+                'numeric',
             ],
             'tarsus' => [
                 'nullable',
-                'numeric'
+                'numeric',
             ],
             'culmen' => [
                 'nullable',
-                'numeric'
+                'numeric',
             ],
             'exposed_culmen' => [
                 'nullable',
-                'numeric'
+                'numeric',
             ],
             'bill_depth' => [
                 'nullable',
-                'numeric'
+                'numeric',
             ],
         ]);
 

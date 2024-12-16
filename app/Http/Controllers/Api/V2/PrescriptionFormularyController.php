@@ -10,17 +10,16 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Symfony\Component\HttpFoundation\Response;
 
 class PrescriptionFormularyController extends Controller
 {
     /**
      * Search the formulary.
      */
-    public function __invoke(Request $request, Patient $patient = null): JsonResponse
+    public function __invoke(Request $request, ?Patient $patient = null): JsonResponse
     {
         $request->validate([
-            'search' => 'required|string'
+            'search' => 'required|string',
         ]);
 
         if ($patient) {
@@ -29,13 +28,13 @@ class PrescriptionFormularyController extends Controller
 
         $formulas = Formula::whereIn('team_id', [
             Auth::user()->current_team_id,
-            Auth::user()->currentTeam->isSubAccount() ? Auth::user()->currentTeam->master_account_id : 0
+            Auth::user()->currentTeam->isSubAccount() ? Auth::user()->currentTeam->master_account_id : 0,
         ])->where('type', FormulaType::PRESCRIPTION->value)
             ->search($request->input('search'))
             ->get()
             ->map(fn ($formula) => [
                 ...$formula->toArray(),
-                'calculated' => $formula->calculatedAttributes($patient)
+                'calculated' => $formula->calculatedAttributes($patient),
             ])
             ->sortBy(fn ($formula) => Str::lower($formula['name']))
             ->values();

@@ -25,8 +25,6 @@ abstract class Generator
 
     /**
      * Constructor.
-     *
-     * @param  \App\Reporting\Contracts\Report  $report
      */
     public function __construct(Report $report)
     {

@@ -2,12 +2,12 @@
 
 namespace App\Analytics\Charts;
 
-use App\Models\Admission;
 use App\Analytics\Categories;
 use App\Analytics\CategorizedCollection;
 use App\Analytics\Concerns\HandleSeriesNames;
 use App\Analytics\Contracts\Chart;
 use App\Analytics\DataSet;
+use App\Models\Admission;
 
 class ClassificationTags extends Chart
 {

@@ -44,7 +44,7 @@ class DatabaseSeeder extends Seeder
         DB::table('information_schema.tables')
             ->where('table_schema', app('db')->getDatabaseName())
             ->whereNotIn('table_name', [
-                'migrations'
+                'migrations',
             ])
             ->pluck('TABLE_NAME')
             ->each(fn ($table) => DB::table($table)->truncate());

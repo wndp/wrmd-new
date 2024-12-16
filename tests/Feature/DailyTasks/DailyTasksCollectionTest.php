@@ -19,8 +19,8 @@ final class DailyTasksCollectionTest extends TestCase
 {
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     #[Test]
     public function dailyTaskFiltersAreRequiredToCollectDailyTasks(): void

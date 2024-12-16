@@ -14,7 +14,7 @@ class UnrecognizedAccountPatientController extends Controller
     /**
      * Identify a patient's unknown species.
      */
-    public function __invoke(Account $account = null): JsonResponse
+    public function __invoke(?Account $account = null): JsonResponse
     {
         $data = request()->validate([
             'taxon_id' => 'required|integer',
@@ -22,7 +22,7 @@ class UnrecognizedAccountPatientController extends Controller
             'newCommonName' => 'required',
         ]);
 
-        $results = (new TaxaPreciseSearchQuery())($data['newCommonName']);
+        $results = (new TaxaPreciseSearchQuery)($data['newCommonName']);
 
         abort_unless(
             $results->unique('species_id')->count() === 1,

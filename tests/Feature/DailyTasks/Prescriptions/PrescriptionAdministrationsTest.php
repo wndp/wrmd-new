@@ -16,8 +16,8 @@ use Tests\Traits\CreatesUiBehavior;
 #[Group('daily-tasks')]
 final class PrescriptionAdministrationsTest extends TestCase
 {
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     #[Test]
     public function aPrescriptionHasAnAppendedAdministrationsAttribute(): void

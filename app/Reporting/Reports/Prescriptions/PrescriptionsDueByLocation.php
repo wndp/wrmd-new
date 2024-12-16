@@ -36,8 +36,8 @@ class PrescriptionsDueByLocation extends Report
     {
         return collect([
             new DateOn(null, 'rx_started_at'),
-            new WhereHolding(),
-            new LocationArea(),
+            new WhereHolding,
+            new LocationArea,
         ]);
     }
 

@@ -16,9 +16,9 @@ class OilWash extends Model
 {
     use HasFactory;
     use HasVersion7Uuids;
-    use SoftDeletes;
-    use LogsActivity;
     use LocksPatient;
+    use LogsActivity;
+    use SoftDeletes;
     use ValidatesOwnership;
 
     protected $fillable = [
@@ -98,6 +98,7 @@ class OilWash extends Model
             if (is_null($this->time_washed_at)) {
                 return $this->date_washed_at?->toFormattedDayDateString();
             }
+
             return $this->date_washed_at?->setTimeFromTimeString($this->time_washed_at);
         });
     }

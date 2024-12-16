@@ -24,7 +24,7 @@ final class UnSpoofTest extends TestCase
         $me->user->joinTeam($team, Role::ADMIN);
         $me->user->switchTeam($team);
 
-        dispatch_sync(new UnSpoofTeams());
+        dispatch_sync(new UnSpoofTeams);
 
         $this->assertTrue($me->user->currentTeam->id === $team->id);
     }

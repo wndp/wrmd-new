@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Profile;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Laravel\Jetstream\Http\Controllers\Inertia\OtherBrowserSessionsController as JetstreamOtherBrowserSessionsController;
 
 class OtherBrowserSessionsController extends JetstreamOtherBrowserSessionsController

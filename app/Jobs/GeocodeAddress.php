@@ -6,10 +6,7 @@ use Geocodio\Exceptions\GeocodioException;
 use Geocodio\GeocodioFacade;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
 class GeocodeAddress implements ShouldQueue
 {

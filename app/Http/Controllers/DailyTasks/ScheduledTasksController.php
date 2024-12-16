@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers\DailyTasks;
 
-use App\Domain\DailyTasks\DailyTaskOptions;
-use App\Domain\DailyTasks\Prescriptions\Prescription;
-use App\Domain\DailyTasks\Rechecks\Recheck;
 use App\Enums\DailyTaskSchedulable;
 use App\Enums\SettingKey;
 use App\Http\Controllers\Controller;
@@ -22,8 +19,7 @@ class ScheduledTasksController extends Controller
 
         $tasks = Collection::make(DailyTaskSchedulable::cases())
             ->map(
-                fn ($schedulable) =>
-                $schedulable->model()::where('patient_id', $admission->patient_id)
+                fn ($schedulable) => $schedulable->model()::where('patient_id', $admission->patient_id)
                     ->with('recordedTasks.user')
                     ->get()
             )

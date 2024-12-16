@@ -37,7 +37,7 @@ class CareLogController extends Controller
         return back()
             ->with('flash.notificationHeading', __('Comment Added'))
             ->with('flash.notification', __('Your comment was add to :caseNumber.', [
-                'caseNumber' => $caseNumber
+                'caseNumber' => $caseNumber,
             ]));
     }
 

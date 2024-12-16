@@ -19,19 +19,19 @@ class SubAccountsExtensionsController extends Controller
     {
         abort_unless(
             Auth::user()->currentTeam->hasSubAccount($subAccount),
-            new RecordNotOwned()
+            new RecordNotOwned
         );
 
         $activated = ExtensionManager::getActivated($subAccount);
 
         $publicExtensions = Arr::map(ExtensionManager::getPublic(), fn ($extension) => [
             ...$extension->toArray(),
-            'is_activated' => $activated->contains('extension', $extension->value)
+            'is_activated' => $activated->contains('extension', $extension->value),
         ]);
 
         $nonPublicExtensions = Arr::map(ExtensionManager::getNonPublic(), fn ($extension) => [
             ...$extension->toArray(),
-            'is_activated' => $activated->contains('extension', $extension->value)
+            'is_activated' => $activated->contains('extension', $extension->value),
         ]);
 
         $extensions = array_merge(

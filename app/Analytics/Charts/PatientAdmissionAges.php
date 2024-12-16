@@ -2,11 +2,11 @@
 
 namespace App\Analytics\Charts;
 
-use App\Models\Admission;
 use App\Analytics\ChronologicalCollection;
 use App\Analytics\Concerns\HandleChronologicalData;
 use App\Analytics\Contracts\Chart;
 use App\Analytics\DataSet;
+use App\Models\Admission;
 use Illuminate\Support\Collection;
 
 class PatientAdmissionAges extends Chart
@@ -51,7 +51,7 @@ class PatientAdmissionAges extends Chart
     public function compareQuery($segment): Collection
     {
         if (! $this->filters->compare) {
-            return new Collection();
+            return new Collection;
         }
 
         $query = Admission::where('team_id', $this->team->id)

@@ -17,11 +17,11 @@ use Tests\Traits\CreatesTeamUser;
 #[Group('daily-tasks')]
 final class DestroyDailyTaskControllerTest extends TestCase
 {
+    use Assertions;
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesTeamUser;
-    use Assertions;
+    use RefreshDatabase;
 
     #[Test]
     public function unAuthenticatedUsersCantDestroyDailyTask(): void

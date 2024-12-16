@@ -100,11 +100,11 @@ trait HasDailyTasks
         $frequencyIds = $this->getFrequencyIds();
 
         return match ($this->frequency_id) {
-            $frequencyIds['sixXdayId'] =>  6,
-            $frequencyIds['fiveXdayId'] =>  5,
-            $frequencyIds['qidId'] =>  4,
-            $frequencyIds['tidId'] =>  3,
-            $frequencyIds['bidId'] =>  2,
+            $frequencyIds['sixXdayId'] => 6,
+            $frequencyIds['fiveXdayId'] => 5,
+            $frequencyIds['qidId'] => 4,
+            $frequencyIds['tidId'] => 3,
+            $frequencyIds['bidId'] => 2,
             default => 1
         };
     }

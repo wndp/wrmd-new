@@ -184,7 +184,7 @@ final class NumbersTest extends TestCase
 
         $result = \App\Analytics\Numbers\AllUnrecognizedPatients::analyze(
             Team::factory()->create(),
-            new AnalyticFilters()
+            new AnalyticFilters
         );
 
         $this->assertEquals(null, $result->difference);
@@ -209,7 +209,7 @@ final class NumbersTest extends TestCase
 
         $result = \App\Analytics\Numbers\UnrecognizedPatients::analyze(
             $team,
-            new AnalyticFilters()
+            new AnalyticFilters
         );
 
         $this->assertEquals(null, $result->difference);
@@ -234,7 +234,7 @@ final class NumbersTest extends TestCase
 
         $result = \App\Analytics\Numbers\AllMissidentifiedPatients::analyze(
             Team::factory()->create(),
-            new AnalyticFilters()
+            new AnalyticFilters
         );
 
         $this->assertEquals(null, $result->difference);
@@ -260,7 +260,7 @@ final class NumbersTest extends TestCase
 
         $result = \App\Analytics\Numbers\MissidentifiedPatients::analyze(
             $team,
-            new AnalyticFilters()
+            new AnalyticFilters
         );
 
         $this->assertEquals(null, $result->difference);

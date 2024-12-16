@@ -22,10 +22,11 @@ final class AdmitPatientTest extends TestCase
 {
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     private $me;
+
     private $pendingDispositionUiBehavior;
 
     protected function setUp(): void
@@ -56,7 +57,7 @@ final class AdmitPatientTest extends TestCase
             'last_name' => 'Halpert',
         ], [
             'admitted_at' => '2023-01-17 7:51',
-            'common_name' => 'Red-headed Foo'
+            'common_name' => 'Red-headed Foo',
         ]);
 
         $this->assertTrue($result->first()->patient->rescuer->is($person));
@@ -80,7 +81,7 @@ final class AdmitPatientTest extends TestCase
             'last_name' => 'Halpert',
         ], [
             'admitted_at' => '2023-01-17 7:51',
-            'common_name' => 'Red-headed Foo'
+            'common_name' => 'Red-headed Foo',
         ]);
 
         $this->assertFalse($result->first()->patient->rescuer->is($person));
@@ -96,7 +97,7 @@ final class AdmitPatientTest extends TestCase
             'last_name' => 'Halpert',
         ], [
             'admitted_at' => '2023-01-17 7:51',
-            'common_name' => 'Red-headed Foo'
+            'common_name' => 'Red-headed Foo',
         ]);
 
         $this->assertInstanceOf(Person::class, $result->first()->patient->rescuer);
@@ -114,7 +115,7 @@ final class AdmitPatientTest extends TestCase
 
         $result = AdmitPatient::run($this->me->team, 2018, $person, [
             'admitted_at' => '2023-01-17 7:51',
-            'common_name' => 'Red-headed Foo'
+            'common_name' => 'Red-headed Foo',
         ]);
 
         $this->assertTrue($result->first()->patient->rescuer->is($person));
@@ -135,7 +136,7 @@ final class AdmitPatientTest extends TestCase
             ],
             [
                 'admitted_at' => '2023-01-17 7:51',
-                'common_name' => 'Red-headed Foo'
+                'common_name' => 'Red-headed Foo',
             ]
         );
 
@@ -159,7 +160,7 @@ final class AdmitPatientTest extends TestCase
             'team_id' => $this->me->team->id,
         ]), [
             'admitted_at' => '2023-01-17 7:51',
-            'common_name' => 'Red-headed Foo'
+            'common_name' => 'Red-headed Foo',
         ]);
 
         $this->assertSame($this->me->team->id, $result->first()->patient->team_possession_id);
@@ -177,7 +178,7 @@ final class AdmitPatientTest extends TestCase
             ],
             [
                 'admitted_at' => '2023-01-17 7:51',
-                'common_name' => 'Red-headed Foo'
+                'common_name' => 'Red-headed Foo',
             ],
             2
         );
@@ -200,7 +201,7 @@ final class AdmitPatientTest extends TestCase
             ],
             [
                 'admitted_at' => '2023-01-17 7:51',
-                'common_name' => 'Red-headed Foo'
+                'common_name' => 'Red-headed Foo',
             ]
         );
         $this->assertInstanceOf(Collection::class, $collection);

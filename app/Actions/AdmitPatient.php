@@ -15,7 +15,6 @@ use App\Models\Patient;
 use App\Models\Person;
 use App\Models\Team;
 use App\Support\Timezone;
-use App\Support\Wrmd;
 use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -136,6 +135,7 @@ class AdmitPatient
     {
         if ($rescuer instanceof Person) {
             $this->rescuer = $rescuer;
+
             return;
         }
 
@@ -146,7 +146,7 @@ class AdmitPatient
             'team_id' => $this->team->id,
         ]), [
             ...$rescuer,
-            'no_solicitations' => true
+            'no_solicitations' => true,
         ]);
     }
 

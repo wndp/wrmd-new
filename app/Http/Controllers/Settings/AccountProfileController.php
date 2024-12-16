@@ -20,7 +20,7 @@ class AccountProfileController extends Controller
     public function edit(): Response
     {
         OptionsStore::add([
-            new LocaleOptions()
+            new LocaleOptions,
         ]);
 
         return Inertia::render('Settings/AccountProfile');
@@ -99,7 +99,7 @@ class AccountProfileController extends Controller
 
         Wrmd::settings([
             SettingKey::TIMEZONE->value => $request->input('timezone'),
-            SettingKey::LANGUAGE->value => $request->input('language')
+            SettingKey::LANGUAGE->value => $request->input('language'),
         ]);
 
         app()->setLocale($request->language);

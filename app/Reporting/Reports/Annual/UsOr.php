@@ -50,7 +50,7 @@ class UsOr extends AnnualReport
     public function filters(): Collection
     {
         return parent::filters()->push(
-            new HalfYear()
+            new HalfYear
         );
     }
 

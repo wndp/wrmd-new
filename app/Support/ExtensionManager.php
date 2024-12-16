@@ -10,9 +10,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\HtmlString;
-use Illuminate\Support\Str;
-use League\CommonMark\CommonMarkConverter;
 
 class ExtensionManager
 {
@@ -103,7 +100,7 @@ class ExtensionManager
             $activatedParents->isNotEmpty(),
             \DomainException::class,
             __('Can not deactivate extension because of active parent extension: :extension', [
-                'extension' => $activatedParents->map(fn ($extension) => $extension->label())->implode(', ')
+                'extension' => $activatedParents->map(fn ($extension) => $extension->label())->implode(', '),
             ])
         );
 
@@ -126,7 +123,7 @@ class ExtensionManager
     /**
      * Determine if the provided extension slug is activated by the provided account.
      */
-    public static function isActivated(Extension $extension, Team $team = null): bool
+    public static function isActivated(Extension $extension, ?Team $team = null): bool
     {
         try {
             $team = $team instanceof Team ? $team : Auth::user()->currentTeam;

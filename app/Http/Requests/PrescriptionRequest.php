@@ -67,8 +67,8 @@ class PrescriptionRequest extends FormRequest
             'veterinarian_id' => [
                 'nullable',
                 'string',
-                Rule::exists('veterinarians', 'id')->where('team_id', $this->user()->current_team_id)
-            ]
+                Rule::exists('veterinarians', 'id')->where('team_id', $this->user()->current_team_id),
+            ],
         ];
     }
 

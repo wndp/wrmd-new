@@ -2,21 +2,18 @@
 
 namespace Tests\Unit\Models;
 
-use App\Domain\Taxonomy\Taxon;
 use App\Models\Patient;
 use App\Models\Person;
-use App\Repositories\AdministrativeDivision;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\AssistsWithAuthentication;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 
 final class PersonTest extends TestCase
 {
-    use RefreshDatabase;
     use Assertions;
+    use RefreshDatabase;
 
     #[Test]
     public function aPersonIsRevisionable(): void

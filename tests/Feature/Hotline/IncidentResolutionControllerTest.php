@@ -126,7 +126,7 @@ final class IncidentResolutionControllerTest extends TestCase
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
         $incident = Incident::factory()->for($me->team)->create([
             'occurred_at' => '2022-07-02 17:30:00',
-            'incident_status_id' => $hotlineStatusIsOpenId
+            'incident_status_id' => $hotlineStatusIsOpenId,
         ]);
 
         $this->actingAs($me->user)->put(route('hotline.incident.update.resolution', $incident), [

@@ -3,8 +3,8 @@
 namespace App\Listing\Lists;
 
 use App\Domain\Admissions\Admission;
-use App\Listing\LiveList;
 use App\Domain\People\Person;
+use App\Listing\LiveList;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class HomecareCases extends LiveList

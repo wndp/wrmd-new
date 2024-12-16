@@ -21,7 +21,7 @@ class OilProcessingFactory extends Factory
         return [
             'patient_id' => Patient::factory(),
             'date_collected_at' => $this->faker->dateTimeBetween('1 days', '90 days')->format('Y-m-d'),
-            'collection_condition_id' => AttributeOption::factory()
+            'collection_condition_id' => AttributeOption::factory(),
         ];
     }
 }

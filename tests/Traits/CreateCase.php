@@ -7,19 +7,17 @@ use App\Models\Admission;
 use App\Models\Patient;
 use App\Models\Person;
 use App\Models\Team;
-use Illuminate\Support\Facades\DB;
 
 trait CreateCase
 {
     use PersistsAdmission;
 
     public function createCase(
-        Team $team = null,
-        int $caseYear = null,
+        ?Team $team = null,
+        ?int $caseYear = null,
         array $patientOverrides = [],
         array $rescuerOverrides = []
-    ): Admission
-    {
+    ): Admission {
         if (! $team instanceof Team) {
             $team = Team::factory()->create();
         }

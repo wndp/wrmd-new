@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Options\LocaleOptions;
 use App\Options\Options;
 use App\Repositories\AdministrativeDivision;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\App;
 
 class LocaleController extends Controller
 {

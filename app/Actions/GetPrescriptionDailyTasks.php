@@ -16,7 +16,7 @@ class GetPrescriptionDailyTasks
      */
     public static function handle(DailyTasksFilters $filters, array $patientIds)
     {
-        if (!in_array(DailyTaskSchedulable::PRESCRIPTIONS->value, $filters->include)) {
+        if (! in_array(DailyTaskSchedulable::PRESCRIPTIONS->value, $filters->include)) {
             return;
         }
 

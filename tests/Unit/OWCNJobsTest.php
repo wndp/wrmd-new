@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Extensions\Owcn;
 
-use App\Domain\Accounts\Account;
 use App\Domain\Patients\Patient;
 use App\Domain\Species\Species;
 use App\Domain\Users\User;
@@ -117,7 +116,7 @@ final class JobsTest extends TestCase
             'teamname' => 'Bob',
         ]);
 
-        $command = new \App\Extensions\Owcn\Bus\AssociateWildlifeRecoveryPatients();
+        $command = new \App\Extensions\Owcn\Bus\AssociateWildlifeRecoveryPatients;
         $command->handle();
 
         $this->assertDatabaseHas('wildlife_recovery_patients', [

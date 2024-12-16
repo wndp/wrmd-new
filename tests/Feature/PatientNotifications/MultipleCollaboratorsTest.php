@@ -9,8 +9,6 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\AssistsWithAuthentication;
-use Tests\Support\AssistsWithCases;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;
@@ -30,7 +28,7 @@ final class MultipleCollaboratorsTest extends TestCase
 
         Admission::factory()->create([
             'patient_id' => $admission->patient->id,
-            'case_year' => Carbon::now()->format('Y')
+            'case_year' => Carbon::now()->format('Y'),
         ]);
 
         tap(new MultipleCollaborators($me->team, $admission->patient), fn ($class) => $class->handle());

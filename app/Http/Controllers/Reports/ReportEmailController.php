@@ -19,7 +19,7 @@ class ReportEmailController extends Controller
     public function __invoke(ReportRequest $request, string $namespace)
     {
         $request->validate([
-            'to' => ['required', new CommaSeparatedEmails()],
+            'to' => ['required', new CommaSeparatedEmails],
             'bcc_me' => 'nullable|boolean',
             'subject' => 'required',
             'body' => 'required',

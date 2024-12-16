@@ -22,11 +22,11 @@ use Tests\Traits\CreatesUiBehavior;
 #[Group('daily-tasks')]
 final class NutritionPlanControllerTest extends TestCase
 {
+    use Assertions;
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
-    use Assertions;
+    use RefreshDatabase;
 
     #[Test]
     public function unAuthenticatedUsersCantStoreANutritionPlan(): void
@@ -84,7 +84,7 @@ final class NutritionPlanControllerTest extends TestCase
             ])
             ->assertInvalid([
                 'started_at' => 'The start date is not a valid date.',
-                'frequency' => 'The frequency field must be a number.'
+                'frequency' => 'The frequency field must be a number.',
             ]);
 
         $this->actingAs($me->user)
@@ -97,9 +97,9 @@ final class NutritionPlanControllerTest extends TestCase
         $this->actingAs($me->user)
             ->post(route('patients.nutrition.store', $admission->patient), [
                 'ingredients' => [[
-                    'unit_id' => 1
+                    'unit_id' => 1,
                 ],
-            ]])
+                ]])
             ->assertInvalid([
                 'ingredients.0.quantity' => 'The ingredients.0.quantity field is required.',
                 'ingredients.0.ingredient' => 'The ingredients.0.ingredient field is required.',
@@ -134,8 +134,8 @@ final class NutritionPlanControllerTest extends TestCase
                 'ingredients' => [[
                     'quantity' => 1,
                     'unit_id' => $ingredientUnitId,
-                    'ingredient' => 'zap'
-                ]]
+                    'ingredient' => 'zap',
+                ]],
             ])
             ->assertRedirect(route('dashboard'));
 
@@ -154,7 +154,7 @@ final class NutritionPlanControllerTest extends TestCase
             'nutrition_plan_id' => NutritionPlan::first()->id,
             'quantity' => 1,
             'unit_id' => $ingredientUnitId,
-            'ingredient' => 'zap'
+            'ingredient' => 'zap',
         ]);
     }
 
@@ -201,7 +201,7 @@ final class NutritionPlanControllerTest extends TestCase
             ])
             ->assertInvalid([
                 'started_at' => 'The start date is not a valid date.',
-                'frequency' => 'The frequency field must be a number.'
+                'frequency' => 'The frequency field must be a number.',
             ]);
 
         $this->actingAs($me->user)
@@ -214,9 +214,9 @@ final class NutritionPlanControllerTest extends TestCase
         $this->actingAs($me->user)
             ->put(route('patients.nutrition.update', [$admission->patient, $nutritionPlan]), [
                 'ingredients' => [[
-                    'unit_id' => 1
+                    'unit_id' => 1,
                 ],
-            ]])
+                ]])
             ->assertInvalid([
                 'ingredients.0.quantity' => 'The ingredients.0.quantity field is required.',
                 'ingredients.0.ingredient' => 'The ingredients.0.ingredient field is required.',
@@ -254,8 +254,8 @@ final class NutritionPlanControllerTest extends TestCase
                     'id' => $nutritionPlanIngredient->id,
                     'quantity' => 1,
                     'unit_id' => $ingredientUnitId,
-                    'ingredient' => 'zap'
-                ]]
+                    'ingredient' => 'zap',
+                ]],
             ])
             ->assertRedirect(route('dashboard'));
 
@@ -275,7 +275,7 @@ final class NutritionPlanControllerTest extends TestCase
             'nutrition_plan_id' => $nutritionPlan->id,
             'quantity' => 1,
             'unit_id' => $ingredientUnitId,
-            'ingredient' => 'zap'
+            'ingredient' => 'zap',
         ]);
     }
 
@@ -304,7 +304,7 @@ final class NutritionPlanControllerTest extends TestCase
             ->put(route('patients.nutrition.update', [$admission->patient, $nutritionPlan]), [
                 'started_at' => '2022-06-30',
                 'frequency_unit_id' => $frequencyId,
-                'ingredients' => []
+                'ingredients' => [],
             ])
             ->assertRedirect(route('dashboard'));
 

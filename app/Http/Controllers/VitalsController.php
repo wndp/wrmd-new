@@ -20,8 +20,8 @@ class VitalsController extends Controller
             'recorded_at.date' => 'The date is not a valid date.',
         ]);
 
-        $exam = new Exam();
-        $lab = new Lab();
+        $exam = new Exam;
+        $lab = new Lab;
 
         if ($request->hasAny(['weight', 'temperature', 'attitude'])) {
             $exam->fill([
@@ -37,7 +37,7 @@ class VitalsController extends Controller
 
             $exam->patient_id = $patient->id;
             $exam->save();
-        };
+        }
 
         if ($request->hasAny(['pcv', 'tp'])) {
             $lab->fill([

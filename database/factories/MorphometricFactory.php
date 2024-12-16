@@ -19,7 +19,7 @@ class MorphometricFactory extends Factory
     {
         return [
             'patient_id' => Patient::factory(),
-            'measured_at' => $this->faker->dateTimeBetween('1 days', '90 days')->format('Y-m-d')
+            'measured_at' => $this->faker->dateTimeBetween('1 days', '90 days')->format('Y-m-d'),
         ];
     }
 }

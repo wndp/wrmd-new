@@ -29,7 +29,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->alias([
-            'pro' => \App\Http\Middleware\EnsureTeamIsOnProPlan::class
+            'pro' => \App\Http\Middleware\EnsureTeamIsOnProPlan::class,
         ]);
 
         $middleware->encryptCookies(except: [

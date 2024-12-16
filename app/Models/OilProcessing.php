@@ -3,15 +3,12 @@
 namespace App\Models;
 
 use App\Concerns\LocksPatient;
-use App\Concerns\QueriesDateRange;
 use App\Concerns\ValidatesOwnership;
 use App\Notifications\NotifyOwcnOfIoa;
-use App\Support\Timezone;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -20,9 +17,9 @@ class OilProcessing extends Model
 {
     use HasFactory;
     use HasVersion7Uuids;
-    use SoftDeletes;
-    use LogsActivity;
     use LocksPatient;
+    use LogsActivity;
+    use SoftDeletes;
     use ValidatesOwnership;
 
     protected $fillable = [
@@ -92,6 +89,7 @@ class OilProcessing extends Model
             if (is_null($this->time_collected_at)) {
                 return $this->date_collected_at?->toFormattedDayDateString();
             }
+
             return $this->date_collected_at?->setTimeFromTimeString($this->time_collected_at);
         });
     }
@@ -102,6 +100,7 @@ class OilProcessing extends Model
             if (is_null($this->time_received_at_primary_care_at)) {
                 return $this->date_received_at_primary_care_at?->toFormattedDayDateString();
             }
+
             return $this->date_received_at_primary_care_at?->setTimeFromTimeString($this->time_received_at_primary_care_at);
         });
     }
@@ -112,6 +111,7 @@ class OilProcessing extends Model
             if (is_null($this->time_processed_at)) {
                 return $this->date_processed_at?->toFormattedDayDateString();
             }
+
             return $this->date_processed_at?->setTimeFromTimeString($this->time_processed_at);
         });
     }

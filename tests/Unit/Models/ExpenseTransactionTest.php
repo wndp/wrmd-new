@@ -10,14 +10,13 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\AssistsWithAuthentication;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 
 final class ExpenseTransactionTest extends TestCase
 {
-    use RefreshDatabase;
     use Assertions;
+    use RefreshDatabase;
 
     #[Test]
     public function aTransactionBelongsToAPatient(): void

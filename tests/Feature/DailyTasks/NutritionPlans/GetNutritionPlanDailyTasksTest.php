@@ -3,12 +3,10 @@
 namespace Tests\Feature\DailyTasks\NutritionPlans;
 
 use App\Actions\GetNutritionPlanDailyTasks;
-use App\Actions\GetRecheckDailyTasks;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
 use App\Enums\SettingKey;
 use App\Models\NutritionPlan;
-use App\Models\Recheck;
 use App\Support\DailyTasksFilters;
 use App\Support\Wrmd;
 use Carbon\Carbon;
@@ -25,8 +23,8 @@ final class GetNutritionPlanDailyTasksTest extends TestCase
 {
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     #[Test]
     public function nothingIsReturnedIfNutritionPlansAreNotIncluded(): void
@@ -61,7 +59,7 @@ final class GetNutritionPlanDailyTasksTest extends TestCase
         ]);
 
         $result = GetNutritionPlanDailyTasks::handle(
-            new DailyTasksFilters(),
+            new DailyTasksFilters,
             [$admission->patient_id]
         );
 

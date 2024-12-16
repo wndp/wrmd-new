@@ -2,18 +2,12 @@
 
 namespace App\Http\Controllers\Labs;
 
-use App\Enums\AttributeOptionName;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LabUrinalysisResultRequest;
-use App\Models\AttributeOption;
-use App\Models\LabUrinalysisResult;
 use App\Models\LabReport;
+use App\Models\LabUrinalysisResult;
 use App\Models\Patient;
-use App\Repositories\OptionsStore;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class LabUrinalysisResultsController extends Controller
 {

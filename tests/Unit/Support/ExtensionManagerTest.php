@@ -5,10 +5,7 @@ namespace Tests\Unit\Support;
 use App\Enums\Extension;
 use App\Models\Team;
 use App\Support\ExtensionManager;
-use DirectoryIterator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -16,8 +13,8 @@ use Tests\Traits\AssistsWithExtensions;
 
 final class ExtensionManagerTest extends TestCase
 {
-    use RefreshDatabase;
     use AssistsWithExtensions;
+    use RefreshDatabase;
 
     #[Test]
     public function itGetsTheActivatedExtensions(): void
@@ -65,7 +62,7 @@ final class ExtensionManagerTest extends TestCase
             [
                 Extension::ATTACHMENTS,
                 Extension::BANDING_MORPHOMETRICS,
-                Extension::OIL_SPILL_PROCESSING
+                Extension::OIL_SPILL_PROCESSING,
             ],
             $result->pluck('extension')->sortBy('value')->values()->toArray()
         );

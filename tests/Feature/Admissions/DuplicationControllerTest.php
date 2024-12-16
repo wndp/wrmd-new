@@ -17,10 +17,11 @@ final class DuplicationControllerTest extends TestCase
 {
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     private $me;
+
     private $pendingDispositionUiBehavior;
 
     protected function setUp(): void
@@ -109,7 +110,7 @@ final class DuplicationControllerTest extends TestCase
 
         $admission = $this->createCase($this->me->team, date('Y'), [
             'common_name' => 'finch',
-            'disposition_id' => $this->pendingDispositionUiBehavior->attribute_option_id
+            'disposition_id' => $this->pendingDispositionUiBehavior->attribute_option_id,
         ]);
 
         $this->actingAs($this->me->user)->post(route('patients.duplicate.store', $admission->patient), [
@@ -143,7 +144,7 @@ final class DuplicationControllerTest extends TestCase
             'subdivision_found' => 'CA',
             'found_at' => date('Y').'-04-24',
             'reason_for_admission' => 'sick',
-            'disposition_id' => $this->pendingDispositionUiBehavior->attribute_option_id
+            'disposition_id' => $this->pendingDispositionUiBehavior->attribute_option_id,
         ]);
     }
 
@@ -157,7 +158,7 @@ final class DuplicationControllerTest extends TestCase
 
         $admission = $this->createCase($this->me->team, $lastYear, [
             'common_name' => 'finch',
-            'disposition_id' => $this->pendingDispositionUiBehavior->attribute_option_id
+            'disposition_id' => $this->pendingDispositionUiBehavior->attribute_option_id,
         ]);
 
         $this->actingAs($this->me->user)->post(route('patients.duplicate.store', $admission->patient), [
@@ -172,7 +173,7 @@ final class DuplicationControllerTest extends TestCase
             'subdivision_found' => 'CA',
             'found_at' => $lastYear.'-04-24',
             'reason_for_admission' => 'sick',
-            'disposition_id' => $this->pendingDispositionUiBehavior->attribute_option_id
+            'disposition_id' => $this->pendingDispositionUiBehavior->attribute_option_id,
         ])
             ->assertRedirect('patients/initial?y='.$thisYear.'&c=1');
 

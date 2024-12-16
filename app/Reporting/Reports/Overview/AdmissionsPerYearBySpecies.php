@@ -41,8 +41,8 @@ class AdmissionsPerYearBySpecies extends Report
     public function filters(): Collection
     {
         return collect([
-            new IncludedTaxonomies(),
-            new SpeciesGrouping(),
+            new IncludedTaxonomies,
+            new SpeciesGrouping,
         ]);
     }
 

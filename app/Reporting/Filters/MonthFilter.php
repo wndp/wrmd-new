@@ -23,9 +23,7 @@ class MonthFilter extends Filter
      *
      * @param  mixed  $value
      */
-    public function apply(Fluent $request, Builder $query, $value): Builder
-    {
-    }
+    public function apply(Fluent $request, Builder $query, $value): Builder {}
 
     public function name(): string
     {

@@ -21,7 +21,7 @@ class DateFrom extends DateFilter
      */
     public function default(): string
     {
-        return (new Carbon())->firstOfYear()->format('Y-m-d');
+        return (new Carbon)->firstOfYear()->format('Y-m-d');
     }
 
     /**

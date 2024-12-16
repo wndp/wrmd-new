@@ -16,8 +16,8 @@ final class PastDueTasksControllerTest extends TestCase
 {
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesTeamUser;
+    use RefreshDatabase;
 
     #[Test]
     public function unAuthenticatedUsersCantAccessPastDueDailyTasksPage(): void

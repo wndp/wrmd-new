@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePatientRequest;
 use App\Actions\AdmitPatient;
 use App\Caches\QueryCache;
 use App\Enums\AttributeOptionName;
-use App\Extensions\ExtensionNavigation;
+use App\Http\Requests\StorePatientRequest;
 use App\Jobs\AssociatePatientToIncident;
 use App\Jobs\SaveAdmissionDonation;
 use App\Listing\FacilitatesListing;
@@ -50,7 +49,7 @@ class PatientsController extends Controller
     public function create(Request $request)
     {
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             'actionsAfterStore' => Options::arrayToSelectable([
                 'return' => __('I want to admit another patient'),
                 'view' => __("I want to view this patient's record"),
@@ -63,7 +62,7 @@ class PatientsController extends Controller
                 AttributeOptionName::TAXA_MORPHS->value,
                 AttributeOptionName::PERSON_ENTITY_TYPES->value,
                 AttributeOptionName::DONATION_METHODS->value,
-            ])
+            ]),
         ]);
 
         if ($request->filled('incident')) {

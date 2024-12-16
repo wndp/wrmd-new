@@ -23,7 +23,7 @@ class DuplicationController extends Controller
         $admission = $this->loadAdmissionAndSharePagination();
 
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             'availableYears' => Options::arrayToSelectable(
                 AdmitPatient::availableYears(Auth::user()->currentTeam)->toArray()
             ),

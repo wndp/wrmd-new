@@ -41,13 +41,13 @@ class OilSpillEvent extends Team
                 ->where('key', SettingKey::OSPR_SPILL_ID->value)
                 ->where('value', 'like', json_encode('SPILL-%'));
         })
-        ->get();
+            ->get();
     }
 
     /**
      * Get an array of unused spill IDs.
      *
-     * @param  bool $preserveCurrentAccount
+     * @param  bool  $preserveCurrentAccount
      * @return array
      */
     public static function filterAvailableSpillIds($preserveCurrentAccount = false)

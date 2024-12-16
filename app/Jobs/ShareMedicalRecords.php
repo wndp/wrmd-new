@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Jobs\RecordSharedCases;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;

@@ -2,9 +2,9 @@
 
 namespace App\Analytics\Charts;
 
-use App\Models\Admission;
 use App\Analytics\Concerns\HandleSeriesNames;
 use App\Analytics\Contracts\Chart;
+use App\Models\Admission;
 use Illuminate\Support\Collection;
 
 class PatientsByBiologicalGroup extends Chart
@@ -54,7 +54,7 @@ class PatientsByBiologicalGroup extends Chart
         }
 
         $this->series->addPieSeriesData($data)
-            ->addPieSeriesData($compareData ?? new Collection());
+            ->addPieSeriesData($compareData ?? new Collection);
     }
 
     public function query($segment)

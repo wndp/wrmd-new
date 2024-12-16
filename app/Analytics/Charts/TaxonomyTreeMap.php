@@ -2,9 +2,9 @@
 
 namespace App\Analytics\Charts;
 
-use App\Models\Admission;
 use App\Analytics\Contracts\Chart;
 use App\Analytics\Series;
+use App\Models\Admission;
 
 class TaxonomyTreeMap extends Chart
 {
@@ -15,7 +15,7 @@ class TaxonomyTreeMap extends Chart
     {
         $segment = $this->filters->segments[0];
 
-        $this->series = (new Series())
+        $this->series = (new Series)
             ->usingCategories(['class', 'order', 'family', 'genus', 'species'])
             ->addTreeMapSeriesData($this->query($segment));
     }

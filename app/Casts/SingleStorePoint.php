@@ -2,13 +2,12 @@
 
 namespace App\Casts;
 
+use geoPHP;
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Contracts\Database\Query\Expression as ExpressionContract;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Point as geoPHPPoint;
-use geoPHP;
 
 class SingleStorePoint implements Castable
 {
@@ -20,7 +19,8 @@ class SingleStorePoint implements Castable
 
     public static function castUsing(array $arguments): CastsAttributes
     {
-        return new class (static::class) implements CastsAttributes {
+        return new class(static::class) implements CastsAttributes
+        {
             public function __construct(private $point)
             {
                 $this->point = $point;

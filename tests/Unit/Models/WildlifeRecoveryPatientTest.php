@@ -15,14 +15,14 @@ use Tests\Traits\Assertions;
 #[Group('oil')]
 final class WildlifeRecoveryPatientTest extends TestCase
 {
-    use RefreshDatabase;
     use Assertions;
+    use RefreshDatabase;
 
     #[Test]
     public function aWildlifeRecoveryPatientBelongsToAPatient(): void
     {
         $this->assertInstanceOf(Patient::class, WildlifeRecoveryPatient::factory()->create([
-            'patient_id' => Patient::factory()
+            'patient_id' => Patient::factory(),
         ])->patient);
     }
 

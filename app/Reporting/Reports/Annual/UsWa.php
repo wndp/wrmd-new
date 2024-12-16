@@ -86,7 +86,7 @@ class UsWa extends AnnualReport
     private function threatened(): Collection
     {
         // Excluding bald eagles and falcons
-        return new \Illuminate\Support\Collection();
+        return new \Illuminate\Support\Collection;
     }
 
     /**
@@ -95,7 +95,7 @@ class UsWa extends AnnualReport
     private function education(): Collection
     {
         // No way to know if animal was transfered into "your possession for education".
-        return new \Illuminate\Support\Collection();
+        return new \Illuminate\Support\Collection;
     }
 
     /**
@@ -103,6 +103,6 @@ class UsWa extends AnnualReport
      */
     private function nonReleasable(): Collection
     {
-        return new \Illuminate\Support\Collection();
+        return new \Illuminate\Support\Collection;
     }
 }

@@ -67,7 +67,7 @@ class PeopleRepository
     /**
      * Base query from which all other queries build off of.
      */
-    private static function baseQuery(Team $team, string $search = null): Builder
+    private static function baseQuery(Team $team, ?string $search = null): Builder
     {
         return Person::where('team_id', $team->id)
             ->whereRaw("concat(coalesce(`organization`, ''), coalesce(`first_name`, ''), coalesce(`last_name`, '')) != ''")

@@ -29,7 +29,7 @@ class AccountsController extends Controller
     public function index(Request $request)
     {
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             'accountStatusOptions' => Options::enumsToSelectable(AccountStatus::cases()),
         ]);
 
@@ -64,7 +64,7 @@ class AccountsController extends Controller
             ->through(fn ($team) => [
                 ...$team->toArray(),
                 'status_for_humans' => $team->status->label(),
-                'locale' => $team->formatted_inline_address
+                'locale' => $team->formatted_inline_address,
             ]);
 
         if ($teams->total() === 1) {
@@ -141,7 +141,7 @@ class AccountsController extends Controller
         $team->load('masterAccount');
 
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             'accountStatusOptions' => Options::enumsToSelectable(AccountStatus::cases()),
             'subdivisionOptions' => Options::arrayToSelectable($locale->countrySubdivisions()),
             'timezoneOptions' => Options::arrayToSelectable($locale->countryTimeZones()),
@@ -199,7 +199,7 @@ class AccountsController extends Controller
         $request->validate([
             'name' => 'required|in:'.Str::slug($team->name),
             'password' => ['required', 'confirmed', 'current_password'],
-            'status' => 'required|in:'.AccountStatus::SUSPENDED->value
+            'status' => 'required|in:'.AccountStatus::SUSPENDED->value,
         ], [
             'name.in' => 'The provided organization name does not match the displayed account organization name.',
             'status.in' => 'The account status must be '.AccountStatus::SUSPENDED->label().' before it can be deleted.',

@@ -8,7 +8,6 @@ use App\Models\NutritionPlan;
 use App\Models\NutritionPlanIngredient;
 use App\Models\Patient;
 use App\Services\RequestRecordsSaver;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 

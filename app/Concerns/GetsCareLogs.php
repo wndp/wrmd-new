@@ -24,7 +24,7 @@ trait GetsCareLogs
         $records[] = CareLog::where('patient_id', $patient->id)->with([
             'user',
             'weightUnit',
-            'temperatureUnit'
+            'temperatureUnit',
         ])->get();
         $records[] = PatientLocation::where('patient_id', $patient->id)->get();
         $records[] = Exam::where('patient_id', $patient->id)->get();

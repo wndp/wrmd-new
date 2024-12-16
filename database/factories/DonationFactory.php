@@ -20,7 +20,7 @@ class DonationFactory extends Factory
         return [
             'person_id' => Person::factory(),
             'donated_at' => $this->faker->dateTimeBetween('1 days', '90 days')->format('Y-m-d'),
-            'value' => $this->faker->randomNumber(5, false)
+            'value' => $this->faker->randomNumber(5, false),
         ];
     }
 }

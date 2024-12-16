@@ -19,8 +19,7 @@ class MisidentifiedController extends Controller
             ->whereMisidentified()
             ->when(
                 $request->input('common_name'),
-                fn ($query, $commonName) =>
-                $query->where('common_name', 'like', "%{$commonName}%")
+                fn ($query, $commonName) => $query->where('common_name', 'like', "%{$commonName}%")
             )
             ->orderBy('common_name')
             ->with('patient', 'account')

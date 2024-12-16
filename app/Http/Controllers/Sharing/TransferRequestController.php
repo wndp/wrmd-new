@@ -34,7 +34,7 @@ class TransferRequestController extends Controller
                 ->orderByDistanceSphere('coordinates', $team->coordinates)
                 ->get()
                 ->pluck('name', 'id')
-            : new Collection();
+            : new Collection;
 
         $farthest = Team::where('status', AccountStatus::ACTIVE->value)
             ->where('id', '!=', $team->id)

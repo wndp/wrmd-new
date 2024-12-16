@@ -23,8 +23,8 @@ final class IncidentImporterTest extends TestCase
 {
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     #[Test]
     public function itImportsASpreadsheetOfNewHotlineIncidentData(): void
@@ -79,11 +79,11 @@ final class IncidentImporterTest extends TestCase
                 'translatedValues' => [
                     'incidents.incident_status_id' => [
                         'Resolved' => $hotlineStatusIsResolvedId,
-                        'Open' => $hotlineStatusIsOpenId
+                        'Open' => $hotlineStatusIsOpenId,
                     ],
                     'incidents.category_id' => [
                         'Window Strike' => $hotlineWildlifeCategoryIsInjuredId,
-                        'Unknown Wing Injury' => $hotlineWildlifeCategoryIsInjuredId
+                        'Unknown Wing Injury' => $hotlineWildlifeCategoryIsInjuredId,
                     ],
                     'incidents.incident_subdivision' => ['Wyoming' => 'US-WY'],
                 ],

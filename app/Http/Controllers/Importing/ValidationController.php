@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Importing;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class ValidationController extends Controller
 {
@@ -20,7 +19,7 @@ class ValidationController extends Controller
         ]);
 
         $validator = 'App\Domain\Importing\Validators\Validate'.ucfirst($data['rule']);
-        $validator = new $validator();
+        $validator = new $validator;
 
         return response()->json([
             'success' => $validator->validate(

@@ -68,7 +68,7 @@ class AnnualReports
     /**
      * Get the annual reports for the requested locale.
      */
-    public static function byLocale(Account $account, string $subdivision = null): array
+    public static function byLocale(Account $account, ?string $subdivision = null): array
     {
         switch (static::iso3166($account->country, $subdivision)) {
             case 'BZ':
@@ -298,7 +298,7 @@ class AnnualReports
      * https://en.wikipedia.org/wiki/ISO_3166-1
      * https://en.wikipedia.org/wiki/ISO_3166-2.
      */
-    private static function iso3166(string $country, string $subdivision = null): string
+    private static function iso3166(string $country, ?string $subdivision = null): string
     {
         return strtoupper(
             implode('-', array_filter(

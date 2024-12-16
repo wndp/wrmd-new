@@ -25,7 +25,7 @@ class SelectedPatientsList extends LiveList
     public function data(): Collection
     {
         if (PatientSelector::count() === 0) {
-            return new Collection();
+            return new Collection;
         }
 
         return ListingQuery::run()

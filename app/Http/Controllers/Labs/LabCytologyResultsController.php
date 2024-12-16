@@ -2,18 +2,12 @@
 
 namespace App\Http\Controllers\Labs;
 
-use App\Enums\AttributeOptionName;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LabCytologyResultRequest;
-use App\Models\AttributeOption;
 use App\Models\LabCytologyResult;
 use App\Models\LabReport;
 use App\Models\Patient;
-use App\Repositories\OptionsStore;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class LabCytologyResultsController extends Controller
 {
@@ -22,7 +16,7 @@ class LabCytologyResultsController extends Controller
         $patient->validateOwnership(Auth::user()->current_team_id);
 
         $labCytologyResult = LabCytologyResult::create([
-            'source' => $request->input('source')
+            'source' => $request->input('source'),
         ]);
 
         $labReport = new LabReport([
@@ -47,7 +41,7 @@ class LabCytologyResultsController extends Controller
             ->validateRelationshipWithPatient($patient);
 
         $labResult->update([
-            'source' => $request->input('source')
+            'source' => $request->input('source'),
         ]);
 
         $labResult->labReport->update([

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Settings;
 
 use App\Enums\Role;
 use App\Enums\SettingKey;
-use App\Events\AccountUpdated;
 use App\Events\TeamUpdated;
 use App\Http\Controllers\Controller;
 use App\Options\Options;
@@ -24,7 +23,7 @@ class SecurityController extends Controller
     public function edit(Request $request): Response
     {
         OptionsStore::add([
-            'roles' => Options::enumsToSelectable(Role::publicRoles())
+            'roles' => Options::enumsToSelectable(Role::publicRoles()),
         ]);
 
         $ipAddress = $request->ip();

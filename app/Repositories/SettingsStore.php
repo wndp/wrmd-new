@@ -47,7 +47,6 @@ class SettingsStore implements IteratorAggregate, JsonSerializable
     /**
      * Create and persist a new setting.
      *
-     * @param  SettingKey|array  $key
      * @param  mixed  $value
      */
     public function set(SettingKey|array $key, $value = null)
@@ -118,7 +117,7 @@ class SettingsStore implements IteratorAggregate, JsonSerializable
     {
         return ! in_array($key->value, [
             SettingKey::TIMEZONE->value,
-            SettingKey::LANGUAGE->value
+            SettingKey::LANGUAGE->value,
         ]);
     }
 

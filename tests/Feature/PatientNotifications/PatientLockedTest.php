@@ -3,14 +3,11 @@
 namespace Tests\Feature\PatientNotifications;
 
 use App\Events\NotifyPatient;
-use App\Jobs\PatientNotifications\FrozenPatient;
 use App\Jobs\PatientNotifications\PatientLocked;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\AssistsWithAuthentication;
-use Tests\Support\AssistsWithCases;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;

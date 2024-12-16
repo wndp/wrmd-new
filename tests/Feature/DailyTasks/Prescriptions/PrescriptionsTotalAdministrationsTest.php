@@ -15,8 +15,8 @@ use Tests\Traits\CreatesUiBehavior;
 #[Group('daily-tasks')]
 final class PrescriptionsTotalAdministrationsTest extends TestCase
 {
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     #[Test]
     public function an_open_sid_prescription_knows_how_many_total_administrations_it_is(): void

@@ -20,7 +20,7 @@ class VeterinarianFactory extends Factory
         return [
             'team_id' => Team::factory()->createQuietly(),
             'name' => $this->faker->name(),
-            'license' => $this->faker->word()
+            'license' => $this->faker->word(),
         ];
     }
 }

@@ -27,7 +27,7 @@ trait AsAction
      */
     public static function runIf($boolean, ...$arguments)
     {
-        return $boolean ? static::run(...$arguments) : new Fluent();
+        return $boolean ? static::run(...$arguments) : new Fluent;
     }
 
     /**

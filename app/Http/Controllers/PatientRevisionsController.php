@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class PatientRevisionsController extends Controller
 {
     /**
@@ -56,7 +54,7 @@ class PatientRevisionsController extends Controller
     {
         $admission = $this->loadAdmissionAndSharePagination();
 
-        abort_unless($this->belongsToAdmission($revision, $admission), new RecordNotOwnedResponse());
+        abort_unless($this->belongsToAdmission($revision, $admission), new RecordNotOwnedResponse);
 
         $revision->append('diff', 'updated_attributes');
 

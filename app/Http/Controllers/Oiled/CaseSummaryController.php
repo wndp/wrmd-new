@@ -29,7 +29,7 @@ class CaseSummaryController extends Controller
                 AttributeOptionName::EXAM_WEIGHT_UNITS->value,
                 AttributeOptionName::EXAM_TEMPERATURE_UNITS->value,
                 AttributeOptionName::EXAM_ATTITUDES->value,
-            ])
+            ]),
         ]);
 
         return Inertia::render('Oiled/CaseSummary', [

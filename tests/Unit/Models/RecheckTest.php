@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Models;
 
-use App\Concerns\GetsCareLogs;
 use App\Models\Patient;
 use App\Models\Recheck;
 use App\Schedulable;
@@ -10,7 +9,6 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\AssistsWithAuthentication;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreatesTeamUser;

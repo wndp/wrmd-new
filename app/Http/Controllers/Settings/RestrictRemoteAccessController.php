@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Settings;
 
-use App\Events\AccountUpdated;
 use App\Events\TeamUpdated;
 use App\Http\Controllers\Controller;
 use App\Support\Wrmd;

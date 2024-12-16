@@ -17,9 +17,9 @@ use Spatie\MediaLibrary\Support\UrlGenerator\UrlGeneratorFactory;
 
 class Media extends BaseMedia
 {
-    use LogsActivity;
-    use LocksPatient;
     use HasFactory;
+    use LocksPatient;
+    use LogsActivity;
 
     public $incrementing = false;
 
@@ -137,7 +137,7 @@ class Media extends BaseMedia
          */
 
         if (App::environment('local')) {
-            $url = str_replace('9000/', '9000/' . Config::get('filesystems.disks.s3.bucket') . '/', $url);
+            $url = str_replace('9000/', '9000/'.Config::get('filesystems.disks.s3.bucket').'/', $url);
         }
 
         return $url;

@@ -40,7 +40,7 @@ trait AssistWithRolesAndAbilities
     /**
      * Get the user's role on a given team.
      */
-    public function roleOn(Team $team): Role|null
+    public function roleOn(Team $team): ?Role
     {
         return $this->allRoles->firstWhere('pivot.scope', $team->id);
 

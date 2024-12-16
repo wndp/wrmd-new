@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\DailyTasks;
 
 use App\Concerns\GetSchedulableFromResource;
-use App\Enums\DailyTaskSchedulable;
 use App\Events\DailyTaskCompleted;
 use App\Http\Controllers\Controller;
 use App\Support\Timezone;
-use App\Support\Wrmd;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -40,7 +38,7 @@ class RecordedDailyTaskListController extends Controller
         ], [
             'user_id' => Auth::id(),
             'summary' => $schedualableModel->summary_body,
-            'completed_at' => Timezone::convertFromLocalToUtc($data['completed_at'])
+            'completed_at' => Timezone::convertFromLocalToUtc($data['completed_at']),
         ]);
 
         //event(new DailyTaskCompleted($schedualableModel, $check));

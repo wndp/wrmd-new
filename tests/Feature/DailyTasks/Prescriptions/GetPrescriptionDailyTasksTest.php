@@ -7,7 +7,6 @@ use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
 use App\Enums\SettingKey;
 use App\Models\Prescription;
-use App\Models\Recheck;
 use App\Support\DailyTasksFilters;
 use App\Support\Wrmd;
 use Carbon\Carbon;
@@ -24,8 +23,8 @@ final class GetPrescriptionDailyTasksTest extends TestCase
 {
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     #[Test]
     public function nothingIsReturnedIfPrescriptionAreNotIncluded(): void
@@ -60,7 +59,7 @@ final class GetPrescriptionDailyTasksTest extends TestCase
         ]);
 
         $result = GetPrescriptionDailyTasks::handle(
-            new DailyTasksFilters(),
+            new DailyTasksFilters,
             [$admission->patient_id]
         );
 

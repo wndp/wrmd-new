@@ -9,7 +9,6 @@ use App\Enums\AccountStatus;
 use App\Enums\Extension;
 use App\Enums\Role;
 use App\Enums\SettingKey;
-use App\Models\Setting;
 use App\Models\Team;
 use App\Models\User;
 use App\Support\ExtensionManager;
@@ -17,14 +16,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Laravel\Jetstream\Contracts\AddsTeamMembers;
 
 class RegisterSubAccount
 {
     use AsAction;
 
     protected $user;
+
     protected $request;
+
     protected $masterAccount;
 
     public function handle(User $user, Request $request)
@@ -98,7 +98,7 @@ class RegisterSubAccount
         } else {
             $subAccountSettings->set([
                 SettingKey::TIMEZONE->value => $masterAccountSettings->get(SettingKey::TIMEZONE, 'America/Los_Angeles'),
-                SettingKey::LANGUAGE->value => $masterAccountSettings->get(SettingKey::LANGUAGE, 'en')
+                SettingKey::LANGUAGE->value => $masterAccountSettings->get(SettingKey::LANGUAGE, 'en'),
             ]);
         }
     }

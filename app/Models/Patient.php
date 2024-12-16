@@ -12,9 +12,6 @@ use App\Concerns\QueriesDateRange;
 use App\Concerns\ValidatesOwnership;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
-use App\Models\Incident;
-use App\Models\LabUrinalysisResult;
-use App\Models\OilWash;
 use App\Models\Scopes\VoidedScope;
 use App\Support\Timezone;
 use Carbon\Carbon;
@@ -37,15 +34,16 @@ class Patient extends Model implements HasMedia
 {
     use HasFactory;
     use HasSpatial;
-    use ValidatesOwnership;
-    use QueriesDateRange;
     use HasVersion7Uuids;
     use InteractsWithMedia;
-    use LogsActivity;
-    use LocksPatient;
     use JoinsTablesToPatients;
+    use LocksPatient;
+    use LogsActivity;
+    use QueriesDateRange;
+    use ValidatesOwnership;
 
     public $incrementing = false;
+
     protected $keyType = 'string';
 
     /**
@@ -53,7 +51,7 @@ class Patient extends Model implements HasMedia
      */
     protected static function booted(): void
     {
-        static::addGlobalScope(new VoidedScope());
+        static::addGlobalScope(new VoidedScope);
     }
 
     protected $fillable = [
@@ -339,6 +337,7 @@ class Patient extends Model implements HasMedia
             if (is_null($this->time_admitted_at)) {
                 return $this->date_admitted_at->toFormattedDayDateString();
             }
+
             return $this->date_admitted_at->setTimeFromTimeString($this->time_admitted_at);
         });
     }
@@ -410,7 +409,7 @@ class Patient extends Model implements HasMedia
 
     public function isUnrecognized(): bool
     {
-        return is_null($this->locked_at) && !Str::contains($this->common_name, ['Void', 'UNBI', 'Unidentified', 'Unknown'], true);
+        return is_null($this->locked_at) && ! Str::contains($this->common_name, ['Void', 'UNBI', 'Unidentified', 'Unknown'], true);
     }
 
     protected function daysInCare(): Attribute

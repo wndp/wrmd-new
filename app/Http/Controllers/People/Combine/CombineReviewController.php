@@ -21,10 +21,10 @@ class CombineReviewController extends Controller
         $person->validateOwnership(Auth::user()->current_team_id);
 
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::PERSON_ENTITY_TYPES->value,
-            ])
+            ]),
         ]);
 
         $request->validate([

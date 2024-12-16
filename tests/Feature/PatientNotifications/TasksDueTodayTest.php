@@ -19,8 +19,8 @@ final class TasksDueTodayTest extends TestCase
 {
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     #[Test]
     public function itNotifiesIfThePatientHasTasksDueToday(): void

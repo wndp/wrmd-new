@@ -14,12 +14,11 @@ class AccountsMasterAccountController extends Controller
     public function __invoke(Team $team, Request $request)
     {
         $team->update([
-            'master_account_id' => $request->master_account_id
+            'master_account_id' => $request->master_account_id,
         ]);
 
         return back()
             ->with('notification.heading', 'Success!')
-            ->with('notification.text', "Master account updated");
+            ->with('notification.text', 'Master account updated');
     }
 }
-

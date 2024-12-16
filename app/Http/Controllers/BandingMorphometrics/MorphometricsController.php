@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveBandingMorphometricsRequest;
 use App\Models\Morphometric;
 use App\Models\Patient;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class MorphometricsController extends Controller
 {

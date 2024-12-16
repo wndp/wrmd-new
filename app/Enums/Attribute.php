@@ -148,7 +148,7 @@ enum Attribute: string
                 AttributeOptionName::HOTLINE_ADMINISTRATIVE_CATEGORIES,
                 AttributeOptionName::HOTLINE_OTHER_CATEGORIES,
             ]),
-            self::INCIDENT_SUBDIVISION => new AttributeOptionsCollection(),
+            self::INCIDENT_SUBDIVISION => new AttributeOptionsCollection,
             self::PATIENT_LOCATIONS_FACILITY_ID => AttributeOption::getDropdownOptions(AttributeOptionName::PATIENT_LOCATION_FACILITIES),
             self::PATIENTS_DISPOSITION_ID => AttributeOption::getDropdownOptions(AttributeOptionName::PATIENT_DISPOSITIONS),
             self::EXAMS_SEX_ID => AttributeOption::getDropdownOptions(AttributeOptionName::EXAM_SEXES),

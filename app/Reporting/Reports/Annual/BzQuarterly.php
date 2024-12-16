@@ -61,7 +61,7 @@ class BzQuarterly extends AnnualReport implements WithMultipleSheets
     public function filters(): Collection
     {
         return parent::filters()->push(
-            new QuarterYear()
+            new QuarterYear
         );
     }
 

@@ -23,10 +23,11 @@ class Admission extends Model
 {
     use HasFactory;
     use HasVersion7Uuids;
-    use QueriesDateRange;
     use JoinsTablesToPatients;
+    use QueriesDateRange;
 
     public $incrementing = false;
+
     protected $keyType = 'string';
 
     protected $fillable = [
@@ -34,7 +35,7 @@ class Admission extends Model
         'case_year',
         'case_id',
         'patient_id',
-        'hash'
+        'hash',
     ];
 
     protected $casts = [
@@ -96,7 +97,7 @@ class Admission extends Model
     {
         $query->joinPatients();
 
-        return (new Patient())->scopeWhereUnrecognized($query);
+        return (new Patient)->scopeWhereUnrecognized($query);
     }
 
     /**
@@ -106,7 +107,7 @@ class Admission extends Model
     {
         $query->joinPatients();
 
-        return (new Patient())->scopeWhereMisidentified($query);
+        return (new Patient)->scopeWhereMisidentified($query);
     }
 
     public static function custody(Team $team, Patient $patient): ?self
@@ -125,7 +126,7 @@ class Admission extends Model
     {
         return static::where([
             'team_id' => $teamId,
-            'case_year' => $caseYear
+            'case_year' => $caseYear,
         ])->count();
     }
 
@@ -144,15 +145,12 @@ class Admission extends Model
             ->joinPatients()
             ->whereDate('date_admitted_at', '<=', $date->format('Y-m-d'))
             ->where(
-                fn ($query) =>
-                $query->where(
-                    fn ($query) =>
-                    $query->whereNull('dispositioned_at')->where('disposition_id', $dispositionPendingId)
+                fn ($query) => $query->where(
+                    fn ($query) => $query->whereNull('dispositioned_at')->where('disposition_id', $dispositionPendingId)
                 )
-                ->orWhere(
-                    fn ($query) =>
-                    $query->whereDate('dispositioned_at', '>=', $date->format('Y-m-d'))->where('disposition_id', '!=', $dispositionPendingId)
-                )
+                    ->orWhere(
+                        fn ($query) => $query->whereDate('dispositioned_at', '>=', $date->format('Y-m-d'))->where('disposition_id', '!=', $dispositionPendingId)
+                    )
             )
             ->orderBy('admissions.case_year')
             ->orderBy('admissions.case_id')

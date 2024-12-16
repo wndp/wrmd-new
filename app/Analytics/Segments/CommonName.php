@@ -11,7 +11,7 @@ class CommonName extends Segment
     {
         $commonName = $this->parameters[0];
 
-        $speciesSearch = (new SpeciesPreciseSearchQuery())($commonName, false);
+        $speciesSearch = (new SpeciesPreciseSearchQuery)($commonName, false);
 
         if ($speciesSearch->isEmpty()) {
             $this->query->where('common_name', $commonName);

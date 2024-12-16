@@ -13,8 +13,8 @@ use Illuminate\Support\Collection;
 
 class DurationRangeAndAverage extends Chart
 {
-    use HandleSeriesNames;
     use HandleChartPeriod;
+    use HandleSeriesNames;
 
     /**
      * {@inheritdoc}
@@ -22,7 +22,7 @@ class DurationRangeAndAverage extends Chart
     public function compute()
     {
         $period = $this->chartPeriod($this->filters);
-        $this->categories = (new Categories())->forTimePeriod($period, $this->filters);
+        $this->categories = (new Categories)->forTimePeriod($period, $this->filters);
 
         $data = $this->query()
             ->aggregateData()
@@ -31,7 +31,7 @@ class DurationRangeAndAverage extends Chart
 
         $this->series->addSeries(
             $this->formatSeriesName(null, 'Average', $this->filters->compare, $this->filters->date_from, $this->filters->date_to),
-            $data->sumSeriesGroup([new AreaRangeCollection(), 'averageFromAggregate']),
+            $data->sumSeriesGroup([new AreaRangeCollection, 'averageFromAggregate']),
             [
                 'zIndex' => 1,
             ]
@@ -39,7 +39,7 @@ class DurationRangeAndAverage extends Chart
 
         $this->series->addSeries(
             $this->formatSeriesName(null, 'Range', $this->filters->compare, $this->filters->date_from, $this->filters->date_to),
-            $data->sumSeriesGroup([new AreaRangeCollection(), 'rangeFromAggregate']),
+            $data->sumSeriesGroup([new AreaRangeCollection, 'rangeFromAggregate']),
             [
                 'type' => 'arearange',
                 'linkedTo' => ':previous',

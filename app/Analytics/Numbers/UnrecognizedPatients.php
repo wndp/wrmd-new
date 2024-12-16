@@ -2,8 +2,8 @@
 
 namespace App\Analytics\Numbers;
 
-use App\Models\Admission;
 use App\Analytics\Contracts\Number;
+use App\Models\Admission;
 
 class UnrecognizedPatients extends Number
 {

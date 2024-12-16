@@ -36,7 +36,7 @@ class PatientMetaController extends Controller
             'voided_at' => $data['is_voided'] ? Carbon::now() : null,
             'is_resident' => $data['is_resident'],
             'is_criminal_activity' => $data['is_criminal_activity'],
-            'keywords' => $data['keywords'] ?? null
+            'keywords' => $data['keywords'] ?? null,
         ]);
 
         event(new PatientUpdated($patient));

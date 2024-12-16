@@ -16,16 +16,17 @@ class LabCytologyResult extends Model implements Badgeable
 {
     /** @use HasFactory<\Database\Factories\LabCytologyResultFactory> */
     use HasFactory;
-    use SoftDeletes;
+
     use HasVersion7Uuids;
     use LogsActivity;
+    use SoftDeletes;
 
     protected $fillable = [
-        'source'
+        'source',
     ];
 
     protected $casts = [
-        'source' => 'string'
+        'source' => 'string',
     ];
 
     public function labReport(): MorphOne

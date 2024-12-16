@@ -31,7 +31,7 @@ class ReportGenerated implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel("device.{$this->uuid}")
+            new PrivateChannel("device.{$this->uuid}"),
         ];
     }
 }

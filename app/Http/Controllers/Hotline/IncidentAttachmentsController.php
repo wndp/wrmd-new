@@ -23,7 +23,7 @@ class IncidentAttachmentsController extends Controller
         ] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             [AttributeOptionName::HOTLINE_STATUSES->value, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_OPEN->value],
             [AttributeOptionName::HOTLINE_STATUSES->value, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_UNRESOLVED->value],
-            [AttributeOptionName::HOTLINE_STATUSES->value, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED->value]
+            [AttributeOptionName::HOTLINE_STATUSES->value, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED->value],
         ]);
 
         $incident->load('status');
@@ -33,7 +33,7 @@ class IncidentAttachmentsController extends Controller
             'media' => fn () => $incident->getMedia(),
             'statusOpenId' => $statusOpenId,
             'statusUnresolvedId' => $statusUnresolvedId,
-            'statusResolvedId' => $statusResolvedId
+            'statusResolvedId' => $statusResolvedId,
         ]);
     }
 }

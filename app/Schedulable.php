@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-interface Schedulable extends Summarizable, Badgeable
+interface Schedulable extends Badgeable, Summarizable
 {
     /**
      * Get the schedulable's "start date".

@@ -4,7 +4,6 @@ namespace Tests\Feature\DailyTasks\Prescriptions;
 
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
-use App\Enums\FormulaType;
 use App\Models\Exam;
 use App\Models\Formula;
 use App\Models\Patient;
@@ -20,8 +19,8 @@ use Tests\Traits\CreatesUiBehavior;
 final class PrescriptionFormulaKgCalculationsTest extends TestCase
 {
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     #[Test]
     public function itCalculatesTheDoseIfAutoCalculateIsFalse(): void
@@ -170,7 +169,7 @@ final class PrescriptionFormulaKgCalculationsTest extends TestCase
         $formula = Formula::factory()->create(['defaults' => [
             'auto_calculate_dose' => true,
             'dosage' => 0.5,
-            'dosage_unit_id' => $dosageUnitIsMlPerKgId
+            'dosage_unit_id' => $dosageUnitIsMlPerKgId,
         ]]);
 
         $results = $formula->calculatedAttributes($patient);

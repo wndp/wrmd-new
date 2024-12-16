@@ -30,7 +30,7 @@ class IncidentCommunicationsController extends Controller
         ] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             [AttributeOptionName::HOTLINE_STATUSES->value, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_OPEN->value],
             [AttributeOptionName::HOTLINE_STATUSES->value, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_UNRESOLVED->value],
-            [AttributeOptionName::HOTLINE_STATUSES->value, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED->value]
+            [AttributeOptionName::HOTLINE_STATUSES->value, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED->value],
         ]);
 
         return Inertia::render('Hotline/Communications', [
@@ -40,12 +40,12 @@ class IncidentCommunicationsController extends Controller
                 'communication_at_for_humans' => Timezone::convertFromUtcToLocal($communication->communication_at)?->toDayDateTimeString(),
                 'communication_at_local' => Timezone::convertFromUtcToLocal($communication->communication_at)?->toDateTimeLocalString(),
                 'communication_for_humans' => implode(' - ', array_filter([
-                    $communication->communication_at_for_humans, $communication->communication_by, $communication->communication
-                ]))
+                    $communication->communication_at_for_humans, $communication->communication_by, $communication->communication,
+                ])),
             ]),
             'statusOpenId' => $statusOpenId,
             'statusUnresolvedId' => $statusUnresolvedId,
-            'statusResolvedId' => $statusResolvedId
+            'statusResolvedId' => $statusResolvedId,
         ]);
     }
 

@@ -43,7 +43,7 @@ return [
     |
     */
 
-    'brand' =>  [
+    'brand' => [
         'logo' => realpath(__DIR__.'/../public/wrmd-logo.svg'),
         'color' => 'bg-green-600',
     ],
@@ -137,5 +137,5 @@ return [
 
     ],
 
-    'terms_url' => '/terms-and-conditions'
+    'terms_url' => '/terms-and-conditions',
 ];

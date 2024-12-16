@@ -37,10 +37,10 @@ class PersonController extends Controller
     public function create()
     {
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::PERSON_ENTITY_TYPES->value,
-            ])
+            ]),
         ]);
 
         return Inertia::render('People/Create');
@@ -64,7 +64,7 @@ class PersonController extends Controller
             'notes' => $request->input('notes'),
             'no_solicitations' => $request->boolean('no_solicitations'),
             'is_volunteer' => $request->boolean('is_volunteer'),
-            'is_member' => $request->boolean('is_member')
+            'is_member' => $request->boolean('is_member'),
         ]);
 
         event(new PersonUpdated($person));
@@ -72,7 +72,7 @@ class PersonController extends Controller
         return redirect()->route('people.edit', $person)
             ->with('notification.heading', __('Success!'))
             ->with('notification.text', __(':name was created.', [
-                'name' => $person->identifier
+                'name' => $person->identifier,
             ]));
     }
 
@@ -82,10 +82,10 @@ class PersonController extends Controller
     public function edit(Person $person)
     {
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::PERSON_ENTITY_TYPES->value,
-            ])
+            ]),
         ]);
 
         $person->validateOwnership(Auth::user()->current_team_id)->append(['is_rescuer', 'is_donor', 'is_reporting_party']);
@@ -115,7 +115,7 @@ class PersonController extends Controller
             'notes' => $request->input('notes'),
             'no_solicitations' => $request->boolean('no_solicitations'),
             'is_volunteer' => $request->boolean('is_volunteer'),
-            'is_member' => $request->boolean('is_member')
+            'is_member' => $request->boolean('is_member'),
         ]);
 
         event(new PersonUpdated($person));

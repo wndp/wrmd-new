@@ -32,7 +32,7 @@ class PatientHealthIndicators extends Chart
             AttributeOptionName::EXAM_ATTITUDES->value,
             AttributeOptionName::EXAM_MUCUS_MEMBRANE_COLORS->value,
             AttributeOptionName::EXAM_MUCUS_MEMBRANE_TEXTURES->value,
-            AttributeOptionName::EXAM_TEMPERATURE_UNITS->value
+            AttributeOptionName::EXAM_TEMPERATURE_UNITS->value,
         ]);
 
         $ages = [];

@@ -2,7 +2,6 @@
 
 namespace App\Support;
 
-use App\Support\Weight;
 use Illuminate\Support\Collection;
 
 class WeightsCollection extends Collection

@@ -7,7 +7,6 @@ use App\Enums\AttributeOptionUiBehavior;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreIncidentRequest;
 use App\Http\Requests\UpdateIncidentRequest;
-use App\Http\Resources\IncidentResource;
 use App\Jobs\GeocodeAddress;
 use App\Models\AttributeOption;
 use App\Models\Communication;
@@ -16,14 +15,10 @@ use App\Models\Person;
 use App\Options\LocaleOptions;
 use App\Repositories\IncidentRepository;
 use App\Repositories\OptionsStore;
-use App\Rules\VerifyAuthPassword;
 use App\Support\Timezone;
-use App\Support\Wrmd;
-use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -53,9 +48,9 @@ class IncidentController extends Controller
                 'suspected_species' => $incident->suspected_species,
                 'is_priority' => $incident->is_priority ? __('Yes') : __('No'),
                 'reporting_party_identifier' => $incident->reporting_party?->identifier,
-                'status' => $incident->status?->value
+                'status' => $incident->status?->value,
             ]),
-            'group' => $group
+            'group' => $group,
         ]);
     }
 
@@ -67,23 +62,23 @@ class IncidentController extends Controller
     public function create(): Response
     {
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::PERSON_ENTITY_TYPES->value,
                 AttributeOptionName::HOTLINE_WILDLIFE_CATEGORIES->value,
                 AttributeOptionName::HOTLINE_ADMINISTRATIVE_CATEGORIES->value,
                 AttributeOptionName::HOTLINE_OTHER_CATEGORIES->value,
                 AttributeOptionName::HOTLINE_STATUSES->value,
-            ])
+            ]),
         ]);
 
         [$statusOpenId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::HOTLINE_STATUSES->value,
-            AttributeOptionUiBehavior::HOTLINE_STATUS_IS_OPEN->value
+            AttributeOptionUiBehavior::HOTLINE_STATUS_IS_OPEN->value,
         ]);
 
         return Inertia::render('Hotline/Create', [
-            'statusOpenId' => $statusOpenId
+            'statusOpenId' => $statusOpenId,
         ]);
     }
 
@@ -94,7 +89,7 @@ class IncidentController extends Controller
     {
         [$statusResolvedId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::HOTLINE_STATUSES->value,
-            AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED->value
+            AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED->value,
         ]);
 
         $incident = new Incident([
@@ -140,7 +135,7 @@ class IncidentController extends Controller
                 'is_volunteer',
                 'is_member',
             ]),
-            'no_solicitations' => true
+            'no_solicitations' => true,
         ]);
 
         $incident->team_id = Auth::user()->current_team_id;
@@ -179,14 +174,14 @@ class IncidentController extends Controller
             ]);
 
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::PERSON_ENTITY_TYPES->value,
                 AttributeOptionName::HOTLINE_WILDLIFE_CATEGORIES->value,
                 AttributeOptionName::HOTLINE_ADMINISTRATIVE_CATEGORIES->value,
                 AttributeOptionName::HOTLINE_OTHER_CATEGORIES->value,
                 AttributeOptionName::HOTLINE_STATUSES->value,
-            ])
+            ]),
         ]);
 
         [
@@ -196,7 +191,7 @@ class IncidentController extends Controller
         ] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             [AttributeOptionName::HOTLINE_STATUSES->value, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_OPEN->value],
             [AttributeOptionName::HOTLINE_STATUSES->value, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_UNRESOLVED->value],
-            [AttributeOptionName::HOTLINE_STATUSES->value, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED->value]
+            [AttributeOptionName::HOTLINE_STATUSES->value, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED->value],
         ]);
 
         return Inertia::render('Hotline/Edit', [
@@ -208,7 +203,7 @@ class IncidentController extends Controller
             ],
             'statusOpenId' => $statusOpenId,
             'statusUnresolvedId' => $statusUnresolvedId,
-            'statusResolvedId' => $statusResolvedId
+            'statusResolvedId' => $statusResolvedId,
         ]);
     }
 

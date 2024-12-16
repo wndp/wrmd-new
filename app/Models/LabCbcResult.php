@@ -16,9 +16,10 @@ class LabCbcResult extends Model implements Badgeable
 {
     /** @use HasFactory<\Database\Factories\LabCbcResultFactory> */
     use HasFactory;
-    use SoftDeletes;
+
     use HasVersion7Uuids;
     use LogsActivity;
+    use SoftDeletes;
 
     protected $fillable = [
         'packed_cell_volume',

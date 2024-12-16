@@ -16,10 +16,10 @@ use Tests\Traits\CreatesUiBehavior;
 final class CareLogTest extends TestCase
 {
     use Assertions;
-    use GetsCareLogs;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use GetsCareLogs;
+    use RefreshDatabase;
 
     #[Test]
     public function aCareLogHasFormattedFullWeightAttribute(): void

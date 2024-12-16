@@ -19,8 +19,8 @@ final class RecordedDailyTaskListControllerTest extends TestCase
 {
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesTeamUser;
+    use RefreshDatabase;
 
     #[Test]
     public function unAuthenticatedUsersCantRecordDailyTasks(): void

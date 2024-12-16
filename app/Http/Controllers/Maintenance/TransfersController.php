@@ -27,7 +27,7 @@ class TransfersController extends Controller
             ->get()
             ->transform(fn ($transfer) => [
                 ...$transfer->toArray(),
-                'created_at_for_humans' => Timezone::convertFromUtcToLocal($transfer->created_at)->toDayDateTimeString()
+                'created_at_for_humans' => Timezone::convertFromUtcToLocal($transfer->created_at)->toDayDateTimeString(),
             ]);
 
         $transfers = Transfer::when(
@@ -44,7 +44,7 @@ class TransfersController extends Controller
             ->onEachSide(1)
             ->through(fn ($transfer) => [
                 ...$transfer->toArray(),
-                'created_at_for_humans' => Timezone::convertFromUtcToLocal($transfer->created_at)->toDayDateTimeString()
+                'created_at_for_humans' => Timezone::convertFromUtcToLocal($transfer->created_at)->toDayDateTimeString(),
             ]);
 
         $uuid = $request->input('uuid');

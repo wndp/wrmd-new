@@ -2,27 +2,23 @@
 
 namespace Tests\Unit\Models;
 
-use App\Concerns\GetsCareLogs;
 use App\Models\Location;
 use App\Models\PatientLocation;
 use App\Models\Team;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\AssistsWithAuthentication;
-use Tests\Support\AssistsWithCases;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreateCase;
-use Tests\Traits\CreatesTeamUser;
 use Tests\Traits\CreatesUiBehavior;
 
 final class LocationTest extends TestCase
 {
     use Assertions;
-    use RefreshDatabase;
     use CreateCase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     // #[Test]
     // public function append_accessors_to_the_location_model(): void

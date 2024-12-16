@@ -6,7 +6,6 @@ use App\Concerns\AsAction;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
 use App\Models\Recheck;
-use App\Support\DailyTasksFilters;
 use Carbon\Carbon;
 
 class SaveNewRecheck
@@ -26,7 +25,7 @@ class SaveNewRecheck
 
         [$singleDoseId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::DAILY_TASK_FREQUENCIES->value,
-            AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_SINGLE_DOSE->value
+            AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_SINGLE_DOSE->value,
         ]);
 
         if ($data['frequency_id'] === $singleDoseId && empty($data['recheck_end_at'])) {

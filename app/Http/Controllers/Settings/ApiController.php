@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Settings;
 
-use App\Events\AccountUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -53,7 +52,7 @@ class ApiController extends Controller
         return back()
             ->with('notification.heading', __('Success!'))
             ->with('notification.text', __(':tokenName token was created.', [
-                'tokenName' => $request->get('token_name')
+                'tokenName' => $request->get('token_name'),
             ]))
             ->with('flash.token', $token);
     }
@@ -74,7 +73,7 @@ class ApiController extends Controller
         return redirect()->route('api.index')
             ->with('notification.heading', __('Token Deleted!'))
             ->with('notification.text', __(':tokenName token was deleted.', [
-                'tokenName' => $token->name
+                'tokenName' => $token->name,
             ]));
     }
 }

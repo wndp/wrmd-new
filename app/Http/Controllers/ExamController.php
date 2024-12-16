@@ -13,7 +13,6 @@ use App\Models\Patient;
 use App\Options\Options;
 use App\Repositories\OptionsStore;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -28,7 +27,7 @@ class ExamController extends Controller
 
         return Inertia::render('Patients/Exams/Index', [
             'patient' => $admission->patient,
-            'exams' => $admission->patient->exams
+            'exams' => $admission->patient->exams,
         ]);
     }
 
@@ -43,12 +42,12 @@ class ExamController extends Controller
 
         [$abnormalBodyPartFindingID] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::EXAM_BODY_PART_FINDINGS->value,
-            AttributeOptionUiBehavior::EXAM_BODY_PART_FINDING_IS_ABNORMAL->value
+            AttributeOptionUiBehavior::EXAM_BODY_PART_FINDING_IS_ABNORMAL->value,
         ]);
 
         return Inertia::render('Patients/Exams/Create', [
             'patient' => $admission->patient,
-            'abnormalBodyPartFindingID' => $abnormalBodyPartFindingID
+            'abnormalBodyPartFindingID' => $abnormalBodyPartFindingID,
         ]);
     }
 
@@ -85,13 +84,13 @@ class ExamController extends Controller
 
         [$abnormalBodyPartFindingID] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::EXAM_BODY_PART_FINDINGS->value,
-            AttributeOptionUiBehavior::EXAM_BODY_PART_FINDING_IS_ABNORMAL->value
+            AttributeOptionUiBehavior::EXAM_BODY_PART_FINDING_IS_ABNORMAL->value,
         ]);
 
         return Inertia::render('Patients/Exams/Edit', [
             'patient' => $admission->patient,
             'exam' => $exam,
-            'abnormalBodyPartFindingID' => $abnormalBodyPartFindingID
+            'abnormalBodyPartFindingID' => $abnormalBodyPartFindingID,
         ]);
     }
 
@@ -132,11 +131,11 @@ class ExamController extends Controller
             ->with('notification.heading', __('Exam Deleted'))
             ->with('notification.text', __(':examType exam on :examDate was deleted.', [
                 'examType' => $exam->type,
-                'examType' => $exam->examined_at_for_humans
+                'examType' => $exam->examined_at_for_humans,
             ]));
     }
 
-    public function transformAndShareOptions(Patient $patient, Collection $exams, Exam $exam = null)
+    public function transformAndShareOptions(Patient $patient, Collection $exams, ?Exam $exam = null)
     {
         $patientTaxaClassAgeUnits = match ($patient->taxon?->class) {
             'Mammalia' => AttributeOptionName::EXAM_MAMMALIA_AGE_UNITS->value,
@@ -169,7 +168,7 @@ class ExamController extends Controller
             $availableExamTypes
                 ->groupBy('name')
                 ->map(fn ($attributeOptions) => $attributeOptions->mapWithKeys(fn ($attributeOption) => [
-                    $attributeOption->id => __($attributeOption->value)
+                    $attributeOption->id => __($attributeOption->value),
                 ])->toArray())
                 ->optionsToSelectable()
         );
@@ -177,7 +176,7 @@ class ExamController extends Controller
         OptionsStore::add([
             'bodyPartOptions' => Options::enumsToSelectable(ExamBodyPart::cases()),
             'taxaClassAgeUnits' => is_null($patientTaxaClassAgeUnits) ? [] : Options::arrayToSelectable(AttributeOption::getDropdownOptions([
-                $patientTaxaClassAgeUnits
+                $patientTaxaClassAgeUnits,
             ])->first()),
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::EXAM_WEIGHT_UNITS->value,
@@ -193,7 +192,7 @@ class ExamController extends Controller
                 AttributeOptionName::PATIENT_DISPOSITIONS->value,
                 AttributeOptionName::PATIENT_RELEASE_TYPES->value,
                 AttributeOptionName::PATIENT_TRANSFER_TYPES->value,
-            ])
+            ]),
         ]);
     }
 }

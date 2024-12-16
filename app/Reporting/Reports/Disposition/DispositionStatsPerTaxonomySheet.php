@@ -10,7 +10,7 @@ use Illuminate\Support\Number;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class DispositionStatsPerTaxonomySheet extends ExportableSheet implements WithStrictNullComparison, FromCollection
+class DispositionStatsPerTaxonomySheet extends ExportableSheet implements FromCollection, WithStrictNullComparison
 {
     use ReportsOnDispositions;
 

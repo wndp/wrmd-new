@@ -18,8 +18,8 @@ final class DeleteRecordedDailyTasksTest extends TestCase
 {
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesTeamUser;
+    use RefreshDatabase;
 
     #[Test]
     public function whenASchedualableIsDeletedDeleteRecordedDailyTasksIsDispatched(): void

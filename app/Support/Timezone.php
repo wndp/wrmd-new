@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Cache;
 
 class Timezone
 {
-    public static function convertFromUtcToLocal(?Carbon $date, Team $team = null): ?Carbon
+    public static function convertFromUtcToLocal(?Carbon $date, ?Team $team = null): ?Carbon
     {
         if (Auth::guest() || is_null($date)) {
             return null;
@@ -19,7 +19,7 @@ class Timezone
         return $date->setTimezone(static::getTimezone($team));
     }
 
-    public static function convertFromLocalToUtc($date, Team $team = null): ?Carbon
+    public static function convertFromLocalToUtc($date, ?Team $team = null): ?Carbon
     {
         if (Auth::guest() || is_null($date)) {
             return null;
@@ -31,7 +31,7 @@ class Timezone
     /**
      * Get the user's team timezone.
      */
-    private static function getTimezone(Team $team = null): string
+    private static function getTimezone(?Team $team = null): string
     {
         $team = $team ?: Auth::user()->currentTeam;
 

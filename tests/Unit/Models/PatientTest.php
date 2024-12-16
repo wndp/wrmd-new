@@ -21,14 +21,11 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Queue;
-use Illuminate\Support\Fluent;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\AssistsWithAuthentication;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreatesTeamUser;
@@ -36,12 +33,12 @@ use Tests\Traits\CreatesUiBehavior;
 
 final class PatientTest extends TestCase
 {
-    use RefreshDatabase;
-    use CreatesUiBehavior;
     use Assertions;
     use CreatesTeamUser;
+    use CreatesUiBehavior;
+    use RefreshDatabase;
 
-    public $connectionsToTransact = ['singlestore','wildalert'];
+    public $connectionsToTransact = ['singlestore', 'wildalert'];
 
     #[Test]
     public function aPatientHasExams(): void
@@ -152,12 +149,12 @@ final class PatientTest extends TestCase
         $pendingDispositionId = $this->pendingDispositionId();
 
         $patient = Patient::factory()->create([
-            'disposition_id' => $pendingDispositionId, 'date_admitted_at' => Carbon::now()->subDays(10)
+            'disposition_id' => $pendingDispositionId, 'date_admitted_at' => Carbon::now()->subDays(10),
         ]);
         $this->assertSame(11, $patient->days_in_care);
 
         $patient = Patient::factory()->create([
-            'disposition_id' => AttributeOption::factory(), 'date_admitted_at' => '2018-03-01', 'dispositioned_at' => '2018-03-05'
+            'disposition_id' => AttributeOption::factory(), 'date_admitted_at' => '2018-03-01', 'dispositioned_at' => '2018-03-05',
         ]);
         $this->assertSame(5, $patient->days_in_care);
     }

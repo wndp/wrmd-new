@@ -13,9 +13,9 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class NutritionPlanIngredient extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use HasVersion7Uuids;
     use LogsActivity;
+    use SoftDeletes;
 
     protected $fillable = [
         'nutrition_plan_id',
@@ -32,7 +32,7 @@ class NutritionPlanIngredient extends Model
     ];
 
     protected $with = [
-        'unit'
+        'unit',
     ];
 
     public function nutritionPlan(): BelongsTo

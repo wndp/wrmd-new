@@ -13,7 +13,9 @@ use Illuminate\Support\Collection;
 class RequestRecordsSaver
 {
     private bool $shouldDelete = true;
+
     private bool $shouldUpdate = true;
+
     private bool $shouldCreate = true;
 
     //private Collection $relationData;
@@ -108,8 +110,8 @@ class RequestRecordsSaver
         // if (!empty($this->relationData)) {
         //     $this->existingRecordsById = $this->relationData->keyBy('id');
         // } else {
-            $relation = $this->relation;
-            $this->existingRecordsById = $this->model->$relation->keyBy('id');
+        $relation = $this->relation;
+        $this->existingRecordsById = $this->model->$relation->keyBy('id');
         //}
 
         $this->requestRecordsById = $this->requestData->whereNotNull('id')
@@ -150,18 +152,18 @@ class RequestRecordsSaver
     private function update(): void
     {
         foreach ($this->existingRecordsById as $existingRecord) {
-            if (!isset($this->requestRecordsById[$existingRecord->id])) {
+            if (! isset($this->requestRecordsById[$existingRecord->id])) {
                 continue;
             }
 
             $requestRecord = new Collection($this->requestRecordsById[$existingRecord->id]);
 
             $fillables = $requestRecord->except(array_merge([
-                'id'
+                'id',
             ], array_keys($this->attributableFields)))
                 ->toArray();
 
-            if (!empty($this->fillablesTransformCallback)) {
+            if (! empty($this->fillablesTransformCallback)) {
                 $fillables = call_user_func($this->fillablesTransformCallback, $fillables, $existingRecord);
             }
 
@@ -197,7 +199,7 @@ class RequestRecordsSaver
             ], array_keys($this->attributableFields)))
                 ->toArray();
 
-            if (!empty($this->fillablesTransformCallback)) {
+            if (! empty($this->fillablesTransformCallback)) {
                 $fillables = call_user_func($this->fillablesTransformCallback, $fillables);
             }
 

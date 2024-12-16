@@ -24,7 +24,7 @@ class TransferPercentages extends Chart
     {
         [$dispositionTransferredId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::PATIENT_DISPOSITIONS->value,
-            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_TRANSFERRED->value
+            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_TRANSFERRED->value,
         ]);
 
         $query = Admission::where('team_id', $this->team->id)
@@ -49,7 +49,7 @@ class TransferPercentages extends Chart
     {
         [$dispositionTransferredId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::PATIENT_DISPOSITIONS->value,
-            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_TRANSFERRED->value
+            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_TRANSFERRED->value,
         ]);
 
         $query = Admission::where('team_id', $this->team->id)

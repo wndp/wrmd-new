@@ -5,8 +5,6 @@ namespace App\Models;
 use App\Concerns\HasUniqueFields;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
-use App\Models\Admission;
-use App\Models\Patient;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,9 +16,9 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Location extends Model
 {
     use HasFactory;
+    use HasUniqueFields;
     use HasVersion7Uuids;
     use LogsActivity;
-    use HasUniqueFields;
 
     protected $fillable = [
         'hash',

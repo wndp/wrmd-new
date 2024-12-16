@@ -24,9 +24,9 @@ final class RecordedPatientDailyTasksControllerTest extends TestCase
 {
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesTeamUser;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     #[Test]
     public function unAuthenticatedUsersCantRecordPatientDailyTasks(): void

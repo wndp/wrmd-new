@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\SettingKey;
 use App\Enums\AttributeOptionName;
+use App\Enums\SettingKey;
 use App\Rules\AttributeOptionExistsRule;
 use App\Support\Wrmd;
 use Carbon\Carbon;
@@ -83,7 +83,7 @@ class StoreIncidentRequest extends FormRequest
             'occurred_at.date' => 'The date occurred field is not a valid date.',
             'person.required' => 'A reporting party is required.',
             'person.array' => 'A reporting party is required.',
-            'resolved_at.date' => 'The date resolved field is not a valid date.'
+            'resolved_at.date' => 'The date resolved field is not a valid date.',
         ];
     }
 }

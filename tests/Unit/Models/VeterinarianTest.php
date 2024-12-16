@@ -5,7 +5,6 @@ namespace Tests\Unit\Models;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\Veterinarian;
-use App\Repositories\AdministrativeDivision;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -13,8 +12,8 @@ use Tests\Traits\Assertions;
 
 final class VeterinarianTest extends TestCase
 {
-    use RefreshDatabase;
     use Assertions;
+    use RefreshDatabase;
 
     #[Test]
     public function aVeterinarianIsRevisionable(): void

@@ -17,7 +17,7 @@ class DomPdfEngine implements Api2PdfInterface
     {
         $this->filename = $filename;
 
-        $options = new Options();
+        $options = new Options;
         $options->setIsRemoteEnabled(true);
 
         $dompdf = new Dompdf($options);
@@ -26,8 +26,8 @@ class DomPdfEngine implements Api2PdfInterface
             'ssl' => [
                 'verify_peer' => false,
                 'verify_peer_name' => false,
-                'allow_self_signed' => true
-            ]
+                'allow_self_signed' => true,
+            ],
         ]));
 
         $dompdf->loadHtmlFile($url);
@@ -41,57 +41,45 @@ class DomPdfEngine implements Api2PdfInterface
     {
         $this->filename = $filename;
 
-        $dompdf = new Dompdf();
+        $dompdf = new Dompdf;
         $dompdf->loadHtml($html);
 
         return $this->response($dompdf);
     }
 
-    public function chromeUrlToImage($url, $inline = true, $filename = null, $options = null)
-    {}
+    public function chromeUrlToImage($url, $inline = true, $filename = null, $options = null) {}
 
-    public function chromeHtmlToImage($html, $inline = true, $filename = null, $options = null)
-    {}
+    public function chromeHtmlToImage($html, $inline = true, $filename = null, $options = null) {}
 
-    public function wkUrlToPdf($url, $inline = true, $filename = null, $options = null, $enableToc = false)
-    {}
+    public function wkUrlToPdf($url, $inline = true, $filename = null, $options = null, $enableToc = false) {}
 
-    public function wkHtmlToPdf($html, $inline = true, $filename = null, $options = null, $enableToc = false)
-    {}
+    public function wkHtmlToPdf($html, $inline = true, $filename = null, $options = null, $enableToc = false) {}
 
-    public function libreOfficeAnyToPdf($url, $inline = true, $filename = null)
-    {}
+    public function libreOfficeAnyToPdf($url, $inline = true, $filename = null) {}
 
-    public function libreOfficeThumbnail($url, $inline = true, $filename = null)
-    {}
+    public function libreOfficeThumbnail($url, $inline = true, $filename = null) {}
 
-    public function libreOfficePdfToHtml($url, $inline = true, $filename = null)
-    {}
+    public function libreOfficePdfToHtml($url, $inline = true, $filename = null) {}
 
-    public function libreOfficeHtmlToDocx($url, $inline = true, $filename = null)
-    {}
+    public function libreOfficeHtmlToDocx($url, $inline = true, $filename = null) {}
 
-    public function libreOfficeHtmlToXlsx($url, $inline = true, $filename = null)
-    {}
+    public function libreOfficeHtmlToXlsx($url, $inline = true, $filename = null) {}
 
-    public function pdfsharpMerge($urls, $inline = true, $filename = null)
-    {}
+    public function pdfsharpMerge($urls, $inline = true, $filename = null) {}
 
-    public function pdfsharpAddBookmarks($url, $bookmarks, $inline = true, $filename = null)
-    {}
+    public function pdfsharpAddBookmarks($url, $bookmarks, $inline = true, $filename = null) {}
 
-    public function pdfsharpAddPassword($url, $userpassword, $ownerpassword = null, $inline = true, $filename = null)
-    {}
+    public function pdfsharpAddPassword($url, $userpassword, $ownerpassword = null, $inline = true, $filename = null) {}
 
-    public function utilityDelete($responseId)
-    {}
+    public function utilityDelete($responseId) {}
 
     private function response($dompdf)
     {
         $dompdf->setPaper('8.5x11', 'portrait');
         $dompdf->render();
 
-        return new class ($dompdf->output(), $this->filename) {
+        return new class($dompdf->output(), $this->filename)
+        {
             public function __construct(private string $file, private string $filename)
             {
                 //

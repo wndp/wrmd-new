@@ -16,7 +16,7 @@ class ReportGeneratorController extends Controller
     /**
      * Get a listing of the generated reports.
      */
-    public function index(Team $team = null): JsonResponse
+    public function index(?Team $team = null): JsonResponse
     {
         return response()->json(
             GeneratedReports::get($team ?: Auth::user()->currentTeam)

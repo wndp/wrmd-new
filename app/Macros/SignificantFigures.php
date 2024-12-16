@@ -14,7 +14,7 @@ class SignificantFigures
             $number = round($number, $decimalPlaces);
 
             // Leave the formatting to number_format(), but always format 0 to 0 decimal places.
-            return (float) number_format($number, 0 == $number ? 0 : $decimalPlaces);
+            return (float) number_format($number, $number == 0 ? 0 : $decimalPlaces);
         };
     }
 }

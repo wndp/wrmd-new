@@ -3,7 +3,6 @@
 namespace App\Analytics\Numbers;
 
 use App\Analytics\Contracts\Number;
-use App\Domain\Accounts\Account;
 use App\Enums\AccountStatus;
 use App\Models\Team;
 

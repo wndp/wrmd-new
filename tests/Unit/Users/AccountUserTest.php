@@ -54,7 +54,7 @@ final class AccountUserTest extends TestCase
     // }
 
     #[Test]
-    public function reAssignAUserDeletedFromSingleAccount(): void
+    public function re_assign_a_user_deleted_from_single_account(): void
     {
         // Given that a user exists in one account
         $account = Account::factory()->create();

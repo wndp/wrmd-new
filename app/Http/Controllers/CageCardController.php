@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\SettingKey;
 use App\Enums\AttributeOptionName;
+use App\Enums\SettingKey;
 use App\Events\PatientUpdated;
 use App\Jobs\AttemptTaxaIdentification;
 use App\Models\Patient;

@@ -21,7 +21,7 @@ class LocationFactory extends Factory
         return [
             'team_id' => Team::factory()->createQuietly(),
             //'facility_id' => AttributeOption::factory(),
-            'area' => $this->faker->word()
+            'area' => $this->faker->word(),
         ];
     }
 }

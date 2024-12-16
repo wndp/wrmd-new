@@ -18,7 +18,7 @@ class IncidentRepository
     {
         [$statusOpenId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::HOTLINE_STATUSES->value,
-            AttributeOptionUiBehavior::HOTLINE_STATUS_IS_OPEN->value
+            AttributeOptionUiBehavior::HOTLINE_STATUS_IS_OPEN->value,
         ]);
 
         return static::baseQuery($team, $search)
@@ -34,7 +34,7 @@ class IncidentRepository
     {
         [$statusResolvedId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::HOTLINE_STATUSES->value,
-            AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED->value
+            AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED->value,
         ]);
 
         return static::baseQuery($team, $search)
@@ -50,7 +50,7 @@ class IncidentRepository
     {
         [$statusUnresolvedId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::HOTLINE_STATUSES->value,
-            AttributeOptionUiBehavior::HOTLINE_STATUS_IS_UNRESOLVED->value
+            AttributeOptionUiBehavior::HOTLINE_STATUS_IS_UNRESOLVED->value,
         ]);
 
         return static::baseQuery($team, $search)
@@ -73,13 +73,13 @@ class IncidentRepository
     /**
      * Base query from which all other queries build off of.
      */
-    private static function baseQuery(Team $team, string $search = null): Builder
+    private static function baseQuery(Team $team, ?string $search = null): Builder
     {
         return Incident::query()
             ->with([
                 'reportingParty',
                 'status',
-                'category'
+                'category',
             ])
             ->where('team_id', $team->id)
             ->when($search, fn ($query) => $query->likeOneOfMany($search, [

@@ -8,10 +8,8 @@ use App\Repositories\AdministrativeDivision;
 use App\Repositories\SettingsStore;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\App;
 use Laravel\Jetstream\Events\TeamCreated;
 use Laravel\Jetstream\Events\TeamDeleted;
 use Laravel\Jetstream\Events\TeamUpdated;
@@ -66,7 +64,7 @@ class Team extends JetstreamTeam
     {
         return [
             'personal_team' => 'boolean',
-            'status' => AccountStatus::class
+            'status' => AccountStatus::class,
         ];
     }
 
@@ -128,8 +126,7 @@ class Team extends JetstreamTeam
     protected function formattedInlineAddress(): Attribute
     {
         return Attribute::get(
-            fn () =>
-            app(AdministrativeDivision::class)->inlineAddress(
+            fn () => app(AdministrativeDivision::class)->inlineAddress(
                 alpha2CountryCode: $this->country,
                 subdivision: $this->subdivision,
                 city: $this->city,
@@ -150,7 +147,7 @@ class Team extends JetstreamTeam
     /**
      * Get the name that should be associated with the Paddle customer.
      */
-    public function paddleName(): string|null
+    public function paddleName(): ?string
     {
         return $this->name;
     }
@@ -158,7 +155,7 @@ class Team extends JetstreamTeam
     /**
      * Get the email address that should be associated with the Paddle customer.
      */
-    public function paddleEmail(): string|null
+    public function paddleEmail(): ?string
     {
         return $this->contact_email;
     }

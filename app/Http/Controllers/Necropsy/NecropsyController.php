@@ -46,7 +46,7 @@ class NecropsyController extends Controller
         OptionsStore::add([
             'bodyPartOptions' => Options::enumsToSelectable(NecropsyBodyPart::cases()),
             'taxaClassAgeUnits' => Options::arrayToSelectable(AttributeOption::getDropdownOptions([
-                $patientTaxaClassAgeUnits
+                $patientTaxaClassAgeUnits,
             ])->first()),
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::EXAM_WEIGHT_UNITS->value,
@@ -56,16 +56,16 @@ class NecropsyController extends Controller
                 AttributeOptionName::NECROPSY_CARCASS_CONDITIONS->value,
                 AttributeOptionName::NECROPSY_SAMPLES->value,
                 AttributeOptionName::EXAM_BODY_PART_FINDINGS->value,
-            ])
+            ]),
         ]);
 
         [$necropsySampleOtherId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
-            AttributeOptionName::NECROPSY_SAMPLES->value, AttributeOptionUiBehavior::NECROPSY_SAMPLES_IS_OTHER->value
+            AttributeOptionName::NECROPSY_SAMPLES->value, AttributeOptionUiBehavior::NECROPSY_SAMPLES_IS_OTHER->value,
         ]);
 
         return Inertia::render('Patients/Necropsy/Edit', [
             'patient' => $admission->patient->load('necropsy'),
-            'necropsySampleOtherId' => $necropsySampleOtherId
+            'necropsySampleOtherId' => $necropsySampleOtherId,
         ]);
     }
 

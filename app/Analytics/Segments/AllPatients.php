@@ -6,7 +6,5 @@ use App\Analytics\Contracts\Segment;
 
 class AllPatients extends Segment
 {
-    public function handle()
-    {
-    }
+    public function handle() {}
 }

@@ -47,7 +47,7 @@ class AssociatePatientToIncident implements ShouldQueue
         if ($incident) {
             [$incidentStatusResolvedId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
                 AttributeOptionName::HOTLINE_STATUSES->value,
-                AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED->value
+                AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED->value,
             ]);
 
             $admission = Admission::custody($this->team, $this->patient);

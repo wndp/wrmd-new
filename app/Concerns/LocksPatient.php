@@ -56,7 +56,7 @@ trait LocksPatient
      */
     protected static function isLockedPatient(Model $model): bool
     {
-        return $model instanceof Patient && !is_null($model->locked_at);
+        return $model instanceof Patient && ! is_null($model->locked_at);
     }
 
     /**
@@ -68,7 +68,7 @@ trait LocksPatient
         // used by morphed relations out of WRMD's control, ie: \Spatie\MediaLibrary\MediaCollections\Models\Media
         $relation = $model->patient ?: $model->model;
 
-        return $relation instanceof Patient && !is_null($relation->locked_at);
+        return $relation instanceof Patient && ! is_null($relation->locked_at);
     }
 
     /**
@@ -76,6 +76,6 @@ trait LocksPatient
      */
     protected static function hasLockedCollectionRelationship(Model $model): bool
     {
-        return $model->patients instanceof Collection && $model->patients->filter(fn ($patient) => !is_null($patient->locked_at))->isNotEmpty();
+        return $model->patients instanceof Collection && $model->patients->filter(fn ($patient) => ! is_null($patient->locked_at))->isNotEmpty();
     }
 }

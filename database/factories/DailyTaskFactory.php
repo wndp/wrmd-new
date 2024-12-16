@@ -19,7 +19,7 @@ class DailyTaskFactory extends Factory
         return [
             'occurrence' => 1,
             'occurrence_at' => $this->faker->dateTimeBetween('1 days', '90 days')->format('Y-m-d'),
-            'summary' => $this->faker->sentence()
+            'summary' => $this->faker->sentence(),
         ];
     }
 }

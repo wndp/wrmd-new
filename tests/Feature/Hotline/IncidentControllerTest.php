@@ -163,7 +163,7 @@ final class IncidentControllerTest extends TestCase
     // }
 
     #[Test]
-    public function aNewIncidentIsSavedToStorage(): void
+    public function a_new_incident_is_saved_to_storage(): void
     {
         $hotlineWildlifeCategoriesId = AttributeOption::factory()->create(['name' => AttributeOptionName::HOTLINE_WILDLIFE_CATEGORIES])->id;
         $hotlineStatusesId = AttributeOption::factory()->create(['name' => AttributeOptionName::HOTLINE_STATUSES])->id;

@@ -24,7 +24,7 @@ class ReleasePercentages extends Chart
     {
         [$dispositionReleasedId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::PATIENT_DISPOSITIONS->value,
-            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_RELEASED->value
+            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_RELEASED->value,
         ]);
 
         $query = Admission::where('team_id', $this->team->id)
@@ -49,7 +49,7 @@ class ReleasePercentages extends Chart
     {
         [$dispositionReleasedId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::PATIENT_DISPOSITIONS->value,
-            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_RELEASED->value
+            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_RELEASED->value,
         ]);
 
         $query = Admission::where('team_id', $this->team->id)

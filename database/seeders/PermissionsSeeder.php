@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Enums\Ability as AbilityEnum;
 use App\Enums\Role as RoleEnum;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Silber\Bouncer\BouncerFacade;
 use Silber\Bouncer\Database\Ability;

@@ -2,6 +2,4 @@
 
 namespace App\Reporting\Engines;
 
-class Api2PdfEngine
-{
-}
+class Api2PdfEngine {}

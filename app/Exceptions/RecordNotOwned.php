@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Request;
 
 class RecordNotOwned extends Exception implements Responsable
 {
-    public function __construct(public string|null $failedMessage = null)
+    public function __construct(public ?string $failedMessage = null)
     {
         $this->failedMessage = $failedMessage ?: static::message();
     }

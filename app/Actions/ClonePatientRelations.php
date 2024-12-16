@@ -26,7 +26,7 @@ class ClonePatientRelations
             'nutritionPlans',
             'oilWaterproofingAssessments',
             'oilProcessing',
-            'labReports'
+            'labReports',
         ]);
 
         foreach ($rootPatient->getRelations() as $relationName => $collectionOrModel) {

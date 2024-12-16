@@ -3,8 +3,8 @@
 use App\Http\Controllers\Reports\FavoriteReportsController;
 use App\Http\Controllers\Reports\ReportEmailController;
 use App\Http\Controllers\Reports\ReportGeneratorController;
-use App\Http\Controllers\Reports\ReportStreamController;
 use App\Http\Controllers\Reports\ReportsController;
+use App\Http\Controllers\Reports\ReportStreamController;
 use Illuminate\Auth\Middleware\Authorize;
 
 Route::middleware(Authorize::using('VIEW_REPORTS'))->group(function () {

@@ -11,9 +11,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
-class IncidentImporter extends Importer implements ToModel, SkipsEmptyRows
+class IncidentImporter extends Importer implements SkipsEmptyRows, ToModel
 {
     public function model(array $row)
     {
@@ -54,15 +53,15 @@ class IncidentImporter extends Importer implements ToModel, SkipsEmptyRows
         return [
             '1' => Rule::in(['patrick@maatwebsite.nl']),
 
-             // Above is alias for as it always validates in batches
-             '*.1' => Rule::in(['patrick@maatwebsite.nl']),
+            // Above is alias for as it always validates in batches
+            '*.1' => Rule::in(['patrick@maatwebsite.nl']),
 
-             // Can also use callback validation rules
-             '0' => function ($attribute, $value, $onFailure) {
-                 if ($value !== 'Patrick Brouwers') {
-                     $onFailure('Name is not Patrick Brouwers');
-                 }
-             }
+            // Can also use callback validation rules
+            '0' => function ($attribute, $value, $onFailure) {
+                if ($value !== 'Patrick Brouwers') {
+                    $onFailure('Name is not Patrick Brouwers');
+                }
+            },
         ];
     }
 

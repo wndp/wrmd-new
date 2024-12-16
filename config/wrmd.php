@@ -31,6 +31,6 @@ return [
 
     'reporting' => [
         'pdf_driver' => env('PDF_DRIVER', 'domPdf'),
-    ]
+    ],
 
 ];

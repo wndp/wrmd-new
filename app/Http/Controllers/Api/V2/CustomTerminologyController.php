@@ -72,7 +72,7 @@ class CustomTerminologyController extends Controller
     public function store(string $category): JsonResponse
     {
         request()->validate([
-            'parentId' => ['required', new Base64()],
+            'parentId' => ['required', new Base64],
             'name' => 'required',
         ]);
 

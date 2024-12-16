@@ -2,8 +2,8 @@
 
 namespace App\Analytics\Concerns;
 
-use App\Models\Admission;
 use App\Analytics\AnalyticFilters;
+use App\Models\Admission;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
@@ -12,7 +12,7 @@ trait HandleChartPeriod
     /**
      * Compute the chronological date period from the provided filters.
      */
-    public function chartPeriod(AnalyticFilters $filters, Carbon $start = null): CarbonPeriod
+    public function chartPeriod(AnalyticFilters $filters, ?Carbon $start = null): CarbonPeriod
     {
         if ($filters->date_period === 'all-dates') {
             $start = $start ?: Admission::where('team_id', $this->team->id)

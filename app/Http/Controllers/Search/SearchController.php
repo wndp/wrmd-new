@@ -32,7 +32,7 @@ class SearchController extends Controller
         OptionsStore::add($peopleOptions);
         ExtensionNavigation::emit('searching');
 
-        $filters = new AnalyticFilters();
+        $filters = new AnalyticFilters;
 
         return Inertia::render('Search/Create', [
             'datePeriod' => $filters->defaultDatePeriod(),

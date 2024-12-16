@@ -6,8 +6,6 @@ use App\Analytics\AnalyticFilters;
 use App\Analytics\Contracts\Number;
 use App\Models\Team;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\AssistsWithAuthentication;
-use Tests\Support\AssistsWithCases;
 use Tests\TestCase;
 
 final class NumberTest extends TestCase
@@ -43,10 +41,9 @@ final class NumberTest extends TestCase
     {
         parent::setUp();
 
-        $this->anonymousNumber = new class (Team::factory()->make(), new AnalyticFilters()) extends Number {
-            public function compute()
-            {
-            }
+        $this->anonymousNumber = new class(Team::factory()->make(), new AnalyticFilters) extends Number
+        {
+            public function compute() {}
 
             public function calculatePercentageDifference($a, $b)
             {

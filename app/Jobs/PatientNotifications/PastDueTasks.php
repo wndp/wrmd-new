@@ -3,8 +3,6 @@
 namespace App\Jobs\PatientNotifications;
 
 use App\Collections\DailyTasksCollection;
-use App\Enums\AttributeOptionName;
-use App\Enums\AttributeOptionUiBehavior;
 use App\Enums\SettingKey;
 use App\Events\NotifyPatient;
 use App\Models\Patient;

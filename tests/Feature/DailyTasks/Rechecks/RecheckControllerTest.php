@@ -5,7 +5,6 @@ namespace Tests\Feature\DailyTasks\Rechecks;
 use App\Enums\Ability;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
-use App\Models\AttributeOption;
 use App\Models\Patient;
 use App\Models\Recheck;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -21,13 +20,14 @@ use Tests\Traits\CreatesUiBehavior;
 #[Group('daily-tasks')]
 final class RecheckControllerTest extends TestCase
 {
+    use Assertions;
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
-    use Assertions;
+    use RefreshDatabase;
 
     private $frequencyId;
+
     private $assignmentId;
 
     protected function setUp(): void

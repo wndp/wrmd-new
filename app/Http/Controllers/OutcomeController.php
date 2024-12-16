@@ -18,7 +18,7 @@ class OutcomeController extends Controller
     /**
      * Handle the incoming request.
      *
-     * @param    $Patient $patient
+     * @param  $Patient  $patient
      * @return \Illuminate\Http\Response
      */
     public function __invoke(Request $request, Patient $patient)
@@ -41,7 +41,7 @@ class OutcomeController extends Controller
                     'nullable',
                     'required_unless:disposition_id,'.$dispositionPendingId,
                     'date',
-                    'after_or_equal:'.$admittedAt
+                    'after_or_equal:'.$admittedAt,
                 ],
                 'release_type_id' => [
                     'nullable',
@@ -64,7 +64,7 @@ class OutcomeController extends Controller
                 'dispositioned_at.required_unless' => __('The disposition date field is required unless disposition is in Pending.'),
                 'dispositioned_at.date' => __('The disposition date is not a valid date.'),
                 'dispositioned_at.after_or_equal' => __('The disposition date must be a date after or equal to :date.', [
-                    'date' => $admittedAt->toFormattedDateString()
+                    'date' => $admittedAt->toFormattedDateString(),
                 ]),
             ]));
 

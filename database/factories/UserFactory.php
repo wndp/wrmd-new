@@ -72,7 +72,7 @@ class UserFactory extends Factory
                                 'id' => Str::random(),
                                 'name' => $user->name,
                                 'email' => $user->email,
-                            ]]
+                            ]],
                         ]),
                     ]);
 

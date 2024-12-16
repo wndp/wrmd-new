@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Hotline;
 
-use App\Enums\SettingKey;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
+use App\Enums\SettingKey;
 use App\Http\Controllers\Controller;
 use App\Models\Incident;
 use App\Support\Timezone;
@@ -34,7 +34,7 @@ class IncidentResolutionController extends Controller
 
         [$statusResolvedId, $statusOpenId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             [AttributeOptionName::HOTLINE_STATUSES->value, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED->value],
-            [AttributeOptionName::HOTLINE_STATUSES->value, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_OPEN->value]
+            [AttributeOptionName::HOTLINE_STATUSES->value, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_OPEN->value],
         ]);
 
         $incident->update([

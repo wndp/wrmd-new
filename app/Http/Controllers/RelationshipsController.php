@@ -17,7 +17,7 @@ class RelationshipsController extends Controller
             function ($attribute, $value, $parameters, $validator) {
                 return ! is_null(Wrmd::resourceForModel($value));
 
-                return class_exists($value) and is_a(new $value(), Model::class);
+                return class_exists($value) and is_a(new $value, Model::class);
             }
         );
 

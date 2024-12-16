@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\SettingKey;
 use App\Enums\AttributeOptionName;
+use App\Enums\SettingKey;
 use App\Rules\AttributeOptionExistsRule;
 use App\Support\Wrmd;
 use Illuminate\Foundation\Http\FormRequest;
@@ -86,7 +86,7 @@ class SaveBandingRequest extends FormRequest
         return [
             'banded_at.required' => 'The banding date field is required.',
             'banded_at.date' => 'The banding date is not a valid date.',
-            'banded_at.after_or_equal' => 'The banding date must be a date after or equal to '.$admittedAt
+            'banded_at.after_or_equal' => 'The banding date must be a date after or equal to '.$admittedAt,
         ];
     }
 }

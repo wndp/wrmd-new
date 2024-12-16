@@ -37,7 +37,7 @@ class DispositionsByDate extends Report
      */
     public function data(): array
     {
-        $includedTaxonomies = $this->getAppliedFilterValue(IncludedTaxonomies::class, (new IncludedTaxonomies())->default());
+        $includedTaxonomies = $this->getAppliedFilterValue(IncludedTaxonomies::class, (new IncludedTaxonomies)->default());
 
         return [
             'dateFrom' => Carbon::parse($this->getAppliedFilterValue(DateFrom::class))->format(config('wrmd.date_format')),
@@ -66,7 +66,7 @@ class DispositionsByDate extends Report
             [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_TRANSFERRED->value],
             [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_DOA->value],
             [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_DIED->value],
-            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_EUTHANIZED->value]
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_EUTHANIZED->value],
         ]);
 
         $query = Admission::where('team_id', $this->team->id)
@@ -76,8 +76,8 @@ class DispositionsByDate extends Report
             ->addSelect(DB::raw("sum(if(`disposition_id` = $releasedPatientId, 1, 0)) as `released`"))
             ->addSelect(DB::raw("sum(if(`disposition_id` = $transferredPatientId, 1, 0)) as `transferred`"))
             ->addSelect(DB::raw("sum(if(`disposition_id` = $doaPatientId, 1, 0)) as `doa`"))
-            ->addSelect(DB::raw("sum(if(`disposition_id` in (".implode(',', $diedPatientId)."), 1, 0)) as `died`"))
-            ->addSelect(DB::raw("sum(if(`disposition_id` in (".implode(',', $euthanizedPatientId)."), 1, 0)) as `euthanized`"));
+            ->addSelect(DB::raw('sum(if(`disposition_id` in ('.implode(',', $diedPatientId).'), 1, 0)) as `died`'))
+            ->addSelect(DB::raw('sum(if(`disposition_id` in ('.implode(',', $euthanizedPatientId).'), 1, 0)) as `euthanized`'));
 
         return $this->applyFilters($query)
             ->joinPatients()

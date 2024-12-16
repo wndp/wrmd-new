@@ -21,8 +21,8 @@ class Formula extends Model
 {
     use HasFactory;
     use HasVersion7Uuids;
-    use ValidatesOwnership;
     use LogsActivity;
+    use ValidatesOwnership;
 
     protected $fillable = [
         'team_id',
@@ -50,7 +50,7 @@ class Formula extends Model
     /**
      * Get the calculated attributes of the formula.
      */
-    public function calculatedAttributes(Patient $patient = null)
+    public function calculatedAttributes(?Patient $patient = null)
     {
         if ($patient) {
             return match ($this->type) {
@@ -68,7 +68,7 @@ class Formula extends Model
      */
     public function getDefaultsForHumansAttribute(): string
     {
-        $defaults = $this->defaults ?? new Collection();
+        $defaults = $this->defaults ?? new Collection;
 
         $autoCalculate = $defaults->get('auto_calculate_dose') ? 'Auto-calculated dose of' : '';
         $dose = empty($defaults->get('dose')) ? '' : $defaults->get('dose').$defaults->get('dose_unit').' of';

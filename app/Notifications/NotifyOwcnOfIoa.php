@@ -57,7 +57,7 @@ class NotifyOwcnOfIoa extends Notification implements ShouldQueue
 
         $url = url("patients/oiled/processing?y={$IoaAdmission->case_year}&c={$IoaAdmission->id}&a={$owcnIoaTeamId}&queryCache=flush");
 
-        return (new MailMessage())
+        return (new MailMessage)
             ->subject('IOA Notification')
             ->greeting('An Individual Oiled Animal Has Been Processed!')
             ->line("Organization: {$originTeam->organization}")
@@ -65,10 +65,10 @@ class NotifyOwcnOfIoa extends Notification implements ShouldQueue
             ->line("IOA Case Number: {$IoaAdmission->case_number}")
             ->action('View Patient', $url);
 
-        return (new MailMessage())
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        return (new MailMessage)
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**

@@ -4,7 +4,6 @@ namespace Tests\Feature\Admin;
 
 use App\Enums\Extension;
 use App\Enums\Role;
-use App\Jobs\DeleteAccount;
 use App\Jobs\DeleteTeam;
 use App\Models\Banding;
 use App\Models\CareLog;
@@ -292,7 +291,7 @@ final class DeleteAccountTest extends TestCase
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
         $labReport = LabReport::factory()->for(LabFecalResult::factory(), 'labResult')->create([
-            'patient_id' => $admission->patient_id
+            'patient_id' => $admission->patient_id,
         ]);
 
         $labResultId = $labReport->labResult->id;
@@ -310,7 +309,7 @@ final class DeleteAccountTest extends TestCase
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
         $labReport = LabReport::factory()->for(LabCbcResult::factory(), 'labResult')->create([
-            'patient_id' => $admission->patient_id
+            'patient_id' => $admission->patient_id,
         ]);
 
         $labResultId = $labReport->labResult->id;
@@ -328,7 +327,7 @@ final class DeleteAccountTest extends TestCase
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
         $labReport = LabReport::factory()->for(LabChemistryResult::factory(), 'labResult')->create([
-            'patient_id' => $admission->patient_id
+            'patient_id' => $admission->patient_id,
         ]);
 
         $labResultId = $labReport->labResult->id;
@@ -346,7 +345,7 @@ final class DeleteAccountTest extends TestCase
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
         $labReport = LabReport::factory()->for(LabCytologyResult::factory(), 'labResult')->create([
-            'patient_id' => $admission->patient_id
+            'patient_id' => $admission->patient_id,
         ]);
 
         $labResultId = $labReport->labResult->id;
@@ -364,7 +363,7 @@ final class DeleteAccountTest extends TestCase
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
         $labReport = LabReport::factory()->for(LabToxicologyResult::factory(), 'labResult')->create([
-            'patient_id' => $admission->patient_id
+            'patient_id' => $admission->patient_id,
         ]);
 
         $labResultId = $labReport->labResult->id;
@@ -382,7 +381,7 @@ final class DeleteAccountTest extends TestCase
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
         $labReport = LabReport::factory()->for(LabUrinalysisResult::factory(), 'labResult')->create([
-            'patient_id' => $admission->patient_id
+            'patient_id' => $admission->patient_id,
         ]);
 
         $labResultId = $labReport->labResult->id;
@@ -513,7 +512,7 @@ final class DeleteAccountTest extends TestCase
         $admission = $this->createCase($team);
         Incident::factory()->create([
             'team_id' => $team->id,
-            'patient_id' => $admission->patient_id
+            'patient_id' => $admission->patient_id,
         ]);
 
         $this->assertDatabaseHas('incidents', ['team_id' => $team->id]);

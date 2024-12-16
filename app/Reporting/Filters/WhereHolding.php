@@ -2,7 +2,6 @@
 
 namespace App\Reporting\Filters;
 
-use App\Domain\Patients\PatientOptions;
 use App\Enums\AttributeOptionName;
 use App\Models\AttributeOption;
 use App\Options\Options;

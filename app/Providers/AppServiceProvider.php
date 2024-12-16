@@ -9,16 +9,12 @@ use App\PdfApiInterface;
 use App\Repositories\AdministrativeDivision;
 use App\Repositories\SettingsStore;
 use App\Services\DomPdfEngine;
-use App\SingleStoreSpatial\SingleStorePoint;
-use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Queue;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Number;
 use Illuminate\Support\ServiceProvider;
@@ -40,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
             if (Auth::check()) {
                 return new AdministrativeDivision(App::getLocale(), Auth::user()->currentTeam->country);
             }
+
             return new AdministrativeDivision(config('app.locale'), 'US');
         });
 
@@ -47,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
             if (config('wrmd.reporting.pdf_driver') === 'api2pdf') {
                 return new Api2Pdf(config('services.api2pdf.key'));
             } elseif (config('wrmd.reporting.pdf_driver') === 'domPdf') {
-                return new DomPdfEngine();
+                return new DomPdfEngine;
             }
         });
     }
@@ -92,7 +89,7 @@ class AppServiceProvider extends ServiceProvider
             'user' => \App\Models\User::class,
             'oil_spill_event' => \App\Models\OilSpillEvent::class,
             'oil_waterproofing_assessment' => \App\Models\OilWaterproofingAssessment::class,
-            'veterinarian' => \App\Models\Veterinarian::class
+            'veterinarian' => \App\Models\Veterinarian::class,
         ]);
 
         Route::bind('voidedPatient', fn ($value) => Patient::onlyVoided()->findOrFail($value));
@@ -114,7 +111,7 @@ class AppServiceProvider extends ServiceProvider
             \App\Policies\PrivacyPolicy::class,
             \App\Policies\OperationsPolicy::class,
         ] as $policy) {
-            foreach (get_class_methods(new $policy()) as $method) {
+            foreach (get_class_methods(new $policy) as $method) {
                 Gate::define($method, "$policy@$method");
             }
         }
@@ -123,7 +120,7 @@ class AppServiceProvider extends ServiceProvider
         foreach ([
             'significantFigures' => \App\Macros\SignificantFigures::class,
             'percentageOf' => \App\Macros\PercentageOf::class,
-            'survivalRate' => \App\Macros\SurvivalRate::class
+            'survivalRate' => \App\Macros\SurvivalRate::class,
         ] as $macro => $class) {
             Number::macro($macro, app($class)());
         }

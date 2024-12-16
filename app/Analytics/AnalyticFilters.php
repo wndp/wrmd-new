@@ -3,7 +3,6 @@
 namespace App\Analytics;
 
 use App\Enums\SettingKey;
-use App\Repositories\SettingsStore;
 use App\Support\Wrmd;
 use Carbon\Carbon;
 use Illuminate\Support\Fluent;

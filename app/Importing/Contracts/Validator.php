@@ -10,7 +10,7 @@ abstract class Validator
 
     public function __construct()
     {
-        $this->failed = new Collection();
+        $this->failed = new Collection;
     }
 
     /**

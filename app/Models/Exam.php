@@ -21,11 +21,11 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Exam extends Model implements Summarizable, Weighable
 {
     use HasFactory;
-    use SoftDeletes;
     use HasVersion7Uuids;
-    use ValidatesOwnership;
-    use LogsActivity;
     use LocksPatient;
+    use LogsActivity;
+    use SoftDeletes;
+    use ValidatesOwnership;
 
     protected $fillable = [
         'patient_id',
@@ -225,6 +225,7 @@ class Exam extends Model implements Summarizable, Weighable
             if (is_null($this->time_examined_at)) {
                 return $this->date_examined_at;
             }
+
             return $this->date_examined_at->setTimeFromTimeString($this->time_examined_at);
         });
     }
@@ -235,6 +236,7 @@ class Exam extends Model implements Summarizable, Weighable
             if (is_null($this->time_examined_at)) {
                 return $this->date_examined_at->toFormattedDayDateString();
             }
+
             return Timezone::convertFromUtcToLocal($this->date_examined_at->setTimeFromTimeString($this->time_examined_at))?->toDayDateTimeString();
         });
     }

@@ -7,16 +7,15 @@ use App\Models\Patient;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\AssistsWithAuthentication;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreatesTeamUser;
 
 final class BandingTest extends TestCase
 {
-    use RefreshDatabase;
     use Assertions;
     use CreatesTeamUser;
+    use RefreshDatabase;
 
     #[Test]
     public function aBandingIsRevisionable(): void

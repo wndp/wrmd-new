@@ -22,8 +22,6 @@ class RescuerPatientsList extends LiveList
             ->orderBy('admissions.case_id', 'desc')
             ->paginate(15);
 
-
-
         // $select = collect($this->columns)->diff(
         //     fields()->where('computed', true)->keys()->toArray()
         // );

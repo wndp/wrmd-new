@@ -3,18 +3,17 @@
 namespace App\Concerns;
 
 use App\Caches\QueryCache;
+use App\Collections\DailyTasksCollection;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
 use App\Enums\Extension;
 use App\Exceptions\AdmissionNotFoundException;
 use App\Exceptions\PatientVoidedException;
-use App\Extensions\ExtensionNavigation;
 use App\Models\Admission;
 use App\Models\AttributeOption;
 use App\Options\Options;
 use App\Paginators\SearchResultPaginator;
 use App\Repositories\OptionsStore;
-use App\Collections\DailyTasksCollection;
 use App\Support\DailyTasksFilters;
 use App\Support\ExtensionManager;
 use App\Support\Timezone;
@@ -118,7 +117,7 @@ trait LoadsAdmissionAndSharesPagination
      */
     public function loadAdmission(Paginator $admissionsPaginator, $teamId): Admission
     {
-        return tap($admissionsPaginator->first(), function ($admission) use ($teamId) {
+        return tap($admissionsPaginator->first(), function ($admission) {
             $this->certifyAdmission($admission);
 
             //$admission->patient->attemptToLock();
@@ -145,10 +144,10 @@ trait LoadsAdmissionAndSharesPagination
     protected function certifyAdmission(Admission $admission)
     {
         if (! $admission instanceof Admission) {
-            throw new AdmissionNotFoundException();
+            throw new AdmissionNotFoundException;
         }
 
-        if (!is_null($admission->patient()->withVoided()->first()->voided_at)) {
+        if (! is_null($admission->patient()->withVoided()->first()->voided_at)) {
             throw new PatientVoidedException($admission);
         }
     }
@@ -182,14 +181,14 @@ trait LoadsAdmissionAndSharesPagination
                     'inaturalist_url' => $admission->patient->taxon?->inaturalist_url,
                     'iucn_id' => $admission->patient->taxon?->iucn_id,
                     'iucn_url' => $admission->patient->taxon?->iucn_url,
-                    'iucn_conservation_status' => $admission->patient->taxon?->conservationStatuses()->where('authority', 'iucn')->first()?->status
+                    'iucn_conservation_status' => $admission->patient->taxon?->conservationStatuses()->where('authority', 'iucn')->first()?->status,
                 ],
                 'days_in_care' => $admission->patient->days_in_care,
                 'incident' => [
                     'id' => $admission->patient->incident?->id,
                     'incident_number' => $admission->patient->incident?->incident_number,
                 ],
-                'numberOfTasksDueToday' => $this->getNumberOfTasksDueToday($admission->patient)
+                'numberOfTasksDueToday' => $this->getNumberOfTasksDueToday($admission->patient),
             ],
             'cageCard' => [
                 'patient_id' => $admission->patient->id,
@@ -203,7 +202,7 @@ trait LoadsAdmissionAndSharesPagination
                 'name' => $admission->patient->name,
                 'reference_number' => $admission->patient->reference_number,
                 'microchip_number' => $admission->patient->microchip_number,
-                'case_number' => $admission->case_number
+                'case_number' => $admission->case_number,
             ],
             'locationCard' => [
                 'patient_id' => $admission->patient->id,
@@ -220,14 +219,14 @@ trait LoadsAdmissionAndSharesPagination
                     'area' => $patientLocation->area,
                     'enclosure' => $patientLocation->enclosure,
                     'comments' => $patientLocation->comments,
-                ])
+                ]),
             ],
             'admission' => [
                 'patient_id' => $admission->patient_id,
                 'case_year' => $admission->case_year,
                 'case_id' => $admission->case_id,
                 'hash' => $admission->hash,
-            ]
+            ],
         ]);
     }
 
@@ -256,7 +255,7 @@ trait LoadsAdmissionAndSharesPagination
                 'necropsy' => ExtensionManager::isActivated(Extension::NECROPSY) ? __('Necropsy Report') : false,
                 'banding_morphometrics' => ExtensionManager::isActivated(Extension::BANDING_MORPHOMETRICS) ? __('Banding and Morphometrics') : false,
                 'expenses' => ExtensionManager::isActivated(Extension::EXPENSES) ? __('Expense statement') : false,
-            ]))
+            ])),
         ]);
     }
 
@@ -287,7 +286,7 @@ trait LoadsAdmissionAndSharesPagination
             [AttributeOptionName::DAILY_TASK_DOSAGE_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_MG_PER_KG->value],
             [AttributeOptionName::DAILY_TASK_DOSE_UNITS->value, AttributeOptionUiBehavior::DAILY_TASK_DOSE_UNIT_IS_ML->value],
             [AttributeOptionName::EXAM_WEIGHT_UNITS->value, AttributeOptionUiBehavior::EXAM_WEIGHT_UNITS_IS_G->value],
-            [AttributeOptionName::DAILY_TASK_NUTRITION_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_NUTRITION_FREQUENCY_IS_HOURS->value]
+            [AttributeOptionName::DAILY_TASK_NUTRITION_FREQUENCIES->value, AttributeOptionUiBehavior::DAILY_TASK_NUTRITION_FREQUENCY_IS_HOURS->value],
         ]);
 
         Inertia::share([
@@ -306,7 +305,7 @@ trait LoadsAdmissionAndSharesPagination
                 'mlId',
                 'gramId',
                 'nutritionFrequencyHoursId'
-            )
+            ),
         ]);
     }
 
@@ -329,7 +328,7 @@ trait LoadsAdmissionAndSharesPagination
     {
         return DailyTasksCollection::make()
             ->withFilters(new DailyTasksFilters([
-                'date' => Carbon::now()
+                'date' => Carbon::now(),
             ]))
             ->forPatient($patient, Auth::user()->currentTeam)
             ->sum(fn ($task) => $task['number_of_occurrences'] - (

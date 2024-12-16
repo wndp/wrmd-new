@@ -2,9 +2,9 @@
 
 namespace App\Analytics\Charts;
 
-use App\Models\Admission;
 use App\Analytics\Contracts\Chart;
 use App\Analytics\FlatHierarchy;
+use App\Models\Admission;
 use Illuminate\Support\Str;
 
 class ClassificationTagsHierarchy extends Chart

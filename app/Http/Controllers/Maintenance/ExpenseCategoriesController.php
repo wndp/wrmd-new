@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Maintenance;
 
 use App\Extensions\Expenses\Models\Category;
-use App\Extensions\ExtensionNavigation;
 use App\Http\Controllers\Controller;
 use App\Models\ExpenseCategory;
 use App\Options\Options;

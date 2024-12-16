@@ -9,7 +9,5 @@ class NullGenerator extends Generator
     /**
      * Generate the report.
      */
-    public function handle(): void
-    {
-    }
+    public function handle(): void {}
 }

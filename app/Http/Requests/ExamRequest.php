@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\SettingKey;
 use App\Enums\Ability;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
+use App\Enums\SettingKey;
 use App\Rules\AttributeOptionExistsRule;
 use App\Support\Timezone;
 use App\Support\Wrmd;
@@ -26,7 +26,7 @@ class ExamRequest extends FormRequest
 
         [$examTypeCanOnlyOccurOnceIds] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::EXAM_TYPES->value,
-            AttributeOptionUiBehavior::EXAM_TYPE_CAN_ONLY_OCCUR_ONCE->value
+            AttributeOptionUiBehavior::EXAM_TYPE_CAN_ONLY_OCCUR_ONCE->value,
         ]);
 
         return [
@@ -40,7 +40,7 @@ class ExamRequest extends FormRequest
                         ->where('patient_id', $patient->id)
                         ->where('type_id', $this->input('type_id'))
                         ->ignore($this->route('exam') ?? 'NULL')
-                )
+                ),
             ],
             'examined_at' => 'required|date|after_or_equal:'.$admittedAt,
             'sex_id' => [
@@ -50,7 +50,7 @@ class ExamRequest extends FormRequest
             ],
             'weight' => [
                 'nullable',
-                'numeric'
+                'numeric',
             ],
             'weight_unit_id' => [
                 'nullable',
@@ -64,7 +64,7 @@ class ExamRequest extends FormRequest
             ],
             'age' => [
                 'nullable',
-                'numeric'
+                'numeric',
             ],
             'age_unit_id' => [
                 'nullable',
@@ -83,7 +83,7 @@ class ExamRequest extends FormRequest
             ],
             'temperature' => [
                 'nullable',
-                'numeric'
+                'numeric',
             ],
             'temperature_unit_id' => [
                 'nullable',
@@ -102,39 +102,39 @@ class ExamRequest extends FormRequest
             ],
             'head' => [
                 'nullable',
-                'string'
+                'string',
             ],
             'cns' => [
                 'nullable',
-                'string'
+                'string',
             ],
             'cardiopulmonary' => [
                 'nullable',
-                'string'
+                'string',
             ],
             'gastrointestinal' => [
                 'nullable',
-                'string'
+                'string',
             ],
             'musculoskeletal' => [
                 'nullable',
-                'string'
+                'string',
             ],
             'integument' => [
                 'nullable',
-                'string'
+                'string',
             ],
             'body' => [
                 'nullable',
-                'string'
+                'string',
             ],
             'forelimb' => [
                 'nullable',
-                'string'
+                'string',
             ],
             'hindlimb' => [
                 'nullable',
-                'string'
+                'string',
             ],
             'head_finding_id' => [
                 'nullable',
@@ -183,20 +183,20 @@ class ExamRequest extends FormRequest
             ],
             'treatment' => [
                 'nullable',
-                'string'
+                'string',
             ],
             'nutrition' => [
                 'nullable',
-                'string'
+                'string',
             ],
             'comments' => [
                 'nullable',
-                'string'
+                'string',
             ],
             'examiner' => [
                 'required',
-                'string'
-            ]
+                'string',
+            ],
         ];
     }
 
@@ -204,7 +204,7 @@ class ExamRequest extends FormRequest
     {
         return [
             'examined_at.required' => 'The examined at date field is required.',
-            'examined_at.date' => 'The examined at date is not a valid date.'
+            'examined_at.date' => 'The examined at date is not a valid date.',
         ];
     }
 

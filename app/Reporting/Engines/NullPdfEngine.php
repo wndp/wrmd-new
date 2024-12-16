@@ -7,38 +7,26 @@ use Illuminate\Support\Facades\File;
 
 class NullPdfEngine
 {
-    public function isInline(): bool
-    {
-    }
+    public function isInline(): bool {}
 
-    public function setInline(bool $inline)
-    {
-    }
+    public function setInline(bool $inline) {}
 
-    public function getFilename(): ?string
-    {
-    }
+    public function getFilename(): ?string {}
 
-    public function setFilename(?string $filename)
-    {
-    }
+    public function setFilename(?string $filename) {}
 
-    public function getOptions(): array
-    {
-    }
+    public function getOptions(): array {}
 
-    public function setOptions(array $options)
-    {
-    }
+    public function setOptions(array $options) {}
 
     public function wkHtmlToPdfFromHtml(string $html)
     {
-        return new static();
+        return new static;
     }
 
     public function headlessChromeFromHtml($html)
     {
-        return (new ApiResult())->createFromResponse(json_encode([
+        return (new ApiResult)->createFromResponse(json_encode([
             'success' => true,
             'pdf' => base_path('tests/storage/report.pdf'),
             'mbIn' => null,

@@ -19,7 +19,7 @@ use App\Reporting\Reports\Expenses\ExpenseStatement;
 use App\Reporting\Reports\Homecare\HomecareHoursByCaregiver;
 use App\Reporting\Reports\Homecare\PatientsSentToHomecare;
 use App\Reporting\Reports\Location\DeceasedPatientsByLocation;
-use App\Reporting\Reports\Location\{PendingPatientsByLocation};
+use App\Reporting\Reports\Location\PendingPatientsByLocation;
 use App\Reporting\Reports\Overview\AdmissionsByLocationFound;
 use App\Reporting\Reports\Overview\AdmissionsPerYearBySpecies;
 use App\Reporting\Reports\Overview\DailySummary;
@@ -54,11 +54,11 @@ class ReportsCollection extends Collection
 
     public static function register(): static
     {
-        if (!empty(static::$reports)) {
+        if (! empty(static::$reports)) {
             return static::$reports;
         }
 
-        $collection = new static();
+        $collection = new static;
 
         $collection->push(new ReportGroup(__('Overview'), [
             DailySummary::class,
@@ -141,7 +141,6 @@ class ReportsCollection extends Collection
                 ExpenseStatement::class,
             ]))->setPatientReports(true)->setVisibility(false)
         );
-
 
         if (Auth::check() && Auth::user()->can('viewWrmdAdmin')) {
             //$account = Auth::user()->current_account;

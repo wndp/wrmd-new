@@ -20,13 +20,13 @@ use Spatie\MediaLibrary\HasMedia;
 class Incident extends Model implements HasMedia
 {
     use HasFactory;
-    use SoftDeletes;
-    use ValidatesOwnership;
+    use HasVersion7Uuids;
+    use InteractsWithMedia;
+    use LogsActivity;
     use QueriesDateRange;
     use QueriesOneOfMany;
-    use InteractsWithMedia;
-    use HasVersion7Uuids;
-    use LogsActivity;
+    use SoftDeletes;
+    use ValidatesOwnership;
 
     protected $fillable = [
         'team_id',

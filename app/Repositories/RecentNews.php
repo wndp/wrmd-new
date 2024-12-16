@@ -37,7 +37,7 @@ class RecentNews
                         ];
                     });
             } catch (\Exception $e) {
-                return new Collection();
+                return new Collection;
             }
         });
     }

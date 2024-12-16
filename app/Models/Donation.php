@@ -3,16 +3,13 @@
 namespace App\Models;
 
 use App\Concerns\QueriesDateRange;
-use App\Models\AttributeOption;
 use App\Repositories\AdministrativeDivision;
-use App\Support\Timezone;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Number;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -20,10 +17,10 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Donation extends Model
 {
     use HasFactory;
-    use SoftDeletes;
-    use QueriesDateRange;
     use HasVersion7Uuids;
     use LogsActivity;
+    use QueriesDateRange;
+    use SoftDeletes;
 
     protected $fillable = [
         'person_id',

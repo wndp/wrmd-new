@@ -2,19 +2,19 @@
 
 namespace App\Analytics\Charts;
 
-use App\Models\Admission;
 use App\Analytics\Categories;
 use App\Analytics\ChronologicalCollection;
 use App\Analytics\Concerns\HandleChartPeriod;
 use App\Analytics\Concerns\HandleSeriesNames;
 use App\Analytics\Contracts\Chart;
 use App\Analytics\DataSet;
+use App\Models\Admission;
 use Illuminate\Support\Facades\DB;
 
 class PatientsInCare extends Chart
 {
-    use HandleSeriesNames;
     use HandleChartPeriod;
+    use HandleSeriesNames;
 
     /**
      * {@inheritdoc}
@@ -23,7 +23,7 @@ class PatientsInCare extends Chart
     {
         $period = $this->chartPeriod($this->filters);
 
-        $this->categories = (new Categories())->forTimePeriod($period, $this->filters);
+        $this->categories = (new Categories)->forTimePeriod($period, $this->filters);
 
         foreach ($this->filters->segments as $segment) {
             $this->series->addSeries(

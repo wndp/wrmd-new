@@ -24,10 +24,10 @@ class RescuerController extends Controller
         }
 
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::PERSON_ENTITY_TYPES->value,
-            ])
+            ]),
         ]);
 
         return Inertia::render('Patients/Rescuer', [

@@ -4,8 +4,6 @@ namespace App\Repositories;
 
 use App\Models\Patient;
 use App\Models\Team;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Cache;
 
 class RecentPatients
 {
@@ -20,7 +18,7 @@ class RecentPatients
                 fn ($patient) => [
                     'common_name' => $patient->common_name,
                     'case_number' => $patient->admissions->first()->case_number,
-                    'url' => $patient->admissions->first()->url
+                    'url' => $patient->admissions->first()->url,
                 ]
             );
     }
@@ -36,7 +34,7 @@ class RecentPatients
             ->transform(fn ($patient) => [
                 'common_name' => $patient->common_name,
                 'case_number' => $patient->admissions->first()->case_number,
-                'url' => $patient->admissions->first()->url
+                'url' => $patient->admissions->first()->url,
             ]);
     }
 }

@@ -18,7 +18,7 @@ class AccountsUsersController extends Controller
         $users = $team->allUsers()->transform(fn ($user) => [
             ...$user->toArray(),
             'created_at_diff_for_humans' => $user->created_at->translatedFormat(config('wrmd.date_format')),
-            'role_name_for_humans' => $user->getRoleNameOnTeamForHumans($team)
+            'role_name_for_humans' => $user->getRoleNameOnTeamForHumans($team),
         ]);
 
         return Inertia::render('Admin/Teams/Users', compact('team', 'users'));

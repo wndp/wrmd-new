@@ -10,7 +10,6 @@ use App\Models\Team;
 use App\Support\ExtensionManager;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -28,10 +27,10 @@ class AccountExtensionsController extends Controller
 
         $extensions = Arr::map(ExtensionManager::getPublic(), fn ($extension) => [
             ...$extension->toArray(),
-            'is_activated' => $activated->contains('extension', $extension->value)
+            'is_activated' => $activated->contains('extension', $extension->value),
         ]);
 
-        $standardExtensions = Arr::where($extensions, fn ($extension) => !$extension['pro']);
+        $standardExtensions = Arr::where($extensions, fn ($extension) => ! $extension['pro']);
         $proExtensions = Arr::where($extensions, fn ($extension) => $extension['pro']);
 
         return Inertia::render('Settings/Extensions', compact('standardExtensions', 'proExtensions'));
@@ -40,12 +39,12 @@ class AccountExtensionsController extends Controller
     /**
      * Activate an extension.
      */
-    public function store(Extension $extension, Team $team = null): RedirectResponse
+    public function store(Extension $extension, ?Team $team = null): RedirectResponse
     {
         if ($team instanceof Team) {
             abort_unless(
                 Auth::user()->can('manageAccounts') || Auth::user()->currentTeam->hasSubAccount($team),
-                new RecordNotOwned()
+                new RecordNotOwned
             );
         }
 
@@ -64,12 +63,12 @@ class AccountExtensionsController extends Controller
     /**
      * Deactivate an extension.
      */
-    public function destroy(Extension $extension, Team $team = null): RedirectResponse
+    public function destroy(Extension $extension, ?Team $team = null): RedirectResponse
     {
         if ($team instanceof Team) {
             abort_unless(
                 Auth::user()->can('manageTeams') || Auth::user()->currentTeam->hasSubAccount($team),
-                new RecordNotOwned()
+                new RecordNotOwned
             );
         }
 

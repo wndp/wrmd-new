@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Importing;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class TranslationController extends Controller
 {

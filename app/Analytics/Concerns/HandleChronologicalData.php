@@ -6,19 +6,19 @@ use App\Analytics\Categories;
 
 trait HandleChronologicalData
 {
-    use HandleSeriesNames;
     use HandleChartPeriod;
+    use HandleSeriesNames;
 
     /**
      * Default method to create a response for chronological series data.
      *
      * @param  \Carbon\Carbon|null  $start
      */
-    public function handleChronologicalData(string $seriesName = null, $startDate = null): void
+    public function handleChronologicalData(?string $seriesName = null, $startDate = null): void
     {
         $period = $this->chartPeriod($this->filters, $startDate);
 
-        $this->categories = (new Categories())->forTimePeriod($period, $this->filters);
+        $this->categories = (new Categories)->forTimePeriod($period, $this->filters);
 
         foreach ($this->filters->segments as $segment) {
             $this->series->addSeries(
@@ -48,7 +48,7 @@ trait HandleChronologicalData
     {
         $period = $this->chartPeriod($this->filters);
 
-        $this->categories = (new Categories())->forTimePeriod($period, $this->filters);
+        $this->categories = (new Categories)->forTimePeriod($period, $this->filters);
 
         foreach ($this->filters->segments as $segment) {
             $this->query($segment)

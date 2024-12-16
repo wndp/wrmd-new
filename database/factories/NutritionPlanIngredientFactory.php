@@ -20,7 +20,7 @@ class NutritionPlanIngredientFactory extends Factory
         return [
             'nutrition_plan_id' => NutritionPlan::factory(),
             'quantity' => $this->faker->randomDigitNotZero(),
-            'ingredient' => $this->faker->words(3, true)
+            'ingredient' => $this->faker->words(3, true),
         ];
     }
 }

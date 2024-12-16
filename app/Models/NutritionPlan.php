@@ -23,13 +23,13 @@ use function Illuminate\Events\queueable;
 
 class NutritionPlan extends Model implements Schedulable
 {
-    use HasFactory;
-    use SoftDeletes;
     use HasDailyTasks;
+    use HasFactory;
     use HasVersion7Uuids;
-    use ValidatesOwnership;
-    use LogsActivity;
     use LocksPatient;
+    use LogsActivity;
+    use SoftDeletes;
+    use ValidatesOwnership;
 
     protected $fillable = [
         'patient_id',
@@ -39,7 +39,7 @@ class NutritionPlan extends Model implements Schedulable
         'frequency',
         'frequency_unit_id',
         'route_id',
-        'description'
+        'description',
     ];
 
     protected $casts = [
@@ -50,7 +50,7 @@ class NutritionPlan extends Model implements Schedulable
         'frequency' => 'double',
         'frequency_unit_id' => 'integer',
         'route_id' => 'integer',
-        'description' => 'string'
+        'description' => 'string',
     ];
 
     protected $touches = [

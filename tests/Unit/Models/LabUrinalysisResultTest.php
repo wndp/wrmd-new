@@ -2,15 +2,11 @@
 
 namespace Tests\Unit\Models;
 
-use App\Models\LabUrinalysisResult;
 use App\Models\LabReport;
+use App\Models\LabUrinalysisResult;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\AssistsWithAuthentication;
-use Tests\Support\AssistsWithCases;
-use Tests\Support\AssistsWithTests;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 

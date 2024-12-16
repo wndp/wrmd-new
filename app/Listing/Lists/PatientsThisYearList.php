@@ -4,7 +4,6 @@ namespace App\Listing\Lists;
 
 use App\Listing\ListingQuery;
 use App\Listing\LiveList;
-use App\Models\Admission;
 use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
 

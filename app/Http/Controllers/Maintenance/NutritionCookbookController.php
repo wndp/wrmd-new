@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Maintenance;
 
 use App\Enums\AttributeOptionName;
 use App\Enums\FormulaType;
-use App\Extensions\ExtensionNavigation;
 use App\Http\Controllers\Controller;
 use App\Models\AttributeOption;
 use App\Models\Formula;
@@ -59,7 +58,7 @@ class NutritionCookbookController extends Controller
                 'integer',
                 new AttributeOptionExistsRule(AttributeOptionName::DAILY_TASK_NUTRITION_INGREDIENT_UNITS),
             ],
-            'ingredients.*.ingredient' => 'required|string'
+            'ingredients.*.ingredient' => 'required|string',
         ]);
 
         $formula = new Formula([
@@ -107,7 +106,7 @@ class NutritionCookbookController extends Controller
                 'integer',
                 new AttributeOptionExistsRule(AttributeOptionName::DAILY_TASK_NUTRITION_INGREDIENT_UNITS),
             ],
-            'ingredients.*.ingredient' => 'required|string'
+            'ingredients.*.ingredient' => 'required|string',
         ]);
 
         $formula->update([

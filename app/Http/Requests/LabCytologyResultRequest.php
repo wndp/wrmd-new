@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\AttributeOptionName;
-use App\Rules\AttributeOptionExistsRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LabCytologyResultRequest extends FormRequest

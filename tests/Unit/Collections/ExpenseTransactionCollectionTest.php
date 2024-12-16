@@ -5,8 +5,8 @@ namespace Tests\Unit\Collections;
 use App\Collections\ExpenseTransactionCollection;
 use App\Models\ExpenseTransaction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class ExpenseTransactionCollectionTest extends TestCase
 {

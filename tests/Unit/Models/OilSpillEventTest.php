@@ -11,17 +11,14 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\AssistsWithAuthentication;
-use Tests\Support\AssistsWithCases;
-use Tests\Support\AssistsWithTests;
 use Tests\TestCase;
 use Tests\Traits\CreatesTeamUser;
 
 #[Group('oil')]
 final class OilSpillEventTest extends TestCase
 {
-    use RefreshDatabase;
     use CreatesTeamUser;
+    use RefreshDatabase;
 
     #[Test]
     public function aSpillEventIsJustAnExtensionOfATeam(): void

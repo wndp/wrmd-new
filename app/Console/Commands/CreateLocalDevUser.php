@@ -6,10 +6,6 @@ use App\Enums\Role;
 use App\Enums\SettingKey;
 use App\Models\User;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
-use Laravel\Paddle\Cashier;
 use Silber\Bouncer\BouncerFacade;
 
 class CreateLocalDevUser extends Command
@@ -43,7 +39,7 @@ class CreateLocalDevUser extends Command
 
         $user->personalTeam()->settingsStore()->set([
             SettingKey::TIMEZONE->value => 'America/Los_Angeles',
-            SettingKey::LANGUAGE->value => 'en'
+            SettingKey::LANGUAGE->value => 'en',
         ]);
     }
 }

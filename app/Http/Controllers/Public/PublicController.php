@@ -36,7 +36,7 @@ class PublicController extends Controller
             ...$extension->toArray(),
         ]);
 
-        $standardExtensions = array_values(Arr::where($extensions, fn ($extension) => !$extension['pro']));
+        $standardExtensions = array_values(Arr::where($extensions, fn ($extension) => ! $extension['pro']));
         $proExtensions = array_values(Arr::where($extensions, fn ($extension) => $extension['pro']));
 
         return Inertia::render('Public/Features', compact('standardExtensions', 'proExtensions'));
@@ -64,12 +64,12 @@ class PublicController extends Controller
             'patients.release_type_id',
             'patients.is_carcass_saved',
         ])
-        ->transform(fn ($attribute) => Attribute::from($attribute))
-        ->filter(fn ($attribute) => $attribute->hasAttributeOptions())
-        ->transform(fn ($attribute) => [
-            'label' => $attribute->label(),
-            'options' => array_values($attribute->options()->first() ?? []),
-        ]);
+            ->transform(fn ($attribute) => Attribute::from($attribute))
+            ->filter(fn ($attribute) => $attribute->hasAttributeOptions())
+            ->transform(fn ($attribute) => [
+                'label' => $attribute->label(),
+                'options' => array_values($attribute->options()->first() ?? []),
+            ]);
 
         session()->put('import.whatImporting', 'patients');
 
@@ -81,8 +81,7 @@ class PublicController extends Controller
         });
 
         $filteredRequiredFields = collect($this->filteredRequiredFields())->transform(
-            fn ($attribute) =>
-            Attribute::from($attribute)->label()
+            fn ($attribute) => Attribute::from($attribute)->label()
         );
 
         return Inertia::render('Public/Importing', compact(
@@ -101,13 +100,14 @@ class PublicController extends Controller
 
             if (Str::contains($locale, '-')) {
                 $subdivision = $administrativeDivision->countrySubdivisions()[$locale];
+
                 return "$countryName - $subdivision";
             }
 
             return $countryName;
         })
-        ->sort()
-        ->values();
+            ->sort()
+            ->values();
 
         return Inertia::render('Public/Agencies', compact('annualReports'));
     }

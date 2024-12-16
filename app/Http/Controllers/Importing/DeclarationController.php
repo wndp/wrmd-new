@@ -39,7 +39,7 @@ class DeclarationController extends Controller
         );
 
         session()->put('import.filePath', $path);
-        session()->put('import.fileHeadings', Excel::toCollection(new HeadingRowImport(), $data['file'])->first()->first()->toArray());
+        session()->put('import.fileHeadings', Excel::toCollection(new HeadingRowImport, $data['file'])->first()->first()->toArray());
         session()->put('import.whatImporting', $data['what_importing']);
         session()->put('import.updateExistingRecords', $data['update_existing_records'] ?? 0);
 

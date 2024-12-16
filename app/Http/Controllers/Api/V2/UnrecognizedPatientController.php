@@ -23,7 +23,7 @@ class UnrecognizedPatientController extends Controller
             $patient->validateOwnership(auth()->user()->currentAccount->id);
         }
 
-        $results = (new TaxaPreciseSearchQuery())($data['newCommonName']);
+        $results = (new TaxaPreciseSearchQuery)($data['newCommonName']);
 
         abort_if(
             $results->unique('taxon_id')->count() !== 1,

@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\AttributeOption;
 use App\Models\LabFecalResult;
 use App\Models\Patient;
 use Illuminate\Database\Eloquent\Factories\Factory;

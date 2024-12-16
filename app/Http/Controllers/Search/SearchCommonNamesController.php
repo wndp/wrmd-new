@@ -23,17 +23,17 @@ class SearchCommonNamesController extends Controller
         $results = $request->whenFilled(
             'search',
             fn () => CommonName::search($request->input('search'))->get(),
-            fn () => new Collection()
+            fn () => new Collection
         )
-        ->transform(fn ($commonName) => [
-            'value' => $commonName->taxon_id,
-            'label' => $commonName->common_name,
-            'data' => []
-        ])
-        ->toBase()
-        ->merge($this->getMostCommon($request->input('search')))
-        ->unique('label')
-        ->take(20);
+            ->transform(fn ($commonName) => [
+                'value' => $commonName->taxon_id,
+                'label' => $commonName->common_name,
+                'data' => [],
+            ])
+            ->toBase()
+            ->merge($this->getMostCommon($request->input('search')))
+            ->unique('label')
+            ->take(20);
 
         return response()->json($results);
     }
@@ -61,7 +61,7 @@ class SearchCommonNamesController extends Controller
             ->transform(fn ($record) => [
                 'value' => $record->taxon_id,
                 'label' => $record->common_name,
-                'data' => []
+                'data' => [],
             ]);
     }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Analytics\Charts;
 
-use App\Models\Admission;
 use App\Analytics\Concerns\HandlePieData;
 use App\Analytics\Contracts\Chart;
+use App\Models\Admission;
 
 class PatientsByBodyCondition extends Chart
 {

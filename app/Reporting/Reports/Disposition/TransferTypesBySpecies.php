@@ -3,9 +3,7 @@
 namespace App\Reporting\Reports\Disposition;
 
 use App\Enums\AttributeOptionName;
-use App\Models\Admission;
 use App\Models\AttributeOption;
-use App\Patients\PatientOptions;
 use App\Reporting\Contracts\Report;
 use App\Reporting\Filters\DateFrom;
 use App\Reporting\Filters\DateRange;
@@ -14,10 +12,7 @@ use App\Reporting\Filters\IncludedTaxonomies;
 use App\Reporting\Filters\SpeciesGrouping;
 use App\Reporting\ReportsOnDispositions;
 use Carbon\Carbon;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class TransferTypesBySpecies extends Report
 {
@@ -45,8 +40,8 @@ class TransferTypesBySpecies extends Report
     public function filters(): Collection
     {
         return collect(array_merge((new DateRange('dispositioned_at'))->toArray(), [
-            new IncludedTaxonomies(),
-            new SpeciesGrouping(),
+            new IncludedTaxonomies,
+            new SpeciesGrouping,
         ]));
     }
 
@@ -55,7 +50,7 @@ class TransferTypesBySpecies extends Report
      */
     public function data(): array
     {
-        $includedTaxonomies = $this->getAppliedFilterValue(IncludedTaxonomies::class, (new IncludedTaxonomies())->default());
+        $includedTaxonomies = $this->getAppliedFilterValue(IncludedTaxonomies::class, (new IncludedTaxonomies)->default());
 
         $transferTypes = AttributeOption::getDropdownOptions([
             AttributeOptionName::PATIENT_TRANSFER_TYPES->value,
@@ -72,7 +67,7 @@ class TransferTypesBySpecies extends Report
                 'unidentified' => in_array('Unidentified', $includedTaxonomies) ? $this->scopeTransferTypeTotals('Unidentified') : [],
             ],
             'grand' => $this->scopeTransferTypeTotals($includedTaxonomies),
-            'transferTypes' => $transferTypes
+            'transferTypes' => $transferTypes,
         ];
     }
 

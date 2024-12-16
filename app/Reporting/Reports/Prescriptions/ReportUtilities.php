@@ -27,7 +27,7 @@ trait ReportUtilities
     {
         [$pendingPatientId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::PATIENT_DISPOSITIONS->value,
-            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_PENDING->value
+            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_PENDING->value,
         ]);
 
         return Prescription::select('prescriptions.*')

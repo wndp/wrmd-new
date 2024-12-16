@@ -8,7 +8,6 @@ use App\Models\Patient;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\AssistsWithAuthentication;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreatesUiBehavior;
@@ -16,8 +15,8 @@ use Tests\Traits\CreatesUiBehavior;
 final class NecropsyTest extends TestCase
 {
     use Assertions;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     #[Test]
     public function aNecropsyIsRevisionable(): void

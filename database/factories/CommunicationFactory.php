@@ -20,7 +20,7 @@ class CommunicationFactory extends Factory
         return [
             'incident_id' => Incident::factory(),
             'communication_at' => $this->faker->dateTimeBetween('-10 days', '10 days')->format('Y-m-d'),
-            'communication' => $this->faker->sentence()
+            'communication' => $this->faker->sentence(),
         ];
     }
 }

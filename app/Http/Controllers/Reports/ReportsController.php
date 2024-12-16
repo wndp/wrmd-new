@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Reports;
 
+use App\Http\Controllers\Controller;
 use App\Reporting\FacilitatesReporting;
 use App\Reporting\ReportsCollection;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;

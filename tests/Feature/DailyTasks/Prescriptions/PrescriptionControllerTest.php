@@ -21,11 +21,11 @@ use Tests\Traits\CreatesUiBehavior;
 #[Group('daily-tasks')]
 final class PrescriptionControllerTest extends TestCase
 {
+    use Assertions;
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
-    use Assertions;
+    use RefreshDatabase;
 
     #[Test]
     public function unAuthenticatedUsersCantStoreAPrescription(): void

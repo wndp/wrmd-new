@@ -46,8 +46,7 @@ class FortifyServiceProvider extends ServiceProvider
 
         RateLimiter::for(
             'auth',
-            fn (Request $request) =>
-            App::isProduction() ? [
+            fn (Request $request) => App::isProduction() ? [
                 Limit::perMinute(500),
                 Limit::perMinute(5)->by($request->ip()),
                 Limit::perMinute(5)->by($request->input('email')),

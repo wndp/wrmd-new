@@ -2,6 +2,4 @@
 
 namespace App\Analytics\Contracts;
 
-abstract class Chart extends Analytic
-{
-}
+abstract class Chart extends Analytic {}

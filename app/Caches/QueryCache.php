@@ -66,7 +66,7 @@ class QueryCache
      *
      * @return mixed
      */
-    public static function get(int $key = null)
+    public static function get(?int $key = null)
     {
         return $queryCache = json_decode(Redis::connection('cache')->get(static::fingerprint()));
 

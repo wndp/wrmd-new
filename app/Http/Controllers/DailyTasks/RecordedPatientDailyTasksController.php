@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\DailyTasks;
 
+use App\Collections\DailyTasksCollection;
 use App\Concerns\GetSchedulableFromResource;
 use App\Events\DailyTaskCompleted;
 use App\Http\Controllers\Controller;
 use App\Models\Patient;
-use App\Collections\DailyTasksCollection;
 use App\Support\DailyTasksFilters;
 use App\Support\Timezone;
-use App\Wrmd;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -57,9 +56,8 @@ class RecordedPatientDailyTasksController extends Controller
                         $values = [
                             'user_id' => Auth::id(),
                             'summary' => $schedualableModel->summary_body,
-                            'completed_at' => Timezone::convertFromLocalToUtc($request->input('completed_at'))
+                            'completed_at' => Timezone::convertFromLocalToUtc($request->input('completed_at')),
                         ];
-
 
                         $schedualableModel->recordedTasks()->updateOrCreate($attributes, $values);
                         //event(new DailyTaskCompleted($schedualableModel, $check));

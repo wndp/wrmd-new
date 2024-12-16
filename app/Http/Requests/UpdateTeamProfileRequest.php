@@ -26,7 +26,7 @@ class UpdateTeamProfileRequest extends FormRequest
         return [
             'status' => [
                 'required',
-                Rule::enum(AccountStatus::class)
+                Rule::enum(AccountStatus::class),
             ],
             'is_master_account' => 'nullable|boolean',
             'name' => 'required',

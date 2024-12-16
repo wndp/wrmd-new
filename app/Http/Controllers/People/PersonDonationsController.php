@@ -11,7 +11,6 @@ use App\Models\Donation;
 use App\Models\Person;
 use App\Repositories\OptionsStore;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -28,12 +27,12 @@ class PersonDonationsController extends Controller
         OptionsStore::add([
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::DONATION_METHODS->value,
-            ])
+            ]),
         ]);
 
         [$donationMethodIsCashId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::DONATION_METHODS->value,
-            AttributeOptionUiBehavior::DONATION_METHOD_IS_CASH->value
+            AttributeOptionUiBehavior::DONATION_METHOD_IS_CASH->value,
         ]);
 
         return Inertia::render('People/Donations', [
@@ -47,9 +46,9 @@ class PersonDonationsController extends Controller
                 'donated_at_for_humans' => $donation->donated_at?->translatedFormat(config('wrmd.date_format')),
                 'method_id' => $donation->method_id,
                 'method' => $donation->method?->value,
-                'comments' => $donation->comments
+                'comments' => $donation->comments,
             ]),
-            'donationMethodIsCashId' => $donationMethodIsCashId
+            'donationMethodIsCashId' => $donationMethodIsCashId,
         ]);
     }
 

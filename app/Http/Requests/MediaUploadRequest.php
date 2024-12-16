@@ -43,16 +43,16 @@ class MediaUploadRequest extends FormRequest
             ],
             'collection' => [
                 'required',
-                Rule::enum(MediaCollection::class)
+                Rule::enum(MediaCollection::class),
             ],
             'extension' => [
                 'required',
-                'string'
+                'string',
             ],
             'uuid' => [
                 'required',
                 'uuid',
-            ]
+            ],
         ];
     }
 }

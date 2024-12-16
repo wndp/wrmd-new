@@ -11,7 +11,7 @@ class WrmdAccounts extends Map
 {
     public function compute()
     {
-        $this->series = new Series();
+        $this->series = new Series;
 
         $this->series->push(
             [

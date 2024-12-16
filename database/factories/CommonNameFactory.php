@@ -20,7 +20,7 @@ class CommonNameFactory extends Factory
         return [
             'taxon_id' => Taxon::factory(),
             'common_name' => $this->faker->word(),
-            'language' => $this->faker->lexify('??')
+            'language' => $this->faker->lexify('??'),
         ];
     }
 }

@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use App\Events\CaseYearChanged;
 use App\Models\Team;
-use App\Support\Wrmd;
 use Closure;
 use Illuminate\Http\Request;
 use Inertia\Inertia;

@@ -4,11 +4,9 @@ namespace Tests\Feature\DailyTasks\Prescriptions;
 
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
-use App\Enums\FormulaType;
 use App\Models\Exam;
 use App\Models\Formula;
 use App\Models\Patient;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -20,8 +18,8 @@ use Tests\Traits\CreatesUiBehavior;
 final class PrescriptionFormulaLbsCalculationsTest extends TestCase
 {
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     #[Test]
     public function itCalculatesTheDoseForMlPerLbFormulas(): void

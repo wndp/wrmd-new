@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Enums\SettingKey;
-use App\Events\AccountUpdated;
 use App\Events\TeamUpdated;
 use App\Http\Controllers\Controller;
 use App\Support\Wrmd;
@@ -30,7 +29,7 @@ class ClassificationsController extends Controller
     public function update(): RedirectResponse
     {
         Wrmd::settings([
-            SettingKey::SHOW_TAGS => request()->input('showTags')
+            SettingKey::SHOW_TAGS => request()->input('showTags'),
         ]);
 
         event(new TeamUpdated(Auth::user()->currentAccount));

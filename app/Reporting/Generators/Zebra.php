@@ -44,7 +44,7 @@ class Zebra extends Generator
      */
     public function handle(): void
     {
-        $this->zpl = new Builder();
+        $this->zpl = new Builder;
 
         if (array_key_exists('homePosition', $this->report->options())) {
             $this->setLabelHomePosition($this->report->options()['homePosition']);

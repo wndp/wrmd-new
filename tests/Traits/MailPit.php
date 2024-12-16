@@ -168,7 +168,7 @@ trait MailPit
     /**
      * Assert email reply to address contains a given string.
      */
-    public function assertEmailReplyTo(string $replyTo, Response $email = null): self
+    public function assertEmailReplyTo(string $replyTo, ?Response $email = null): self
     {
         $this->assertStringContainsString($replyTo, $this->resolveEmail($email)['Content']['Headers']['Reply-To'][0]);
 
@@ -178,7 +178,7 @@ trait MailPit
     /**
      * Assert email reply to address does not contain a given string.
      */
-    public function assertNotEmailReplyTo(string $replyTo, Response $email = null): self
+    public function assertNotEmailReplyTo(string $replyTo, ?Response $email = null): self
     {
         $this->assertNotContains($replyTo, $this->resolveEmail($email)['Content']['Headers']['Reply-To'][0]);
 

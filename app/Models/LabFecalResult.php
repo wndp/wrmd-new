@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Badgeable;
-use App\Support\Wrmd;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,9 +17,10 @@ class LabFecalResult extends Model implements Badgeable
 {
     /** @use HasFactory<\Database\Factories\LabFecalResultFactory> */
     use HasFactory;
-    use SoftDeletes;
+
     use HasVersion7Uuids;
     use LogsActivity;
+    use SoftDeletes;
 
     protected $fillable = [
         'float_id',

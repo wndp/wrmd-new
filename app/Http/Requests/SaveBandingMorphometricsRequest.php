@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\SettingKey;
 use App\Enums\AttributeOptionName;
+use App\Enums\SettingKey;
 use App\Rules\AttributeOptionExistsRule;
 use App\Support\Wrmd;
 use Illuminate\Foundation\Http\FormRequest;
@@ -62,7 +62,7 @@ class SaveBandingMorphometricsRequest extends FormRequest
         return [
             'measured_at.required' => 'The date measured field is required.',
             'measured_at.date' => 'The date measured is not a valid date.',
-            'measured_at.after_or_equal' => 'The date measured must be a date after or equal to '.$admittedAt
+            'measured_at.after_or_equal' => 'The date measured must be a date after or equal to '.$admittedAt,
         ];
     }
 }

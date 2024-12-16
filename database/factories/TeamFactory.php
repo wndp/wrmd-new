@@ -4,14 +4,10 @@ namespace Database\Factories;
 
 use App\Enums\AccountStatus;
 use App\Enums\Plan;
-use App\Models\Customer;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
-use Laravel\Paddle\Cashier;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Team>

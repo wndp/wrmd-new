@@ -145,7 +145,7 @@ abstract class LiveList implements JsonSerializable
 
                     if ($entity === Entity::PATIENT) {
                         $model = $admission->patient;
-                    } else if ($entity->shouldDisplayLatestInLists()) {
+                    } elseif ($entity->shouldDisplayLatestInLists()) {
                         $model = $admission->patient->{$patientRelationship}->last(
                             fn ($model) => $model->created_at //
                         );
@@ -158,10 +158,10 @@ abstract class LiveList implements JsonSerializable
                     if (is_null($rawValue)) {
                         $row[$tableColumn] = null;
 
-                    } else if (Str::endsWith($column, '_at') || $rawValue instanceof Carbon) {
+                    } elseif (Str::endsWith($column, '_at') || $rawValue instanceof Carbon) {
                         $row[$tableColumn] = Carbon::parse($rawValue)->format(config('wrmd.date_format'));
 
-                    } else if (Attribute::tryFrom($tableColumn)?->hasAttributeOptions()) {
+                    } elseif (Attribute::tryFrom($tableColumn)?->hasAttributeOptions()) {
                         $row[$tableColumn] = $model->{Attribute::from($tableColumn)->attributeOptionOwningModelRelationship()}?->value;
 
                     } else {
@@ -191,16 +191,15 @@ abstract class LiveList implements JsonSerializable
 
     /**
      * Format the list's headers to translated values.
-     *
-     * @return array
      */
     public function formatListHeaders(): array
     {
         return array_map(function ($name) {
             $attribute = Attribute::tryFrom($name);
+
             return [
                 'label' => $attribute->label(),
-                'key' => $name
+                'key' => $name,
             ];
         }, $this->columns);
     }

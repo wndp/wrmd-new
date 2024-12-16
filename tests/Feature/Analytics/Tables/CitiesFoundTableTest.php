@@ -15,7 +15,7 @@ final class CitiesFoundTableTest extends TestCase
     {
         $table = (new CitiesFound(
             Team::factory()->create(),
-            new AnalyticFilters()
+            new AnalyticFilters
         ))->compute();
     }
 }

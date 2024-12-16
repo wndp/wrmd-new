@@ -19,7 +19,7 @@ class NecropsySummaryController extends Controller
         $data = $request->validate([
             'samples_collected' => [
                 'nullable',
-                'array'
+                'array',
             ],
             'samples_collected.*' => [
                 'integer',
@@ -27,15 +27,15 @@ class NecropsySummaryController extends Controller
             ],
             'other_sample' => [
                 'nullable',
-                'array'
+                'array',
             ],
             'morphologic_diagnosis' => [
                 'nullable',
-                'string'
+                'string',
             ],
             'gross_summary_diagnosis' => [
                 'nullable',
-                'string'
+                'string',
             ],
         ]);
 

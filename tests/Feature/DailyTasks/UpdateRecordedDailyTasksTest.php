@@ -21,8 +21,8 @@ final class UpdateRecordedDailyTasksTest extends TestCase
 {
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     #[Test]
     public function whenASchedualableIsUpdatedUpdateRecordedDailyTasksIsDispatched(): void

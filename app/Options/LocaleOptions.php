@@ -3,9 +3,6 @@
 namespace App\Options;
 
 use App\Repositories\AdministrativeDivision;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Str;
 
 class LocaleOptions extends Options
 {

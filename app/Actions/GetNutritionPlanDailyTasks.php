@@ -13,7 +13,7 @@ class GetNutritionPlanDailyTasks
 
     public static function handle(DailyTasksFilters $filters, array $patientIds)
     {
-        if (!in_array(DailyTaskSchedulable::NUTRITION->value, $filters->include)) {
+        if (! in_array(DailyTaskSchedulable::NUTRITION->value, $filters->include)) {
             return;
         }
 
@@ -27,6 +27,6 @@ class GetNutritionPlanDailyTasks
             )
             ->with('patient.admissions')
             ->get();
-            //->filter->isDueOn($filters->date);
+        //->filter->isDueOn($filters->date);
     }
 }

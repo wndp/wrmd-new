@@ -15,11 +15,11 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Banding extends Model
 {
     use HasFactory;
+    use HasVersion7Uuids;
+    use LocksPatient;
+    use LogsActivity;
     use SoftDeletes;
     use ValidatesOwnership;
-    use HasVersion7Uuids;
-    use LogsActivity;
-    use LocksPatient;
 
     protected $fillable = [
         'patient_id',

@@ -20,7 +20,7 @@ class SettingFactory extends Factory
     {
         return [
             'team_id' => Team::factory()->createQuietly(),
-            'key' => SettingKey::TIMEZONE
+            'key' => SettingKey::TIMEZONE,
         ];
     }
 }

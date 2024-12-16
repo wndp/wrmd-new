@@ -14,9 +14,9 @@ class CustomField extends Model
 {
     use HasFactory;
     use HasVersion7Uuids;
-    use ValidatesOwnership;
-    use LogsActivity;
     use LocksPatient;
+    use LogsActivity;
+    use ValidatesOwnership;
 
     protected $fillable = [
         'account_field_id',

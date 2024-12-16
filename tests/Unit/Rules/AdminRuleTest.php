@@ -12,9 +12,9 @@ use Tests\Traits\CreatesTeamUser;
 
 final class AdminRuleTest extends TestCase
 {
+    use CreatesTeamUser;
     //use AssistsWithAuthentication;
     use RefreshDatabase;
-    use CreatesTeamUser;
 
     #[Test]
     public function updateMyRoleToAllowedValue(): void

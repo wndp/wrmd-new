@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Importing;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class MappingController extends Controller
 {
@@ -96,7 +95,7 @@ class MappingController extends Controller
                 ->toArray();
         }
 
-        $worksheet = (new PreviewImport())->toCollection(session('import.filePath'), 's3-accounts')->first();
+        $worksheet = (new PreviewImport)->toCollection(session('import.filePath'), 's3-accounts')->first();
 
         $sampleValues = collect(array_fill_keys(session('import.fileHeadings'), null))->map(function ($value, $heading) use ($worksheet) {
             return $worksheet->map(function ($row) use ($heading) {

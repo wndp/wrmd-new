@@ -16,9 +16,10 @@ class LabUrinalysisResult extends Model implements Badgeable
 {
     /** @use HasFactory<\Database\Factories\LabUrinalysisResultFactory> */
     use HasFactory;
-    use SoftDeletes;
+
     use HasVersion7Uuids;
     use LogsActivity;
+    use SoftDeletes;
 
     protected $fillable = [
         'collection_method_id',

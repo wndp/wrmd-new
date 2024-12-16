@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveBandingRequest;
 use App\Models\Banding;
 use App\Models\Patient;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class BandingController extends Controller
 {

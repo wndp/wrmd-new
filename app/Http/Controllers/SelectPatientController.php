@@ -26,7 +26,7 @@ class SelectPatientController extends Controller
      *
      * @return void
      */
-    public function destroy(Patient $patient = null)
+    public function destroy(?Patient $patient = null)
     {
         if (is_null($patient)) {
             PatientSelector::empty();

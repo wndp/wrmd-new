@@ -3,21 +3,17 @@
 namespace Tests\Unit\Models;
 
 use App\Models\Donation;
-use App\Repositories\AdministrativeDivision;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\AssistsWithAuthentication;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreatesTeamUser;
 
 final class DonationTest extends TestCase
 {
-    use RefreshDatabase;
     use Assertions;
     use CreatesTeamUser;
+    use RefreshDatabase;
 
     #[Test]
     public function aDonationHasAnAppendedValueFormattedAttribute(): void

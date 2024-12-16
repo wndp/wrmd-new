@@ -15,7 +15,7 @@ final class MostPrevalentSpeciesTableTest extends TestCase
     {
         $table = (new MostPrevalentSpecies(
             Team::factory()->create(),
-            new AnalyticFilters()
+            new AnalyticFilters
         ))->compute();
     }
 }

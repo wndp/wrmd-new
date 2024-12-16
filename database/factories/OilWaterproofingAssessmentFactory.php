@@ -20,7 +20,7 @@ class OilWaterproofingAssessmentFactory extends Factory
         return [
             'patient_id' => Patient::factory(),
             'date_evaluated_at' => $this->faker->dateTimeBetween('1 days', '90 days')->format('Y-m-d'),
-            'examiner' => $this->faker->name()
+            'examiner' => $this->faker->name(),
         ];
     }
 }

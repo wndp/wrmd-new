@@ -38,7 +38,7 @@ trait ReportsOnDispositions
             [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_TRANSFERRED->value],
             [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_DOA->value],
             [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_DIED->value],
-            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_EUTHANIZED->value]
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_EUTHANIZED->value],
         ]);
 
         $groupBy = $this->getAppliedFilterValue(SpeciesGrouping::class);
@@ -55,10 +55,10 @@ trait ReportsOnDispositions
             ->addSelect(DB::raw("sum(if(`disposition_id` = $doaPatientId, 1, 0)) as `doa`"))
             //->addSelect(DB::raw("sum(if(`disposition_id` = 'Died +24hr', 1, 0)) as `died_after_24`"))
             //->addSelect(DB::raw("sum(if(`disposition_id` = 'Died in 24hr', 1, 0)) as `died_in_24`"))
-            ->addSelect(DB::raw("sum(if(`disposition_id` in (".implode(',', $diedPatientId)."), 1, 0)) as `died`"))
+            ->addSelect(DB::raw('sum(if(`disposition_id` in ('.implode(',', $diedPatientId).'), 1, 0)) as `died`'))
             //->addSelect(DB::raw("sum(if(`disposition_id` = 'Euthanized +24hr', 1, 0)) as `euthanized_after_24`"))
             //->addSelect(DB::raw("sum(if(`disposition_id` = 'Euthanized in 24hr', 1, 0)) as `euthanized_in_24`"))
-            ->addSelect(DB::raw("sum(if(`disposition_id` in (".implode(',', $euthanizedPatientId)."), 1, 0)) as `euthanized`"))
+            ->addSelect(DB::raw('sum(if(`disposition_id` in ('.implode(',', $euthanizedPatientId).'), 1, 0)) as `euthanized`'))
 
             ->joinPatients()
             ->joinTaxa();
@@ -78,7 +78,7 @@ trait ReportsOnDispositions
     /**
      * Get release type totals per species for taxonomic class.
      */
-    protected function scopeReleaseTypeTotals(string|array $class = null): Builder
+    protected function scopeReleaseTypeTotals(string|array|null $class = null): Builder
     {
         $query = Admission::where('team_id', $this->team->id);
 
@@ -105,7 +105,7 @@ trait ReportsOnDispositions
 
         [$releasedPatientId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::PATIENT_DISPOSITIONS->value,
-            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_RELEASED->value
+            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_RELEASED->value,
         ]);
 
         return $query->joinPatients()
@@ -139,7 +139,7 @@ trait ReportsOnDispositions
 
         [$transferedPatientId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             AttributeOptionName::PATIENT_DISPOSITIONS->value,
-            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_TRANSFERRED->value
+            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_TRANSFERRED->value,
         ]);
 
         return $this->applyFilters($query)->joinPatients()

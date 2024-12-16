@@ -53,8 +53,8 @@ class DispositionLocation extends Map
     public function query($segment)
     {
         $releasedAndTransferredIds = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
-           [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_RELEASED->value],
-           [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_TRANSFERRED->value]
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_RELEASED->value],
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_TRANSFERRED->value],
         ]);
 
         $query = Admission::where('team_id', $this->team->id)
@@ -77,8 +77,8 @@ class DispositionLocation extends Map
     public function compareQuery($segment)
     {
         $releasedAndTransferredIds = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
-           [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_RELEASED->value],
-           [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_TRANSFERRED->value]
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_RELEASED->value],
+            [AttributeOptionName::PATIENT_DISPOSITIONS->value, AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_TRANSFERRED->value],
         ]);
 
         $query = Admission::where('team_id', $this->team->id)

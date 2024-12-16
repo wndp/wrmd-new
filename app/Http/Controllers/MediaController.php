@@ -7,9 +7,7 @@ use App\Enums\MediaResource;
 use App\Exceptions\RecordNotOwned;
 use App\Http\Requests\MediaUploadRequest;
 use App\Models\Media;
-use App\Wrmd;
 use Carbon\Carbon;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +16,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Number;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 
 class MediaController extends Controller
 {
@@ -58,8 +55,8 @@ class MediaController extends Controller
             ],
         ], [
             'file_size.lte' => __('The file size must be less than or equal to :maxFileSize', [
-                'maxFileSize' => Number::fileSize(config('media-library.max_file_size'))
-            ])
+                'maxFileSize' => Number::fileSize(config('media-library.max_file_size')),
+            ]),
         ]);
 
         if ($validator->fails()) {
@@ -72,7 +69,7 @@ class MediaController extends Controller
 
         $owningModel->addMediaFromDisk($request->input('key'), 's3')
             ->usingName($urlFriendlyFileName)
-            ->usingFileName($urlFriendlyFileName . ".{$request->input('extension')}")
+            ->usingFileName($urlFriendlyFileName.".{$request->input('extension')}")
             ->withCustomProperties(array_merge(
                 ['obtained_at' => Carbon::now()],
                 Arr::wrap($request->input('custom_properties'))
@@ -82,7 +79,6 @@ class MediaController extends Controller
 
         return response()->noContent();
     }
-
 
     /**
      * Update the specified media in storage.
@@ -109,7 +105,7 @@ class MediaController extends Controller
         $owningModel = $mediaResource->owningModelInstance($request->string('resource_id'))
             ->validateOwnership(Auth::user()->current_team_id);
 
-        abort_unless($owningModel->media->contains($media->id), new RecordNotOwned());
+        abort_unless($owningModel->media->contains($media->id), new RecordNotOwned);
 
         foreach ($request->only(['obtained_at', 'source', 'description', 'is_evidence', 'is_correction']) as $key => $value) {
             $media->setCustomProperty($key, $value);
@@ -144,7 +140,7 @@ class MediaController extends Controller
         $owningModel = $mediaResource->owningModelInstance($request->string('resource_id'))
             ->validateOwnership(Auth::user()->current_team_id);
 
-        abort_unless($owningModel->media->contains($media->id), new RecordNotOwned());
+        abort_unless($owningModel->media->contains($media->id), new RecordNotOwned);
 
         $media->delete();
 

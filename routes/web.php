@@ -8,7 +8,6 @@ use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\SelectPatientController;
 use App\Http\Controllers\SelectPatientsController;
 use Illuminate\Auth\Middleware\Authorize;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\Response;

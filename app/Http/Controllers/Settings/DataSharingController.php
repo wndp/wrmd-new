@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Enums\SettingKey;
-use App\Events\AccountUpdated;
 use App\Http\Controllers\Controller;
 use App\Support\Wrmd;
 use Illuminate\Http\RedirectResponse;

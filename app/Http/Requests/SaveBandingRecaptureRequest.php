@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\SettingKey;
 use App\Enums\AttributeOptionName;
+use App\Enums\SettingKey;
 use App\Rules\AttributeOptionExistsRule;
 use App\Support\Wrmd;
 use Illuminate\Foundation\Http\FormRequest;
@@ -56,7 +56,7 @@ class SaveBandingRecaptureRequest extends FormRequest
         return [
             'recaptured_at.required' => 'The recapture date field is required.',
             'recaptured_at.date' => 'The recapture date is not a valid date.',
-            'recaptured_at.after_or_equal' => 'The recapture date must be a date after or equal to '.$admittedAt
+            'recaptured_at.after_or_equal' => 'The recapture date must be a date after or equal to '.$admittedAt,
         ];
     }
 }

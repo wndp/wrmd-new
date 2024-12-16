@@ -9,16 +9,15 @@ use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\App;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Veterinarian extends Model
 {
     use HasFactory;
-    use ValidatesOwnership;
     use HasVersion7Uuids;
     use LogsActivity;
+    use ValidatesOwnership;
 
     /**
      * The attributes that are mass assignable.
@@ -57,14 +56,13 @@ class Veterinarian extends Model
 
     protected function formattedInlineAddress(): Attribute
     {
-        return Attribute::get(fn () =>
-            app(AdministrativeDivision::class)->inlineAddress(
-                organization: $this->business_name,
-                subdivision: $this->subdivision,
-                locality: $this->city,
-                postalCode: $this->postal_code,
-                addressLine1: $this->address,
-            )
+        return Attribute::get(fn () => app(AdministrativeDivision::class)->inlineAddress(
+            organization: $this->business_name,
+            subdivision: $this->subdivision,
+            locality: $this->city,
+            postalCode: $this->postal_code,
+            addressLine1: $this->address,
+        )
         );
     }
 

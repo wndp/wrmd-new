@@ -26,12 +26,12 @@ class SaveDonationRequest extends FormRequest
         return [
             'donated_at' => 'required|date',
             'value' => 'required|numeric',
-            'method_id'  => [
+            'method_id' => [
                 'nullable',
                 'integer',
                 new AttributeOptionExistsRule(AttributeOptionName::DONATION_METHODS),
             ],
-            'comments' => 'nullable|string'
+            'comments' => 'nullable|string',
         ];
     }
 

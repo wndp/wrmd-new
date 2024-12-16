@@ -21,8 +21,8 @@ final class PrescriptionsIsDueTest extends TestCase
 {
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     /**
      * @var \App\Domain\AccountPatients\AccountPatient

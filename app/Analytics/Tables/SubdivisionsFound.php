@@ -13,7 +13,7 @@ class SubdivisionsFound extends Table
      */
     public function compute()
     {
-        $this->series = new Series();
+        $this->series = new Series;
 
         foreach ($this->filters->segments as $segment) {
             $this->series = $this->series->merge(

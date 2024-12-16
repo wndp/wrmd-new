@@ -3,7 +3,6 @@
 namespace App\Listing\Lists;
 
 use App\Enums\SettingKey;
-use App\Domain\Admissions\Admission;
 use App\Listing\ListingQuery;
 use App\Listing\LiveList;
 use App\Support\Wrmd;

@@ -13,7 +13,7 @@ class GetRecheckDailyTasks
 
     public static function handle(DailyTasksFilters $filters, array $patientIds)
     {
-        if (!in_array(DailyTaskSchedulable::RECHECKS->value, $filters->include)) {
+        if (! in_array(DailyTaskSchedulable::RECHECKS->value, $filters->include)) {
             return;
         }
 

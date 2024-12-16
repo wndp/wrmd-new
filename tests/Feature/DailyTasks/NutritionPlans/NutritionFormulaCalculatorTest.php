@@ -24,7 +24,7 @@ final class NutritionFormulaCalculatorTest extends TestCase
             'type' => FormulaType::NUTRITION,
             'defaults' => [
                 'start_on_plan_date' => true,
-            ]
+            ],
         ]);
 
         $results = $formula->calculatedAttributes($patient);
@@ -42,7 +42,7 @@ final class NutritionFormulaCalculatorTest extends TestCase
             'defaults' => [
                 'start_on_plan_date' => true,
                 'duration' => 7,
-            ]
+            ],
         ]);
 
         $results = $formula->calculatedAttributes($patient);
@@ -59,7 +59,7 @@ final class NutritionFormulaCalculatorTest extends TestCase
             'type' => FormulaType::NUTRITION,
             'defaults' => [
                 'start_on_plan_date' => true,
-            ]
+            ],
         ]);
 
         $results = $formula->calculatedAttributes($patient);

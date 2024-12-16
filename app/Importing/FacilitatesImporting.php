@@ -76,7 +76,7 @@ trait FacilitatesImporting
     public function getImportCollectionForSession(string $sessionId, string $filePath): Collection
     {
         return Cache::remember("import.$sessionId", now()->addMinutes(30), function () use ($filePath) {
-            return (new CompleteImport())->toCollection($filePath, 's3-accounts')->first();
+            return (new CompleteImport)->toCollection($filePath, 's3-accounts')->first();
         });
     }
 

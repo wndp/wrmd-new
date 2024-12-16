@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Hotline;
 
 use App\Http\Controllers\Controller;
 use App\Models\Incident;
-use App\Rules\VerifyAuthPassword;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

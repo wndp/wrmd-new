@@ -10,8 +10,8 @@ use Illuminate\Support\Collection;
 
 class ChronologicalCollection extends Collection
 {
-    use HandleAggregates;
     use GroupsDataByTimePeriod;
+    use HandleAggregates;
 
     /**
      * Pad the collection's items with missing dates within the provided period.

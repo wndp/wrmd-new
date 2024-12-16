@@ -15,7 +15,7 @@ class EmailController extends Controller
     /**
      * Produce an admission or collection of admissions into PDF medical record.
      */
-    public function store(Request $request, Patient $patient = null): RedirectResponse
+    public function store(Request $request, ?Patient $patient = null): RedirectResponse
     {
         $request->validate([
             'to' => 'required',

@@ -27,7 +27,7 @@ class AnalyticsViewController extends Controller
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::PATIENT_DISPOSITIONS->value,
                 AttributeOptionName::TAXA_CLASSES->value,
-            ])
+            ]),
         ]);
 
         // OptionsStore::add(new TaxonomyOptions());

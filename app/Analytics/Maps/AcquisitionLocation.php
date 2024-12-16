@@ -2,10 +2,10 @@
 
 namespace App\Analytics\Maps;
 
-use App\Models\Admission;
 use App\Analytics\Concerns\HandleSeriesNames;
 use App\Analytics\Contracts\Map;
 use App\Analytics\MapIntoMapMarkers;
+use App\Models\Admission;
 
 class AcquisitionLocation extends Map
 {

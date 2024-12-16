@@ -58,7 +58,7 @@ class Bz extends AnnualReport implements WithMultipleSheets
     public function filters(): Collection
     {
         return parent::filters()->push(
-            new MonthFilter()
+            new MonthFilter
         );
     }
 

@@ -7,14 +7,13 @@ use App\Enums\AttributeOptionUiBehavior;
 use App\Http\Requests\StoreQuickAdmitRequest;
 use App\Models\Exam;
 use App\Support\Timezone;
-use Illuminate\Http\Request;
 
 class PatientsQuickAdmitController extends Controller
 {
     public function create()
     {
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             'actionsAfterStore' => Options::arrayToSelectable([
                 'return' => __('I want to admit another patient'),
                 'view' => __("I want to view this patient's record"),
@@ -37,7 +36,7 @@ class PatientsQuickAdmitController extends Controller
                 AttributeOptionName::PATIENT_DISPOSITIONS->value,
                 AttributeOptionName::PATIENT_RELEASE_TYPES->value,
                 AttributeOptionName::PATIENT_TRANSFER_TYPES->value,
-            ])
+            ]),
         ]);
 
         $this->shareLastCaseId();
@@ -77,7 +76,7 @@ class PatientsQuickAdmitController extends Controller
                         'age',
                         'age_unit_id',
                         'attitude_id',
-                    ])
+                    ]),
                 ]
             );
         });

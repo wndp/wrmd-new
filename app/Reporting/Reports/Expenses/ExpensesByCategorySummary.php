@@ -2,7 +2,6 @@
 
 namespace App\Reporting\Reports\Expenses;
 
-use App\Extensions\Expenses\Models\Transaction;
 use App\Models\ExpenseTransaction;
 use App\Reporting\Contracts\Report;
 use App\Reporting\Filters\DateFrom;

@@ -13,7 +13,7 @@ class Account extends Map
         $team = Team::find($this->team->id);
 
         if ($team->coordinates) {
-            $this->series = (new Series())->push(
+            $this->series = (new Series)->push(
                 [
                     //'name' => 'test',
                     'data' => [$this->formatMarkers($team)],

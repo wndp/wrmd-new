@@ -9,8 +9,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\AssistsWithAuthentication;
-use Tests\Support\AssistsWithCases;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;
@@ -20,8 +18,8 @@ final class HasWildAlertEventTest extends TestCase
 {
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     #[Test]
     public function itNotifiesIfThePatientHasBeenInCareForExcessiveDays(): void
@@ -30,8 +28,8 @@ final class HasWildAlertEventTest extends TestCase
         Http::fake([
             HasWildAlertEvent::apiUrl().'/alerts' => Http::response([
                 'data' => [[
-                    'name' => 'Foo birds with some disease'
-                ]]
+                    'name' => 'Foo birds with some disease',
+                ]],
             ]),
         ]);
 

@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\DailyTasks;
 
 use App\Concerns\GetSchedulableFromResource;
-use App\Enums\DailyTaskSchedulable;
 use App\Http\Controllers\Controller;
 use App\Schedulable;
 use App\Support\Wrmd;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\Response;
 
 class DestroyDailyTaskController extends Controller
 {

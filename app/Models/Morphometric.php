@@ -17,14 +17,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Morphometric extends Model implements Weighable, Summarizable
+class Morphometric extends Model implements Summarizable, Weighable
 {
     use HasFactory;
+    use HasVersion7Uuids;
+    use LocksPatient;
+    use LogsActivity;
     use SoftDeletes;
     use ValidatesOwnership;
-    use HasVersion7Uuids;
-    use LogsActivity;
-    use LocksPatient;
 
     protected $fillable = [
         'patient_id',
@@ -64,7 +64,7 @@ class Morphometric extends Model implements Weighable, Summarizable
         'tail_length' => 'float',
         'weight' => 'float',
         'samples_collected' => 'array',
-        'remarks' => 'string'
+        'remarks' => 'string',
     ];
 
     protected $touches = [

@@ -13,7 +13,6 @@ use App\Http\Controllers\Api\V2\TrainingController;
 use App\Http\Controllers\Api\V2\UnrecognizedAccountPatientController;
 use App\Http\Controllers\Api\V2\UnrecognizedPatientController;
 use App\Http\Controllers\LocaleController;
-use App\Http\Controllers\Maintenance\NutritionCookbookController;
 use App\Http\Controllers\RelationshipsController;
 use App\Http\Controllers\Settings\UsersController;
 

@@ -41,7 +41,7 @@ class HomecareHoursByCaregiver extends Report
 
         $caregivers = Admission::where([
             'team_id' => $this->team->id,
-            'case_year' => $year
+            'case_year' => $year,
         ])
             ->select('area', 'enclosure')
             //->selectRaw('sum(hours) as hours_sum')

@@ -8,7 +8,6 @@ use App\Models\Subscription;
 use App\Models\SubscriptionItem;
 use App\Models\Team;
 use App\Models\Transaction;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\ValidationException;

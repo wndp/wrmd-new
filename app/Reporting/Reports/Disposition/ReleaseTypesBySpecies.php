@@ -40,8 +40,8 @@ class ReleaseTypesBySpecies extends Report
     public function filters(): Collection
     {
         return collect(array_merge((new DateRange('dispositioned_at'))->toArray(), [
-            new IncludedTaxonomies(),
-            new SpeciesGrouping(),
+            new IncludedTaxonomies,
+            new SpeciesGrouping,
         ]));
     }
 
@@ -50,7 +50,7 @@ class ReleaseTypesBySpecies extends Report
      */
     public function data(): array
     {
-        $includedTaxonomies = $this->getAppliedFilterValue(IncludedTaxonomies::class, (new IncludedTaxonomies())->default());
+        $includedTaxonomies = $this->getAppliedFilterValue(IncludedTaxonomies::class, (new IncludedTaxonomies)->default());
 
         $releaseTypes = AttributeOption::getDropdownOptions([
             AttributeOptionName::PATIENT_RELEASE_TYPES->value,
@@ -67,7 +67,7 @@ class ReleaseTypesBySpecies extends Report
                 'unidentified' => in_array('Unidentified', $includedTaxonomies) ? $this->applyFilters($this->scopeReleaseTypeTotals('Unidentified'))->get() : [],
             ],
             'grand' => $this->applyFilters($this->scopeReleaseTypeTotals($includedTaxonomies))->get(),
-            'releaseTypes' => $releaseTypes
+            'releaseTypes' => $releaseTypes,
         ];
     }
 }

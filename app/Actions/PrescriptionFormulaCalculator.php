@@ -2,11 +2,10 @@
 
 namespace App\Actions;
 
-use App\Enums\SettingKey;
-use App\Actions\GetPatientWeights;
 use App\Concerns\AsAction;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
+use App\Enums\SettingKey;
 use App\Models\Formula;
 use App\Models\Patient;
 use App\Support\Weight;
@@ -16,33 +15,50 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Str;
 use JsonSerializable;
 
-class PrescriptionFormulaCalculator implements JsonSerializable, Arrayable
+class PrescriptionFormulaCalculator implements Arrayable, JsonSerializable
 {
     use AsAction;
 
     protected $dosageUnitIsPerKgIds;
+
     protected $dosageUnitIsPerLbIds;
+
     protected $dosageUnitIsMgPerKgId;
+
     protected $dosageUnitIsMlPerKgId;
+
     protected $dosageUnitIsIuPerKgId;
+
     protected $dosageUnitIsMgPerLbId;
+
     protected $dosageUnitIsIuPerLbId;
 
     protected $concentrationUnitIsMgIds;
+
     protected $concentrationUnitIsIuIds;
+
     protected $concentrationUnitIsMgPerMlId;
+
     protected $concentrationUnitIsMgPerTabId;
+
     protected $concentrationUnitIsMgPerCapId;
+
     protected $concentrationUnitIsMgPerGramId;
+
     protected $concentrationUnitIsIuPerCapId;
+
     protected $concentrationUnitIsIuPerMlId;
 
     protected $doseUnitIsMlId;
+
     protected $doseUnitIsCapId;
+
     protected $doseUnitIsTabId;
+
     protected $doseUnitIsGramId;
 
     protected $defaults;
+
     protected $patient;
 
     /**

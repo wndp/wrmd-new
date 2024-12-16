@@ -16,9 +16,10 @@ class LabChemistryResult extends Model implements Badgeable
 {
     /** @use HasFactory<\Database\Factories\LabChemistryResultFactory> */
     use HasFactory;
-    use SoftDeletes;
+
     use HasVersion7Uuids;
     use LogsActivity;
+    use SoftDeletes;
 
     protected $fillable = [
         'ast',

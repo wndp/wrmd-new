@@ -185,7 +185,7 @@ enum Extension: string
                 self::DAILY_EXAM,
                 self::OIL_SPILL_PROCESSING,
                 self::OIL_SPILL_WASH,
-                self::OIL_SPILL_WATERPROOFING_ASSESSMENT
+                self::OIL_SPILL_WATERPROOFING_ASSESSMENT,
             ],
             self::OWCN_OWRMD => [
                 self::OIL_SPILL,

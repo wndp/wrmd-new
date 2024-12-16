@@ -39,9 +39,9 @@ class TotalDispositionsBySpecies extends ExportableReport implements WithMultipl
      */
     public function filters(): Collection
     {
-        return parent::filters()->merge(array_merge((new DateRange())->toArray(), [
-            new IncludedTaxonomies(),
-            new SpeciesGrouping(),
+        return parent::filters()->merge(array_merge((new DateRange)->toArray(), [
+            new IncludedTaxonomies,
+            new SpeciesGrouping,
         ]));
     }
 
@@ -51,7 +51,7 @@ class TotalDispositionsBySpecies extends ExportableReport implements WithMultipl
     public function data(): array
     {
         $sheets = new Collection($this->sheets());
-        $includedTaxonomies = $this->getAppliedFilterValue(IncludedTaxonomies::class, (new IncludedTaxonomies())->default());
+        $includedTaxonomies = $this->getAppliedFilterValue(IncludedTaxonomies::class, (new IncludedTaxonomies)->default());
 
         return [
             'dateFrom' => Carbon::parse($this->getAppliedFilterValue(DateFrom::class))->format(config('wrmd.date_format')),
@@ -68,7 +68,7 @@ class TotalDispositionsBySpecies extends ExportableReport implements WithMultipl
     {
         $sheets = [];
 
-        foreach ($this->getAppliedFilterValue(IncludedTaxonomies::class, (new IncludedTaxonomies())->default()) as $class) {
+        foreach ($this->getAppliedFilterValue(IncludedTaxonomies::class, (new IncludedTaxonomies)->default()) as $class) {
             $sheets[$class] = (new DispositionStatsPerTaxonomySheet($this->team))
                 ->withFilters($this->appliedFilters)
                 ->withRequest(new Request(compact('class')));

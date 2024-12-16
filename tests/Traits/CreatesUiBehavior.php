@@ -17,7 +17,7 @@ trait CreatesUiBehavior
 
         return AttributeOptionUiBehaviorModel::factory()->create([
             'attribute_option_id' => $attributeOptionId,
-            'behavior' => $behavior->value
+            'behavior' => $behavior->value,
         ]);
     }
 

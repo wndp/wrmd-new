@@ -6,7 +6,6 @@ use App\Enums\Plan;
 use App\Models\Team;
 use App\Repositories\OptionsStore;
 use App\Repositories\RecentPatients;
-use App\Repositories\SettingsStore;
 use App\Support\ExtensionManager;
 use App\Support\Wrmd;
 use Illuminate\Contracts\Auth\Access\Gate;
@@ -71,7 +70,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => fn () => array_merge($user->only('id', 'name', 'email'), [
                     'two_factor_enabled' => ! is_null($user->two_factor_secret),
                     'all_teams' => $user->allTeams()->values(),
-                    'current_team' => $user->currentTeam
+                    'current_team' => $user->currentTeam,
                 ]),
                 'abilities' => $abilities,
                 'team' => $team,
@@ -85,7 +84,7 @@ class HandleInertiaRequests extends Middleware
 
             $parentShare['unreadNotifications'] = $user->unreadNotifications->transform(fn ($notification) => [
                 ...$notification->toArray(),
-                'created_at_diff' => $notification->created_at->diffForHumans()
+                'created_at_diff' => $notification->created_at->diffForHumans(),
             ]);
 
             if ($team instanceof Team) {

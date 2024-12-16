@@ -13,7 +13,6 @@ use App\Support\Timezone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-use Inertia\Response;
 
 class WaterproofingAssessmentController extends Controller
 {
@@ -28,7 +27,7 @@ class WaterproofingAssessmentController extends Controller
                 AttributeOptionName::OILED_CONDITIONING_PREENINGS->value,
                 AttributeOptionName::OILED_CONDITIONING_UNKNOWN_BOOL->value,
                 AttributeOptionName::OILED_CONDITIONING_AREAS_WET_TO_SKIN->value,
-            ])
+            ]),
         ]);
 
         $assessments = $admission

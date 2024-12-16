@@ -12,7 +12,7 @@ use Silber\Bouncer\BouncerFacade;
 
 trait CreatesTeamUser
 {
-    public function createTeamUser(array $teamOverrides = [], array $userOverrides = [], Role $role = null)
+    public function createTeamUser(array $teamOverrides = [], array $userOverrides = [], ?Role $role = null)
     {
         $role = $role?->value ?? Role::ADMIN->value;
 

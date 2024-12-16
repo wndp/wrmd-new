@@ -6,7 +6,6 @@ use App\Exceptions\RecordNotOwned;
 use App\Models\Admission;
 use App\Models\Patient;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 trait ValidatesOwnership
@@ -16,14 +15,14 @@ trait ValidatesOwnership
      *
      * @throws \Illuminate\Http\Exceptions\HttpResponseException
      */
-    public function validateOwnership(int $teamId, string $message = null): self
+    public function validateOwnership(int $teamId, ?string $message = null): self
     {
         if ($this->isOwnedBy($teamId)) {
             return $this;
         }
 
         throw new HttpResponseException(
-            (new RecordNotOwned())->toResponse(request())
+            (new RecordNotOwned)->toResponse(request())
         );
     }
 
@@ -34,7 +33,7 @@ trait ValidatesOwnership
         }
 
         throw new HttpResponseException(
-            (new RecordNotOwned())->toResponse(request())
+            (new RecordNotOwned)->toResponse(request())
         );
     }
 

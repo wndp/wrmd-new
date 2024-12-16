@@ -11,7 +11,7 @@ class AttributeOptionsCollection extends Collection
     public function optionsToSelectable(): array
     {
         return $this->mapWithKeys(fn ($array, $key) => [
-            Str::of($key)->lower()->camel()->toString() . 'Options' => Options::arrayToSelectable($array)
+            Str::of($key)->lower()->camel()->toString().'Options' => Options::arrayToSelectable($array),
         ])->toArray();
     }
 

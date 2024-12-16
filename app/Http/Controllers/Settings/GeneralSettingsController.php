@@ -25,7 +25,7 @@ class GeneralSettingsController extends Controller
     public function edit()
     {
         OptionsStore::add([
-            'roles' => Options::enumsToSelectable(Role::publicRoles())
+            'roles' => Options::enumsToSelectable(Role::publicRoles()),
         ]);
 
         $generalSettings = [

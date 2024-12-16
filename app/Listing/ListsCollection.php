@@ -29,13 +29,13 @@ class ListsCollection extends Collection
 
     public static function register(): static
     {
-        if (!empty(static::$lists)) {
+        if (! empty(static::$lists)) {
             return static::$lists;
         }
 
         $team = Auth::user()->currentTeam;
 
-        $collection = new static();
+        $collection = new static;
 
         $collection->push(new ListGroup('Standard', [
             new PatientsThisYearList($team),

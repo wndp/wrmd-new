@@ -10,6 +10,7 @@ class FailedImport extends Model
 {
     /** @use HasFactory<\Database\Factories\FailedImportFactory> */
     use HasFactory;
+
     use HasVersion7Uuids;
 
     protected $fillable = [
