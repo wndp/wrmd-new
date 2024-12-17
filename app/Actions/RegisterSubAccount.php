@@ -16,7 +16,6 @@ use App\Support\ExtensionManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 
 class RegisterSubAccount
 {
@@ -113,11 +112,10 @@ class RegisterSubAccount
     {
         if ($this->request->boolean('clone_custom_fields')) {
             CustomField::where('team_id', $this->masterAccount->id)->get()->each(
-                fn ($customField) =>
-                CustomField::create(array_merge(
+                fn ($customField) => CustomField::create(array_merge(
                     Arr::except($customField->toArray(), ['id', 'team_id', 'created_at', 'updated_at']),
                     [
-                        'team_id' => $subAccount->id
+                        'team_id' => $subAccount->id,
                     ]
                 ))
             );

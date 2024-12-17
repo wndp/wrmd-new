@@ -14,7 +14,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
-use Tests\Support\AssistsWithAuthentication;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreatesTeamUser;

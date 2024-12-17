@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\SubAccounts;
 
-use App\Domain\Accounts\Account;
 use App\Enums\Ability;
 use App\Models\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;

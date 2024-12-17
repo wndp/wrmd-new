@@ -13,6 +13,7 @@ use Tests\Traits\CreatesTeamUser;
 final class AdminRuleTest extends TestCase
 {
     use CreatesTeamUser;
+
     //use AssistsWithAuthentication;
     use RefreshDatabase;
 
