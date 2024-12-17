@@ -9,6 +9,7 @@ use App\Enums\AccountStatus;
 use App\Enums\Extension;
 use App\Enums\Role;
 use App\Enums\SettingKey;
+use App\Models\CustomField;
 use App\Models\Team;
 use App\Models\User;
 use App\Support\ExtensionManager;
@@ -38,7 +39,7 @@ class RegisterSubAccount
         $subAccount->save();
 
         $this->cloneSettings($subAccount);
-        //$this->cloneCustomFields($subAccount);
+        $this->cloneCustomFields($subAccount);
         $this->addUsers($subAccount);
         $this->activateExtensions($subAccount);
 
@@ -111,12 +112,15 @@ class RegisterSubAccount
     public function cloneCustomFields(Team $subAccount)
     {
         if ($this->request->boolean('clone_custom_fields')) {
-            $select = CustomField::selectRaw($subAccount->id.', `account_field_id`, `panel`, `location`, `type`, `label`, `options`, `is_required`, now(), now()')
-                ->where('team_id', $this->masterAccount->id);
-
-            $insertQuery = 'INSERT into custom_fields (`team_id`, `account_field_id`, `panel`, `location`, `type`, `label`, `options`, `is_required`, `updated_at`, `created_at`) '.$select->toSql();
-
-            DB::insert($insertQuery, $select->getBindings());
+            CustomField::where('team_id', $this->masterAccount->id)->get()->each(
+                fn ($customField) =>
+                CustomField::create(array_merge(
+                    Arr::except($customField->toArray(), ['id', 'team_id', 'created_at', 'updated_at']),
+                    [
+                        'team_id' => $subAccount->id
+                    ]
+                ))
+            );
         }
     }
 
@@ -166,9 +170,9 @@ class RegisterSubAccount
     {
         if ($this->request->boolean('clone_extensions')) {
             ExtensionManager::getActivated($this->masterAccount)
-                ->each(fn ($extension) => ExtensionManager::activate(
+                ->each(fn ($teamExtension) => ExtensionManager::activate(
                     $subAccount,
-                    Extension::tryFrom($extension->extension),
+                    $teamExtension->extension, //Extension::tryFrom(dd($extension->extension)),
                     activateDependents: false
                 ));
         }

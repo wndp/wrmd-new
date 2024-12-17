@@ -19,7 +19,8 @@ class CustomField extends Model
     use ValidatesOwnership;
 
     protected $fillable = [
-        'account_field_id',
+        'team_id',
+        'team_field_id',
         'group',
         'panel',
         'location',
@@ -30,7 +31,8 @@ class CustomField extends Model
     ];
 
     protected $casts = [
-        'account_field_id' => 'integer',
+        'team_id' => 'integer',
+        'team_field_id' => 'integer',
         'group' => 'string',
         'panel' => 'string',
         'location' => 'string',

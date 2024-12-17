@@ -2,7 +2,10 @@
 
 namespace Tests\Traits;
 
+use App\Enums\SettingKey;
 use App\Exceptions\RecordNotOwned;
+use App\Models\Setting;
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Testing\TestResponse;
@@ -29,6 +32,33 @@ trait Assertions
             $revisionable->id,
             $actual->subject_id
         );
+    }
+
+    public function assertTeamHasSetting(Team $team, SettingKey $key, $value = null)
+    {
+        $setting = Setting::where([
+            'team_id' => $team->id,
+            'key' => $key->value,
+        ])->first();
+
+        $this->assertInstanceOf(
+            Setting::class,
+            $setting,
+            "Unable to find setting with key [{$key->value}] for team [{$team->id}]."
+        );
+
+        if ($value) {
+            $expected = json_encode($value);
+            $actual = json_encode($setting->value);
+
+            $this->assertEquals(
+                $expected,
+                $actual,
+                "Expected setting with key [{$key->value}] to have value [{$expected}] but it had {$actual} instead."
+            );
+        }
+
+        return $this;
     }
 
     #[Before]
