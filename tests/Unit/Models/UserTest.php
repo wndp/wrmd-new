@@ -45,7 +45,7 @@ final class UserTest extends TestCase
         $user = User::factory()->create();
         $team = Team::factory()->create([
             'user_id' => $user->id,
-            'personal_team' => true
+            'personal_team' => true,
         ]);
 
         $user->joinTeamWithRole($team, Role::ADMIN);

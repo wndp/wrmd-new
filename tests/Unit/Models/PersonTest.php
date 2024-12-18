@@ -50,7 +50,7 @@ final class PersonTest extends TestCase
             'phone' => '808-555-1234',
             'phone_normalized' => '8085551234',
             'phone_e164' => '+18085551234',
-            'phone_national' => '(808) 555-1234'
+            'phone_national' => '(808) 555-1234',
         ]);
     }
 
@@ -79,7 +79,7 @@ final class PersonTest extends TestCase
             'alternate_phone' => '808-555-1234',
             'alternate_phone_normalized' => '8085551234',
             'alternate_phone_e164' => '+18085551234',
-            'alternate_phone_national' => '(808) 555-1234'
+            'alternate_phone_national' => '(808) 555-1234',
         ]);
     }
 

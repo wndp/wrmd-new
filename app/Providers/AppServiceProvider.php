@@ -44,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
             if (config('wrmd.reporting.pdf_driver') === 'api2pdf') {
                 return new Api2Pdf(config('services.api2pdf.key'));
             } elseif (config('wrmd.reporting.pdf_driver') === 'domPdf') {
-                return new DomPdfEngine();
+                return new DomPdfEngine;
             }
         });
     }
@@ -90,7 +90,7 @@ class AppServiceProvider extends ServiceProvider
             'oil_spill_event' => \App\Models\OilSpillEvent::class,
             'oil_waterproofing_assessment' => \App\Models\OilWaterproofingAssessment::class,
             'veterinarian' => \App\Models\Veterinarian::class,
-            'wildlife_recovery_patient' => \App\Models\WildlifeRecoveryPatient::class
+            'wildlife_recovery_patient' => \App\Models\WildlifeRecoveryPatient::class,
         ]);
 
         Route::bind('voidedPatient', fn ($value) => Patient::onlyVoided()->findOrFail($value));
@@ -112,7 +112,7 @@ class AppServiceProvider extends ServiceProvider
             \App\Policies\PrivacyPolicy::class,
             \App\Policies\OperationsPolicy::class,
         ] as $policy) {
-            foreach (get_class_methods(new $policy()) as $method) {
+            foreach (get_class_methods(new $policy) as $method) {
                 Gate::define($method, "$policy@$method");
             }
         }

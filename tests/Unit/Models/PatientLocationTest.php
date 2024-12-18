@@ -120,7 +120,7 @@ final class PatientLocationTest extends TestCase
 
         // Cant update
         $patient->locations()->updateExistingPivot($patientLocation->id, [
-            'comments' => 'NEW'
+            'comments' => 'NEW',
         ]);
         $this->assertEquals('OLD', $patient->locations->first()->patientLocation->fresh()->comments);
 

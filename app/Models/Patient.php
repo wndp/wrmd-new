@@ -52,7 +52,7 @@ class Patient extends Model implements HasMedia
      */
     protected static function booted(): void
     {
-        static::addGlobalScope(new VoidedScope());
+        static::addGlobalScope(new VoidedScope);
     }
 
     protected $fillable = [

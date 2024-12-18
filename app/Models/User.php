@@ -30,10 +30,10 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasRolesAndAbilities;
     use HasTeams;
     use HasUniqueFields;
+    use LogsActivity;
     use Notifiable;
     use TwoFactorAuthenticatable;
     use ValidatesOwnership;
-    use LogsActivity;
 
     /**
      * The attributes that are mass assignable.

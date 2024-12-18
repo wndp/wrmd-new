@@ -15,8 +15,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
-use Propaganistas\LaravelPhone\Casts\RawPhoneNumberCast;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -181,13 +179,13 @@ class Person extends Model
         static::saving(function (Person $person) {
             $administrativeDivision = app(AdministrativeDivision::class);
 
-            if ($person->wasChanged('phone') || !$person->exists) {
+            if ($person->wasChanged('phone') || ! $person->exists) {
                 $person->phone_normalized = $administrativeDivision->phoneNumber($person->phone, format: PhoneFormat::NORMALIZED);
                 $person->phone_e164 = $administrativeDivision->phoneNumber($person->phone, format: PhoneFormat::E164);
                 $person->phone_national = $administrativeDivision->phoneNumber($person->phone, format: PhoneFormat::NATIONAL);
             }
 
-            if ($person->wasChanged('alternate_phone') || !$person->exists) {
+            if ($person->wasChanged('alternate_phone') || ! $person->exists) {
                 $person->alternate_phone_normalized = $administrativeDivision->phoneNumber($person->alternate_phone, format: PhoneFormat::NORMALIZED);
                 $person->alternate_phone_e164 = $administrativeDivision->phoneNumber($person->alternate_phone, format: PhoneFormat::E164);
                 $person->alternate_phone_national = $administrativeDivision->phoneNumber($person->alternate_phone, format: PhoneFormat::NATIONAL);

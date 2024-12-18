@@ -55,7 +55,7 @@ class Veterinarian extends Model
         static::saving(function (Veterinarian $veterinarian) {
             $administrativeDivision = app(AdministrativeDivision::class);
 
-            if ($veterinarian->wasChanged('phone') || !$veterinarian->exists) {
+            if ($veterinarian->wasChanged('phone') || ! $veterinarian->exists) {
                 $veterinarian->phone_normalized = $administrativeDivision->phoneNumber($veterinarian->phone, format: PhoneFormat::NORMALIZED);
                 $veterinarian->phone_e164 = $administrativeDivision->phoneNumber($veterinarian->phone, format: PhoneFormat::E164);
                 $veterinarian->phone_national = $administrativeDivision->phoneNumber($veterinarian->phone, format: PhoneFormat::NATIONAL);

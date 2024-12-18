@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\People;
 
 use App\Enums\AttributeOptionName;
-use App\Enums\PhoneFormat;
 use App\Events\PersonUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdatePersonRequest;
 use App\Models\AttributeOption;
 use App\Models\Person;
 use App\Options\LocaleOptions;
-use App\Repositories\AdministrativeDivision;
 use App\Repositories\OptionsStore;
 use App\Repositories\PeopleRepository;
 use Illuminate\Http\Request;
@@ -39,7 +37,7 @@ class PersonController extends Controller
     public function create()
     {
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::PERSON_ENTITY_TYPES->value,
             ]),
@@ -84,7 +82,7 @@ class PersonController extends Controller
     public function edit(Person $person)
     {
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::PERSON_ENTITY_TYPES->value,
             ]),

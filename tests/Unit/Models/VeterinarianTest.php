@@ -69,7 +69,7 @@ final class VeterinarianTest extends TestCase
             'phone' => '808-555-1234',
             'phone_normalized' => '8085551234',
             'phone_e164' => '+18085551234',
-            'phone_national' => '(808) 555-1234'
+            'phone_national' => '(808) 555-1234',
         ]);
     }
 
@@ -85,7 +85,7 @@ final class VeterinarianTest extends TestCase
             'phone' => '123',
             'phone_normalized' => '123',
             'phone_e164' => '123',
-            'phone_national' => '123'
+            'phone_national' => '123',
         ]);
     }
 }

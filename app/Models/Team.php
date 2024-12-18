@@ -182,7 +182,7 @@ class Team extends JetstreamTeam
         static::saving(function (Team $team) {
             $administrativeDivision = app(AdministrativeDivision::class);
 
-            if ($team->wasChanged('phone') || !$team->exists) {
+            if ($team->wasChanged('phone') || ! $team->exists) {
                 $team->phone_normalized = $administrativeDivision->phoneNumber($team->phone, format: PhoneFormat::NORMALIZED);
                 $team->phone_e164 = $administrativeDivision->phoneNumber($team->phone, format: PhoneFormat::E164);
                 $team->phone_national = $administrativeDivision->phoneNumber($team->phone, format: PhoneFormat::NATIONAL);
