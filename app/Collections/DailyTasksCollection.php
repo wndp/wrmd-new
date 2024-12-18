@@ -34,7 +34,7 @@ class DailyTasksCollection extends Collection
 
     public function __construct($items = [])
     {
-        $this->filters = new DailyTasksFilters;
+        $this->filters = new DailyTasksFilters();
 
         parent::__construct($items);
     }
@@ -61,11 +61,18 @@ class DailyTasksCollection extends Collection
             ->where('team_id', $team->id);
 
         if ($this->filters->facility === 'anywhere') {
-            $query->leftJoinCurrentLocation()->whereNotNull('facility_id');
+            //$query->leftJoinCurrentLocation()->whereNotNull('facility_id');
+            $query->whereHas('locations', fn ($query) => $query->whereNotNull('facility_id')
+                ->orderBy('moved_in_at', 'desc')
+                ->limit(1));
         } elseif ($this->filters->facility === 'none-assigned') {
-            $query->leftJoinCurrentLocation()->whereNull('facility_id');
+            //$query->leftJoinCurrentLocation()->whereNull('facility_id');
+            $query->doesntHave('locations');
         } else {
-            $query->leftJoinCurrentLocation()->where('facility_id', $this->filters->facility);
+            //$query->leftJoinCurrentLocation()->where('facility_id', $this->filters->facility);
+            $query->whereHas('locations', fn ($query) => $query->where('facility_id', $this->filters->facility)
+                ->orderBy('moved_in_at', 'desc')
+                ->limit(1));
         }
 
         if (! $this->filters->include_non_pending) {
@@ -97,7 +104,7 @@ class DailyTasksCollection extends Collection
         return data_get(
             $this->getNormalizedTasks(),
             '0.patients.0.tasks',
-            new self
+            new self()
         );
     }
 
@@ -267,7 +274,7 @@ class DailyTasksCollection extends Collection
                 ->pluck('occurrence'),
             'body' => nl2br($model->summary_body),
             'area' => $lastLocation?->area,
-            'enclosure' => "{$lastLocation?->area} {$lastLocation?->enclosure}",
+            'enclosure' => $lastLocation?->enclosure,
             'assignment' => $model->assigned_to,
             'model' => $model->toArray(),
         ];
@@ -283,7 +290,7 @@ class DailyTasksCollection extends Collection
         }
 
         if ($this->filters->group_by === 'Enclosure') {
-            return $task['enclosure'] ?? __('Unknown');
+            return implode(' ', array_filter([$task['area'], $task['enclosure']])) ?? __('Unknown');
         }
 
         if ($this->filters->group_by === 'Type') {

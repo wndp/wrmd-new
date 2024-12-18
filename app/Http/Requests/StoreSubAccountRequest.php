@@ -29,7 +29,7 @@ class StoreSubAccountRequest extends FormRequest
             'subdivision' => 'required',
             'postal_code' => 'nullable',
             'contact_name' => 'required',
-            'phone_number' => 'required',
+            'phone' => 'required|phone:country',
             'contact_email' => 'required|email',
             'notes' => 'nullable',
             'clone_settings' => 'sometimes|boolean',

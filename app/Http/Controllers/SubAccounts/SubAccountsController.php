@@ -41,7 +41,7 @@ class SubAccountsController extends Controller
     public function create(): Response
     {
         OptionsStore::add([
-            new LocaleOptions,
+            new LocaleOptions(),
         ]);
 
         $users = Auth::user()
@@ -71,7 +71,7 @@ class SubAccountsController extends Controller
     {
         abort_unless(
             Auth::user()->currentTeam->hasSubAccount($subAccount),
-            new RecordNotOwned
+            new RecordNotOwned()
         );
 
         $analyticFiltersForAllYears = [
@@ -127,11 +127,11 @@ class SubAccountsController extends Controller
     {
         abort_unless(
             Auth::user()->currentTeam->hasSubAccount($subAccount),
-            new RecordNotOwned
+            new RecordNotOwned()
         );
 
         OptionsStore::add([
-            new LocaleOptions,
+            new LocaleOptions(),
         ]);
 
         return Inertia::render('SubAccounts/Edit', compact('subAccount'));
@@ -144,7 +144,7 @@ class SubAccountsController extends Controller
     {
         abort_unless(
             Auth::user()->currentTeam->hasSubAccount($subAccount),
-            new RecordNotOwned
+            new RecordNotOwned()
         );
 
         $subAccount->update($request->only([
@@ -155,7 +155,7 @@ class SubAccountsController extends Controller
             'subdivision',
             'postal_code',
             'contact_name',
-            'phone_number',
+            'phone',
             'contact_email',
             'notes',
             'federal_permit_number',

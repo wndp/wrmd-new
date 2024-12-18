@@ -36,6 +36,7 @@ final class AccountsActionsControllerTest extends TestCase
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
         $team = Team::factory()->create();
+
         $response = $this->actingAs($me->user)->get(route('teams.show.actions', $team))
             ->assertOk()
             ->assertInertia(function ($page) use ($team) {

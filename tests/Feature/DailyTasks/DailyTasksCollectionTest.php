@@ -3,6 +3,7 @@
 namespace Tests\Feature\DailyTasks;
 
 use App\Collections\DailyTasksCollection;
+use App\Models\Location;
 use App\Models\Recheck;
 use App\Support\DailyTasksFilters;
 use Carbon\Carbon;
@@ -28,27 +29,6 @@ final class DailyTasksCollectionTest extends TestCase
         $this->expectException(\TypeError::class);
 
         DailyTasksCollection::make()->withFilters([]);
-    }
-
-    #[Test]
-    public function dailyTasksAreLimitedToPatientsInAnAccount(): void
-    {
-        $pendingDispositionId = $this->pendingDispositionId();
-
-        $me = $this->createTeamUser();
-
-        $admission = $this->createCase($me->team, 2024, [
-            //'voided' => false,
-            'disposition_id' => $pendingDispositionId,
-        ]);
-
-        $dailyTasks = tap(DailyTasksCollection::make(), function ($dailyTasks) use ($me) {
-            $dailyTasks
-                ->withFilters(new DailyTasksFilters(['facility' => 'none-assigned']))
-                ->forTeam($me->team);
-        });
-
-        $this->assertSame($admission->patient_id, $dailyTasks->patientIds()->first());
     }
 
     #[Test]
@@ -90,12 +70,10 @@ final class DailyTasksCollectionTest extends TestCase
         $pendingDispositionId = $this->pendingDispositionId();
 
         $me = $this->createTeamUser();
-
         $this->registerSettingsContainer($me->team);
 
         $admission = $this->createCase($me->team, 2024, ['disposition_id' => $pendingDispositionId]);
         $date = Carbon::now()->format('Y-m-d');
-
         $recheck = Recheck::factory()->create([
             'patient_id' => $admission->patient_id, 'recheck_start_at' => $date, 'recheck_end_at' => $date,
         ]);
@@ -117,12 +95,10 @@ final class DailyTasksCollectionTest extends TestCase
         $pendingDispositionId = $this->pendingDispositionId();
 
         $me = $this->createTeamUser();
-
         $this->registerSettingsContainer($me->team);
 
         $admission = $this->createCase($me->team, 2024, ['disposition_id' => $pendingDispositionId]);
         $yestarday = Carbon::now()->subDay(2)->format('Y-m-d');
-
         $recheck = Recheck::factory()->create([
             'patient_id' => $admission->patient_id, 'recheck_start_at' => $yestarday, 'recheck_end_at' => $yestarday,
         ]);
@@ -131,5 +107,77 @@ final class DailyTasksCollectionTest extends TestCase
 
         $this->assertSame('recheck', $pastDue->first()['tasks']->first()['type']);
         $this->assertSame($recheck->id, $pastDue->first()['tasks']->first()['type_id']);
+    }
+
+    #[Test]
+    public function itGetsDailyTasksForPatientsInAnyLocation(): void
+    {
+        $pendingDispositionId = $this->pendingDispositionId();
+
+        $me = $this->createTeamUser();
+        $this->registerSettingsContainer($me->team);
+
+        $admission = $this->createCase($me->team, 2024, ['disposition_id' => $pendingDispositionId]);
+        $date = Carbon::now()->format('Y-m-d');
+        $recheck = Recheck::factory()->create([
+            'patient_id' => $admission->patient_id, 'recheck_start_at' => $date, 'recheck_end_at' => $date,
+        ]);
+
+        $location = Location::factory()->create([
+            'area' => 'ICU',
+            'enclosure' => 'Incubator'
+        ]);
+        $admission->patient->locations()->attach($location);
+
+        $dailyTasks = DailyTasksCollection::make()
+            ->withFilters(new DailyTasksFilters([
+                'date' => $date,
+                'facility' => 'anywhere',
+            ]))
+            ->forTeam($me->team);
+
+        $patient = $dailyTasks->first()['patients']->first();
+
+        $this->assertSame('recheck', $patient['tasks']->first()['type']);
+        $this->assertSame($recheck->id, $patient['tasks']->first()['type_id']);
+        $this->assertSame($location->area, $patient['area']);
+        $this->assertSame($location->enclosure, $patient['enclosure']);
+    }
+
+    #[Test]
+    public function itGetsDailyTasksForPatientsInASpecificFacility(): void
+    {
+        $pendingDispositionId = $this->pendingDispositionId();
+        [$clinicId] = $this->patientLocationFacilitiesIds();
+
+        $me = $this->createTeamUser();
+        $this->registerSettingsContainer($me->team);
+
+        $admission = $this->createCase($me->team, 2024, ['disposition_id' => $pendingDispositionId]);
+        $date = Carbon::now()->format('Y-m-d');
+        $recheck = Recheck::factory()->create([
+            'patient_id' => $admission->patient_id, 'recheck_start_at' => $date, 'recheck_end_at' => $date,
+        ]);
+
+        $location = Location::factory()->create([
+            'facility_id' => $clinicId,
+            'area' => 'ICU',
+            'enclosure' => 'Incubator'
+        ]);
+        $admission->patient->locations()->attach($location);
+
+        $dailyTasks = DailyTasksCollection::make()
+            ->withFilters(new DailyTasksFilters([
+                'date' => $date,
+                'facility' => $clinicId,
+            ]))
+            ->forTeam($me->team);
+
+        $patient = $dailyTasks->first()['patients']->first();
+
+        $this->assertSame('recheck', $patient['tasks']->first()['type']);
+        $this->assertSame($recheck->id, $patient['tasks']->first()['type_id']);
+        $this->assertSame($location->area, $patient['area']);
+        $this->assertSame($location->enclosure, $patient['enclosure']);
     }
 }

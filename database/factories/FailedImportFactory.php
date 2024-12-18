@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Import;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,11 @@ class FailedImportFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => User::factory(),
+            'import_id' => Import::factory(),
+            'disclosures' => [],
+            'row' => [],
+            'exception' => $this->faker->sentence()
         ];
     }
 }

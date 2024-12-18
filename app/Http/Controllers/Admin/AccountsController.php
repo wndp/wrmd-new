@@ -29,7 +29,7 @@ class AccountsController extends Controller
     public function index(Request $request)
     {
         OptionsStore::add([
-            new LocaleOptions,
+            new LocaleOptions(),
             'accountStatusOptions' => Options::enumsToSelectable(AccountStatus::cases()),
         ]);
 
@@ -50,7 +50,7 @@ class AccountsController extends Controller
                 'subdivision',
                 'postal_code',
                 'coordinates',
-                //'phone_number',
+                //'phone',
                 'contact_email',
                 'website',
             ]), function ($query, $requestData) {
@@ -141,7 +141,7 @@ class AccountsController extends Controller
         $team->load('masterAccount');
 
         OptionsStore::add([
-            new LocaleOptions,
+            new LocaleOptions(),
             'accountStatusOptions' => Options::enumsToSelectable(AccountStatus::cases()),
             'subdivisionOptions' => Options::arrayToSelectable($locale->countrySubdivisions()),
             'timezoneOptions' => Options::arrayToSelectable($locale->countryTimeZones()),
@@ -165,7 +165,7 @@ class AccountsController extends Controller
             'subdivision',
             'postal_code',
             'contact_name',
-            'phone_number',
+            'phone',
             'contact_email',
             'website',
             'federal_permit_number',

@@ -39,7 +39,7 @@ final class RegisterSubAccountTest extends TestCase
             'subdivision' => 'CA',
             'postal_code' => '12345',
             'contact_name' => 'Jim Halpert',
-            'phone_number' => '(925) 555-1234',
+            'phone' => '(925) 555-1234',
             'contact_email' => 'name@email.com',
         ]));
 
@@ -52,7 +52,7 @@ final class RegisterSubAccountTest extends TestCase
             'subdivision' => 'CA',
             'postal_code' => '12345',
             'contact_name' => 'Jim Halpert',
-            'phone_number' => '9255551234',
+            'phone' => '(925) 555-1234',
             'contact_email' => 'name@email.com',
         ]);
     }

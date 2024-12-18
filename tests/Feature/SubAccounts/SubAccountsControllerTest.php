@@ -84,11 +84,12 @@ final class SubAccountsControllerTest extends TestCase
             ->assertInvalid(['city' => 'The city field is required.'])
             ->assertInvalid(['subdivision' => 'The subdivision field is required.'])
             ->assertInvalid(['contact_name' => 'The contact name field is required.'])
-            ->assertInvalid(['phone_number' => 'The phone number field is required.'])
+            ->assertInvalid(['phone' => 'The phone field is required.'])
             ->assertInvalid(['contact_email' => 'The contact email field is required.']);
 
-        $this->actingAs($me->user)->post(route('sub_accounts.store'), ['contact_email' => 'foo'])
-            ->assertInvalid(['contact_email' => 'The contact email field must be a valid email address.']);
+        $this->actingAs($me->user)->post(route('sub_accounts.store'), ['contact_email' => 'foo', 'phone' => '123'])
+            ->assertInvalid(['contact_email' => 'The contact email field must be a valid email address.'])
+            ->assertInvalid(['phone' => 'The phone field must be a valid number.']);
     }
 
     #[Test]
@@ -108,7 +109,7 @@ final class SubAccountsControllerTest extends TestCase
             'subdivision' => 'CA',
             'postal_code' => '12345',
             'contact_name' => 'Jim Jones',
-            'phone_number' => '(925) 555-1234',
+            'phone' => '(925) 555-1234',
             'contact_email' => 'fame@email.com',
         ]);
 
@@ -124,7 +125,7 @@ final class SubAccountsControllerTest extends TestCase
             'subdivision' => 'CA',
             'postal_code' => '12345',
             'contact_name' => 'Jim Jones',
-            'phone_number' => '9255551234',
+            'phone' => '(925) 555-1234',
             'contact_email' => 'fame@email.com',
         ]);
     }
@@ -197,7 +198,7 @@ final class SubAccountsControllerTest extends TestCase
             'subdivision' => 'CA',
             'postal_code' => '12345',
             'contact_name' => 'Jim Jones',
-            'phone_number' => '(925) 555-1234',
+            'phone' => '(925) 555-1234',
             'contact_email' => 'fame@email.com',
         ])
             ->assertOwnershipValidationError();
@@ -221,11 +222,12 @@ final class SubAccountsControllerTest extends TestCase
             ->assertInvalid(['city' => 'The city field is required.'])
             ->assertInvalid(['subdivision' => 'The subdivision field is required.'])
             ->assertInvalid(['contact_name' => 'The contact name field is required.'])
-            ->assertInvalid(['phone_number' => 'The phone number field is required.'])
+            ->assertInvalid(['phone' => 'The phone field is required.'])
             ->assertInvalid(['contact_email' => 'The contact email field is required.']);
 
-        $this->actingAs($me->user)->put(route('sub_accounts.update', $team), ['contact_email' => 'foo'])
-            ->assertInvalid(['contact_email' => 'The contact email field must be a valid email address.']);
+        $this->actingAs($me->user)->put(route('sub_accounts.update', $team), ['contact_email' => 'foo', 'phone' => '123'])
+            ->assertInvalid(['contact_email' => 'The contact email field must be a valid email address.'])
+            ->assertInvalid(['phone' => 'The phone field must be a valid number.']);
     }
 
     #[Test]
@@ -249,7 +251,7 @@ final class SubAccountsControllerTest extends TestCase
                 'subdivision' => 'CA',
                 'postal_code' => '12345',
                 'contact_name' => 'Jim Jones',
-                'phone_number' => '(925) 555-1234',
+                'phone' => '(925) 555-1234',
                 'contact_email' => 'fame@email.com',
             ])
             ->assertRedirect(route('sub_accounts.show', $team));
@@ -263,7 +265,7 @@ final class SubAccountsControllerTest extends TestCase
             'subdivision' => 'CA',
             'postal_code' => '12345',
             'contact_name' => 'Jim Jones',
-            'phone_number' => '9255551234',
+            'phone' => '(925) 555-1234',
             'contact_email' => 'fame@email.com',
         ]);
     }

@@ -61,7 +61,7 @@ class RegisterSubAccount
             'city' => $this->request->input('city'),
             'subdivision' => $this->request->input('subdivision'),
             'postal_code' => $this->request->input('postal_code'),
-            'phone_number' => $this->request->input('phone_number'),
+            'phone' => $this->request->input('phone'),
             'contact_email' => $this->request->input('contact_email'),
             'notes' => $this->request->input('notes'),
         ]);
@@ -75,7 +75,7 @@ class RegisterSubAccount
         //     'city',
         //     'subdivision',
         //     'postal_code',
-        //     'phone_number',
+        //     'phone',
         //     'contact_email',
         //     'notes',
         // ]));

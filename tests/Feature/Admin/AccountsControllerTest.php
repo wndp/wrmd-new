@@ -102,13 +102,14 @@ final class AccountsControllerTest extends TestCase
                 'city' => 'The city field is required.',
                 'subdivision' => 'The subdivision field is required.',
                 'contact_name' => 'The contact name field is required.',
-                'phone_number' => 'The phone number field is required.',
+                'phone' => 'The phone field is required.',
                 'contact_email' => 'The contact email field is required.',
             ]);
 
         $this->actingAs($me->user)
-            ->put(route('teams.update', $team), ['contact_email' => 'foo'])
-            ->assertInvalid(['contact_email' => 'The contact email field must be a valid email address.']);
+            ->put(route('teams.update', $team), ['contact_email' => 'foo', 'phone' => '123'])
+            ->assertInvalid(['contact_email' => 'The contact email field must be a valid email address.'])
+            ->assertInvalid(['phone' => 'The phone field must be a valid number.']);
     }
 
     #[Test]
@@ -131,7 +132,7 @@ final class AccountsControllerTest extends TestCase
                 'subdivision' => 'FL',
                 'postal_code' => '12345',
                 'contact_name' => 'Pam Beezly',
-                'phone_number' => '5552345433',
+                'phone' => '(925) 234-5433',
                 'contact_email' => 'foo@example.com',
                 'website' => 'http://fake.com',
                 'federal_permit_number' => 'abc123',
@@ -148,7 +149,7 @@ final class AccountsControllerTest extends TestCase
             'subdivision' => 'FL',
             'postal_code' => '12345',
             'contact_name' => 'Pam Beezly',
-            'phone_number' => '5552345433',
+            'phone' => '(925) 234-5433',
             'contact_email' => 'foo@example.com',
             'website' => 'http://fake.com',
             'federal_permit_number' => 'abc123',

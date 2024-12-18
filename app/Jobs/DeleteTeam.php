@@ -33,7 +33,7 @@ class DeleteTeam implements ShouldQueue
         $this->team->formulas->each->forceDelete();
         $this->team->customFields->each->forceDelete();
         $this->team->locations->each->forceDelete();
-        // //$this->team->failedImports()->forceDelete();
+        $this->team->failedImports->each->forceDelete();
 
         $this->team->users->each(fn ($user) => $this->team->removeUser($user));
 
@@ -47,8 +47,8 @@ class DeleteTeam implements ShouldQueue
 
             if ($patient instanceof Patient) {
                 // $this->deleteSafely($patient->predictions);
+                $patient->locations()->detach();
                 $this->deleteSafely($patient->exams()->withTrashed()->get());
-                $this->deleteSafely($patient->locations);
                 $this->deleteSafely($patient->rechecks()->withTrashed()->get());
                 $this->deleteSafely($patient->prescriptions()->withTrashed()->get());
                 $this->deleteSafely($patient->nutritionPlans()->withTrashed()->get());

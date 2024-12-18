@@ -13,6 +13,7 @@ use App\Models\Donation;
 use App\Models\Exam;
 use App\Models\ExpenseCategory;
 use App\Models\ExpenseTransaction;
+use App\Models\FailedImport;
 use App\Models\Formula;
 use App\Models\Incident;
 use App\Models\LabCbcResult;
@@ -157,6 +158,19 @@ final class DeleteAccountTest extends TestCase
         DeleteTeam::dispatch($team);
 
         $this->assertDatabaseMissing('custom_fields', ['team_id' => $customField->team_id]);
+    }
+
+    #[Test]
+    public function aTeamsFailedImportsAreDeletedBeforeDeletingTheTeam(): void
+    {
+        $team = Team::factory()->create();
+        $failedImport = FailedImport::factory()->create(['team_id' => $team->id]);
+
+        $this->assertDatabaseHas('failed_imports', ['team_id' => $failedImport->team_id]);
+
+        DeleteTeam::dispatch($team);
+
+        $this->assertDatabaseMissing('failed_imports', ['team_id' => $failedImport->team_id]);
     }
 
     #[Test]

@@ -43,7 +43,7 @@ class PatientLocation extends Pivot implements Summarizable
     ];
 
     protected $appends = [
-        'location_for_humans',
+        //'location_for_humans',
         //'moved_in_at_for_humans',
     ];
 

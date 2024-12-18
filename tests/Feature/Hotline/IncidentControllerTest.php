@@ -149,6 +149,16 @@ final class IncidentControllerTest extends TestCase
             ->assertInvalid(['duration_of_call' => 'The duration of call field must be a number.']);
     }
 
+    #[Test]
+    public function thePhoneMustbeValidToCreateAnIncident(): void
+    {
+        $me = $this->createTeamUser();
+        BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
+
+        $this->actingAs($me->user)->post(route('hotline.incident.store'), ['phone' => '123'])
+            ->assertInvalid(['phone' => 'The phone field must be a valid number.']);
+    }
+
     /** @test */
     // public function aReportingPartyIsRequiredToCreateAnIncident()
     // {
@@ -192,9 +202,10 @@ final class IncidentControllerTest extends TestCase
             'organization' => 'Dunder Mifflin',
             'first_name' => 'Dwight',
             'last_name' => 'Schrute',
-            'phone' => '808 555 3432',
-            'alternate_phone' => '925 633 4324',
+            'phone' => '(808) 555-3432',
+            'alternate_phone' => '(925) 633-4324',
             'email' => 'dwight@dundermifflin.com',
+            'country' => 'US',
             'subdivision' => 'PA',
             'city' => 'Scranton',
             'address' => '1725 Slough Avenue',
@@ -212,8 +223,8 @@ final class IncidentControllerTest extends TestCase
             'organization' => 'Dunder Mifflin',
             'first_name' => 'Dwight',
             'last_name' => 'Schrute',
-            'phone' => '8085553432',
-            'alternate_phone' => '9256334324',
+            'phone' => '(808) 555-3432',
+            'alternate_phone' => '(925) 633-4324',
             'email' => 'dwight@dundermifflin.com',
             'subdivision' => 'PA',
             'city' => 'Scranton',

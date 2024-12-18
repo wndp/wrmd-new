@@ -102,6 +102,11 @@ class Team extends JetstreamTeam
         return $this->hasMany(Formula::class);
     }
 
+    public function failedImports(): HasMany
+    {
+        return $this->hasMany(FailedImport::class);
+    }
+
     public function locations(): HasMany
     {
         return $this->hasMany(Location::class);
