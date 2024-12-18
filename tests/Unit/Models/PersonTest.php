@@ -30,45 +30,77 @@ final class PersonTest extends TestCase
     public function whenAPersonsPhoneNumberIsAccessedItIsFormattedForTheirCountry(): void
     {
         $person = Person::factory()->create([
-            'phone' => '808*555-1234',
+            'phone' => '808-555-1234',
         ]);
 
-        $this->assertEquals('(808) 555-1234', $person->phone);
+        $this->assertEquals('8085551234', $person->phone_normalized);
+        $this->assertEquals('+18085551234', $person->phone_e164);
+        $this->assertEquals('(808) 555-1234', $person->phone_national);
     }
 
     #[Test]
-    public function whenAPersonsPhoneNumberIsSavedItIsFormattedForTheirCountry(): void
+    public function whenAPersonsPhoneNumberIsSavedItIsFormattedForMultipleUses(): void
     {
         $person = Person::factory()->create([
-            'phone' => '808*555-1234',
+            'phone' => '808-555-1234',
         ]);
 
         $this->assertDatabaseHas('people', [
             'id' => $person->id,
-            'phone' => '8085551234',
+            'phone' => '808-555-1234',
+            'phone_normalized' => '8085551234',
+            'phone_e164' => '+18085551234',
+            'phone_national' => '(808) 555-1234'
         ]);
     }
 
     #[Test]
-    public function whenAPersonsAltPhoneNumberIsAccessedItIsFormattedForTheirCountry(): void
+    public function whenAPersonsAlternatePhoneNumberIsAccessedItIsFormattedForTheirCountry(): void
     {
         $person = Person::factory()->create([
-            'alternate_phone' => '808*555-1234',
+            'alternate_phone' => '808-555-1234',
         ]);
 
-        $this->assertEquals('(808) 555-1234', $person->alternate_phone);
+        $this->assertEquals('8085551234', $person->alternate_phone_normalized);
+        $this->assertEquals('+18085551234', $person->alternate_phone_e164);
+        $this->assertEquals('(808) 555-1234', $person->alternate_phone_national);
     }
 
     #[Test]
-    public function whenAPersonsAltPhoneNumberIsSavedItIsFormattedForTheirCountry(): void
+    public function whenAPersonsAlternatePhoneNumberIsSavedItIsFormattedForTheirCountry(): void
     {
         $person = Person::factory()->create([
-            'alternate_phone' => '808*555-1234',
+            'county' => 'US',
+            'alternate_phone' => '808-555-1234',
         ]);
 
         $this->assertDatabaseHas('people', [
             'id' => $person->id,
-            'alternate_phone' => '8085551234',
+            'alternate_phone' => '808-555-1234',
+            'alternate_phone_normalized' => '8085551234',
+            'alternate_phone_e164' => '+18085551234',
+            'alternate_phone_national' => '(808) 555-1234'
+        ]);
+    }
+
+    #[Test]
+    public function whenAPhoneNumberDoesNotMatchACountryFormatItStillSavesToTheDatabase(): void
+    {
+        $person = Person::factory()->create([
+            'phone' => '123',
+            'alternate_phone' => '123',
+        ]);
+
+        $this->assertDatabaseHas('people', [
+            'id' => $person->id,
+            'phone' => '123',
+            'phone_normalized' => '123',
+            'phone_e164' => '123',
+            'phone_national' => '123',
+            'alternate_phone' => '123',
+            'alternate_phone_normalized' => '123',
+            'alternate_phone_e164' => '123',
+            'alternate_phone_national' => '123',
         ]);
     }
 

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\ValidatesOwnership;
+use App\Enums\PhoneFormat;
 use App\Repositories\AdministrativeDivision;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
@@ -33,6 +34,9 @@ class Veterinarian extends Model
         'subdivision',
         'postal_code',
         'phone',
+        'phone_e164',
+        'phone_normalized',
+        'phone_national',
         'email',
     ];
 
@@ -46,23 +50,29 @@ class Veterinarian extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function phone(): Attribute
+    protected static function booted(): void
     {
-        return Attribute::make(
-            get: fn ($value) => app(AdministrativeDivision::class)->phoneNumber($value),
-            set: fn ($value) => preg_replace('/[^0-9]/', '', $value)
-        );
+        static::saving(function (Veterinarian $veterinarian) {
+            $administrativeDivision = app(AdministrativeDivision::class);
+
+            if ($veterinarian->wasChanged('phone') || !$veterinarian->exists) {
+                $veterinarian->phone_normalized = $administrativeDivision->phoneNumber($veterinarian->phone, format: PhoneFormat::NORMALIZED);
+                $veterinarian->phone_e164 = $administrativeDivision->phoneNumber($veterinarian->phone, format: PhoneFormat::E164);
+                $veterinarian->phone_national = $administrativeDivision->phoneNumber($veterinarian->phone, format: PhoneFormat::NATIONAL);
+            }
+        });
     }
 
     protected function formattedInlineAddress(): Attribute
     {
-        return Attribute::get(fn () => app(AdministrativeDivision::class)->inlineAddress(
-            organization: $this->business_name,
-            subdivision: $this->subdivision,
-            locality: $this->city,
-            postalCode: $this->postal_code,
-            addressLine1: $this->address,
-        )
+        return Attribute::get(
+            fn () => app(AdministrativeDivision::class)->inlineAddress(
+                organization: $this->business_name,
+                subdivision: $this->subdivision,
+                locality: $this->city,
+                postalCode: $this->postal_code,
+                addressLine1: $this->address,
+            )
         );
     }
 

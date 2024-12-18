@@ -46,25 +46,46 @@ final class VeterinarianTest extends TestCase
     }
 
     #[Test]
-    public function whenAnVeterinariansPhoneIsAccessedItIsFormattedForItsCountry(): void
+    public function whenAVeterinariansPhoneNumberIsAccessedItIsFormattedForTheirCountry(): void
     {
         $veterinarian = Veterinarian::factory()->create([
-            'phone' => '808*555-1234',
+            'phone' => '808-555-1234',
         ]);
 
-        $this->assertEquals('(808) 555-1234', $veterinarian->phone);
+        $this->assertEquals('8085551234', $veterinarian->phone_normalized);
+        $this->assertEquals('+18085551234', $veterinarian->phone_e164);
+        $this->assertEquals('(808) 555-1234', $veterinarian->phone_national);
     }
 
     #[Test]
-    public function whenAnVeterinariansPhoneIsSavedItIsFormattedForItsCountry(): void
+    public function whenAVeterinariansPhoneNumberIsSavedItIsFormattedForItsCountry(): void
     {
         $veterinarian = Veterinarian::factory()->create([
-            'phone' => '808*555-1234',
+            'phone' => '808-555-1234',
         ]);
 
         $this->assertDatabaseHas('veterinarians', [
             'id' => $veterinarian->id,
-            'phone' => '8085551234',
+            'phone' => '808-555-1234',
+            'phone_normalized' => '8085551234',
+            'phone_e164' => '+18085551234',
+            'phone_national' => '(808) 555-1234'
+        ]);
+    }
+
+    #[Test]
+    public function whenAPhoneNumberDoesNotMatchACountryFormatItStillSavesToTheDatabase(): void
+    {
+        $veterinarian = Veterinarian::factory()->create([
+            'phone' => '123',
+        ]);
+
+        $this->assertDatabaseHas('veterinarians', [
+            'id' => $veterinarian->id,
+            'phone' => '123',
+            'phone_normalized' => '123',
+            'phone_e164' => '123',
+            'phone_national' => '123'
         ]);
     }
 }

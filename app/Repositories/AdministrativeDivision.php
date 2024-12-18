@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\PhoneFormat;
 use CommerceGuys\Addressing\Address;
 use CommerceGuys\Addressing\AddressFormat\AddressFormatRepository;
 use CommerceGuys\Addressing\Country\CountryRepository;
@@ -10,9 +11,8 @@ use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use libphonenumber\NumberParseException;
-use libphonenumber\PhoneNumberFormat;
-use libphonenumber\PhoneNumberUtil;
+use Propaganistas\LaravelPhone\Exceptions\NumberParseException;
+use Propaganistas\LaravelPhone\PhoneNumber;
 use Sokil\IsoCodes\Database\Subdivisions\Subdivision;
 use Sokil\IsoCodes\IsoCodesFactory;
 use Sokil\IsoCodes\TranslationDriver\SymfonyTranslationDriver;
@@ -23,7 +23,7 @@ class AdministrativeDivision
 
     public function __construct(private string $locale, private string $alpha2CountryCode)
     {
-        $driver = new SymfonyTranslationDriver;
+        $driver = new SymfonyTranslationDriver();
         $driver->setLocale($locale);
 
         $this->isoCodes = new IsoCodesFactory(null, $driver);
@@ -176,7 +176,7 @@ class AdministrativeDivision
         ?string $organization = null,
         ?string $name = null
     ): string {
-        $address = (new Address)
+        $address = (new Address())
             ->withLocale($this->locale)
             ->withCountryCode($alpha2CountryCode ?? $this->alpha2CountryCode)
             ->withAdministrativeArea($subdivision ?: '')
@@ -187,9 +187,9 @@ class AdministrativeDivision
             ->withGivenName($name ?: '');
 
         $formatter = new DefaultFormatter(
-            new AddressFormatRepository,
-            new CountryRepository,
-            new SubdivisionRepository
+            new AddressFormatRepository(),
+            new CountryRepository(),
+            new SubdivisionRepository()
         );
 
         return str_replace("\n", ' ', $formatter->format($address, [
@@ -203,18 +203,34 @@ class AdministrativeDivision
      * @param  string  $phoneNumber
      * @return string
      */
-    public function phoneNumber($phoneNumber, ?string $alpha2CountryCode = null)
+    public function phoneNumber($phoneNumber, ?string $alpha2CountryCode = null, ?PhoneFormat $format = null)
     {
-        $phoneUtil = PhoneNumberUtil::getInstance();
-
         try {
-            $numberProto = $phoneUtil->parse($phoneNumber, $alpha2CountryCode ?? $this->alpha2CountryCode);
+            $phone = new PhoneNumber($phoneNumber, $alpha2CountryCode ?? $this->alpha2CountryCode);
+
+            return match ($format) {
+                PhoneFormat::E164 => $phone->formatE164(),
+                PhoneFormat::NATIONAL => $phone->formatNational(),
+                PhoneFormat::NORMALIZED => preg_replace('/[^0-9]/', '', $phoneNumber),
+                default => preg_replace('/[^0-9]/', '', $phoneNumber),
+            };
         } catch (NumberParseException $e) {
-            return $phoneNumber;
+            return preg_replace('/[^0-9]/', '', $phoneNumber);
         }
 
-        return $phoneUtil->isValidNumber($numberProto)
-            ? $phoneUtil->format($numberProto, PhoneNumberFormat::NATIONAL)
-            : $phoneNumber;
+
+        //$phone->formatForCountry($alpha2CountryCode ?? $this->alpha2CountryCode);
+
+        // $phoneUtil = PhoneNumberUtil::getInstance();
+
+        // try {
+        //     $numberProto = $phoneUtil->parse($phoneNumber, $alpha2CountryCode ?? $this->alpha2CountryCode);
+        // } catch (NumberParseException $e) {
+        //     return $phoneNumber;
+        // }
+
+        // return $phoneUtil->isValidNumber($numberProto)
+        //     ? $phoneUtil->format($numberProto, PhoneNumberFormat::NATIONAL)
+        //     : $phoneNumber;
     }
 }

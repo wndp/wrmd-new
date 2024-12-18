@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Concerns\HasSubAccounts;
 use App\Enums\AccountStatus;
+use App\Enums\PhoneFormat;
 use App\Repositories\AdministrativeDivision;
 use App\Repositories\SettingsStore;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -41,13 +42,29 @@ class Team extends JetstreamTeam
         'subdivision',
         'postal_code',
         'coordinates',
-        'phone_number',
+        'phone',
+        'phone_e164',
+        'phone_normalized',
+        'phone_national',
         'website',
         'federal_permit_number',
         'subdivision_permit_number',
         'profile_photo_path',
         'notes',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_master_account' => 'boolean',
+            'personal_team' => 'boolean',
+            'status' => AccountStatus::class,
+            'phone' => 'string',
+            'phone_normalized' => 'string',
+            'phone_e164' => 'string',
+            'phone_national' => 'string',
+        ];
+    }
 
     protected $appends = [
         'profile_photo_url',
@@ -59,14 +76,6 @@ class Team extends JetstreamTeam
         'updated' => TeamUpdated::class,
         'deleted' => TeamDeleted::class,
     ];
-
-    protected function casts(): array
-    {
-        return [
-            'personal_team' => 'boolean',
-            'status' => AccountStatus::class,
-        ];
-    }
 
     public function admissions(): HasMany
     {
@@ -136,13 +145,13 @@ class Team extends JetstreamTeam
         );
     }
 
-    public function phoneNumber(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => app(AdministrativeDivision::class)->phoneNumber($value),
-            set: fn ($value) => preg_replace('/[^0-9]/', '', $value)
-        );
-    }
+    // public function phoneNumber(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn ($value) => app(AdministrativeDivision::class)->phoneNumber($value),
+    //         set: fn ($value) => preg_replace('/[^0-9]/', '', $value)
+    //     );
+    // }
 
     /**
      * Get the name that should be associated with the Paddle customer.
@@ -166,5 +175,18 @@ class Team extends JetstreamTeam
             ->logAll()
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (Team $team) {
+            $administrativeDivision = app(AdministrativeDivision::class);
+
+            if ($team->wasChanged('phone') || !$team->exists) {
+                $team->phone_normalized = $administrativeDivision->phoneNumber($team->phone, format: PhoneFormat::NORMALIZED);
+                $team->phone_e164 = $administrativeDivision->phoneNumber($team->phone, format: PhoneFormat::E164);
+                $team->phone_national = $administrativeDivision->phoneNumber($team->phone, format: PhoneFormat::NATIONAL);
+            }
+        });
     }
 }

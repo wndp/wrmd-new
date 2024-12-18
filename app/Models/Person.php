@@ -6,6 +6,7 @@ use App\Concerns\LocksPatient;
 use App\Concerns\QueriesDateRange;
 use App\Concerns\QueriesOneOfMany;
 use App\Concerns\ValidatesOwnership;
+use App\Enums\PhoneFormat;
 use App\Repositories\AdministrativeDivision;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
@@ -14,6 +15,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
+use Propaganistas\LaravelPhone\Casts\RawPhoneNumberCast;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -35,9 +38,13 @@ class Person extends Model
         'first_name',
         'last_name',
         'phone',
-        'phone_clean',
+        'phone_e164',
+        'phone_normalized',
+        'phone_national',
         'alternate_phone',
-        'alternate_phone_clean',
+        'alternate_phone_e164',
+        'alternate_phone_normalized',
+        'alternate_phone_national',
         'email',
         'country',
         'subdivision',
@@ -58,9 +65,13 @@ class Person extends Model
         'first_name' => 'string',
         'last_name' => 'string',
         'phone' => 'string',
-        'phone_clean' => 'string',
+        'phone_normalized' => 'string',
+        'phone_e164' => 'string',
+        'phone_national' => 'string',
         'alternate_phone' => 'string',
-        'alternate_phone_clean' => 'string',
+        'alternate_phone_normalized' => 'string',
+        'alternate_phone_e164' => 'string',
+        'alternate_phone_national' => 'string',
         'email' => 'string',
         'country' => 'string',
         'subdivision' => 'string',
@@ -104,21 +115,21 @@ class Person extends Model
         return $this->belongsTo(AttributeOption::class, 'entity_id');
     }
 
-    public function phone(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => app(AdministrativeDivision::class)->phoneNumber($value),
-            set: fn ($value) => preg_replace('/[^0-9]/', '', $value)
-        );
-    }
+    // public function phone(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn ($value) => app(AdministrativeDivision::class)->phoneNumber($value),
+    //         set: fn ($value) => preg_replace('/[^0-9]/', '', $value)
+    //     );
+    // }
 
-    public function alternatePhone(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => app(AdministrativeDivision::class)->phoneNumber($value),
-            set: fn ($value) => preg_replace('/[^0-9]/', '', $value)
-        );
-    }
+    // public function alternatePhone(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn ($value) => app(AdministrativeDivision::class)->phoneNumber($value),
+    //         set: fn ($value) => preg_replace('/[^0-9]/', '', $value)
+    //     );
+    // }
 
     public function fullName(): Attribute
     {
@@ -163,5 +174,24 @@ class Person extends Model
             ->logAll()
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (Person $person) {
+            $administrativeDivision = app(AdministrativeDivision::class);
+
+            if ($person->wasChanged('phone') || !$person->exists) {
+                $person->phone_normalized = $administrativeDivision->phoneNumber($person->phone, format: PhoneFormat::NORMALIZED);
+                $person->phone_e164 = $administrativeDivision->phoneNumber($person->phone, format: PhoneFormat::E164);
+                $person->phone_national = $administrativeDivision->phoneNumber($person->phone, format: PhoneFormat::NATIONAL);
+            }
+
+            if ($person->wasChanged('alternate_phone') || !$person->exists) {
+                $person->alternate_phone_normalized = $administrativeDivision->phoneNumber($person->alternate_phone, format: PhoneFormat::NORMALIZED);
+                $person->alternate_phone_e164 = $administrativeDivision->phoneNumber($person->alternate_phone, format: PhoneFormat::E164);
+                $person->alternate_phone_national = $administrativeDivision->phoneNumber($person->alternate_phone, format: PhoneFormat::NATIONAL);
+            }
+        });
     }
 }

@@ -20,7 +20,7 @@ final class TeamTest extends TestCase
         $team = Team::factory(['name' => 'Foo Place'])->create();
 
         $this->assertTrue(
-            Str::startsWith($team->profile_photo_url, 'https://ui-avatars.com/api/?name=Foo+Place')
+            Str::startsWith($team->profile_photo_url, 'https://ui-avatars.com/api/?name=F+P')
         );
     }
 
@@ -36,25 +36,46 @@ final class TeamTest extends TestCase
     }
 
     #[Test]
-    public function whenATeamsPhoneNumberIsAccessedItIsFormattedForItsCountry(): void
+    public function whenATeamsPhoneNumberIsAccessedItIsFormattedForTheirCountry(): void
     {
         $team = Team::factory()->create([
-            'phone_number' => '808*555-1234',
+            'phone' => '808-555-1234',
         ]);
 
-        $this->assertEquals('(808) 555-1234', $team->phone_number);
+        $this->assertEquals('8085551234', $team->phone_normalized);
+        $this->assertEquals('+18085551234', $team->phone_e164);
+        $this->assertEquals('(808) 555-1234', $team->phone_national);
     }
 
     #[Test]
     public function whenATeamsPhoneNumberIsSavedItIsFormattedForItsCountry(): void
     {
         $team = Team::factory()->create([
-            'phone_number' => '808*555-1234',
+            'phone' => '808-555-1234',
         ]);
 
         $this->assertDatabaseHas('teams', [
             'id' => $team->id,
-            'phone_number' => '8085551234',
+            'phone' => '808-555-1234',
+            'phone_normalized' => '8085551234',
+            'phone_e164' => '+18085551234',
+            'phone_national' => '(808) 555-1234'
+        ]);
+    }
+
+    #[Test]
+    public function whenAPhoneNumberDoesNotMatchACountryFormatItStillSavesToTheDatabase(): void
+    {
+        $team = Team::factory()->create([
+            'phone' => '123',
+        ]);
+
+        $this->assertDatabaseHas('teams', [
+            'id' => $team->id,
+            'phone' => '123',
+            'phone_normalized' => '123',
+            'phone_e164' => '123',
+            'phone_national' => '123'
         ]);
     }
 
@@ -78,7 +99,7 @@ final class TeamTest extends TestCase
 
         $this->assertSame(
             [$masterAccount->id],
-            $subAccounts->pluck('master_team_id')->unique()->toArray()
+            $subAccounts->pluck('master_account_id')->unique()->toArray()
         );
     }
 
@@ -86,6 +107,7 @@ final class TeamTest extends TestCase
     public function aTeamKnowsIfItIsAMasterAccount(): void
     {
         $team = Team::factory()->create();
+
         $this->assertFalse($team->is_master_account);
 
         $masterAccount = Team::factory()->create(['is_master_account' => true]);
