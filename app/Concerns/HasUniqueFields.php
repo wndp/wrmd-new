@@ -30,6 +30,7 @@ trait HasUniqueFields
     private static function fieldIsNotUnique(Model $model, string $field): bool
     {
         return app($model::class)::where($field, $model->{$field})
+            ->whereNotNull($field)
             ->whereNot($model->getKeyName(), $model->getKey())
             ->exists();
     }
