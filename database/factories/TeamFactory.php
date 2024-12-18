@@ -24,6 +24,7 @@ class TeamFactory extends Factory
         return [
             'name' => fake()->unique()->company(),
             'user_id' => User::factory(),
+            'is_master_account' => false,
             'personal_team' => true,
             'status' => AccountStatus::ACTIVE,
             'contact_name' => fake()->name,
@@ -33,7 +34,7 @@ class TeamFactory extends Factory
             'city' => fake()->city,
             'subdivision' => fake()->stateAbbr(),
             'postal_code' => fake()->postcode,
-            'phone_number' => fake()->phoneNumber,
+            'phone' => fake()->phoneNumber,
         ];
     }
 

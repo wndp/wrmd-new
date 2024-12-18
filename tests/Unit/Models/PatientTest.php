@@ -14,6 +14,7 @@ use App\Models\LabFecalResult;
 use App\Models\LabReport;
 use App\Models\LabToxicologyResult;
 use App\Models\LabUrinalysisResult;
+use App\Models\Location;
 use App\Models\Patient;
 use App\Models\Taxon;
 use Carbon\Carbon;
@@ -127,6 +128,19 @@ final class PatientTest extends TestCase
 
         $this->assertInstanceOf(Collection::class, $labReport->patient->labToxicologyResults);
         $this->assertInstanceOf(LabToxicologyResult::class, $labReport->patient->labToxicologyResults->first());
+    }
+
+    #[Test]
+    public function a_patient_belongs_to_many_locations(): void
+    {
+        $patient = Patient::factory()->create();
+        $locations = Location::factory()->count(3)->create();
+
+        $patient->locations()->attach($locations);
+
+        $this->assertInstanceOf(Collection::class, $patient->locations);
+        $this->assertCount(3, $patient->locations);
+        $this->assertInstanceOf(Location::class, $patient->locations->first());
     }
 
     #[Test]
@@ -348,14 +362,12 @@ final class PatientTest extends TestCase
     #[Test]
     public function taxonAlphaCodesAreNotMissidentified(): void
     {
+        $commonName = CommonName::factory()->create();
+
         Patient::factory()->create([
-            'taxon_id' => Taxon::factory()->createQuietly(['id' => 123, 'alpha_code' => 'CAGO'])->id,
+            'taxon_id' => Taxon::factory()->create(['id' => $commonName->taxon_id, 'alpha_code' => 'CAGO'])->id,
             'common_name' => 'CAGO',
         ]);
-
-        // CommonName::factory()->createQuietly([
-        //     'taxon_id' => 123,
-        // ]);
 
         $result = Patient::whereMisidentified()->get();
 
@@ -365,14 +377,14 @@ final class PatientTest extends TestCase
     #[Test]
     public function commonNameAlphaCodesAreNotMissidentified(): void
     {
-        $taxonId = Taxon::factory()->createQuietly(['id' => 123])->id;
+        $taxonId = Taxon::factory()->create()->id;
 
         Patient::factory()->create([
             'taxon_id' => $taxonId,
             'common_name' => 'CAGO',
         ]);
 
-        $commonName = CommonName::factory()->createQuietly([
+        CommonName::factory()->create([
             'taxon_id' => $taxonId,
             'alpha_code' => 'CAGO',
         ]);

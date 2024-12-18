@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Concerns\LocksPatient;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
@@ -18,6 +19,7 @@ use Spatie\MediaLibrary\Support\UrlGenerator\UrlGeneratorFactory;
 class Media extends BaseMedia
 {
     use HasFactory;
+    use HasVersion7Uuids;
     use LocksPatient;
     use LogsActivity;
 
@@ -32,11 +34,11 @@ class Media extends BaseMedia
     {
         parent::boot();
 
-        static::creating(function (Model $model) {
-            if (is_null($model->getOriginal('id'))) {
-                $model->id = Str::uuid7()->toString();
-            }
-        });
+        // static::creating(function (Model $model) {
+        //     if (is_null($model->getOriginal('id'))) {
+        //         $model->id = Str::uuid7()->toString();
+        //     }
+        // });
 
         static::retrieved(function ($model) {
             static::setObtainedAtDateAttribute($model);

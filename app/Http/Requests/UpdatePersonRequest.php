@@ -31,6 +31,8 @@ class UpdatePersonRequest extends FormRequest
             ],
             'organization' => 'required_without:first_name',
             'first_name' => 'required_without:organization',
+            'phone' => 'nullable|phone',
+            'alternate_phone' => 'nullable|phone',
             'email' => 'nullable|email',
             'no_solicitations' => 'nullable|boolean',
             'is_volunteer' => 'nullable|boolean',

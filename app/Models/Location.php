@@ -5,9 +5,12 @@ namespace App\Models;
 use App\Concerns\HasUniqueFields;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Collection;
 use Spatie\Activitylog\LogOptions;
@@ -22,8 +25,15 @@ class Location extends Model
 
     protected $fillable = [
         'hash',
+        'facility_id',
         'area',
         'enclosure',
+    ];
+
+    protected $casts = [
+        'facility_id' => 'integer',
+        'area' => 'string',
+        'enclosure' => 'string',
     ];
 
     protected array $unique = [
@@ -38,9 +48,45 @@ class Location extends Model
             ->dontSubmitEmptyLogs();
     }
 
-    public function patients(): HasManyThrough
+    public function team(): BelongsTo
     {
-        return $this->hasManyThrough(Patient::class, PatientLocation::class);
+        return $this->belongsTo(Team::class);
+    }
+
+    public function patients(): BelongsToMany
+    {
+        return $this->belongsToMany(Patient::class, 'patient_locations')
+            ->using(PatientLocation::class)
+            ->withPivot('id', 'moved_in_at', 'hours', 'comments')
+            ->as('patientLocation')
+            ->withTimestamps()
+            ->orderByPivot('moved_in_at', 'desc')
+            ->orderByPivot('created_at', 'desc');
+    }
+
+    public function facility(): BelongsTo
+    {
+        return $this->belongsTo(AttributeOption::class, 'facility_id');
+    }
+
+    protected function locationForHumans(): Attribute
+    {
+        [$homeCareId] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
+            AttributeOptionName::PATIENT_LOCATION_FACILITIES->value,
+            AttributeOptionUiBehavior::PATIENT_LOCATION_FACILITIES_IS_HOMECARE->value,
+        ]);
+
+        return Attribute::get(
+            function () use ($homeCareId) {
+                $string = $this->area;
+
+                if ($this->facility_id === $homeCareId) {
+                    return $string;
+                }
+
+                return $string .= trim($this->enclosure) === '' ? '' : ', '.$this->enclosure;
+            }
+        );
     }
 
     public function currentPatients(): Collection

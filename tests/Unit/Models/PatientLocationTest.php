@@ -23,36 +23,16 @@ final class PatientLocationTest extends TestCase
     use GetsCareLogs;
     use RefreshDatabase;
 
+    #[Test]
     public function aPatientLocationBelongsToAPatient(): void
     {
         $this->assertInstanceOf(Patient::class, PatientLocation::factory()->create()->patient);
     }
 
+    #[Test]
     public function aPatientLocationBelongsToALocation(): void
     {
-        $this->assertInstanceOf(Location::class, PatientLocation::factory()->create()->patient);
-    }
-
-    #[Test]
-    public function aPatientLocationHasFormattedLocation(): void
-    {
-        [$clinicId, $homeCareId] = $this->patientLocationFacilitiesIds();
-
-        $patientLocation = PatientLocation::factory()->make([
-            'facility_id' => $clinicId,
-            'area' => 'ICU',
-            'enclosure' => 'Inc 1',
-        ]);
-
-        $this->assertEquals('ICU, Inc 1', $patientLocation->location_for_humans);
-
-        $patientLocation = PatientLocation::factory()->make([
-            'facility_id' => $homeCareId,
-            'area' => 'Rachel Avilla',
-            'enclosure' => '123 main st',
-        ]);
-
-        $this->assertEquals('Rachel Avilla', $patientLocation->location_for_humans);
+        $this->assertInstanceOf(Location::class, PatientLocation::factory()->create()->location);
     }
 
     #[Test]
@@ -60,38 +40,44 @@ final class PatientLocationTest extends TestCase
     {
         [$clinicId, $homeCareId] = $this->patientLocationFacilitiesIds();
 
-        $location = PatientLocation::factory()->make([
+        $patient = Patient::factory()->create();
+
+        $location = Location::factory()->create([
             'facility_id' => $clinicId,
             'area' => 'ICU',
             'enclosure' => 'Inc 1',
-            'comments' => 'foo bar',
         ]);
 
-        $this->assertEquals('Moved to ICU, Inc 1. foo bar', $location->summary_body);
+        $x = $patient->locations()->attach($location, [
+            'moved_in_at' => '2017-04-09',
+            'comments' => 'foo bar',
+        ]);
+        //dd($patient->locations->first()->patientLocation);
+
+        $this->assertEquals('Moved to ICU, Inc 1. foo bar', $patient->locations->first()->patientLocation->summary_body);
     }
 
     #[Test]
     public function patientLocationsAreFilteredIntoTheCareLog(): void
     {
-        [$clinicId, $homeCareId] = $this->patientLocationFacilitiesIds();
+        [$clinicId] = $this->patientLocationFacilitiesIds();
 
         $me = $this->createTeamUser();
         Auth::loginUsingId($me->user->id);
         $patient = Patient::factory()->create();
 
-        PatientLocation::factory()->create([
-            'patient_id' => $patient->id,
-            'moved_in_at' => '2017-04-09',
+        $location = Location::factory()->create([
             'facility_id' => $clinicId,
             'area' => 'ICU',
             'enclosure' => 'Inc 1',
+        ]);
+
+        $patient->locations()->attach($location, [
+            'moved_in_at' => '2017-04-09',
             'comments' => 'foo bar',
         ]);
 
-        $logs = $this->getCareLogs(
-            $patient,
-            $me->user
-        );
+        $logs = $this->getCareLogs($patient, $me->user);
 
         $this->assertCount(1, $logs);
         $this->assertInstanceOf(PatientLocation::class, $logs[0]->model);
@@ -100,7 +86,7 @@ final class PatientLocationTest extends TestCase
     }
 
     #[Test]
-    public function aLocationIsRevisionable(): void
+    public function aPatientLocationIsRevisionable(): void
     {
         activity()->enableLogging();
 
@@ -113,20 +99,35 @@ final class PatientLocationTest extends TestCase
     #[Test]
     public function ifAPatientLocationsPatientIsLockedThenItCanNotBeUpdated(): void
     {
+        [$clinicId] = $this->patientLocationFacilitiesIds();
+
         $patient = Patient::factory()->create();
-        $patientLocation = PatientLocation::factory()->create(['patient_id' => $patient->id, 'area' => 'OLD']);
+        $location = Location::factory()->create([
+            'facility_id' => $clinicId,
+            'area' => 'ICU',
+            'enclosure' => 'Inc 1',
+        ]);
+
+        $patient->locations()->attach($location, [
+            'comments' => 'OLD',
+        ]);
+
         $patient->locked_at = Carbon::now();
         $patient->save();
-        $patientLocation->patient->refresh();
+        //$patientLocation->patient->refresh();
+
+        $patientLocation = $patient->locations()->first()->patientLocation;
 
         // Cant update
-        $patientLocation->update(['area' => 'NEW']);
-        $this->assertEquals('OLD', $patientLocation->fresh()->area);
+        $patient->locations()->updateExistingPivot($patientLocation->id, [
+            'comments' => 'NEW'
+        ]);
+        $this->assertEquals('OLD', $patient->locations->first()->patientLocation->fresh()->comments);
 
         // Cant save
-        $patientLocation->area = 'NEW';
+        $patientLocation->comments = 'NEW';
         $patientLocation->save();
-        $this->assertEquals('OLD', $patientLocation->fresh()->area);
+        $this->assertEquals('OLD', $patientLocation->fresh()->comments);
     }
 
     #[Test]

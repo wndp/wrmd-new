@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\AttributeOption;
+use App\Models\Location;
 use App\Models\Patient;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -20,8 +21,7 @@ class PatientLocationFactory extends Factory
     {
         return [
             'patient_id' => Patient::factory(),
-            'facility_id' => AttributeOption::factory(),
-            'area' => $this->faker->word(),
+            'location_id' => Location::factory(),
         ];
     }
 }

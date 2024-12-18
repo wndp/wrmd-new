@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -51,7 +52,7 @@ class Patient extends Model implements HasMedia
      */
     protected static function booted(): void
     {
-        static::addGlobalScope(new VoidedScope);
+        static::addGlobalScope(new VoidedScope());
     }
 
     protected $fillable = [
@@ -168,11 +169,15 @@ class Patient extends Model implements HasMedia
         return $this->hasOne(Incident::class);
     }
 
-    public function locations(): HasMany
+    public function locations(): BelongsToMany
     {
-        return $this->hasMany(PatientLocation::class)
-            ->orderByDesc('moved_in_at')
-            ->orderByDesc('created_at');
+        return $this->belongsToMany(Location::class, 'patient_locations')
+            ->using(PatientLocation::class)
+            ->withPivot('id', 'moved_in_at', 'hours', 'comments')
+            ->as('patientLocation')
+            ->withTimestamps()
+            ->orderByPivot('moved_in_at', 'desc')
+            ->orderByPivot('created_at', 'desc');
     }
 
     public function possession(): BelongsTo

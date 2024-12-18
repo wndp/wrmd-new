@@ -43,9 +43,10 @@ final class UserTest extends TestCase
     public function itGetsTheUsersRoleForThierCurrentTeam(): void
     {
         $user = User::factory()->create();
-        $team = Team::factory()->create();
-
-        //$this->scopeBouncerTo($team->id);
+        $team = Team::factory()->create([
+            'user_id' => $user->id,
+            'personal_team' => true
+        ]);
 
         $user->joinTeamWithRole($team, Role::ADMIN);
 
