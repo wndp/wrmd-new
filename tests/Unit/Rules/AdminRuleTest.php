@@ -61,7 +61,7 @@ final class AdminRuleTest extends TestCase
     public function updateThierRoleToDisallowedValue(): void
     {
         // Give that there is a team with two users and I am not an Admin
-        $me = $this->createTeamUser([], ['role' => Role::USER->value]);
+        $me = $this->createTeamUser(role: Role::USER);
         $you = $this->attachUser($me->team);
 
         // When I try to change their role to anything but Admin

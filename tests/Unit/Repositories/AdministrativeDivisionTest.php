@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Repositories;
 
+use App\Enums\PhoneFormat;
 use App\Repositories\AdministrativeDivision;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -22,7 +23,8 @@ final class AdministrativeDivisionTest extends TestCase
             postalCode: '12345',
         );
 
-        $this->assertEquals('<p translate="no"> <span class="given-name">Jim Bob</span><br> <span class="organization">Foo Corporation</span><br> <span class="address-line1">123 Main st.</span><br> <span class="locality">Any Town</span>, <span class="administrative-area">CA</span> <span class="postal-code">12345</span><br> <span class="country">United States</span> </p>',
+        $this->assertEquals(
+            '<p translate="no"> <span class="given-name">Jim Bob</span><br> <span class="organization">Foo Corporation</span><br> <span class="address-line1">123 Main st.</span><br> <span class="locality">Any Town</span>, <span class="administrative-area">CA</span> <span class="postal-code">12345</span><br> <span class="country">United States</span> </p>',
             $result
         );
     }
@@ -45,24 +47,42 @@ final class AdministrativeDivisionTest extends TestCase
     }
 
     #[Test]
-    public function itFormatsAPhoneNumber(): void
+    public function itFormatsAPhoneNumberAsE164(): void
     {
         $administrativeDivision = new AdministrativeDivision('en', 'US');
 
-        $result = $administrativeDivision->phoneNumber('9255551234');
+        $result = $administrativeDivision->phoneNumber('9255551234', format: PhoneFormat::E164);
+
+        $this->assertEquals('+19255551234', $result);
+    }
+
+    #[Test]
+    public function itFormatsAPhoneNumberIntoTheNationalPattern(): void
+    {
+        $administrativeDivision = new AdministrativeDivision('en', 'US');
+
+        $result = $administrativeDivision->phoneNumber('9255551234', format: PhoneFormat::NATIONAL);
 
         $this->assertEquals('(925) 555-1234', $result);
     }
 
     #[Test]
-    public function itReturnsAnUnrecognizablePhoneNumberFormat(): void
+    public function itFormatsAPhoneNumberIntoANormalizedPattern(): void
     {
         $administrativeDivision = new AdministrativeDivision('en', 'US');
 
-        $phoneNumber = '+10-123-4399 x 101';
+        $result = $administrativeDivision->phoneNumber('(925) 555-1234', format: PhoneFormat::NORMALIZED);
 
-        $result = $administrativeDivision->phoneNumber($phoneNumber);
+        $this->assertEquals('9255551234', $result);
+    }
 
-        $this->assertEquals($phoneNumber, $result);
+    #[Test]
+    public function aPhoneNumberThatIsNotValidFormatsIntoANormalizedPattern(): void
+    {
+        $administrativeDivision = new AdministrativeDivision('en', 'US');
+
+        $result = $administrativeDivision->phoneNumber('1*234!');
+
+        $this->assertEquals('1234', $result);
     }
 }
