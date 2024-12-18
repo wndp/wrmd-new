@@ -35,9 +35,9 @@ const showExtensionDetails = (extension) => {
           <div class="lg:col-start-2 prose prose-blue">
             <h2>Customized Annual Reports</h2>
             <p>
-              Wildlife Rehabilitation MD has the benefit of being able to adapt to many circumstances including the reporting needs of different agencies. We are able to create customized annual reports at the push of a button. The customization is the real trick. Each state, province or territory has their own idea of what should be report on at the end of the year and how it should be organized.
+              Wildlife Rehabilitation MD has the benefit of being able to adapt to many circumstances including the reporting needs of different agencies. We are able to create customized annual reports at the push of a button. The customization is the real trick. Each state, province or territory has their own idea of what should be reported on at the end of the year and how it should be organized.
             </p>
-            <p><Link :href="route('about.agencies')">View the list of all the annual reports</Link> that Wildlife Rehabilitation MD is currently able to create.  If your state, province or territory is not listed then don't fret. Send us the actual report as created by your government and we'll recreate it as soon as possible. Send missing or updated annual reports to <a href="mailto:support@wildneighborsdp.org">support@wildneighborsdp.org</a> and please indicate in the subject that you are including an annual report.</p>
+            <p><Link :href="route('about.agencies')">View the list of all the annual reports</Link> that Wildlife Rehabilitation MD is currently able to create.  If your state, province or territory is not listed then, don't fret. Send us the actual report as created by your government and we'll recreate it as soon as possible. Send missing or updated annual reports to <a href="mailto:support@wildneighborsdp.org">support@wildneighborsdp.org</a> and please indicate in the subject that you are including an annual report.</p>
           </div>
           <div class="mt-10 -mx-4 relative lg:mt-0 lg:col-start-1">
             <img

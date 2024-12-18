@@ -48,7 +48,7 @@ enum Extension: string
     public function description(): string
     {
         return match ($this) {
-            self::ATTACHMENTS => __('Upload image and pdf files to your records.'),
+            self::ATTACHMENTS => __("Upload image and pdf files to your patient's record."),
             self::BANDING_MORPHOMETRICS => __('Banding & morphometrics data compatible with Bandit 4.0.'),
             self::CALCULATORS => __('Adds commonly needed calculators to the sidebar.'),
             self::CUSTOM_FIELD => __('Add custom fields when no other field meets your needs.'),
@@ -57,7 +57,7 @@ enum Extension: string
             self::LAB_REPORTS => __('Include detailed lab values collected on your patients.'),
             self::NECROPSY => __('Write detailed necropsy reports on your patients.'),
             self::PAPER_FORMS => __('Use paper forms to log your intake and daily treatments.'),
-            self::QUICK_ADMIT => __('Even more quickly admit patients into Wildlife Rehabilitation MD.'),
+            self::QUICK_ADMIT => __('Require less fields to quickly admit a patient.'),
             self::OIL_SPILL => __('Specialized features to manage patients during an oil spill event.'),
             self::OIL_SPILL_PROCESSING => __('Collect evidence processing data for you oil spill patients.'),
             self::OIL_SPILL_WASH => __('Record wash related data for you oil spill patients.'),

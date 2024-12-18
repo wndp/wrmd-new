@@ -402,7 +402,7 @@ const loginUser = () => {
               Used Internationally by All Wildlife Professionals
             </h2>
             <p class="mt-3 max-w-3xl text-lg text-gray-500">
-              The WRMD community includes, wildlife rehabilitators, oiled wildlife responders, universities, government agencies and a wide range of NGOs.
+              The WRMD community includes wildlife rehabilitators, oiled wildlife responders, universities, government agencies and a wide range of NGOs.
             </p>
             <div class="mt-8 sm:flex">
               <div class="rounded-md shadow">

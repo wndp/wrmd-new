@@ -289,7 +289,7 @@ const year = format(new Date(), 'yyyy');
         </div>
         <div class="mt-8 md:mt-0 text-sm">
           <h5 class="text-gray-400">
-            Developed With the Support From
+            Developed With Support From
           </h5>
           <div class="flex justify-between md:justify-end space-x-6 mt-2">
             <a

@@ -22,9 +22,9 @@ defineProps({
       </div>
       <div class="mt-6 prose prose-lg prose-blue text-gray-500 mx-auto">
         <h4>Annual Reports</h4>
-        <p>Part of what makes Wildlife Rehabilitation MD so special is it's ability to produce customized annual reports at the push of a button. The customization is the real trick. Each state, province or subdivision has their own idea of what should be report at the end of the year and how it should be organized.</p>
+        <p>Part of what makes Wildlife Rehabilitation MD so special is it's ability to produce customized annual reports at the push of a button. The customization is the real trick. Each state, province or subdivision has their own idea of what should be reported on at the end of the year and how it should be organized.</p>
         <p>
-          View the list below of all the annual reports that Wildlife Rehabilitation MD is currently able to create. If your state, province or subdivision is not listed then don't fret. Send us the actual report as created by your government and we'll recreate it as soon as possible.
+          View the list below of all the annual reports that Wildlife Rehabilitation MD is currently able to create. If your state, province or subdivision is not listed, then don't fret. Send us the actual report as created by your government and we'll recreate it as soon as possible.
         </p>
         <ol class="md:columns-2">
           <li

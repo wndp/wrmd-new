@@ -8,7 +8,7 @@ const tiers = [
     id: 'tier-standard',
     href: '#',
     priceMonthly: '$0',
-    description: 'Yes actually free. One of our mottoes is "Keep it Free." Not only this service to our community but the animals we dedicate our lives to.',
+    description: 'Yes, actually free. We strive to serve as many wildlife rehabilitators as possible by keeping a free version of WRMD.',
     features: [
       'Unlimited users',
       'Daily tasks',
@@ -45,7 +45,7 @@ const tiers = [
             Simple no-tricks pricing
           </h1>
           <p class="mt-4 max-w-3xl mx-auto text-center text-xl text-gray-500">
-            No matter how well established your organization is, we are sure that your funds are limited and as wildlife rehabilitators ourselves we know that paying for food is a priority. Our Pricing is simple. The free plan includes all the essential features you need, while the pro plan offers additional advanced tools and priority support, which require extra resources for us to maintain.
+            No matter how well established your organization is, we are sure that your funds are limited and as wildlife rehabilitators ourselves we know that paying for food is a priority. Our pricing is simple. The free plan includes all the essential features you need, while the Pro plan offers additional advanced tools and priority support, which require extra resources for us to maintain.
           </p>
         </div>
       </div>
