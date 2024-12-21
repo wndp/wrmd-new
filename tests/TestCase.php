@@ -38,5 +38,9 @@ abstract class TestCase extends BaseTestCase
                 ]],
             ]),
         ]);
+
+        config([
+            'wrmd.geocoders' => [\App\Actions\NullGeocoder::class],
+        ]);
     }
 }

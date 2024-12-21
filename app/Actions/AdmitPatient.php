@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 
-use App\Casts\SingleStorePoint;
+use App\ValueObjects\SingleStorePoint;
 use App\Concerns\AsAction;
 use App\Concerns\PersistsAdmission;
 use App\Enums\AttributeOptionName;
@@ -152,10 +152,8 @@ class AdmitPatient
 
     /**
      * Persist the patient into storage.
-     *
-     * @param  array|\App\Domain\Patients\Patient  $patientData
      */
-    protected function persistPatient($patientData): Patient
+    protected function persistPatient(Patient|array $patientData): Patient
     {
         if ($patientData instanceof Patient) {
             return $patientData;

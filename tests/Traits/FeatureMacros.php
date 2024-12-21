@@ -10,7 +10,7 @@ use PHPUnit\Framework\Attributes\Before;
 trait FeatureMacros
 {
     #[Before]
-    public function helperMacros()
+    public function featureMacros()
     {
         AssertableInertia::macro('hasOption', function ($option) {
             Assert::assertArrayHasKey($option, OptionsStore::all());

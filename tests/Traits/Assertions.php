@@ -61,8 +61,22 @@ trait Assertions
         return $this;
     }
 
+    public function assertTeamMissingSetting(Team $team, SettingKey $key): void
+    {
+        $count = Setting::where([
+            'team_id' => $team->id,
+            'key' => $key->value,
+        ])->count();
+
+        $this->assertSame(
+            0,
+            $count,
+            "Found unexpected setting with key [{$key->value}] for team [{$team->id}]."
+        );
+    }
+
     #[Before]
-    public function helperMacros()
+    public function assertionMacros()
     {
         /**
          * Assert that the response has an ownership validation error.
@@ -78,6 +92,10 @@ trait Assertions
             }
 
             $this->assertStatus(422)->assertExactJson([$message]);
+        });
+
+        TestResponse::macro('assertHasNotificationMessage', function ($message) {
+            $this->assertSessionHas('notification.text', $message);
         });
     }
 }

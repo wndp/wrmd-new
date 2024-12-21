@@ -24,7 +24,6 @@ class Transfer extends Model
     ];
 
     protected $casts = [
-        'uuid' => 'string',
         'patient_id' => 'integer',
         'cloned_patient_id' => 'integer',
         'from_team_id' => 'integer',

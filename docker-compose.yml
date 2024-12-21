@@ -36,10 +36,17 @@ services:
             - '${FORWARD_SINGLESTORE_UI_PORT:-8080}:8080'
             # - '${FORWARD_SINGLESTORE_API_PORT:-9000}:9000'
         volumes:
-            - 'sail-singlestore:/data'
+            - 'sail-singlestore-data:/data'
+            - 'sail-singlestore-logs:/logs'
+            - 'sail-singlestore-server:/server'
+            # - ./docker/singlestore/create_databases.sql:/init.sql
         environment:
-            - SINGLESTORE_LICENSE=${SINGLESTORE_LICENSE}
-            - ROOT_PASSWORD=${DB_PASSWORD}
+            SINGLESTORE_LICENSE: ${SINGLESTORE_LICENSE}
+            ROOT_PASSWORD: ${DB_PASSWORD}
+            SINGLESTORE_SET_GLOBAL_LOG_FILE_SIZE_PARTITIONS: '10485760'
+            SINGLESTORE_SET_GLOBAL_SNAPSHOT_TRIGGER_SIZE: '536870912'
+            SINGLESTORE_SET_GLOBAL_SNAPSHOTS_TO_KEEP: '1'
+            SINGLESTORE_SET_GLOBAL_DISK_PLAN_EXPIRATION_MINUTES: '30'
         networks:
             - sail
     redis:
@@ -133,7 +140,11 @@ networks:
     sail:
         driver: bridge
 volumes:
-    sail-singlestore:
+    sail-singlestore-data:
+        driver: local
+    sail-singlestore-logs:
+        driver: local
+    sail-singlestore-server:
         driver: local
     sail-redis:
         driver: local

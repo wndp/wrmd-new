@@ -1562,7 +1562,50 @@ class AttributeOptionSeeder extends Seeder
             'mg/dL',
             'MMOL/L',
         ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::CUSTOM_FIELD_TYPES, [
+            'text' => __('Text field'),
+            'textarea' => __('Textarea field'),
+            'date' => __('Date field'),
+            'datetime' => __('DateTime field'),
+            'number' => __('Number field'),
+            'select' => __('Dropdown list'),
+            'boolean' => __('Boolean ("Yes" / "No") toggle'),
+            'checkbox-group' => __('Checkbox group'),
+        ]);
+        $this->createOrUpdateAttributeOptionUiBehaviors(
+            AttributeOptionName::CUSTOM_FIELD_TYPES,
+            [
+                __('Dropdown list'),
+                __('Checkbox group'),
+            ],
+            AttributeOptionUiBehavior::CUSTOM_FIELD_TYPES_REQUIRES_OPTIONS,
+        );
+
+        $this->createOrUpdateAttributes(AttributeOptionName::CUSTOM_FIELD_GROUPS, [
+            __('Patient'),
+            __('Person'),
+            __('Exam')
+        ]);
+        $this->createOrUpdateAttributeOptionUiBehaviors(
+            AttributeOptionName::CUSTOM_FIELD_GROUPS,
+            __('Patient'),
+            AttributeOptionUiBehavior::CUSTOM_FIELD_GROUP_IS_PATIENT,
+        );
+
+        $this->createOrUpdateAttributes(AttributeOptionName::CUSTOM_FIELD_PATIENT_PANELS, [
+            __('Cage Card'),
+            __('Intake'),
+            __('Diagnosis'),
+            __('Outcome')
+        ]);
+
+        $this->createOrUpdateAttributes(AttributeOptionName::CUSTOM_FIELD_LOCATIONS, [
+            __('Top'),
+            __('Bottom')
+        ]);
     }
+
 
     private function createOrUpdateAttributes(AttributeOptionName $attributeName, array $values): void
     {

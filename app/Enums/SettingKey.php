@@ -31,6 +31,7 @@ enum SettingKey: string
     case EXPORT_SHARING = 'EXPORT_SHARING';
 
     case FAVORITE_REPORTS = 'FAVORITE_REPORTS';
+    case PAPER_FORM_TEMPLATES = 'PAPER_FORM_TEMPLATES';
 
     case SUB_ACCOUNT_ALLOW_MANAGE_SETTINGS = 'SUB_ACCOUNT_ALLOW_MANAGE_SETTINGS';
     case SUB_ACCOUNT_ALLOW_TRANSFER_PATIENTS = 'SUB_ACCOUNT_ALLOW_TRANSFER_PATIENTS';
@@ -57,14 +58,15 @@ enum SettingKey: string
             self::SHOW_GEOLOCATION_FIELDS => 'Show geolocation fields',
             self::AREAS => 'Areas',
             self::ENCLOSURES => 'Enclosures',
-            self::LIST_FIELDS => 'LIST_FIELDS',
-            self::SHOW_TAGS => 'SHOW_TAGS',
-            self::WILD_ALERT_SHARING => 'WILD_ALERT_SHARING',
-            self::EXPORT_SHARING => 'EXPORT_SHARING',
-            self::FAVORITE_REPORTS => 'FAVORITE_REPORTS',
-            self::SUB_ACCOUNT_ALLOW_MANAGE_SETTINGS => 'SUB_ACCOUNT_ALLOW_MANAGE_SETTINGS',
-            self::SUB_ACCOUNT_ALLOW_TRANSFER_PATIENTS => 'SUB_ACCOUNT_ALLOW_TRANSFER_PATIENTS',
-            self::OSPR_SPILL_ID => 'OSPR_SPILL_ID',
+            self::LIST_FIELDS => 'List Fields',
+            self::SHOW_TAGS => 'Show Tags',
+            self::WILD_ALERT_SHARING => 'Wild Alert Sharing',
+            self::EXPORT_SHARING => 'Export Sharing',
+            self::FAVORITE_REPORTS => 'Favorite Reports',
+            self::PAPER_FORM_TEMPLATES => 'Paper Form Templates',
+            self::SUB_ACCOUNT_ALLOW_MANAGE_SETTINGS => 'Sub Account Allow Manage Settings',
+            self::SUB_ACCOUNT_ALLOW_TRANSFER_PATIENTS => 'Sub Account Allow Transfer Patients',
+            self::OSPR_SPILL_ID => 'OSPR Spill Id',
         };
     }
 }

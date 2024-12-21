@@ -44,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
             if (config('wrmd.reporting.pdf_driver') === 'api2pdf') {
                 return new Api2Pdf(config('services.api2pdf.key'));
             } elseif (config('wrmd.reporting.pdf_driver') === 'domPdf') {
-                return new DomPdfEngine;
+                return new DomPdfEngine();
             }
         });
     }
@@ -62,6 +62,7 @@ class AppServiceProvider extends ServiceProvider
             'chemistry' => \App\Models\LabChemistryResult::class,
             'cytology' => \App\Models\LabCytologyResult::class,
             'custom_field' => \App\Models\CustomField::class,
+            'custom_value' => \App\Models\CustomValue::class,
             'donation' => \App\Models\Donation::class,
             'expense_category' => \App\Models\ExpenseCategory::class,
             'expense_transaction' => \App\Models\ExpenseTransaction::class,
@@ -112,7 +113,7 @@ class AppServiceProvider extends ServiceProvider
             \App\Policies\PrivacyPolicy::class,
             \App\Policies\OperationsPolicy::class,
         ] as $policy) {
-            foreach (get_class_methods(new $policy) as $method) {
+            foreach (get_class_methods(new $policy()) as $method) {
                 Gate::define($method, "$policy@$method");
             }
         }

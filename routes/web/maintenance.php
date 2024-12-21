@@ -17,13 +17,13 @@ use Illuminate\Auth\Middleware\Authorize;
 
 Route::prefix('maintenance')->name('maintenance.')->group(function () {
     Route::get('/unrecognized-patients', UnrecognizedPatientsController::class)
-        ->can('viewMaintenance')
+        ->middleware(Authorize::using(Ability::VIEW_ACCOUNT_MAINTENANCE))
         ->name('unrecognized-patients');
 
     Route::get('/transfers', TransfersController::class)->name('transfers');
-    Route::post('/transfers/{transfer:uuid}/uncollaborate', UncollaborateTransferController::class)->name('transfers.uncollaborate');
+    Route::post('/transfers/{transfer}/uncollaborate', UncollaborateTransferController::class)->name('transfers.uncollaborate');
 
-    Route::controller(FormularyController::class)->middleware('can:viewMaintenance')->group(function () {
+    Route::controller(FormularyController::class)->middleware(Authorize::using(Ability::VIEW_ACCOUNT_MAINTENANCE))->group(function () {
         Route::get('/prescription-formulary', 'index')->name('formulas.index');
         Route::get('/prescription-formulary/create', 'create')->name('formulas.create');
         Route::post('/prescription-formulary', 'store')->name('formulas.store');
@@ -32,7 +32,7 @@ Route::prefix('maintenance')->name('maintenance.')->group(function () {
         Route::delete('/prescription-formulary/{formula}', 'destroy')->name('formulas.destroy');
     });
 
-    Route::controller(NutritionCookbookController::class)->middleware('can:viewMaintenance')->group(function () {
+    Route::controller(NutritionCookbookController::class)->middleware(Authorize::using(Ability::VIEW_ACCOUNT_MAINTENANCE))->group(function () {
         Route::get('/nutrition-cookbook', 'index')->name('cookbook.index');
         Route::get('/nutrition-cookbook/create', 'create')->name('cookbook.create');
         Route::post('/nutrition-cookbook', 'store')->name('cookbook.store');
@@ -41,7 +41,7 @@ Route::prefix('maintenance')->name('maintenance.')->group(function () {
         Route::delete('/nutrition-cookbook/{formula}', 'destroy')->name('cookbook.destroy');
     });
 
-    Route::controller(AutocompleteController::class)->middleware('can:viewMaintenance')->group(function () {
+    Route::controller(AutocompleteController::class)->middleware(Authorize::using(Ability::VIEW_ACCOUNT_MAINTENANCE))->group(function () {
         Route::get('/autocomplete', 'index')->name('autocomplete.index');
         Route::post('/autocomplete', 'store')->name('autocomplete.store');
         Route::put('/autocomplete/{field}', 'update')->name('autocomplete.update');
@@ -63,7 +63,7 @@ Route::prefix('maintenance')->name('maintenance.')->group(function () {
         Route::delete('/paper-forms/{slug}', 'destroy')->name('paper_forms.destroy');
     });
 
-    Route::controller(CustomFieldsController::class)->middleware('can:manage-custom-fields')->group(function () {
+    Route::controller(CustomFieldsController::class)->middleware(Authorize::using(Ability::MANAGE_CUSTOM_FIELDS))->group(function () {
         Route::get('/custom-fields', 'index')->name('custom_fields.index');
         Route::get('/custom-fields/create', 'create')->name('custom_fields.create');
         Route::post('/custom-fields', 'store')->name('custom_fields.store');
@@ -78,7 +78,7 @@ Route::prefix('maintenance')->name('maintenance.')->group(function () {
     });
 });
 
-Route::prefix('danger')->middleware('can:display-danger-zone')->group(function () {
+Route::prefix('danger')->middleware(Authorize::using(Ability::VIEW_DANGER_ZONE))->group(function () {
     Route::get('delete-patient', [DeletePatientController::class, 'index'])
         ->name('patient.delete.index');
 

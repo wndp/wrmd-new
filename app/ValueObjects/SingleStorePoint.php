@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Casts;
+namespace App\ValueObjects;
 
-use geoPHP;
+use App\Casts\SingleStorePointCast;
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Contracts\Database\Query\Expression as ExpressionContract;
 use Illuminate\Support\Facades\DB;
 use Point as geoPHPPoint;
+use geoPHP;
 
 class SingleStorePoint implements Castable
 {
@@ -19,39 +20,7 @@ class SingleStorePoint implements Castable
 
     public static function castUsing(array $arguments): CastsAttributes
     {
-        return new class(static::class) implements CastsAttributes
-        {
-            public function __construct(private $point)
-            {
-                $this->point = $point;
-            }
-
-            public function get($model, string $key, $value, array $attributes): ?SingleStorePoint
-            {
-                if (! $value) {
-                    return null;
-                }
-
-                return $this->point::fromWkt($value);
-            }
-
-            public function set($model, string $key, $value, array $attributes): ?ExpressionContract
-            {
-                if (! $value) {
-                    return null;
-                }
-
-                if (is_array($value)) {
-                    $value = Geometry::fromArray($value);
-                }
-
-                if ($value instanceof ExpressionContract) {
-                    return $value;
-                }
-
-                return $value->toSqlExpression($model->getConnection());
-            }
-        };
+        return new SingleStorePointCast();
     }
 
     public function toWkt(): string
@@ -90,7 +59,7 @@ class SingleStorePoint implements Castable
     {
         try {
             /** @var geoPHPGeometry|false $geoPHPGeometry */
-            $geoPHPGeometry = geoPHP::load($wkt);
+            $geoPHPGeometry = geoPHP::load($wkt, 'wkt');
         } finally {
             if (! isset($geoPHPGeometry) || ! $geoPHPGeometry) {
                 throw new InvalidArgumentException('Invalid spatial value');

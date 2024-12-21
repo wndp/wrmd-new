@@ -7,6 +7,8 @@ use App\Models\Admission;
 use App\Models\Patient;
 use App\Models\Person;
 use App\Models\Team;
+use Illuminate\Database\Query\Expression;
+use Illuminate\Support\Facades\DB;
 
 trait CreateCase
 {
@@ -38,4 +40,18 @@ trait CreateCase
             is_int($caseYear) ? $caseYear : (int) now()->format('Y')
         );
     }
+
+    // public function castToJson($json): Expression
+    // {
+    //     // Convert from array to json and add slashes, if necessary.
+    //     if (is_array($json)) {
+    //         $json = addslashes(json_encode($json));
+    //     }
+    //     // Or check if the value is malformed.
+    //     elseif (is_null($json) || is_null(json_decode($json))) {
+    //         throw new \Exception('A valid JSON string was not provided.');
+    //     }
+
+    //     return DB::raw("TO_JSON('{$json}')");
+    // }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\AttributeOption;
 use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -20,9 +21,9 @@ class CustomFieldFactory extends Factory
         return [
             'team_id' => Team::factory()->createQuietly(),
             'team_field_id' => $this->faker->randomDigitNotZero(),
-            'group' => $this->faker->word(),
-            'location' => $this->faker->word(),
-            'type' => $this->faker->word(),
+            'group_id' => AttributeOption::factory(),
+            'location_id' => AttributeOption::factory(),
+            'type_id' => AttributeOption::factory(),
             'label' => $this->faker->word(),
         ];
     }

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Casts\SingleStorePoint;
+use App\ValueObjects\SingleStorePoint;
 use App\Concerns\InteractsWithMedia;
 use App\Concerns\QueriesDateRange;
 use App\Concerns\QueriesOneOfMany;

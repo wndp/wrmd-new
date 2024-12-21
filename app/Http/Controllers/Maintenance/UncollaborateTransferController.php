@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Maintenance;
 
-use App\Domain\Admissions\Admission;
-use App\Domain\Database\RecordNotOwnedResponse;
-use App\Domain\Patients\Transfer;
+use App\Exceptions\RecordNotOwned;
 use App\Http\Controllers\Controller;
+use App\Models\Admission;
+use App\Models\Transfer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,13 +17,13 @@ class UncollaborateTransferController extends Controller
      */
     public function __invoke(Request $request, Transfer $transfer): RedirectResponse
     {
-        abort_unless($this->transferCanUncollaborate($transfer), new RecordNotOwnedResponse);
+        abort_unless($this->transferCanUncollaborate($transfer), new RecordNotOwned());
 
-        $admission = Admission::custody($transfer->toAccount, $transfer->patient);
+        $admission = Admission::custody($transfer->toTeam, $transfer->patient);
         $newPatient = $transfer->patient->clone();
 
         Admission::where([
-            'account_id' => $admission->account_id,
+            'team_id' => $admission->team_id,
             'case_year' => $admission->case_year,
             'case_id' => $admission->case_id,
         ])->update(['patient_id' => $newPatient->id]);
@@ -32,8 +32,8 @@ class UncollaborateTransferController extends Controller
         $transfer->update(['is_collaborative' => false]);
 
         return redirect()->route('patients.initial.edit', ['c' => $admission->case_id, 'y' => $admission->case_year])
-            ->with('flash.notificationHeading', __('Success!'))
-            ->with('flash.notification', __('Patient was un-collaborated.'));
+            ->with('notification.heading', __('Success!'))
+            ->with('notification.text', __('Patient was un-collaborated.'));
     }
 
     /**
@@ -45,6 +45,6 @@ class UncollaborateTransferController extends Controller
     {
         return $transfer->is_collaborative &&
             $transfer->is_accepted &&
-            in_array(Auth::user()->current_team_id, [$transfer->to_account_id, $transfer->from_account_id]);
+            in_array(Auth::user()->current_team_id, [$transfer->to_team_id, $transfer->from_team_id]);
     }
 }

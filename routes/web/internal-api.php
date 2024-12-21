@@ -21,8 +21,10 @@ Route::prefix('internal-api')->group(function () {
 
     /** Unrecognized Patients */
     // Route::get('unrecognized-patients/account/{account?}', [UnrecognizedAccountPatientController::class, 'index']);
+
     Route::put('unrecognized-patients/account/{account?}', UnrecognizedAccountPatientController::class);
     Route::put('unrecognized-patients/patient/{patient}', UnrecognizedPatientController::class);
+
     // //Route::get('misidentified-patients/account/{account}', [MisidentifiedAccountPatientController::class, 'index']);
     // //Route::get('misidentified-patients', [MisidentifiedPatientController::class, 'index']);
 

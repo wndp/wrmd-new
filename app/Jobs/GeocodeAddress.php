@@ -2,11 +2,15 @@
 
 namespace App\Jobs;
 
+use App\ValueObjects\SingleStorePoint;
+use App\ValueObjects\GeocodeComponents;
+use CommerceGuys\Addressing\Address;
 use Geocodio\Exceptions\GeocodioException;
 use Geocodio\GeocodioFacade;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Str;
 
 class GeocodeAddress implements ShouldQueue
 {
@@ -26,18 +30,37 @@ class GeocodeAddress implements ShouldQueue
      */
     public function handle(): void
     {
-        try {
-            $response = GeocodioFacade::geocode($this->model->address_to_geocode, [], 1);
-        } catch (GeocodioException $e) {
-            return;
-        }
+        //$freshModel = $this->model->fresh();
 
-        if (count($response?->results) === 1) {
-            $this->model->{$this->coordinatesAttribute} = new GeographyPoint(
-                data_get($response, 'results.0.location.lat'),
-                data_get($response, 'results.0.location.lng')
-            );
-            $this->model->save();
+        $result = $this->geocode();
+
+        $this->model->timestamps = false;
+        $this->model->{$this->coordinatesAttribute} = new SingleStorePoint($result->latitude, $result->longitude);
+
+        // if (property_exists($attributes, 'county_attribute')) {
+        //     $this->model->{$attributes->county_attribute} = $result->county;
+        // }
+
+        $this->model->save();
+    }
+
+    public function geocode(): GeocodeComponents
+    {
+        $address = $this->getAddress();
+
+        foreach (config('wrmd.geocoders') as $geocoder) {
+            try {
+                return $geocoder::run($address);
+            } catch (GeocodingException $e) {
+            }
         }
+    }
+
+    /**
+     * Get the model's address to geocode.
+     */
+    protected function getAddress(): Address
+    {
+        return $this->model->{'get'.Str::studly($this->coordinatesAttribute).'Address'}();
     }
 }

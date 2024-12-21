@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Oiled;
 
-use App\Casts\SingleStorePoint;
+use App\ValueObjects\SingleStorePoint;
 use App\Enums\AttributeOptionName;
 use App\Enums\Extension;
 use App\Http\Controllers\Controller;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Settings;
 
+use App\Enums\Ability;
 use App\Enums\Extension;
 use App\Events\TeamUpdated;
 use App\Exceptions\RecordNotOwned;
@@ -43,8 +44,8 @@ class AccountExtensionsController extends Controller
     {
         if ($team instanceof Team) {
             abort_unless(
-                Auth::user()->can('manageAccounts') || Auth::user()->currentTeam->hasSubAccount($team),
-                new RecordNotOwned
+                Auth::user()->can(Ability::VIEW_WRMD_ADMIN->value) || Auth::user()->currentTeam->hasSubAccount($team),
+                new RecordNotOwned()
             );
         }
 
@@ -68,7 +69,7 @@ class AccountExtensionsController extends Controller
         if ($team instanceof Team) {
             abort_unless(
                 Auth::user()->can('manageTeams') || Auth::user()->currentTeam->hasSubAccount($team),
-                new RecordNotOwned
+                new RecordNotOwned()
             );
         }
 

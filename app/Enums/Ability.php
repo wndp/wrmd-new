@@ -6,6 +6,7 @@ enum Ability: string
 {
     case VIEW_WRMD_ADMIN = 'VIEW_WRMD_ADMIN';
     case VIEW_ACCOUNT_SETTINGS = 'VIEW_ACCOUNT_SETTINGS';
+    case VIEW_ACCOUNT_MAINTENANCE = 'VIEW_ACCOUNT_MAINTENANCE';
     case VIEW_DANGER_ZONE = 'VIEW_DANGER_ZONE';
     case VIEW_EXTENSION_SETTINGS = 'VIEW_EXTENSION_SETTINGS';
     case CREATE_PEOPLE = 'CREATE_PEOPLE';
@@ -33,6 +34,7 @@ enum Ability: string
     case MANAGE_LABS = 'MANAGE_LABS';
     case VIEW_EXPENSES = 'VIEW_EXPENSES';
     case MANAGE_EXPENSES = 'MANAGE_EXPENSES';
+    case MANAGE_CUSTOM_FIELDS = 'MANAGE_CUSTOM_FIELDS';
     case UPDATE_NECROPSY = 'UPDATE_NECROPSY';
     case UPDATE_BANDING_AND_MORPHOMETRICS = 'UPDATE_BANDING_AND_MORPHOMETRICS';
     case DETACH_RESCUERS = 'DETACH_RESCUERS';
@@ -63,6 +65,7 @@ enum Ability: string
         return match ($this) {
             self::VIEW_WRMD_ADMIN => 'View WRMD Admin',
             self::VIEW_ACCOUNT_SETTINGS => 'View Account Settings',
+            self::VIEW_ACCOUNT_MAINTENANCE => 'View Account Maintenance',
             self::VIEW_DANGER_ZONE => 'View Danger Zone',
             self::VIEW_EXTENSION_SETTINGS => 'View Extension Settings',
             self::CREATE_PEOPLE => 'Create People',
@@ -90,6 +93,7 @@ enum Ability: string
             self::MANAGE_LABS => 'Manage Labs',
             self::VIEW_EXPENSES => 'View Expenses',
             self::MANAGE_EXPENSES => 'Manage Expenses',
+            self::MANAGE_CUSTOM_FIELDS => 'Manage Custom Fields',
             self::UPDATE_NECROPSY => 'Update Necropsy',
             self::UPDATE_BANDING_AND_MORPHOMETRICS => 'Update Banding and Morphometrics',
             self::DETACH_RESCUERS => 'Detach Rescuers',
@@ -121,6 +125,7 @@ enum Ability: string
     {
         return [
             self::VIEW_ACCOUNT_SETTINGS,
+            self::VIEW_ACCOUNT_MAINTENANCE,
             self::VIEW_DANGER_ZONE,
             self::VIEW_EXTENSION_SETTINGS,
             self::CREATE_PEOPLE,

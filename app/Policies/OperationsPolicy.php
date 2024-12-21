@@ -29,10 +29,10 @@ class OperationsPolicy
         return $user->can(Ability::VIEW_ACCOUNT_SETTINGS);
     }
 
-    public function viewMaintenance($user)
-    {
-        return $user->can(Ability::VIEW_ACCOUNT_SETTINGS);
-    }
+    // public function viewMaintenance($user)
+    // {
+    //     return $user->can(Ability::VIEW_ACCOUNT_SETTINGS);
+    // }
 
     public function viewTransferPatient($user)
     {

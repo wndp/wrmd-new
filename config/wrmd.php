@@ -33,4 +33,10 @@ return [
         'pdf_driver' => env('PDF_DRIVER', 'domPdf'),
     ],
 
+    'geocoders' => [
+        //\App\Domain\Geocoding\Geocoders\WrmdGeocoder::class,
+        \App\Actions\GeocodioGeocoder::class,
+        \App\Actions\NullGeocoder::class,
+    ]
+
 ];

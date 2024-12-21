@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Maintenance;
 
-use App\Domain\Options;
-use App\Domain\OptionsStore;
+use App\Actions\CustomFieldBuilder;
+use App\Enums\AttributeOptionName;
 use App\Events\AccountUpdated;
-use App\Extensions\CustomFields\CustomField;
-use App\Extensions\CustomFields\CustomFieldBuilder;
-use App\Extensions\CustomFields\CustomFieldOptions;
-use App\Extensions\CustomFields\CustomFieldsRepository;
-use App\Extensions\Expenses\Models\Category;
-use App\Extensions\ExtensionNavigation;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCustomFieldRequest;
+use App\Http\Requests\UpdateCustomFieldRequest;
+use App\Models\AttributeOption;
+use App\Models\CustomField;
+use App\Repositories\CustomFieldsRepository;
+use App\Repositories\OptionsStore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -23,11 +23,16 @@ class CustomFieldsController extends Controller
     /**
      * Display a listing of expense categories.
      */
-    public function index(CustomFieldOptions $options)
+    public function index()
     {
-        ExtensionNavigation::emit('maintenance');
-
-        OptionsStore::merge($options);
+        OptionsStore::add([
+            AttributeOption::getDropdownOptions([
+                AttributeOptionName::CUSTOM_FIELD_TYPES->value,
+                AttributeOptionName::CUSTOM_FIELD_GROUPS->value,
+                AttributeOptionName::CUSTOM_FIELD_PATIENT_PANELS->value,
+                AttributeOptionName::CUSTOM_FIELD_LOCATIONS->value,
+            ])
+        ]);
 
         $fields = CustomFieldsRepository::getCustomFields(Auth::user()->current_team_id)
             ->groupBy('group')
@@ -41,19 +46,24 @@ class CustomFieldsController extends Controller
     /**
      * Display the view to create an expense category.
      */
-    public function create(CustomFieldOptions $options)
+    public function create()
     {
-        ExtensionNavigation::emit('maintenance');
-
-        OptionsStore::merge($options);
+        OptionsStore::add([
+            AttributeOption::getDropdownOptions([
+                AttributeOptionName::CUSTOM_FIELD_TYPES->value,
+                AttributeOptionName::CUSTOM_FIELD_GROUPS->value,
+                AttributeOptionName::CUSTOM_FIELD_PATIENT_PANELS->value,
+                AttributeOptionName::CUSTOM_FIELD_LOCATIONS->value,
+            ])
+        ]);
 
         $fieldsCount = CustomFieldsRepository::getCustomFields(Auth::user()->current_team_id)->count();
 
         if ($fieldsCount === CustomFieldBuilder::NUMBER_OF_ALLOWED_FIELDS) {
             return redirect()->route('maintenance.custom_fields.index')
-                ->with('flash.notificationHeading', __('Oops!'))
-                ->with('flash.notification', __('You already have :numAllowedFields custom fields created!', ['numAllowedFields' => CustomFieldBuilder::NUMBER_OF_ALLOWED_FIELDS]))
-                ->with('flash.style', 'danger');
+                ->with('notification.heading', __('Oops!'))
+                ->with('notification.text', __('You already have :numAllowedFields custom fields created!', ['numAllowedFields' => CustomFieldBuilder::NUMBER_OF_ALLOWED_FIELDS]))
+                ->with('notification.style', 'danger');
         }
 
         return Inertia::render('Maintenance/CustomFields/Create');
@@ -64,27 +74,17 @@ class CustomFieldsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCustomFieldRequest $request)
     {
-        $request->validate([
-            'label' => 'required',
-            'group' => ['required', Rule::in(CustomFieldOptions::$groups)],
-            'location' => ['required', Rule::in(CustomFieldOptions::$locations)],
-            'panel' => ['required_if:group,Patient', 'nullable', Rule::in(CustomFieldOptions::$patientPanels)],
-            'type' => ['required', Rule::in(array_keys(CustomFieldOptions::$fieldTypes))],
-            'is_required' => ['required', 'boolean'],
-            'options' => Rule::requiredIf(fn () => in_array($request->type, ['select', 'checkbox-group'])),
-        ]);
-
         CustomFieldsRepository::save(
             array_merge(
-                $request->all(['group', 'label', 'type', 'panel', 'location', 'is_required']),
+                $request->only(['label', 'group_id', 'type_id', 'panel_id', 'location_id', 'is_required']),
                 ['options' => $this->sanatizedOptions($request->options)]
             ),
-            Auth::user()->currentAccount
+            Auth::user()->currentTeam
         );
 
-        event(new AccountUpdated(Auth::user()->currentAccount));
+        //event(new AccountUpdated(Auth::user()->currentTeam));
 
         return redirect()->route('maintenance.custom_fields.index');
     }
@@ -92,13 +92,18 @@ class CustomFieldsController extends Controller
     /**
      * Display the page to edit a custom field.
      */
-    public function edit(CustomFieldOptions $options, CustomField $customField)
+    public function edit(CustomField $customField)
     {
         $customField->validateOwnership(Auth::user()->current_team_id);
 
-        ExtensionNavigation::emit('maintenance');
-
-        OptionsStore::merge($options);
+        OptionsStore::add([
+            AttributeOption::getDropdownOptions([
+                AttributeOptionName::CUSTOM_FIELD_TYPES->value,
+                AttributeOptionName::CUSTOM_FIELD_GROUPS->value,
+                AttributeOptionName::CUSTOM_FIELD_PATIENT_PANELS->value,
+                AttributeOptionName::CUSTOM_FIELD_LOCATIONS->value,
+            ])
+        ]);
 
         return Inertia::render('Maintenance/CustomFields/Edit', compact('customField'));
     }
@@ -108,28 +113,16 @@ class CustomFieldsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CustomField $customField)
+    public function update(UpdateCustomFieldRequest $request, CustomField $customField)
     {
         $customField->validateOwnership(Auth::user()->current_team_id);
 
-        $request->validate([
-            'label' => 'required',
-            'location' => ['required', Rule::in(CustomFieldOptions::$locations)],
-            'panel' => [
-                Rule::requiredIf(fn () => $customField->group === 'Patient'),
-                'nullable',
-                Rule::in(CustomFieldOptions::$patientPanels),
-            ],
-            'is_required' => ['required', 'boolean'],
-            'options' => Rule::requiredIf(fn () => in_array($customField->type, ['select', 'checkbox-group'])),
-        ]);
-
         $customField->update(array_merge(
-            $request->all(['label', 'panel', 'location', 'is_required']),
+            $request->only(['label', 'panel_id', 'location_id', 'is_required']),
             ['options' => $this->sanatizedOptions($request->options)]
         ));
 
-        event(new AccountUpdated(Auth::user()->currentAccount));
+        //event(new AccountUpdated(Auth::user()->currentTeam));
 
         return redirect()->route('maintenance.custom_fields.index');
     }
@@ -145,7 +138,7 @@ class CustomFieldsController extends Controller
 
         $customField->delete();
 
-        event(new AccountUpdated(Auth::user()->currentAccount));
+        //event(new AccountUpdated(Auth::user()->currentTeam));
 
         return redirect()->route('maintenance.custom_fields.index')
             ->with('flash.notificationHeading', __('We hope you meant that.'))

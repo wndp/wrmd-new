@@ -6,6 +6,7 @@ RUN apk --update add imagemagick ghostscript
 # RUN docker-php-ext-enable imagick
 
 # TODO: Use latest released version, after https://github.com/Imagick/imagick/issues/640 is fixed
+# and a new version of Imagick is tagged. In the mean time we have to build Imagick on our own.
 RUN apk add git --update --no-cache && \
     git clone https://github.com/Imagick/imagick.git --depth 1 /tmp/imagick && \
     cd /tmp/imagick && \

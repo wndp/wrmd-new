@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `wildalert`.`classifications` (
   SORT KEY `__UNORDERED` ()
 );
 
-CREATE TABLE `conservation_statuses` (
+CREATE TABLE `wildalert`.`conservation_statuses` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `taxon_id` bigint(20) unsigned NOT NULL,
   `authority` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -79,14 +79,14 @@ CREATE TABLE `conservation_statuses` (
   SORT KEY `__UNORDERED` ()
 );
 
-INSERT INTO `taxa` (`id`, `species`, `genus`, `family`, `order`, `class`, `alpha_code`, `is_mbta`, `iucn_id`, `inaturalist_taxon_id`, `bow_code`, `created_at`, `updated_at`) VALUES
+INSERT INTO `wildalert`.`taxa` (`id`, `species`, `genus`, `family`, `order`, `class`, `alpha_code`, `is_mbta`, `iucn_id`, `inaturalist_taxon_id`, `bow_code`, `created_at`, `updated_at`) VALUES
 (1150, 'homochroa', 'Oceanodroma', 'Hydrobatidae', 'Procellariiformes', 'Aves', 'ASSP', 1, 22698562, 1289618, NULL, '2024-05-04 14:12:39', '2024-05-04 14:12:39'),
 (1271, 'jamaicensis', 'Buteo', 'Accipitridae', 'Accipitriformes', 'Aves', 'RTHA', 1, 22695933, 5212, NULL, '2024-05-04 14:12:39', '2024-05-04 14:12:39'),
 (2946, 'mexicanus', 'Haemorhous', 'Fringillidae', 'Passeriformes', 'Aves', 'HOFI', 1, 22720563, 199840, NULL, '2024-05-04 14:12:39', '2024-05-04 14:12:39'),
 (1043745, NULL, 'Parulidae', 'Passeri', 'Passeriformes', 'Aves', NULL, 0, NULL, NULL, NULL, '2024-05-04 14:12:39', '2024-05-04 14:12:39'),
 (1033364, 'Boylii', 'Rana', 'Ranidae', 'Anura', 'Amphibia', NULL, 0, 19175, 25646, NULL, '2024-05-04 14:12:39', '2024-05-04 14:12:39');
 
-INSERT INTO `common_names` (`id`, `taxon_id`, `language`, `common_name`, `subspecies`, `alpha_code`, `created_at`, `updated_at`) VALUES
+INSERT INTO `wildalert`.`common_names` (`id`, `taxon_id`, `language`, `common_name`, `subspecies`, `alpha_code`, `created_at`, `updated_at`) VALUES
 (2251799813712004, 1271, 'en', 'Red-tailed Hawk', '', '', '2024-07-19 23:09:50', '2024-07-19 23:09:50'),
 (2251799813712652, 1150, 'en', 'Ashy Storm-petrel', '', '', '2024-07-19 23:09:50', '2024-07-19 23:09:50'),
 (2251799813712653, 1150, 'en', 'Ashy Storm Petrel', '', '', '2024-07-19 23:09:50', '2024-07-19 23:09:50'),
@@ -98,7 +98,7 @@ INSERT INTO `common_names` (`id`, `taxon_id`, `language`, `common_name`, `subspe
 (2251799813697279, 1033364, 'en', 'Yellow-legged Frog', '', '', '2024-07-19 23:09:50', '2024-07-19 23:09:50'),
 (2251799813697280, 1033364, 'en', 'Foothill Yellow-legged Frog', '', '', '2024-07-19 23:09:50', '2024-07-19 23:09:50');
 
-INSERT INTO `taxon_metas` (`id`, `taxon_id`, `key`, `value`, `created_at`, `updated_at`) VALUES
+INSERT INTO `wildalert`.`taxon_metas` (`id`, `taxon_id`, `key`, `value`, `created_at`, `updated_at`) VALUES
 (1125899906843687, 2946, 'biological_group', 'Songbird', '2024-07-19 23:49:41', '2024-07-19 23:49:41'),
 (1125899906843688, 2946, 'diet', 'Granivore', '2024-07-19 23:49:41', '2024-07-19 23:49:41'),
 (1125899906843689, 2946, 'diet', 'Herbivore', '2024-07-19 23:49:41', '2024-07-19 23:49:41'),
@@ -115,11 +115,11 @@ INSERT INTO `taxon_metas` (`id`, `taxon_id`, `key`, `value`, `created_at`, `upda
 (1125899906850889, 1271, 'diet', 'Carnivore', '2024-07-19 23:49:41', '2024-07-19 23:49:41'),
 (1125899906850890, 1271, 'phenology', 'Diurnal', '2024-07-19 23:49:41', '2024-07-19 23:49:41');
 
-INSERT INTO `conservation_statuses` (`id`, `taxon_id`, `authority`, `territory`, `status`, `created_at`, `updated_at`) VALUES
+INSERT INTO `wildalert`.`conservation_statuses` (`id`, `taxon_id`, `authority`, `territory`, `status`, `created_at`, `updated_at`) VALUES
 (1125899906842625, 1271, 'IUCN', '*', 'LC', '2024-10-23 17:28:20', '2024-10-23 17:28:20'),
 (1125899906842626, 1271, 'USFWS', 'US', 'LC', '2024-10-23 17:28:31', '2024-10-23 17:28:31'),
 (1125899906842627, 1150, 'IUCN', '*', 'EN', '2024-10-23 17:28:31', '2024-10-23 17:28:31'),
 (1125899906842628, 2946, 'IUCN', '*', 'LC', '2024-10-23 17:28:20', '2024-10-23 17:28:20'),
 (1125899906842629, 1033364, 'IUCN', '*', 'NE', '2024-10-23 17:28:20', '2024-10-23 17:28:20'),
 (1125899906842630, 1033364, 'IUCN', '*', 'NT', '2024-10-23 17:28:20', '2024-10-23 17:28:20'),
-(1125899906842631, 1033364, 'USFWS', 'US-8', 'T', '2024-10-23 17:28:20', '2024-10-23 17:28:20'),
+(1125899906842631, 1033364, 'USFWS', 'US-8', 'T', '2024-10-23 17:28:20', '2024-10-23 17:28:20');

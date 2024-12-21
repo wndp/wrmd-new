@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Maintenance;
 
-use App\Domain\Admissions\Admission;
 use App\Events\AccountUpdated;
 use App\Events\PatientDeleted;
 use App\Extensions\ExtensionNavigation;
 use App\Http\Controllers\Controller;
+use App\Models\Admission;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -20,9 +20,7 @@ class DeleteYearController extends Controller
      */
     public function index(): Response
     {
-        ExtensionNavigation::emit('maintenance');
-
-        $yearsInAccount = Admission::yearsInAccount(Auth::user()->currentAccount->id)->toArray();
+        $yearsInAccount = Admission::yearsInAccount(Auth::user()->currentTeam->id)->toArray();
 
         return Inertia::render('Maintenance/DeleteYear', compact('yearsInAccount'));
     }
@@ -32,34 +30,34 @@ class DeleteYearController extends Controller
      */
     public function destroy(): RedirectResponse
     {
-        $account = auth()->user()->currentAccount;
+        $team = Auth::user()->currentTeam;
 
         $data = request()->validate([
-            'year' => 'required|integer|in:'.Admission::yearsInAccount($account->id)->implode(','),
+            'year' => 'required|integer|in:'.Admission::yearsInAccount($team->id)->implode(','),
             'password' => ['required', 'confirmed', 'current_password'],
         ]);
 
         $admissions = Admission::where([
-            'account_id' => $account->id,
+            'team_id' => $team->id,
             'case_year' => $data['year'],
         ])
             ->get();
 
         if (! $admissions->isEmpty()) {
             Admission::where([
-                'account_id' => $account->id,
+                'team_id' => $team->id,
                 'case_year' => $data['year'],
             ])->delete();
 
-            event(new AccountUpdated($account));
-            event(new PatientDeleted($admissions->first()->patient));
+            // event(new AccountUpdated($team));
+            // event(new PatientDeleted($admissions->first()->patient));
 
-            Metadata::add(
-                $account->id,
-                'deletion',
-                'deleted_year',
-                "{$data['year']} deleted by ".auth()->user()->name
-            );
+            // Metadata::add(
+            //     $team->id,
+            //     'deletion',
+            //     'deleted_year',
+            //     "{$data['year']} deleted by ".auth()->user()->name
+            // );
 
             return redirect()->route('year.delete.index')
                 ->with('flash.notificationHeading', 'Patient Deleted')

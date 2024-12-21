@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Maintenance;
 
-use App\Extensions\Expenses\Models\Category;
 use App\Http\Controllers\Controller;
 use App\Models\ExpenseCategory;
 use App\Options\Options;
@@ -42,7 +41,7 @@ class ExpenseCategoriesController extends Controller
             ->pluck('name')
             ->toArray();
 
-        OptionsStore::merge(['parentCategories' => Options::arrayToSelectable($parentCategories)]);
+        OptionsStore::add(['parentCategories' => Options::arrayToSelectable($parentCategories)]);
 
         return Inertia::render('Maintenance/ExpenseCategories/Create');
     }
@@ -59,6 +58,8 @@ class ExpenseCategoriesController extends Controller
             'name' => ['required', Rule::unique('expense_categories')->where(function ($query) {
                 return $query->where('team_id', Auth::user()->current_team_id);
             })],
+        ], [
+            'parent_category.exists' => 'The selected parent category is invalid.'
         ]);
 
         $childCategory = new ExpenseCategory($request->all('name', 'description'));
@@ -76,14 +77,14 @@ class ExpenseCategoriesController extends Controller
     {
         abort_if($category->isParent(), 404);
 
-        $category->validateOwnership(Auth::user()->current_team_id)->loadCount('transactions');
+        $category->validateOwnership(Auth::user()->current_team_id)->loadCount('expenseTransactions');
 
         $parentCategories = ExpenseCategory::whereNull('parent_id')->whereNull('team_id')
             ->orderBy('name')
             ->pluck('name')
             ->toArray();
 
-        OptionsStore::merge(['parentCategories' => Options::arrayToSelectable($parentCategories)]);
+        OptionsStore::add(['parentCategories' => Options::arrayToSelectable($parentCategories)]);
 
         return Inertia::render('Maintenance/ExpenseCategories/Edit', compact('category'));
     }
@@ -104,6 +105,8 @@ class ExpenseCategoriesController extends Controller
             'name' => ['required', Rule::unique('expense_categories')->where(function ($query) {
                 return $query->where('team_id', Auth::user()->current_team_id);
             })->ignore($category->id)],
+        ], [
+            'parent_category.exists' => 'The selected parent category is invalid.'
         ]);
 
         $category->parent_id = ExpenseCategory::where('name', $request->parent_category)->whereNull('parent_id')->whereNull('team_id')->first()->id;
@@ -115,13 +118,13 @@ class ExpenseCategoriesController extends Controller
     /**
      * Delete an expense category from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(ExpenseCategory $category)
     {
         abort_if($category->isParent(), 404);
 
-        $category->validateOwnership(Auth::user()->current_team_id)->loadCount('transactions');
+        $category->validateOwnership(Auth::user()->current_team_id)->loadCount('expenseTransactions');
 
-        if ($category->transactions_count === 0) {
+        if ($category->expense_transactions_count === 0) {
             $category->delete();
 
             return redirect()->route('maintenance.expense_categories.index')

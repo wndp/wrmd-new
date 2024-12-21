@@ -16,8 +16,6 @@ class UnrecognizedPatientsController extends Controller
      */
     public function __invoke(): Response
     {
-        //ExtensionNavigation::emit('maintenance');
-
         $admissions = Admission::select('admissions.*')
             ->where('team_id', Auth::user()->current_team_id)
             ->whereUnrecognized()

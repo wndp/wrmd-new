@@ -22,7 +22,7 @@ class AccountsExtensionsController extends Controller
 
         $extensions = Arr::map(Extension::cases(), fn ($extension) => [
             ...$extension->toArray(),
-            'is_activated' => $activated->contains(fn ($active) => $active->extension === $extension->value),
+            'is_activated' => $activated->contains(fn ($active) => $active->extension->value === $extension->value),
         ]);
 
         return Inertia::render('Admin/Teams/Extensions', compact('team', 'extensions'));

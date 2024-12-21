@@ -36,8 +36,6 @@ class FormularyController extends Controller
      */
     public function create(): Response
     {
-        //ExtensionNavigation::emit('maintenance');
-
         OptionsStore::add([
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::DAILY_TASK_FREQUENCIES->value,
@@ -84,8 +82,6 @@ class FormularyController extends Controller
      */
     public function edit(Formula $formula): Response
     {
-        //ExtensionNavigation::emit('maintenance');
-
         OptionsStore::add([
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::DAILY_TASK_FREQUENCIES->value,
