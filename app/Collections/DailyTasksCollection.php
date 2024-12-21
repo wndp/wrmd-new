@@ -34,7 +34,7 @@ class DailyTasksCollection extends Collection
 
     public function __construct($items = [])
     {
-        $this->filters = new DailyTasksFilters();
+        $this->filters = new DailyTasksFilters;
 
         parent::__construct($items);
     }
@@ -104,7 +104,7 @@ class DailyTasksCollection extends Collection
         return data_get(
             $this->getNormalizedTasks(),
             '0.patients.0.tasks',
-            new self()
+            new self
         );
     }
 

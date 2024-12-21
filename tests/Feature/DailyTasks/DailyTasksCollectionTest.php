@@ -125,7 +125,7 @@ final class DailyTasksCollectionTest extends TestCase
 
         $location = Location::factory()->create([
             'area' => 'ICU',
-            'enclosure' => 'Incubator'
+            'enclosure' => 'Incubator',
         ]);
         $admission->patient->locations()->attach($location);
 
@@ -162,7 +162,7 @@ final class DailyTasksCollectionTest extends TestCase
         $location = Location::factory()->create([
             'facility_id' => $clinicId,
             'area' => 'ICU',
-            'enclosure' => 'Incubator'
+            'enclosure' => 'Incubator',
         ]);
         $admission->patient->locations()->attach($location);
 

@@ -23,7 +23,7 @@ class FailedImportFactory extends Factory
             'import_id' => Import::factory(),
             'disclosures' => [],
             'row' => [],
-            'exception' => $this->faker->sentence()
+            'exception' => $this->faker->sentence(),
         ];
     }
 }
