@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Oiled;
 
-use App\ValueObjects\SingleStorePoint;
 use App\Enums\AttributeOptionName;
 use App\Enums\Extension;
 use App\Http\Controllers\Controller;
@@ -11,6 +10,7 @@ use App\Models\Patient;
 use App\Rules\AttributeOptionExistsRule;
 use App\Support\ExtensionManager;
 use App\Support\Timezone;
+use App\ValueObjects\SingleStorePoint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

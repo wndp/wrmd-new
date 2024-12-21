@@ -15,7 +15,6 @@ use App\Repositories\OptionsStore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class CustomFieldsController extends Controller
@@ -31,7 +30,7 @@ class CustomFieldsController extends Controller
                 AttributeOptionName::CUSTOM_FIELD_GROUPS->value,
                 AttributeOptionName::CUSTOM_FIELD_PATIENT_PANELS->value,
                 AttributeOptionName::CUSTOM_FIELD_LOCATIONS->value,
-            ])
+            ]),
         ]);
 
         $fields = CustomFieldsRepository::getCustomFields(Auth::user()->current_team_id)
@@ -54,7 +53,7 @@ class CustomFieldsController extends Controller
                 AttributeOptionName::CUSTOM_FIELD_GROUPS->value,
                 AttributeOptionName::CUSTOM_FIELD_PATIENT_PANELS->value,
                 AttributeOptionName::CUSTOM_FIELD_LOCATIONS->value,
-            ])
+            ]),
         ]);
 
         $fieldsCount = CustomFieldsRepository::getCustomFields(Auth::user()->current_team_id)->count();
@@ -102,7 +101,7 @@ class CustomFieldsController extends Controller
                 AttributeOptionName::CUSTOM_FIELD_GROUPS->value,
                 AttributeOptionName::CUSTOM_FIELD_PATIENT_PANELS->value,
                 AttributeOptionName::CUSTOM_FIELD_LOCATIONS->value,
-            ])
+            ]),
         ]);
 
         return Inertia::render('Maintenance/CustomFields/Edit', compact('customField'));

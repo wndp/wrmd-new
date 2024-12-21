@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Maintenance;
 
 use App\Enums\AttributeOptionName;
 use App\Enums\FormulaType;
-use App\Extensions\ExtensionNavigation;
 use App\Http\Controllers\Controller;
 use App\Models\AttributeOption;
 use App\Models\Formula;

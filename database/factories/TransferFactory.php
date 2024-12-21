@@ -21,7 +21,7 @@ class TransferFactory extends Factory
         return [
             'patient_id' => Patient::factory(),
             'from_team_id' => Team::factory(),
-            'to_team_id' => Team::factory()
+            'to_team_id' => Team::factory(),
         ];
     }
 }

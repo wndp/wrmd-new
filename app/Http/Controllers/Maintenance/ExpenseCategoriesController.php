@@ -59,7 +59,7 @@ class ExpenseCategoriesController extends Controller
                 return $query->where('team_id', Auth::user()->current_team_id);
             })],
         ], [
-            'parent_category.exists' => 'The selected parent category is invalid.'
+            'parent_category.exists' => 'The selected parent category is invalid.',
         ]);
 
         $childCategory = new ExpenseCategory($request->all('name', 'description'));
@@ -106,7 +106,7 @@ class ExpenseCategoriesController extends Controller
                 return $query->where('team_id', Auth::user()->current_team_id);
             })->ignore($category->id)],
         ], [
-            'parent_category.exists' => 'The selected parent category is invalid.'
+            'parent_category.exists' => 'The selected parent category is invalid.',
         ]);
 
         $category->parent_id = ExpenseCategory::where('name', $request->parent_category)->whereNull('parent_id')->whereNull('team_id')->first()->id;

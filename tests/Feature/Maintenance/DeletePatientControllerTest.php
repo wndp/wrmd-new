@@ -9,8 +9,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
-use Tests\Support\AssistsWithAuthentication;
-use Tests\Support\AssistsWithCases;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;

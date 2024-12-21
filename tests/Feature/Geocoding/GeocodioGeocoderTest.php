@@ -15,7 +15,7 @@ final class GeocodioGeocoderTest extends TestCase
     #[Test]
     public function itReturnsAnPredictableGeocodeComponentsObject(): void
     {
-        $address = (new Address())
+        $address = (new Address)
             ->withCountryCode('US')
             ->withAdministrativeArea('CA')
             ->withLocality('Lower Lake')

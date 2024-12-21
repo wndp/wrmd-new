@@ -23,7 +23,7 @@ class AdministrativeDivision
 
     public function __construct(private string $locale, private string $alpha2CountryCode)
     {
-        $driver = new SymfonyTranslationDriver();
+        $driver = new SymfonyTranslationDriver;
         $driver->setLocale($locale);
 
         $this->isoCodes = new IsoCodesFactory(null, $driver);
@@ -181,7 +181,7 @@ class AdministrativeDivision
         ?string $organization = null,
         ?string $name = null
     ): string {
-        $address = (new Address())
+        $address = (new Address)
             ->withLocale($this->locale)
             ->withCountryCode($alpha2CountryCode ?? $this->alpha2CountryCode)
             ->withAdministrativeArea($subdivision ?: '')
@@ -201,9 +201,9 @@ class AdministrativeDivision
     public static function addressFormater()
     {
         return new DefaultFormatter(
-            new AddressFormatRepository(),
-            new CountryRepository(),
-            new SubdivisionRepository()
+            new AddressFormatRepository,
+            new CountryRepository,
+            new SubdivisionRepository
         );
     }
 

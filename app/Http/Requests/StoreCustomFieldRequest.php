@@ -30,7 +30,7 @@ class StoreCustomFieldRequest extends FormRequest
             $customFieldTypesRequiresOptionsIds
         ] = \App\Models\AttributeOptionUiBehavior::getAttributeOptionUiBehaviorIds([
             [AttributeOptionName::CUSTOM_FIELD_GROUPS->value, AttributeOptionUiBehavior::CUSTOM_FIELD_GROUP_IS_PATIENT->value],
-            [AttributeOptionName::CUSTOM_FIELD_TYPES->value, AttributeOptionUiBehavior::CUSTOM_FIELD_TYPES_REQUIRES_OPTIONS->value]
+            [AttributeOptionName::CUSTOM_FIELD_TYPES->value, AttributeOptionUiBehavior::CUSTOM_FIELD_TYPES_REQUIRES_OPTIONS->value],
         ]);
 
         return [

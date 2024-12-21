@@ -8,8 +8,6 @@ use App\Geocoder;
 use App\Models\Patient;
 use App\ValueObjects\GeocodeComponents;
 use CommerceGuys\Addressing\Address;
-use Geocodio\Exceptions\GeocodioException;
-use Geocodio\GeocodioFacade;
 
 class WrmdGeocoder implements Geocoder
 {

@@ -24,8 +24,8 @@ final class CustomFieldsControllerTest extends TestCase
     use Assertions;
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     private function createAttributeOptions()
     {
@@ -35,22 +35,22 @@ final class CustomFieldsControllerTest extends TestCase
         )->attribute_option_id;
 
         $locationId = AttributeOption::factory()->create([
-            'name' => AttributeOptionName::CUSTOM_FIELD_LOCATIONS
+            'name' => AttributeOptionName::CUSTOM_FIELD_LOCATIONS,
         ])->id;
 
         $panelId = AttributeOption::factory()->create([
-            'name' => AttributeOptionName::CUSTOM_FIELD_PATIENT_PANELS
+            'name' => AttributeOptionName::CUSTOM_FIELD_PATIENT_PANELS,
         ])->id;
 
         $typeId = AttributeOption::factory()->create([
-            'name' => AttributeOptionName::CUSTOM_FIELD_TYPES
+            'name' => AttributeOptionName::CUSTOM_FIELD_TYPES,
         ])->id;
 
         return [
             $customFieldGroupIsPatientId,
             $locationId,
             $panelId,
-            $typeId
+            $typeId,
         ];
     }
 
@@ -360,7 +360,7 @@ final class CustomFieldsControllerTest extends TestCase
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_CUSTOM_FIELDS->value);
         $customField = CustomField::factory()->create([
             'team_id' => $me->team->id,
-            'type_id' => $customFieldTypesRequiresOptionsId
+            'type_id' => $customFieldTypesRequiresOptionsId,
         ]);
 
         $this->actingAs($me->user)->put(route('maintenance.custom_fields.update', $customField))
