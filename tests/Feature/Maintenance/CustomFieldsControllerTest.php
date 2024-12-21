@@ -25,7 +25,6 @@ final class CustomFieldsControllerTest extends TestCase
     use CreateCase;
     use CreatesTeamUser;
     use RefreshDatabase;
-    use CreatesUiBehavior;
 
     private function createAttributeOptions()
     {
