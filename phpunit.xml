@@ -4,7 +4,10 @@
          bootstrap="vendor/autoload.php"
          colors="true"
          cacheResult="true"
-         stopOnFailure="true"
+         stopOnFailure="false"
+         testdox="true"
+         testdoxSummary="true"
+         testdoxHtml="tests/testdox.html"
 >
     <testsuites>
         <testsuite name="Unit">
