@@ -7,7 +7,6 @@ use App\Models\Team;
 use App\Support\ExtensionManager;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\AssistsWithExtensions;
 
@@ -16,8 +15,7 @@ final class ExtensionManagerTest extends TestCase
     use AssistsWithExtensions;
     use RefreshDatabase;
 
-    #[Test]
-    public function itGetsTheActivatedExtensions(): void
+    public function test_it_gets_the_activated_extensions(): void
     {
         $team = $this->activateExtension(Extension::ATTACHMENTS);
 
@@ -26,8 +24,7 @@ final class ExtensionManagerTest extends TestCase
         $this->assertCount(1, $result);
     }
 
-    #[Test]
-    public function itActivatesAnExtension(): void
+    public function test_it_activates_an_extension(): void
     {
         $team = $this->activateExtension(Extension::ATTACHMENTS);
 
@@ -36,8 +33,7 @@ final class ExtensionManagerTest extends TestCase
         $this->assertEquals('Attachments', $result[0]->extension->label());
     }
 
-    #[Test]
-    public function activatedExtensionsCanNotBeActivatedMultipleTimes(): void
+    public function test_activated_extensions_can_not_be_activated_multiple_times(): void
     {
         $team = Team::factory()->create();
 
@@ -50,8 +46,7 @@ final class ExtensionManagerTest extends TestCase
         $this->assertCount(1, ExtensionManager::getActivated($team->fresh()));
     }
 
-    #[Test]
-    public function dependentExtensionsAreActivatedWhenAnExtensionIsActivated(): void
+    public function test_dependent_extensions_are_activated_when_an_extension_is_activated(): void
     {
         $team = Team::factory()->create();
         ExtensionManager::activate($team, Extension::OIL_SPILL_PROCESSING);
@@ -68,8 +63,7 @@ final class ExtensionManagerTest extends TestCase
         );
     }
 
-    #[Test]
-    public function itDeactivatesAnExtension(): void
+    public function test_it_deactivates_an_extension(): void
     {
         $team = $this->activateExtension(Extension::ATTACHMENTS);
 
@@ -80,8 +74,7 @@ final class ExtensionManagerTest extends TestCase
         $this->assertCount(0, $result);
     }
 
-    #[Test]
-    public function dependentExtensionsAreDeactivatedWhenAParentIsDeactivated(): void
+    public function test_dependent_extensions_are_deactivated_when_a_parent_is_deactivated(): void
     {
         $team = Team::factory()->create();
         ExtensionManager::activate($team, Extension::OIL_SPILL_PROCESSING);
@@ -93,8 +86,7 @@ final class ExtensionManagerTest extends TestCase
         $this->assertCount(0, $result);
     }
 
-    #[Test]
-    public function aDependentExtensionCanNotBeDeactivatedWhenItsParentIsActivated(): void
+    public function test_a_dependent_extension_can_not_be_deactivated_when_its_parent_is_activated(): void
     {
         $this->expectException(\DomainException::class);
         $this->expectExceptionMessage('Can not deactivate extension because of active parent extension: '.Extension::OIL_SPILL_PROCESSING->label());
@@ -105,8 +97,7 @@ final class ExtensionManagerTest extends TestCase
         ExtensionManager::deactivate($team->fresh(), Extension::ATTACHMENTS);
     }
 
-    #[Test]
-    public function itDeterminesIfTheExtensionIsActivated(): void
+    public function test_it_determines_if_the_extension_is_activated(): void
     {
         $team = Team::factory()->create();
 

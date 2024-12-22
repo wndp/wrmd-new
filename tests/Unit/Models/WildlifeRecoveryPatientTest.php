@@ -8,7 +8,6 @@ use App\Models\WildlifeRecoveryPatient;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 
@@ -18,22 +17,19 @@ final class WildlifeRecoveryPatientTest extends TestCase
     use Assertions;
     use RefreshDatabase;
 
-    #[Test]
-    public function aWildlifeRecoveryPatientBelongsToAPatient(): void
+    public function test_a_wildlife_recovery_patient_belongs_to_a_patient(): void
     {
         $this->assertInstanceOf(Patient::class, WildlifeRecoveryPatient::factory()->create([
             'patient_id' => Patient::factory(),
         ])->patient);
     }
 
-    #[Test]
-    public function aWildlifeRecoveryPatientBelongsToATeam(): void
+    public function test_a_wildlife_recovery_patient_belongs_to_a_team(): void
     {
         $this->assertInstanceOf(Team::class, WildlifeRecoveryPatient::factory()->create()->team);
     }
 
-    #[Test]
-    public function aWildlifeRecoveryPatientCanBeFoundByItsQrCodeHash(): void
+    public function test_a_wildlife_recovery_patient_can_be_found_by_its_qr_code_hash(): void
     {
         WildlifeRecoveryPatient::factory()->create([
             'qr_code' => 'https://wr.md/abc123',
@@ -45,8 +41,7 @@ final class WildlifeRecoveryPatientTest extends TestCase
         $this->assertEquals('https://wr.md/abc123', $wr->qr_code);
     }
 
-    #[Test]
-    public function aWildlifeRecoveryPatientIsRevisionable(): void
+    public function test_a_wildlife_recovery_patient_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -56,8 +51,7 @@ final class WildlifeRecoveryPatientTest extends TestCase
         );
     }
 
-    #[Test]
-    public function ifAWildlifeRecoveryPatientsPatientIsLockedThenItCanNotBeUpdated(): void
+    public function test_if_a_wildlife_recovery_patients_patient_is_locked_then_it_can_not_be_updated(): void
     {
         $patient = Patient::factory()->create();
         $wrPatient = WildlifeRecoveryPatient::factory()->create(['patient_id' => $patient->id, 'surveyname' => 'OLD']);
@@ -75,8 +69,7 @@ final class WildlifeRecoveryPatientTest extends TestCase
         $this->assertEquals('OLD', $wrPatient->fresh()->surveyname);
     }
 
-    #[Test]
-    public function ifAWildlifeRecoveryPatientsPatientIsLockedThenItCanNotBeDeleted(): void
+    public function test_if_a_wildlife_recovery_patients_patient_is_locked_then_it_can_not_be_deleted(): void
     {
         $patient = Patient::factory()->create();
         $wrPatient = WildlifeRecoveryPatient::factory()->create(['patient_id' => $patient->id]);

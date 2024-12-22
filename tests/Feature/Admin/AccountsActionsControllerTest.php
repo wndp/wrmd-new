@@ -15,23 +15,20 @@ final class AccountsActionsControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessAccountActions(): void
+    public function test_un_authenticated_users_cant_access_account_actions(): void
     {
         $team = Team::factory()->create();
         $this->get(route('teams.show.actions', $team))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessAccountActions(): void
+    public function test_un_authorized_users_cant_access_account_actions(): void
     {
         $me = $this->createTeamUser();
         $team = Team::factory()->create();
         $this->actingAs($me->user)->get(route('teams.show.actions', $team))->assertForbidden();
     }
 
-    #[Test]
-    public function itDisplaysTheAccountsActionsPage(): void
+    public function test_it_displays_the_accounts_actions_page(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);

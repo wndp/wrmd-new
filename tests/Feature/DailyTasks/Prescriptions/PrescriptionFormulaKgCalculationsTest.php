@@ -22,8 +22,7 @@ final class PrescriptionFormulaKgCalculationsTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function itCalculatesTheDoseIfAutoCalculateIsFalse(): void
+    public function test_it_calculates_the_dose_if_auto_calculate_is_false(): void
     {
         $doseUnitIsMlId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_DOSE_UNITS,
@@ -43,8 +42,7 @@ final class PrescriptionFormulaKgCalculationsTest extends TestCase
         $this->assertSame($doseUnitIsMlId, $results['dose_unit_id']);
     }
 
-    #[Test]
-    public function itCalculatesTheDoseForTypicalMgPerKgMgPerMlFormulas(): void
+    public function test_it_calculates_the_dose_for_typical_mg_per_kg_mg_per_ml_formulas(): void
     {
         [$kgWeightId, $gWeightId] = $this->weightUnits();
 
@@ -84,8 +82,7 @@ final class PrescriptionFormulaKgCalculationsTest extends TestCase
         $this->assertSame($doseUnitIsMlId, $results['dose_unit_id']);
     }
 
-    #[Test]
-    public function itCalculatesTheDoseForMgPerKgMgPerTabFormulas(): void
+    public function test_it_calculates_the_dose_for_mg_per_kg_mg_per_tab_formulas(): void
     {
         [$kgWeightId, $gWeightId] = $this->weightUnits();
 
@@ -125,8 +122,7 @@ final class PrescriptionFormulaKgCalculationsTest extends TestCase
         $this->assertSame($doseUnitIsTabId, $results['dose_unit_id']);
     }
 
-    #[Test]
-    public function itCalculatesTheDoseForMgPerKgFormulas(): void
+    public function test_it_calculates_the_dose_for_mg_per_kg_formulas(): void
     {
         [$kgWeightId, $gWeightId] = $this->weightUnits();
 
@@ -151,8 +147,7 @@ final class PrescriptionFormulaKgCalculationsTest extends TestCase
         $this->assertSame(0.25, $results['dose']);
     }
 
-    #[Test]
-    public function itCalculatesTheDoseForMlPerKgFormulas(): void
+    public function test_it_calculates_the_dose_for_ml_per_kg_formulas(): void
     {
         [$kgWeightId, $gWeightId] = $this->weightUnits();
 
@@ -177,8 +172,7 @@ final class PrescriptionFormulaKgCalculationsTest extends TestCase
         $this->assertSame(0.25, $results['dose']);
     }
 
-    #[Test]
-    public function itCalculatesTheDoseForIuPerKgFormulas(): void
+    public function test_it_calculates_the_dose_for_iu_per_kg_formulas(): void
     {
         [$kgWeightId, $gWeightId] = $this->weightUnits();
 
@@ -203,8 +197,7 @@ final class PrescriptionFormulaKgCalculationsTest extends TestCase
         $this->assertSame(0.25, $results['dose']);
     }
 
-    #[Test]
-    public function itCalculatesTheDoseForIuPerKgIuPerMlFormulas(): void
+    public function test_it_calculates_the_dose_for_iu_per_kg_iu_per_ml_formulas(): void
     {
         [$kgWeightId, $gWeightId] = $this->weightUnits();
 

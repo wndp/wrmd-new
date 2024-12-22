@@ -8,7 +8,6 @@ use App\Models\Recheck;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
@@ -22,8 +21,7 @@ final class RecordedDailyTaskListControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantRecordDailyTasks(): void
+    public function test_un_authenticated_users_cant_record_daily_tasks(): void
     {
         $recheck = Recheck::factory()->create();
 
@@ -31,8 +29,7 @@ final class RecordedDailyTaskListControllerTest extends TestCase
             ->assertUnauthorized();
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantRecordDailyTasks(): void
+    public function test_un_authorized_users_cant_record_daily_tasks(): void
     {
         $me = $this->createTeamUser();
 
@@ -43,8 +40,7 @@ final class RecordedDailyTaskListControllerTest extends TestCase
             ->assertForbidden();
     }
 
-    #[Test]
-    public function itStoresANewDailyTasksRecordedInStorage(): void
+    public function test_it_stores_a_new_daily_tasks_recorded_in_storage(): void
     {
         $me = $this->createTeamUser();
 
@@ -69,8 +65,7 @@ final class RecordedDailyTaskListControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itRemovesACompleteDailyTaskRecordFromStorage(): void
+    public function test_it_removes_a_complete_daily_task_record_from_storage(): void
     {
         $me = $this->createTeamUser();
 

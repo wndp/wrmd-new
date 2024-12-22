@@ -5,7 +5,6 @@ namespace Tests\Feature\DailyTasks;
 use App\Enums\Ability;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
@@ -19,22 +18,19 @@ final class PastDueTasksControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessPastDueDailyTasksPage(): void
+    public function test_un_authenticated_users_cant_access_past_due_daily_tasks_page(): void
     {
         $this->get(route('patients.past-due-tasks.edit'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessPastDueDailyTasksPage(): void
+    public function test_un_authorized_users_cant_access_past_due_daily_tasks_page(): void
     {
         $me = $this->createTeamUser();
 
         $this->actingAs($me->user)->get(route('patients.past-due-tasks.edit'))->assertForbidden();
     }
 
-    #[Test]
-    public function itDisplaysThePatientsPastDueDailyTasksEditPage(): void
+    public function test_it_displays_the_patients_past_due_daily_tasks_edit_page(): void
     {
         $me = $this->createTeamUser();
 

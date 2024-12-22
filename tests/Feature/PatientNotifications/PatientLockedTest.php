@@ -7,7 +7,6 @@ use App\Jobs\PatientNotifications\PatientLocked;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;
@@ -18,8 +17,7 @@ final class PatientLockedTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function itNotifiesIfThePatientIsLocked(): void
+    public function test_it_notifies_if_the_patient_is_locked(): void
     {
         Event::fake();
 
@@ -36,8 +34,7 @@ final class PatientLockedTest extends TestCase
         );
     }
 
-    #[Test]
-    public function itDoesNotNotifyIfThePatientIsNotLocked(): void
+    public function test_it_does_not_notify_if_the_patient_is_not_locked(): void
     {
         Event::fake();
 

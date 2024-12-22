@@ -6,7 +6,6 @@ use App\Models\Banding;
 use App\Models\Patient;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreatesTeamUser;
@@ -17,8 +16,7 @@ final class BandingTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function aBandingIsRevisionable(): void
+    public function test_a_banding_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -28,8 +26,7 @@ final class BandingTest extends TestCase
         );
     }
 
-    #[Test]
-    public function ifABandingsPatientIsLockedThenItCanNotBeUpdated(): void
+    public function test_if_a_bandings_patient_is_locked_then_it_can_not_be_updated(): void
     {
         $patient = Patient::factory()->create();
         $banding = Banding::factory()->create(['patient_id' => $patient->id, 'band_number' => 'OLD']);
@@ -47,8 +44,7 @@ final class BandingTest extends TestCase
         $this->assertEquals('OLD', $banding->fresh()->band_number);
     }
 
-    #[Test]
-    public function ifABandingsPatientIsLockedThenItCanNotBeCreated(): void
+    public function test_if_a_bandings_patient_is_locked_then_it_can_not_be_created(): void
     {
         $banding = Banding::factory()->create([
             'patient_id' => Patient::factory()->create(['locked_at' => Carbon::now()])->id,
@@ -57,8 +53,7 @@ final class BandingTest extends TestCase
         $this->assertFalse($banding->exists);
     }
 
-    #[Test]
-    public function ifABandingsPatientIsLockedThenItCanNotBeDeleted(): void
+    public function test_if_a_bandings_patient_is_locked_then_it_can_not_be_deleted(): void
     {
         $patient = Patient::factory()->create();
         $banding = Banding::factory()->create(['patient_id' => $patient->id]);
@@ -70,8 +65,7 @@ final class BandingTest extends TestCase
         $this->assertDatabaseHas('bandings', ['id' => $banding->id, 'deleted_at' => null]);
     }
 
-    #[Test]
-    public function whenAPatientIsReplicatedSoIsTheBanding(): void
+    public function test_when_a_patient_is_replicated_so_is_the_banding(): void
     {
         $me = $this->createTeamUser();
         $patient = Patient::factory()->create();

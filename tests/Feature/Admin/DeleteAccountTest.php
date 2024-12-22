@@ -46,8 +46,7 @@ final class DeleteAccountTest extends TestCase
     use CreateCase;
     use RefreshDatabase;
 
-    #[Test]
-    public function aTeamsVeterinariansAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_veterinarians_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $veterinarians = Veterinarian::factory()->count(2)->create(['team_id' => $team->id]);
@@ -58,8 +57,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('veterinarians', ['id' => $veterinarians->last()->id]);
     }
 
-    #[Test]
-    public function aTeamsSettingsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_settings_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $settings = Setting::factory()->count(2)->create(['team_id' => $team->id]);
@@ -120,8 +118,7 @@ final class DeleteAccountTest extends TestCase
     //     $this->assertDatabaseMissing('threads', ['team_id' => $thread->team_id]);
     // }
 
-    #[Test]
-    public function aTeamsActivatedExtensionsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_activated_extensions_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
 
@@ -134,8 +131,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertFalse(ExtensionManager::isActivated(Extension::QUICK_ADMIT, $team));
     }
 
-    #[Test]
-    public function aTeamsFormulasAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_formulas_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         Formula::factory()->create(['team_id' => $team->id]);
@@ -147,8 +143,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('formulas', ['team_id' => $team->id]);
     }
 
-    #[Test]
-    public function aTeamsCustomFieldsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_custom_fields_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $customField = CustomField::factory()->create(['team_id' => $team->id]);
@@ -160,8 +155,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('custom_fields', ['team_id' => $customField->team_id]);
     }
 
-    #[Test]
-    public function aTeamsFailedImportsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_failed_imports_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $failedImport = FailedImport::factory()->create(['team_id' => $team->id]);
@@ -173,8 +167,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('failed_imports', ['team_id' => $failedImport->team_id]);
     }
 
-    #[Test]
-    public function aTeamsExpenseCategoriesAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_expense_categories_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $category = ExpenseCategory::factory()->create(['team_id' => $team->id]);
@@ -184,8 +177,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('expense_categories', ['team_id' => $category->team_id]);
     }
 
-    #[Test]
-    public function aTeamsUsersAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_users_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $user1 = User::factory()->create()->joinTeam($team, Role::USER);
@@ -199,8 +191,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('users', ['id' => $user2->user_id]);
     }
 
-    #[Test]
-    public function aTeamsAdmissionsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_admissions_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $this->createCase($team);
@@ -210,8 +201,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('admissions', ['team_id' => $team->id]);
     }
 
-    #[Test]
-    public function aTeamsPatientsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_patients_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
@@ -221,8 +211,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('patients', ['id' => $admission->patient_id]);
     }
 
-    #[Test]
-    public function aTeamsPatientsExamsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_patients_exams_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
@@ -233,8 +222,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('exams', ['patient_id' => $admission->patient_id]);
     }
 
-    #[Test]
-    public function aTeamsPatientsLocationsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_patients_locations_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
@@ -247,8 +235,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('patient_locations', ['patient_id' => $admission->patient_id]);
     }
 
-    #[Test]
-    public function aTeamsPeopleAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_people_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $this->createCase($team);
@@ -259,8 +246,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('people', ['team_id' => $team->id]);
     }
 
-    #[Test]
-    public function aTeamsPeoplesDonationsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_peoples_donations_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $this->createCase($team);
@@ -274,8 +260,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('donations', ['id' => $donation->id]);
     }
 
-    #[Test]
-    public function aTeamsLocationsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_locations_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         Location::factory()->create(['team_id' => $team->id]);
@@ -287,8 +272,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('locations', ['team_id' => $team->id]);
     }
 
-    #[Test]
-    public function aTeamsLabReportsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_lab_reports_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
@@ -299,8 +283,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('lab_reports', ['patient_id' => $admission->patient_id]);
     }
 
-    #[Test]
-    public function aTeamsFecalLabResultsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_fecal_lab_results_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
@@ -317,8 +300,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('lab_fecal_results', ['id' => $labResultId]);
     }
 
-    #[Test]
-    public function aTeamsCbcLabResultsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_cbc_lab_results_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
@@ -335,8 +317,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('lab_cbc_results', ['id' => $labResultId]);
     }
 
-    #[Test]
-    public function aTeamsChemistryLabResultsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_chemistry_lab_results_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
@@ -353,8 +334,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('lab_chemistry_results', ['id' => $labResultId]);
     }
 
-    #[Test]
-    public function aTeamsCytologyLabResultsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_cytology_lab_results_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
@@ -371,8 +351,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('lab_cytology_results', ['id' => $labResultId]);
     }
 
-    #[Test]
-    public function aTeamsToxicologyLabResultsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_toxicology_lab_results_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
@@ -389,8 +368,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('lab_toxicology_results', ['id' => $labResultId]);
     }
 
-    #[Test]
-    public function aTeamsUrinalysisLabResultsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_urinalysis_lab_results_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
@@ -407,8 +385,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('lab_urinalysis_results', ['id' => $labResultId]);
     }
 
-    #[Test]
-    public function aTeamsPrescriptionsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_prescriptions_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
@@ -421,8 +398,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('prescriptions', ['patient_id' => $admission->patient_id]);
     }
 
-    #[Test]
-    public function aTeamsRechecksAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_rechecks_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
@@ -435,8 +411,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('rechecks', ['patient_id' => $admission->patient_id]);
     }
 
-    #[Test]
-    public function aTeamsNutritionPlansAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_nutrition_plans_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
@@ -449,8 +424,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('nutrition_plans', ['patient_id' => $admission->patient_id]);
     }
 
-    #[Test]
-    public function aTeamsCareLogsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_care_logs_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
@@ -463,8 +437,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('care_logs', ['patient_id' => $admission->patient_id]);
     }
 
-    #[Test]
-    public function aTeamsExpenseTransactionsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_expense_transactions_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
@@ -477,8 +450,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('expense_transactions', ['patient_id' => $admission->patient_id]);
     }
 
-    #[Test]
-    public function aTeamsBandingsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_bandings_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
@@ -491,8 +463,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('bandings', ['patient_id' => $admission->patient_id]);
     }
 
-    #[Test]
-    public function aTeamsMorphometricsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_morphometrics_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
@@ -505,8 +476,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('morphometrics', ['patient_id' => $admission->patient_id]);
     }
 
-    #[Test]
-    public function aTeamsNecropsiesAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_necropsies_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
@@ -519,8 +489,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('necropsies', ['patient_id' => $admission->patient_id]);
     }
 
-    #[Test]
-    public function aTeamsIncidentsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_incidents_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
         $admission = $this->createCase($team);
@@ -536,8 +505,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('incidents', ['team_id' => $team->id]);
     }
 
-    #[Test]
-    public function aTeamsIncidentCommunicationsAreDeletedBeforeDeletingTheTeam(): void
+    public function test_a_teams_incident_communications_are_deleted_before_deleting_the_team(): void
     {
         $team = Team::factory()->create();
 
@@ -550,8 +518,7 @@ final class DeleteAccountTest extends TestCase
         $this->assertDatabaseMissing('communications', ['id' => $communication->id]);
     }
 
-    #[Test]
-    public function aTeamIsDeleted(): void
+    public function test_a_team_is_deleted(): void
     {
         $team = Team::factory()->create();
 

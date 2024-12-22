@@ -27,22 +27,19 @@ final class IncidentControllerTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessHotline(): void
+    public function test_un_authenticated_users_cant_access_hotline(): void
     {
         $this->get(route('hotline.open.index'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessHotline(): void
+    public function test_un_authorized_users_cant_access_hotline(): void
     {
         $me = $this->createTeamUser();
 
         $this->actingAs($me->user)->get(route('hotline.open.index'))->assertForbidden();
     }
 
-    #[Test]
-    public function itDisplaysTheHotlineIndexPage(): void
+    public function test_it_displays_the_hotline_index_page(): void
     {
         $hotlineStatusIsOpenId = $this->createUiBehavior(
             AttributeOptionName::HOTLINE_STATUSES,
@@ -67,8 +64,7 @@ final class IncidentControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function itDisplaysThePageToCreateANewIncident(): void
+    public function test_it_displays_the_page_to_create_a_new_incident(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -80,8 +76,7 @@ final class IncidentControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function aReportedAtDateIsRequiredToCreateAnIncident(): void
+    public function test_a_reported_at_date_is_required_to_create_an_incident(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -93,8 +88,7 @@ final class IncidentControllerTest extends TestCase
             ->assertInvalid(['reported_at' => 'The date reported field is not a valid date.']);
     }
 
-    #[Test]
-    public function anOccurredAtDateIsRequiredToCreateAnIncident(): void
+    public function test_an_occurred_at_date_is_required_to_create_an_incident(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -106,8 +100,7 @@ final class IncidentControllerTest extends TestCase
             ->assertInvalid(['occurred_at' => 'The date occurred field is not a valid date.']);
     }
 
-    #[Test]
-    public function aCategoryIsRequiredToCreateAnIncident(): void
+    public function test_a_category_is_required_to_create_an_incident(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -116,8 +109,7 @@ final class IncidentControllerTest extends TestCase
             ->assertInvalid(['category_id' => 'The category id field is required.']);
     }
 
-    #[Test]
-    public function anIsPriorityBooleanIsRequiredToCreateAnIncident(): void
+    public function test_an_is_priority_boolean_is_required_to_create_an_incident(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -129,8 +121,7 @@ final class IncidentControllerTest extends TestCase
             ->assertInvalid(['is_priority' => 'The is priority field must be true or false.']);
     }
 
-    #[Test]
-    public function theNumberOfAnimalsMustBeAnIntegerToCreateAnIncident(): void
+    public function test_the_number_of_animals_must_be_an_integer_to_create_an_incident(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -139,8 +130,7 @@ final class IncidentControllerTest extends TestCase
             ->assertInvalid(['number_of_animals' => 'The number of animals field must be an integer.']);
     }
 
-    #[Test]
-    public function theDurationOfCallMustBeAnIntegerToCreateAnIncident(): void
+    public function test_the_duration_of_call_must_be_an_integer_to_create_an_incident(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -149,8 +139,7 @@ final class IncidentControllerTest extends TestCase
             ->assertInvalid(['duration_of_call' => 'The duration of call field must be a number.']);
     }
 
-    #[Test]
-    public function thePhoneMustbeValidToCreateAnIncident(): void
+    public function test_the_phone_mustbe_valid_to_create_an_incident(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -172,8 +161,7 @@ final class IncidentControllerTest extends TestCase
     //         ->assertInvalid('person', 'A reporting party is required.');
     // }
 
-    #[Test]
-    public function a_new_incident_is_saved_to_storage(): void
+    public function test_a_new_incident_is_saved_to_storage(): void
     {
         $hotlineWildlifeCategoriesId = AttributeOption::factory()->create(['name' => AttributeOptionName::HOTLINE_WILDLIFE_CATEGORIES])->id;
         $hotlineStatusesId = AttributeOption::factory()->create(['name' => AttributeOptionName::HOTLINE_STATUSES])->id;
@@ -266,8 +254,7 @@ final class IncidentControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAnIncidentBeforeDisplayingThePageToEditIt(): void
+    public function test_it_validates_ownership_of_an_incident_before_displaying_the_page_to_edit_it(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -278,8 +265,7 @@ final class IncidentControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function itDisplaysThePageToEditAnIncident(): void
+    public function test_it_displays_the_page_to_edit_an_incident(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -294,8 +280,7 @@ final class IncidentControllerTest extends TestCase
             );
     }
 
-    #[Test]
-    public function aReportedAtDateIsRequiredToUpdateAnIncident(): void
+    public function test_a_reported_at_date_is_required_to_update_an_incident(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -309,8 +294,7 @@ final class IncidentControllerTest extends TestCase
             ->assertInvalid(['reported_at' => 'The date reported field is not a valid date.']);
     }
 
-    #[Test]
-    public function anOccurredAtDateIsRequiredToUpdateAnIncident(): void
+    public function test_an_occurred_at_date_is_required_to_update_an_incident(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -324,8 +308,7 @@ final class IncidentControllerTest extends TestCase
             ->assertInvalid(['occurred_at' => 'The date occurred field is not a valid date.']);
     }
 
-    #[Test]
-    public function aCategoryIsRequiredToUpdateAnIncident(): void
+    public function test_a_category_is_required_to_update_an_incident(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -336,8 +319,7 @@ final class IncidentControllerTest extends TestCase
             ->assertInvalid(['category_id' => 'The category id field is required.']);
     }
 
-    #[Test]
-    public function anIsPriorityBooleanIsRequiredToUpdateAnIncident(): void
+    public function test_an_is_priority_boolean_is_required_to_update_an_incident(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -351,8 +333,7 @@ final class IncidentControllerTest extends TestCase
             ->assertInvalid(['is_priority' => 'The is priority field must be true or false.']);
     }
 
-    #[Test]
-    public function theNumberOfAnimalsMustBeAnIntegerToUpdateAnIncident(): void
+    public function test_the_number_of_animals_must_be_an_integer_to_update_an_incident(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -363,8 +344,7 @@ final class IncidentControllerTest extends TestCase
             ->assertInvalid(['number_of_animals' => 'The number of animals field must be an integer.']);
     }
 
-    #[Test]
-    public function theDurationOfCallMustBeAnIntegerToUpdateAnIncident(): void
+    public function test_the_duration_of_call_must_be_an_integer_to_update_an_incident(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -375,8 +355,7 @@ final class IncidentControllerTest extends TestCase
             ->assertInvalid(['duration_of_call' => 'The duration of call field must be a number.']);
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAnIncidentBeforeUpdatingIt(): void
+    public function test_it_validates_ownership_of_an_incident_before_updating_it(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -394,8 +373,7 @@ final class IncidentControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function anIncidentIsUpdatedInStorage(): void
+    public function test_an_incident_is_updated_in_storage(): void
     {
         $hotlineWildlifeCategoriesId = AttributeOption::factory()->create(['name' => AttributeOptionName::HOTLINE_WILDLIFE_CATEGORIES])->id;
         $hotlineStatusIsResolvedId = $this->createUiBehavior(AttributeOptionName::HOTLINE_STATUSES, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED)->attribute_option_id;
@@ -429,8 +407,7 @@ final class IncidentControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function anIncidentNumberIsRequiredToDeleteAnIncident(): void
+    public function test_an_incident_number_is_required_to_delete_an_incident(): void
     {
         $me = $this->createTeamUser();
         $incident = Incident::factory()->create(['team_id' => $me->team->id]);
@@ -443,8 +420,7 @@ final class IncidentControllerTest extends TestCase
             ->assertInvalid(['incident_number' => 'The provided incident number does not match the displayed incident number.']);
     }
 
-    #[Test]
-    public function theAuthenticatedUsersPasswordIsRequiredToDeleteAnIncident(): void
+    public function test_the_authenticated_users_password_is_required_to_delete_an_incident(): void
     {
         $me = $this->createTeamUser();
         $incident = Incident::factory()->create(['team_id' => $me->team->id]);
@@ -457,8 +433,7 @@ final class IncidentControllerTest extends TestCase
             ->assertInvalid(['password' => 'The password is incorrect.']);
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAnIncidentBeforeDeletingIt(): void
+    public function test_it_validates_ownership_of_an_incident_before_deleting_it(): void
     {
         $me = $this->createTeamUser();
         $incident = Incident::factory()->create();
@@ -470,8 +445,7 @@ final class IncidentControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function anIncidentCanBeDeleted(): void
+    public function test_an_incident_can_be_deleted(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);

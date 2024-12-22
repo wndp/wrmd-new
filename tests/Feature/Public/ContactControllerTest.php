@@ -4,13 +4,11 @@ namespace Tests\Feature\Public;
 
 use App\Mail\ContactEmail;
 use Illuminate\Support\Facades\Mail;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 final class ContactControllerTest extends TestCase
 {
-    #[Test]
-    public function sendContactEmail(): void
+    public function test_send_contact_email(): void
     {
         //$this->withoutExceptionHandling();
         Mail::fake();

@@ -5,13 +5,11 @@ namespace Tests\Feature\Geocoding;
 use App\Jobs\GeocodeAddress;
 use App\Models\Patient;
 use App\ValueObjects\SingleStorePoint;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 final class GeocodeAddressTest extends TestCase
 {
-    #[Test]
-    public function it_geocodes_an_address_using_one_of_the_geocoders(): void
+    public function test_it_geocodes_an_address_using_one_of_the_geocoders(): void
     {
         $patient = Patient::factory()->create([
             'subdivision_found' => 'CA',

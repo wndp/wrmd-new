@@ -5,7 +5,6 @@ namespace Tests\Unit\Extensions\Owcn;
 use App\Domain\Patients\Exam;
 use App\Extensions\Labs\Lab;
 use Mockery;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\Support\AssistsWithAuthentication;
 use Tests\Support\AssistsWithCases;
 use Tests\TestCase;
@@ -28,8 +27,7 @@ final class RepositoryTest extends TestCase
         $this->setSetting(Team::factory()->create(), 'date_format', 'Y-m-d');
     }
 
-    #[Test]
-    public function only_lab_vitals(): void
+    public function test_only_lab_vitals(): void
     {
         $case = $this->createCase();
 
@@ -43,8 +41,7 @@ final class RepositoryTest extends TestCase
         $this->assertEquals(40, $result[0]['pcv']);
     }
 
-    #[Test]
-    public function only_treatment_vitals(): void
+    public function test_only_treatment_vitals(): void
     {
         $case = $this->createCase();
 
@@ -58,8 +55,7 @@ final class RepositoryTest extends TestCase
         $this->assertNull($result[0]['tp']);
     }
 
-    #[Test]
-    public function combine_vitals_dates(): void
+    public function test_combine_vitals_dates(): void
     {
         $case = $this->createCase();
 

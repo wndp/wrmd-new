@@ -7,7 +7,6 @@ use App\Models\Communication;
 use App\Models\Incident;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
@@ -22,8 +21,7 @@ final class IncidentCommunicationsControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessAnIncidentsCommunications(): void
+    public function test_un_authenticated_users_cant_access_an_incidents_communications(): void
     {
         $communication = Communication::Factory()->create([
             'incident_id' => Incident::factory()->create(),
@@ -32,8 +30,7 @@ final class IncidentCommunicationsControllerTest extends TestCase
         $this->get(route('hotline.incident.communications.index', $communication->incident))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessAnIncidentsCommunications(): void
+    public function test_un_authorized_users_cant_access_an_incidents_communications(): void
     {
         $me = $this->createTeamUser();
         $communication = Communication::Factory()->create([
@@ -43,8 +40,7 @@ final class IncidentCommunicationsControllerTest extends TestCase
         $this->actingAs($me->user)->get(route('hotline.incident.communications.index', $communication->incident))->assertForbidden();
     }
 
-    #[Test]
-    public function itDisplaysAnIncidentsCommunications(): void
+    public function test_it_displays_an_incidents_communications(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -61,8 +57,7 @@ final class IncidentCommunicationsControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function aCommunicationAtDateIsRequiredToCreateACommunication(): void
+    public function test_a_communication_at_date_is_required_to_create_a_communication(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -76,8 +71,7 @@ final class IncidentCommunicationsControllerTest extends TestCase
             ->assertInvalid(['communication_at' => 'The date responded field is not a valid date.']);
     }
 
-    #[Test]
-    public function aOccurredAtDateIsRequiredToCreateACommunication(): void
+    public function test_a_occurred_at_date_is_required_to_create_a_communication(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -88,8 +82,7 @@ final class IncidentCommunicationsControllerTest extends TestCase
             ->assertInvalid(['communication' => 'The communication field is required.']);
     }
 
-    #[Test]
-    public function aNewCommunicationIsSavedToStorage(): void
+    public function test_a_new_communication_is_saved_to_storage(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -111,8 +104,7 @@ final class IncidentCommunicationsControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function aCommunicationAtDateIsRequiredToUpdateACommunication(): void
+    public function test_a_communication_at_date_is_required_to_update_a_communication(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -127,8 +119,7 @@ final class IncidentCommunicationsControllerTest extends TestCase
             ->assertInvalid(['communication_at' => 'The date responded field is not a valid date.']);
     }
 
-    #[Test]
-    public function aCommunicationIsRequiredToUpdateACommunication(): void
+    public function test_a_communication_is_required_to_update_a_communication(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -140,8 +131,7 @@ final class IncidentCommunicationsControllerTest extends TestCase
             ->assertInvalid(['communication' => 'The communication field is required.']);
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAnIncidentBeforeDisplayingACommunicationToEditIt(): void
+    public function test_it_validates_ownership_of_an_incident_before_displaying_a_communication_to_edit_it(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -157,8 +147,7 @@ final class IncidentCommunicationsControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function aCommunicationIsUpdatedInStorage(): void
+    public function test_a_communication_is_updated_in_storage(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -181,8 +170,7 @@ final class IncidentCommunicationsControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAnIncidentBeforeDeletingACommunication(): void
+    public function test_it_validates_ownership_of_an_incident_before_deleting_a_communication(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -194,8 +182,7 @@ final class IncidentCommunicationsControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function aCommunicationCanBeDeleted(): void
+    public function test_a_communication_can_be_deleted(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);

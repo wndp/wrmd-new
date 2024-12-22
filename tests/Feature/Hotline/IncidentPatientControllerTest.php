@@ -6,7 +6,6 @@ use App\Enums\Ability;
 use App\Models\Incident;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
@@ -21,8 +20,7 @@ final class IncidentPatientControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function aCaseNumberIsRequiredToRelateAPatientToAnIncident(): void
+    public function test_a_case_number_is_required_to_relate_a_patient_to_an_incident(): void
     {
         $me = $this->createTeamUser();
         $incident = Incident::factory()->create(['team_id' => $me->team->id]);
@@ -32,8 +30,7 @@ final class IncidentPatientControllerTest extends TestCase
             ->assertInvalid(['case_number' => 'The case number field is required.']);
     }
 
-    #[Test]
-    public function theCaseNumberMustBeConfirmedToRelateAPatientToAnIncident(): void
+    public function test_the_case_number_must_be_confirmed_to_relate_a_patient_to_an_incident(): void
     {
         $me = $this->createTeamUser();
         $incident = Incident::factory()->create(['team_id' => $me->team->id]);
@@ -45,8 +42,7 @@ final class IncidentPatientControllerTest extends TestCase
             ->assertInvalid(['case_number' => 'The case number field confirmation does not match.']);
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAnIncidentBeforeRelatingItToAPatient(): void
+    public function test_it_validates_ownership_of_an_incident_before_relating_it_to_a_patient(): void
     {
         $me = $this->createTeamUser();
         $incident = Incident::factory()->create();
@@ -59,8 +55,7 @@ final class IncidentPatientControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfTheAdmissionBeforeRelatingItToAPatient(): void
+    public function test_it_validates_ownership_of_the_admission_before_relating_it_to_a_patient(): void
     {
         $me = $this->createTeamUser();
         $admission = $this->createCase();
@@ -78,8 +73,7 @@ final class IncidentPatientControllerTest extends TestCase
             );
     }
 
-    #[Test]
-    public function anIncidentIsRelatedToAPatient(): void
+    public function test_an_incident_is_related_to_a_patient(): void
     {
         $me = $this->createTeamUser();
         $admission = $this->createCase($me->team);

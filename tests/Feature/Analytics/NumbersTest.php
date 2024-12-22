@@ -11,7 +11,6 @@ use App\Models\Taxon;
 use App\Models\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;
@@ -24,8 +23,7 @@ final class NumbersTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function itGetsTheNumberOfCasesForThisYear(): void
+    public function test_it_gets_the_number_of_cases_for_this_year(): void
     {
         $team = Team::factory()->create();
         $thisYear = date('Y');
@@ -55,8 +53,7 @@ final class NumbersTest extends TestCase
         $this->assertEquals(2, $result->prev);
     }
 
-    #[Test]
-    public function itGetsTheNumberOfCasesForThisWeekToDate(): void
+    public function test_it_gets_the_number_of_cases_for_this_week_to_date(): void
     {
         $team = Team::factory()->create();
         $thisYear = now()->format('Y');
@@ -88,8 +85,7 @@ final class NumbersTest extends TestCase
         $this->assertEquals(2, $result->prev);
     }
 
-    #[Test]
-    public function itGetsTheNumberOfPatientsInCare(): void
+    public function test_it_gets_the_number_of_patients_in_care(): void
     {
         $team = Team::factory()->create();
         $thisYear = now()->format('Y');
@@ -122,8 +118,7 @@ final class NumbersTest extends TestCase
         $this->assertEquals(2, $result->prev);
     }
 
-    #[Test]
-    public function itGetsTheTotalNumberOfPatientsAdmitted(): void
+    public function test_it_gets_the_total_number_of_patients_admitted(): void
     {
         $this->createCase(Team::factory()->create(), 2018);
         $this->createCase(Team::factory()->create(), 2017);
@@ -142,8 +137,7 @@ final class NumbersTest extends TestCase
         $this->assertEquals(null, $result->prev);
     }
 
-    #[Test]
-    public function itGetsTheTotalNumberOfPatientsAdmittedThisWeek(): void
+    public function test_it_gets_the_total_number_of_patients_admitted_this_week(): void
     {
         $team = Team::factory()->create();
         $thisYear = now()->format('Y');
@@ -171,8 +165,7 @@ final class NumbersTest extends TestCase
         $this->assertEquals(null, $result->prev);
     }
 
-    #[Test]
-    public function itGetsTheTotalNumberOfAllUnrecognizedPatients(): void
+    public function test_it_gets_the_total_number_of_all_unrecognized_patients(): void
     {
         // Disable AttemptSpeciesIdentification
         Event::fake();
@@ -193,8 +186,7 @@ final class NumbersTest extends TestCase
         $this->assertEquals(null, $result->prev);
     }
 
-    #[Test]
-    public function itGetsTheNumberOfUnrecognizedPatients(): void
+    public function test_it_gets_the_number_of_unrecognized_patients(): void
     {
         // Disable AttemptSpeciesIdentification
         Event::fake();
@@ -218,8 +210,7 @@ final class NumbersTest extends TestCase
         $this->assertEquals(null, $result->prev);
     }
 
-    #[Test]
-    public function itGetsTheTotalNumberOfAllMisidentifiedPatients(): void
+    public function test_it_gets_the_total_number_of_all_misidentified_patients(): void
     {
         // Disable AttemptSpeciesIdentification
         Event::fake();
@@ -243,8 +234,7 @@ final class NumbersTest extends TestCase
         $this->assertEquals(null, $result->prev);
     }
 
-    #[Test]
-    public function itGetsTheNumberOfMisidentifiedPatients(): void
+    public function test_it_gets_the_number_of_misidentified_patients(): void
     {
         // Disable AttemptSpeciesIdentification
         Event::fake();

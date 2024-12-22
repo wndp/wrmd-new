@@ -9,7 +9,6 @@ use App\Extensions\Owcn\Events\OwcnPatientAdmitted;
 use App\Extensions\Owcn\Models\WildlifeRecoveryPatient;
 use Illuminate\Support\Str;
 use MatanYadaev\EloquentSpatial\Objects\Point;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\Support\AssistsWithAuthentication;
 use Tests\Support\AssistsWithCases;
 use Tests\TestCase;
@@ -33,8 +32,7 @@ final class JobsTest extends TestCase
         $this->hash = Str::random();
     }
 
-    #[Test]
-    public function admit_wildlife_recovery_patient(): void
+    public function test_admit_wildlife_recovery_patient(): void
     {
         Species::factory()->create(['id' => 999999]);
         $team = Team::factory()->create();
@@ -84,8 +82,7 @@ final class JobsTest extends TestCase
         $this->assertEquals($patient->coordinates_found->getLng(), '-120.8656003699832');
     }
 
-    #[Test]
-    public function associate_wildlife_recovery_patients(): void
+    public function test_associate_wildlife_recovery_patients(): void
     {
         // wrmd
         Team::factory()->create(['id' => '1']);

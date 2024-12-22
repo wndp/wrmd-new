@@ -12,7 +12,6 @@ use App\Models\Patient;
 use App\Models\Person;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreatesTeamUser;
 
@@ -21,22 +20,19 @@ final class CombineMergeControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessMergePeople(): void
+    public function test_un_authenticated_users_cant_access_merge_people(): void
     {
         $this->post(route('people.combine.merge'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessMergePeople(): void
+    public function test_un_authorized_users_cant_access_merge_people(): void
     {
         $me = $this->createTeamUser(role: Role::USER);
 
         $this->actingAs($me->user)->post(route('people.combine.merge'))->assertForbidden();
     }
 
-    #[Test]
-    public function aNewPersonArrayIsRequiredToSearchForMatches(): void
+    public function test_a_new_person_array_is_required_to_search_for_matches(): void
     {
         $me = $this->createTeamUser();
 
@@ -49,8 +45,7 @@ final class CombineMergeControllerTest extends TestCase
             ->assertInvalid(['newPerson' => 'There was a problem creating the new person.']);
     }
 
-    #[Test]
-    public function anOldPeopleArrayIsRequiredToSearchForMatches(): void
+    public function test_an_old_people_array_is_required_to_search_for_matches(): void
     {
         $me = $this->createTeamUser();
 
@@ -68,8 +63,7 @@ final class CombineMergeControllerTest extends TestCase
             ->assertInvalid(['oldPeople.0' => 'There was a problem with one of the duplicate persons.']);
     }
 
-    #[Test]
-    public function itCombineTheSearchResults(): void
+    public function test_it_combine_the_search_results(): void
     {
         $me = $this->createTeamUser();
         $people = Person::factory()->count(2)->create([
@@ -112,8 +106,7 @@ final class CombineMergeControllerTest extends TestCase
         $this->assertDatabaseMissing('people', ['id' => $people->last()->id]);
     }
 
-    #[Test]
-    public function itReAssociatesTheOldPeoplesPatientsToTheNewPerson(): void
+    public function test_it_re_associates_the_old_peoples_patients_to_the_new_person(): void
     {
         $me = $this->createTeamUser();
 
@@ -145,8 +138,7 @@ final class CombineMergeControllerTest extends TestCase
             );
     }
 
-    #[Test]
-    public function itReAssociatesTheOldPeoplesDonationsToTheNewPerson(): void
+    public function test_it_re_associates_the_old_peoples_donations_to_the_new_person(): void
     {
         $me = $this->createTeamUser();
 
@@ -178,8 +170,7 @@ final class CombineMergeControllerTest extends TestCase
             );
     }
 
-    #[Test]
-    public function itReAssociatesTheOldPeoplesIncidentsToTheNewPerson(): void
+    public function test_it_re_associates_the_old_peoples_incidents_to_the_new_person(): void
     {
         $me = $this->createTeamUser();
 

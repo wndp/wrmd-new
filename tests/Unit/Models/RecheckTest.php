@@ -8,7 +8,6 @@ use App\Schedulable;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreatesTeamUser;
@@ -20,8 +19,7 @@ final class RecheckTest extends TestCase
     use RefreshDatabase;
     //use CreatesTeamUser;
 
-    #[Test]
-    public function aRecheckIsRevisionable(): void
+    public function test_a_recheck_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -31,8 +29,7 @@ final class RecheckTest extends TestCase
         );
     }
 
-    #[Test]
-    public function ifARechecksPatientIsLockedThenItCanNotBeUpdated(): void
+    public function test_if_a_rechecks_patient_is_locked_then_it_can_not_be_updated(): void
     {
         $patient = Patient::factory()->create();
         $recheck = Recheck::factory()->create(['patient_id' => $patient->id, 'description' => 'OLD']);
@@ -50,8 +47,7 @@ final class RecheckTest extends TestCase
         $this->assertEquals('OLD', $recheck->fresh()->description);
     }
 
-    #[Test]
-    public function ifARechecksPatientIsLockedThenItCanNotBeCreated(): void
+    public function test_if_a_rechecks_patient_is_locked_then_it_can_not_be_created(): void
     {
         $recheck = Recheck::factory()->create([
             'patient_id' => Patient::factory()->create(['locked_at' => Carbon::now()])->id,
@@ -60,8 +56,7 @@ final class RecheckTest extends TestCase
         $this->assertFalse($recheck->exists);
     }
 
-    #[Test]
-    public function ifARechecksPatientIsLockedThenItCanNotBeDeleted(): void
+    public function test_if_a_rechecks_patient_is_locked_then_it_can_not_be_deleted(): void
     {
         $patient = Patient::factory()->create();
         $recheck = Recheck::factory()->create(['patient_id' => $patient->id]);
@@ -73,8 +68,7 @@ final class RecheckTest extends TestCase
         $this->assertDatabaseHas('rechecks', ['id' => $recheck->id, 'deleted_at' => null]);
     }
 
-    #[Test]
-    public function aRecheckIsSchedualable(): void
+    public function test_a_recheck_is_schedualable(): void
     {
         $this->assertInstanceOf(Schedulable::class, Recheck::factory()->make());
     }

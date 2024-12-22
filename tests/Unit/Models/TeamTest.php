@@ -5,7 +5,6 @@ namespace Tests\Unit\Models;
 use App\Models\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 
@@ -14,8 +13,7 @@ final class TeamTest extends TestCase
     use Assertions;
     use RefreshDatabase;
 
-    #[Test]
-    public function aTeamCanRetrieveItsDefaultAvatarUrl(): void
+    public function test_a_team_can_retrieve_its_default_avatar_url(): void
     {
         $team = Team::factory(['name' => 'Foo Place'])->create();
 
@@ -24,8 +22,7 @@ final class TeamTest extends TestCase
         );
     }
 
-    #[Test]
-    public function aTeamIsRevisionable(): void
+    public function test_a_team_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -35,8 +32,7 @@ final class TeamTest extends TestCase
         );
     }
 
-    #[Test]
-    public function whenATeamsPhoneNumberIsAccessedItIsFormattedForTheirCountry(): void
+    public function test_when_a_teams_phone_number_is_accessed_it_is_formatted_for_their_country(): void
     {
         $team = Team::factory()->create([
             'phone' => '808-555-1234',
@@ -47,8 +43,7 @@ final class TeamTest extends TestCase
         $this->assertEquals('(808) 555-1234', $team->phone_national);
     }
 
-    #[Test]
-    public function whenATeamsPhoneNumberIsSavedItIsFormattedForItsCountry(): void
+    public function test_when_a_teams_phone_number_is_saved_it_is_formatted_for_its_country(): void
     {
         $team = Team::factory()->create([
             'phone' => '808-555-1234',
@@ -63,8 +58,7 @@ final class TeamTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function whenAPhoneNumberDoesNotMatchACountryFormatItStillSavesToTheDatabase(): void
+    public function test_when_a_phone_number_does_not_match_a_country_format_it_still_saves_to_the_database(): void
     {
         $team = Team::factory()->create([
             'phone' => '123',
@@ -79,8 +73,7 @@ final class TeamTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function aMasterAccountHasSubAccounts(): void
+    public function test_a_master_account_has_sub_accounts(): void
     {
         $masterAccount = Team::factory()
             ->has(Team::factory()->count(3), 'subAccounts')
@@ -89,8 +82,7 @@ final class TeamTest extends TestCase
         $this->assertCount(3, $masterAccount->subAccounts);
     }
 
-    #[Test]
-    public function subAccountsHaveAMasterAccount(): void
+    public function test_sub_accounts_have_a_master_account(): void
     {
         $subAccounts = Team::factory()
             ->count(3)
@@ -103,8 +95,7 @@ final class TeamTest extends TestCase
         );
     }
 
-    #[Test]
-    public function aTeamKnowsIfItIsAMasterAccount(): void
+    public function test_a_team_knows_if_it_is_a_master_account(): void
     {
         $team = Team::factory()->create();
 
@@ -114,8 +105,7 @@ final class TeamTest extends TestCase
         $this->assertTrue($masterAccount->is_master_account);
     }
 
-    #[Test]
-    public function aTeamKnowsIfItIsASubAccount(): void
+    public function test_a_team_knows_if_it_is_a_sub_account(): void
     {
         $team = Team::factory()->create();
         $this->assertFalse($team->isSubAccount());
@@ -124,8 +114,7 @@ final class TeamTest extends TestCase
         $this->assertTrue($subAccount->isSubAccount());
     }
 
-    #[Test]
-    public function itAssignsATeamToAMasterAccount(): void
+    public function test_it_assigns_a_team_to_a_master_account(): void
     {
         $team1 = Team::factory()->create();
         $team2 = Team::factory()->create();
@@ -136,8 +125,7 @@ final class TeamTest extends TestCase
         $this->assertTrue($team1->subAccounts->contains($result));
     }
 
-    #[Test]
-    public function aTeamKnowsIfASubAccountBelongsToIt(): void
+    public function test_a_team_knows_if_a_sub_account_belongs_to_it(): void
     {
         $team1 = Team::factory()->create();
         $team2 = Team::factory()->create();

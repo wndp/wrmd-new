@@ -6,7 +6,6 @@ use App\Enums\Role;
 use App\Models\Person;
 use App\Models\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreateCase;
@@ -19,8 +18,7 @@ final class PersonPatientsControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessAPersonsDonations(): void
+    public function test_un_authenticated_users_cant_access_a_persons_donations(): void
     {
         $team = Team::factory()->create();
         $rescuer = Person::factory()->create(['team_id' => $team->id, 'first_name' => 'John', 'last_name' => 'Doe']);
@@ -29,8 +27,7 @@ final class PersonPatientsControllerTest extends TestCase
         $this->get(route('people.patients.index', $rescuer))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessPeople(): void
+    public function test_un_authorized_users_cant_access_people(): void
     {
         $me = $this->createTeamUser(role: Role::USER);
         $rescuer = Person::factory()->create(['team_id' => $me->team->id, 'first_name' => 'John', 'last_name' => 'Doe']);
@@ -39,8 +36,7 @@ final class PersonPatientsControllerTest extends TestCase
         $this->actingAs($me->user)->get(route('people.patients.index', $rescuer))->assertForbidden();
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAPersonBeforeDisplayingThierPatients(): void
+    public function test_it_validates_ownership_of_a_person_before_displaying_thier_patients(): void
     {
         $me = $this->createTeamUser();
         $team = Team::factory()->create();
@@ -51,8 +47,7 @@ final class PersonPatientsControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function itDisplaysPersonsPatients(): void
+    public function test_it_displays_persons_patients(): void
     {
         $me = $this->createTeamUser();
         $rescuer = Person::factory()->create(['team_id' => $me->team->id, 'first_name' => 'John', 'last_name' => 'Doe']);

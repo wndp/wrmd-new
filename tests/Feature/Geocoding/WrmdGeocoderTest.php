@@ -7,13 +7,11 @@ use App\Models\Patient;
 use App\ValueObjects\GeocodeComponents;
 use App\ValueObjects\SingleStorePoint;
 use CommerceGuys\Addressing\Address;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 final class WrmdGeocoderTest extends TestCase
 {
-    #[Test]
-    public function itReturnsAnPredictableGeocodeComponentsObjectForAPatientsLocationFound(): void
+    public function test_it_returns_an_predictable_geocode_components_object_for_a_patients_location_found(): void
     {
         Patient::factory()->create([
             'address_found' => '21428 Jerusalem Grade',
@@ -36,8 +34,7 @@ final class WrmdGeocoderTest extends TestCase
         $this->assertEquals(new GeocodeComponents(38.82296602, -122.51286703, 'Lake County'), $response);
     }
 
-    #[Test]
-    public function itReturnsAnPredictableGeocodeComponentsObjectForAPatientsDispositionLocation(): void
+    public function test_it_returns_an_predictable_geocode_components_object_for_a_patients_disposition_location(): void
     {
         Patient::factory()->create([
             'disposition_address' => '21428 Jerusalem Grade',

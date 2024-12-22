@@ -8,7 +8,6 @@ use App\Models\Taxon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;
@@ -21,8 +20,7 @@ final class HasWildAlertEventTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function itNotifiesIfThePatientHasBeenInCareForExcessiveDays(): void
+    public function test_it_notifies_if_the_patient_has_been_in_care_for_excessive_days(): void
     {
         Event::fake();
         Http::fake([

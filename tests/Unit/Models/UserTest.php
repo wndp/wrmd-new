@@ -6,7 +6,6 @@ use App\Enums\Role;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 
@@ -15,8 +14,7 @@ final class UserTest extends TestCase
     use Assertions;
     use RefreshDatabase;
 
-    #[Test]
-    public function aUserIsRevisionable(): void
+    public function test_a_user_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -26,8 +24,7 @@ final class UserTest extends TestCase
         );
     }
 
-    #[Test]
-    public function itDeterminesThatTheUserIsAMemberOfATeam(): void
+    public function test_it_determines_that_the_user_is_a_member_of_a_team(): void
     {
         $user = User::factory()->create();
         $team = Team::factory()->create();
@@ -39,8 +36,7 @@ final class UserTest extends TestCase
         $this->assertTrue($result);
     }
 
-    #[Test]
-    public function itGetsTheUsersRoleForThierCurrentTeam(): void
+    public function test_it_gets_the_users_role_for_thier_current_team(): void
     {
         $user = User::factory()->create();
         $team = Team::factory()->create([
@@ -53,8 +49,7 @@ final class UserTest extends TestCase
         $this->assertEquals(Role::ADMIN->value, $user->roleOnCurrentTeam()->name);
     }
 
-    #[Test]
-    public function itGetsTheUsersRoleForAnyOfThierTeams(): void
+    public function test_it_gets_the_users_role_for_any_of_thier_teams(): void
     {
         $user = User::factory()->create();
         $team1 = Team::factory()->create();
@@ -70,8 +65,7 @@ final class UserTest extends TestCase
         $this->assertEquals(Role::USER->value, $user->roleOn($team2)->name);
     }
 
-    #[Test]
-    public function itGetsTheApiUserForTheProvidedTeam(): void
+    public function test_it_gets_the_api_user_for_the_provided_team(): void
     {
         $user = User::factory()->create();
         $team = Team::factory()->create();

@@ -4,29 +4,25 @@ namespace Tests\Feature\Public;
 
 use App\Enums\AttributeOptionName;
 use App\Models\AttributeOption;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 final class VisitPublicPagesTest extends TestCase
 {
-    #[Test]
-    public function visitHome(): void
+    public function test_visit_home(): void
     {
         $this->get(route('home'))->assertOk()->assertInertia(function ($page) {
             $page->component('Welcome');
         });
     }
 
-    #[Test]
-    public function visitTestimonials(): void
+    public function test_visit_testimonials(): void
     {
         $this->get(route('about.testimonials'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Testimonials');
         });
     }
 
-    #[Test]
-    public function visitFeatures(): void
+    public function test_visit_features(): void
     {
         $this->get(route('about.features'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Features')
@@ -34,118 +30,103 @@ final class VisitPublicPagesTest extends TestCase
         });
     }
 
-    #[Test]
-    public function visitPrice(): void
+    public function test_visit_price(): void
     {
         $this->get(route('about.pricing'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Pricing');
         });
     }
 
-    #[Test]
-    public function visitDonate(): void
+    public function test_visit_donate(): void
     {
         $this->get(route('donate.index'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Donate');
         });
     }
 
-    #[Test]
-    public function visitThankYou(): void
+    public function test_visit_thank_you(): void
     {
         $this->get(route('donate.thanks'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Thanks');
         });
     }
 
-    #[Test]
-    public function visitAbout(): void
+    public function test_visit_about(): void
     {
         $this->get(route('about'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/About');
         });
     }
 
-    #[Test]
-    public function visitWhatsNew(): void
+    public function test_visit_whats_new(): void
     {
         $this->get(route('about.new'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/WhatsNew');
         });
     }
 
-    #[Test]
-    public function visitSecurityAndDataIntegrity(): void
+    public function test_visit_security_and_data_integrity(): void
     {
         $this->get(route('about.security'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Security');
         });
     }
 
-    #[Test]
-    public function visitAgencies(): void
+    public function test_visit_agencies(): void
     {
         $this->get(route('about.agencies'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Agencies');
         });
     }
 
-    #[Test]
-    public function visitOilSpills(): void
+    public function test_visit_oil_spills(): void
     {
         $this->get(route('about.oil-spills'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/OilSpills');
         });
     }
 
-    #[Test]
-    public function visitWildAlert(): void
+    public function test_visit_wild_alert(): void
     {
         $this->get(route('about.wildalert'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/WildAlert');
         });
     }
 
-    #[Test]
-    public function visitApi(): void
+    public function test_visit_api(): void
     {
         $this->get('api/v3')->assertOk();
     }
 
-    #[Test]
-    public function visitTerms(): void
+    public function test_visit_terms(): void
     {
         $this->get(route('about.terms'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Terms');
         });
     }
 
-    #[Test]
-    public function visitPrivacy(): void
+    public function test_visit_privacy(): void
     {
         $this->get(route('about.privacy'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Privacy');
         });
     }
 
-    #[Test]
-    public function visitInactiveAccountPolicy(): void
+    public function test_visit_inactive_account_policy(): void
     {
         $this->get(route('about.inactive-account'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/InactiveAccount');
         });
     }
 
-    #[Test]
-    public function visitSla(): void
+    public function test_visit_sla(): void
     {
         $this->get(route('about.sla'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Sla');
         });
     }
 
-    #[Test]
-    public function visitImporting(): void
+    public function test_visit_importing(): void
     {
         AttributeOption::factory()->create(['name' => AttributeOptionName::PATIENT_DISPOSITIONS]);
         AttributeOption::factory()->create(['name' => AttributeOptionName::EXAM_SEXES]);
@@ -161,8 +142,7 @@ final class VisitPublicPagesTest extends TestCase
         });
     }
 
-    #[Test]
-    public function visitContact(): void
+    public function test_visit_contact(): void
     {
         $this->get(route('contact.create'))->assertOk()->assertInertia(function ($page) {
             $page->component('Public/Contact');

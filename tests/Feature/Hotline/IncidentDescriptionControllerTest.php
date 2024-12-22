@@ -6,7 +6,6 @@ use App\Enums\Ability;
 use App\Models\Incident;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
@@ -21,16 +20,14 @@ final class IncidentDescriptionControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessHotline(): void
+    public function test_un_authenticated_users_cant_access_hotline(): void
     {
         $incident = Incident::factory()->create();
 
         $this->put(route('hotline.incident.update.description', $incident))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessHotline(): void
+    public function test_un_authorized_users_cant_access_hotline(): void
     {
         $me = $this->createTeamUser();
         $incident = Incident::factory()->for($me->team)->create();
@@ -38,8 +35,7 @@ final class IncidentDescriptionControllerTest extends TestCase
         $this->actingAs($me->user)->put(route('hotline.incident.update.description', $incident))->assertForbidden();
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAnIncidentBeforeUpdatingIt(): void
+    public function test_it_validates_ownership_of_an_incident_before_updating_it(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -49,8 +45,7 @@ final class IncidentDescriptionControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function anIncidentIsUpdatedInStorage(): void
+    public function test_an_incident_is_updated_in_storage(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);

@@ -6,7 +6,6 @@ use App\Models\Donation;
 use App\Models\Person;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Maatwebsite\Excel\Facades\Excel;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;
@@ -17,8 +16,7 @@ final class PersonExportControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function itFailsValidationWhenTryingToExportAPeople(): void
+    public function test_it_fails_validation_when_trying_to_export_a_people(): void
     {
         $me = $this->createTeamUser();
 
@@ -49,8 +47,7 @@ final class PersonExportControllerTest extends TestCase
             ->assertInvalid(['date_to' => 'The date to field must be a date after or equal to date from.']);
     }
 
-    #[Test]
-    public function itExportsRescuers(): void
+    public function test_it_exports_rescuers(): void
     {
         Excel::fake();
         Excel::matchByRegex();
@@ -76,8 +73,7 @@ final class PersonExportControllerTest extends TestCase
         });
     }
 
-    #[Test]
-    public function itExportsVolunteers(): void
+    public function test_it_exports_volunteers(): void
     {
         Excel::fake();
         Excel::matchByRegex();
@@ -104,8 +100,7 @@ final class PersonExportControllerTest extends TestCase
         });
     }
 
-    #[Test]
-    public function itExportsMembers(): void
+    public function test_it_exports_members(): void
     {
         Excel::fake();
         Excel::matchByRegex();
@@ -132,8 +127,7 @@ final class PersonExportControllerTest extends TestCase
         });
     }
 
-    #[Test]
-    public function itExportsDonors(): void
+    public function test_it_exports_donors(): void
     {
         Excel::fake();
         Excel::matchByRegex();

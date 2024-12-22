@@ -8,7 +8,6 @@ use App\Models\Admission;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;
@@ -19,8 +18,7 @@ final class MultipleCollaboratorsTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function itNotifiesIfThereAMultipleCollaborators(): void
+    public function test_it_notifies_if_there_a_multiple_collaborators(): void
     {
         Event::fake();
         $me = $this->createTeamUser();
@@ -39,8 +37,7 @@ final class MultipleCollaboratorsTest extends TestCase
         );
     }
 
-    #[Test]
-    public function itDoesNotNotifyfThereAMultipleCollaborators(): void
+    public function test_it_does_not_notifyf_there_a_multiple_collaborators(): void
     {
         Event::fake();
         $me = $this->createTeamUser();

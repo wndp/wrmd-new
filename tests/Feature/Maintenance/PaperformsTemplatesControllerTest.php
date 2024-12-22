@@ -9,7 +9,6 @@ use App\Support\Wrmd;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreateCase;
@@ -22,14 +21,12 @@ class PaperformsTemplatesControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessPaperForms(): void
+    public function test_un_authenticated_users_cant_access_paper_forms(): void
     {
         $this->get(route('maintenance.paper_forms.index'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function itListsTheAvailablePaperFormTeplates()
+    public function test_it_lists_the_available_paper_form_teplates()
     {
         $me = $this->createTeamUser();
         ExtensionManager::activate($me->team, Extension::PAPER_FORMS);
@@ -42,8 +39,7 @@ class PaperformsTemplatesControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function aNameIsRequiredToStoreATempalte()
+    public function test_a_name_is_required_to_store_a_tempalte()
     {
         $me = $this->createTeamUser();
         ExtensionManager::activate($me->team, Extension::PAPER_FORMS);
@@ -52,8 +48,7 @@ class PaperformsTemplatesControllerTest extends TestCase
             ->assertInvalid(['name' => 'The name field is required.']);
     }
 
-    #[Test]
-    public function aValidFileIsRequiredToStoreATempalte()
+    public function test_a_valid_file_is_required_to_store_a_tempalte()
     {
         Storage::fake('s3');
 
@@ -74,8 +69,7 @@ class PaperformsTemplatesControllerTest extends TestCase
             ->assertInvalid(['template' => 'The template field must not be greater than 5000 kilobytes.']);
     }
 
-    #[Test]
-    public function aNewPaperFormTemplateIsSavedToStorage()
+    public function test_a_new_paper_form_template_is_saved_to_storage()
     {
         Storage::fake('s3');
 
@@ -100,8 +94,7 @@ class PaperformsTemplatesControllerTest extends TestCase
         ]]);
     }
 
-    #[Test]
-    public function newPaperFormTemplatesArePushedToTheEndOfTheSettingStorage()
+    public function test_new_paper_form_templates_are_pushed_to_the_end_of_the_setting_storage()
     {
         Storage::fake('s3');
 
@@ -141,8 +134,7 @@ class PaperformsTemplatesControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function aPaperFormTemplateIsDeletedFromStorage()
+    public function test_a_paper_form_template_is_deleted_from_storage()
     {
         $this->withoutExceptionHandling();
         Storage::fake('s3');

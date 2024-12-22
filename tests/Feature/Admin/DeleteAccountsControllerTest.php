@@ -8,7 +8,6 @@ use App\Jobs\DeleteTeam;
 use App\Models\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\CreatesTeamUser;
@@ -18,23 +17,20 @@ final class DeleteAccountsControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessAccounts(): void
+    public function test_un_authenticated_users_cant_access_accounts(): void
     {
         $team = Team::factory()->create();
         $this->get(route('teams.delete', $team))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessAccounts(): void
+    public function test_un_authorized_users_cant_access_accounts(): void
     {
         $me = $this->createTeamUser();
         $team = Team::factory()->create();
         $this->actingAs($me->user)->get(route('teams.delete', $team))->assertForbidden();
     }
 
-    #[Test]
-    public function itDisplaysTheDeleteAccountView(): void
+    public function test_it_displays_the_delete_account_view(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -48,8 +44,7 @@ final class DeleteAccountsControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function theAccountNameIsRequiredToDeleteAnAccount(): void
+    public function test_the_account_name_is_required_to_delete_an_account(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -62,8 +57,7 @@ final class DeleteAccountsControllerTest extends TestCase
             ->assertInvalid(['name' => 'The provided organization name does not match the displayed account organization name.']);
     }
 
-    #[Test]
-    public function theAccountStatusMustBeSuspendedToDeleteAnAccount(): void
+    public function test_the_account_status_must_be_suspended_to_delete_an_account(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -73,8 +67,7 @@ final class DeleteAccountsControllerTest extends TestCase
             ->assertInvalid(['status' => 'The account status must be Suspended before it can be deleted.']);
     }
 
-    #[Test]
-    public function theAuthenticatedUsersPasswordMustBeConfirmedToDeleteAnAccount(): void
+    public function test_the_authenticated_users_password_must_be_confirmed_to_delete_an_account(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -96,8 +89,7 @@ final class DeleteAccountsControllerTest extends TestCase
             ->assertInvalid(['password' => 'The password is incorrect.']);
     }
 
-    #[Test]
-    public function theDeleteAccountJobIsFired(): void
+    public function test_the_delete_account_job_is_fired(): void
     {
         Queue::fake();
 

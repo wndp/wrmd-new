@@ -22,15 +22,13 @@ final class LabReportTest extends TestCase
     use GetsCareLogs;
     use RefreshDatabase;
 
-    #[Test]
-    public function aLabReportBelongsToAPatient(): void
+    public function test_a_lab_report_belongs_to_a_patient(): void
     {
         $labReport = LabReport::factory()->make();
         $this->assertInstanceOf(Patient::class, $labReport->patient);
     }
 
-    #[Test]
-    public function itFiltersLabReportsIntoTheCareLog(): void
+    public function test_it_filters_lab_reports_into_the_care_log(): void
     {
         $me = $this->createTeamUser();
         Auth::loginUsingId($me->user->id);
@@ -57,8 +55,7 @@ final class LabReportTest extends TestCase
         //$this->assertEquals('FECAL: Float=negative, test. Technician: bob', $logs[0]->body);
     }
 
-    #[Test]
-    public function aLabReportIsRevisionable(): void
+    public function test_a_lab_report_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -68,8 +65,7 @@ final class LabReportTest extends TestCase
         );
     }
 
-    #[Test]
-    public function ifALabReportsPatientIsLockedThenItCanNotBeUpdated(): void
+    public function test_if_a_lab_reports_patient_is_locked_then_it_can_not_be_updated(): void
     {
         $patient = Patient::factory()->create();
         $lab = LabReport::factory()->create(['patient_id' => $patient->id, 'accession_number' => 'OLD']);
@@ -87,8 +83,7 @@ final class LabReportTest extends TestCase
         $this->assertEquals('OLD', $lab->fresh()->accession_number);
     }
 
-    #[Test]
-    public function ifALabReportsPatientIsLockedThenItCanNotBeCreated(): void
+    public function test_if_a_lab_reports_patient_is_locked_then_it_can_not_be_created(): void
     {
         $lab = LabReport::factory()->create([
             'patient_id' => Patient::factory()->create(['locked_at' => Carbon::now()])->id,
@@ -97,8 +92,7 @@ final class LabReportTest extends TestCase
         $this->assertFalse($lab->exists);
     }
 
-    #[Test]
-    public function ifALabReportsPatientIsLockedThenItCanNotBeDeleted(): void
+    public function test_if_a_lab_reports_patient_is_locked_then_it_can_not_be_deleted(): void
     {
         $patient = Patient::factory()->create();
         $lab = LabReport::factory()->create(['patient_id' => $patient->id]);
@@ -110,8 +104,7 @@ final class LabReportTest extends TestCase
         $this->assertDatabaseHas('lab_reports', ['id' => $lab->id, 'deleted_at' => null]);
     }
 
-    #[Test]
-    public function whenAPatientIsReplicatedSoAreTheLabReports(): void
+    public function test_when_a_patient_is_replicated_so_are_the_lab_reports(): void
     {
         $patient = Patient::factory()->create();
         LabReport::factory()->create(['patient_id' => $patient->id]);

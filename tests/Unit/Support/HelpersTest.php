@@ -7,24 +7,21 @@ use Tests\TestCase;
 
 final class HelpersTest extends TestCase
 {
-    #[Test]
-    public function itRecognizesANumericYear(): void
+    public function test_it_recognizes_a_numeric_year(): void
     {
         $result = is_year(2014);
 
         $this->assertTrue($result);
     }
 
-    #[Test]
-    public function itRecognizesAStringYear(): void
+    public function test_it_recognizes_a_string_year(): void
     {
         $result = is_year('2014');
 
         $this->assertTrue($result);
     }
 
-    #[Test]
-    public function itDoesNotRecognizeATwoCharacterYear(): void
+    public function test_it_does_not_recognize_a_two_character_year(): void
     {
         $result = is_year('14');
 

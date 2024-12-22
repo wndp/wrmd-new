@@ -7,7 +7,6 @@ use App\Events\AccountUpdated;
 use App\Events\PatientDeleted;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
@@ -19,21 +18,18 @@ final class DeleteYearControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessDeleteYear(): void
+    public function test_un_authenticated_users_cant_access_delete_year(): void
     {
         $this->get(route('year.delete.index'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessDeleteYear(): void
+    public function test_un_authorized_users_cant_access_delete_year(): void
     {
         $me = $this->createTeamUser();
         $this->actingAs($me->user)->get(route('year.delete.index'))->assertForbidden();
     }
 
-    #[Test]
-    public function itDisplaysTheViewToDeleteAYearOfPatients(): void
+    public function test_it_displays_the_view_to_delete_a_year_of_patients(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_DANGER_ZONE->value);
@@ -46,8 +42,7 @@ final class DeleteYearControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function aValidCaseYearIsRequiredToDeleteAYearOfPatients(): void
+    public function test_a_valid_case_year_is_required_to_delete_a_year_of_patients(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_DANGER_ZONE->value);
@@ -59,8 +54,7 @@ final class DeleteYearControllerTest extends TestCase
             ->assertInvalid(['year' => 'The selected year is invalid.']);
     }
 
-    #[Test]
-    public function theAuthenticatedUsersPasswordIsRequiredToDeleteAYearOfPatients(): void
+    public function test_the_authenticated_users_password_is_required_to_delete_a_year_of_patients(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_DANGER_ZONE->value);
@@ -75,8 +69,7 @@ final class DeleteYearControllerTest extends TestCase
             ->assertInvalid(['password' => 'The password is incorrect.']);
     }
 
-    #[Test]
-    public function aYearOfPatientsCanBeDeleted(): void
+    public function test_a_year_of_patients_can_be_deleted(): void
     {
         Event::fake();
 

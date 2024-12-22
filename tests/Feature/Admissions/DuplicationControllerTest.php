@@ -6,7 +6,6 @@ use App\Enums\Ability;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
@@ -36,20 +35,17 @@ final class DuplicationControllerTest extends TestCase
         $this->me = $this->createTeamUser();
     }
 
-    #[Test]
-    public function unAuthenticatedUsersCantDuplicatePatients(): void
+    public function test_un_authenticated_users_cant_duplicate_patients(): void
     {
         $this->get(route('patients.duplicate.create'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantDuplicatePatients(): void
+    public function test_un_authorized_users_cant_duplicate_patients(): void
     {
         $this->actingAs($this->me->user)->get(route('patients.duplicate.create'))->assertForbidden();
     }
 
-    #[Test]
-    public function itShowsTheFormForDuplicatingAnExistingPatient(): void
+    public function test_it_shows_the_form_for_duplicating_an_existing_patient(): void
     {
         BouncerFacade::allow($this->me->user)->to(Ability::CREATE_PATIENTS->value);
 
@@ -63,8 +59,7 @@ final class DuplicationControllerTest extends TestCase
             );
     }
 
-    #[Test]
-    public function itFailsValidationWhenTryingToReplicateAnExistingPatient(): void
+    public function test_it_fails_validation_when_trying_to_replicate_an_existing_patient(): void
     {
         BouncerFacade::allow($this->me->user)->to(Ability::CREATE_PATIENTS->value);
 
@@ -101,8 +96,7 @@ final class DuplicationControllerTest extends TestCase
             ]);
     }
 
-    #[Test]
-    public function itReplicatesAnExistingPatient(): void
+    public function test_it_replicates_an_existing_patient(): void
     {
         \Illuminate\Support\Facades\Cache::flush();
 
@@ -148,8 +142,7 @@ final class DuplicationControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itReplicatesAnExistingCaseIntoADifferentYearThanThisYear(): void
+    public function test_it_replicates_an_existing_case_into_a_different_year_than_this_year(): void
     {
         BouncerFacade::allow($this->me->user)->to(Ability::CREATE_PATIENTS->value);
 

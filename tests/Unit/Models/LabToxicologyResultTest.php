@@ -6,7 +6,6 @@ use App\Models\LabReport;
 use App\Models\LabToxicologyResult;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 
@@ -16,16 +15,14 @@ final class LabToxicologyResultTest extends TestCase
     use Assertions;
     use RefreshDatabase;
 
-    #[Test]
-    public function aLabToxicologyResultBelongsToALabReport(): void
+    public function test_a_lab_toxicology_result_belongs_to_a_lab_report(): void
     {
         $labReport = LabReport::factory()->for(LabToxicologyResult::factory(), 'labResult')->create();
 
         $this->assertInstanceOf(LabToxicologyResult::class, $labReport->labResult);
     }
 
-    #[Test]
-    public function aLabToxicologyResultIsRevisionable(): void
+    public function test_a_lab_toxicology_result_is_revisionable(): void
     {
         activity()->enableLogging();
 

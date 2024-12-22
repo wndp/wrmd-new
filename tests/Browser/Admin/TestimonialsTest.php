@@ -6,7 +6,6 @@ use App\Enums\Ability;
 use App\Models\Team;
 use App\Models\Testimonial;
 use Illuminate\Foundation\Testing\DatabaseTruncation;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\DuskTestCase;
 use Tests\Traits\CreatesTeamUser;
@@ -16,8 +15,7 @@ final class TestimonialsTest extends DuskTestCase
     use CreatesTeamUser;
     use DatabaseTruncation;
 
-    #[Test]
-    public function listTestimonials(): void
+    public function test_list_testimonials(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -39,8 +37,7 @@ final class TestimonialsTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function createATestimonial(): void
+    public function test_create_a_testimonial(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -69,8 +66,7 @@ final class TestimonialsTest extends DuskTestCase
         ]);
     }
 
-    #[Test]
-    public function updateATestimonial(): void
+    public function test_update_a_testimonial(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -101,8 +97,7 @@ final class TestimonialsTest extends DuskTestCase
         ]);
     }
 
-    #[Test]
-    public function searchTestimonials(): void
+    public function test_search_testimonials(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -125,8 +120,7 @@ final class TestimonialsTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function deleteATestimonial(): void
+    public function test_delete_a_testimonial(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);

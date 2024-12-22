@@ -4,7 +4,6 @@ namespace Tests\Feature\Admissions;
 
 use App\Exceptions\AdmissionNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;
@@ -15,8 +14,7 @@ final class AdmissionNotFoundTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function redirectWhenAdmissionNotFound(): void
+    public function test_redirect_when_admission_not_found(): void
     {
         $this->withoutExceptionHandling();
         $this->expectException(AdmissionNotFoundException::class);

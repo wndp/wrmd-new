@@ -12,7 +12,6 @@ use App\Models\User;
 use App\Support\ExtensionManager;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
@@ -24,8 +23,7 @@ final class RegisterSubAccountTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function theSubAccountIsCreated(): void
+    public function test_the_sub_account_is_created(): void
     {
         $me = $this->createTeamUser();
 
@@ -57,8 +55,7 @@ final class RegisterSubAccountTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function aSubAccountsSettingsAreClonedFromTheMasterAccount(): void
+    public function test_a_sub_accounts_settings_are_cloned_from_the_master_account(): void
     {
         $me = $this->createTeamUser();
 
@@ -77,8 +74,7 @@ final class RegisterSubAccountTest extends TestCase
         $this->assertTeamHasSetting($subAccount, SettingKey::TIMEZONE, 'foo_bar');
     }
 
-    #[Test]
-    public function aSubAccountsCustomFieldsAreClonedFromTheMasterAccount(): void
+    public function test_a_sub_accounts_custom_fields_are_cloned_from_the_master_account(): void
     {
         $me = $this->createTeamUser();
 
@@ -97,8 +93,7 @@ final class RegisterSubAccountTest extends TestCase
         $this->assertTrue($subAccount->fresh()->customFields->contains('label', 'foobar'));
     }
 
-    #[Test]
-    public function aSubAccountsUsersAreClonedFromTheMasterAccount(): void
+    public function test_a_sub_accounts_users_are_cloned_from_the_master_account(): void
     {
         $me = $this->createTeamUser();
 
@@ -128,8 +123,7 @@ final class RegisterSubAccountTest extends TestCase
         $this->assertEquals(Role::USER->value, $accountUsers->firstWhere('id', $pam->id)->roles->first()->name);
     }
 
-    #[Test]
-    public function aSubAccountsExtensionsAreClonedFromTheMasterAccount(): void
+    public function test_a_sub_accounts_extensions_are_cloned_from_the_master_account(): void
     {
         $me = $this->createTeamUser();
 

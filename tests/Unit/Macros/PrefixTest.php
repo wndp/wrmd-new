@@ -3,13 +3,11 @@
 namespace Tests\Unit\Macros;
 
 use Illuminate\Support\Arr;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 final class PrefixTest extends TestCase
 {
-    #[Test]
-    public function itPrefixesAStringToAnArraysValues(): void
+    public function test_it_prefixes_a_string_to_an_arrays_values(): void
     {
         $string = 'string-';
         $array = ['foo', 'bar'];

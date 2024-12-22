@@ -20,20 +20,17 @@ final class IncidentTest extends TestCase
     use Assertions;
     use RefreshDatabase;
 
-    #[Test]
-    public function anIncidentBelongsToAnTeam(): void
+    public function test_an_incident_belongs_to_an_team(): void
     {
         $this->assertInstanceOf(Team::class, Incident::factory()->create()->team);
     }
 
-    #[Test]
-    public function anIncidentBelongsToAReportingParty(): void
+    public function test_an_incident_belongs_to_a_reporting_party(): void
     {
         $this->assertInstanceOf(Person::class, Incident::factory()->create()->reportingParty);
     }
 
-    #[Test]
-    public function anAutoIncrementingIncidentNumberIsDeterminedBasedOnTheCurrentYear(): void
+    public function test_an_auto_incrementing_incident_number_is_determined_based_on_the_current_year(): void
     {
         $team1Id = Team::factory()->create()->id;
         $team2Id = Team::factory()->create()->id;
@@ -52,8 +49,7 @@ final class IncidentTest extends TestCase
         $this->assertSame('HL-'.date('y').'-0001', $incident3->incident_number);
     }
 
-    #[Test]
-    public function incidentNumbersWillIncrementIfAnyPreviousIncidentsAreDeleted(): void
+    public function test_incident_numbers_will_increment_if_any_previous_incidents_are_deleted(): void
     {
         $teamId = Team::factory()->create()->id;
 
@@ -66,8 +62,7 @@ final class IncidentTest extends TestCase
         $this->assertSame('HL-'.date('y').'-0002', $incident2->incident_number);
     }
 
-    #[Test]
-    public function anIncidentIsRevisionable(): void
+    public function test_an_incident_is_revisionable(): void
     {
         activity()->enableLogging();
 

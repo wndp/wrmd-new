@@ -13,7 +13,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreateCase;
@@ -27,8 +26,7 @@ final class IncidentSearchTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function anIncidentSearchCanRun(): void
+    public function test_an_incident_search_can_run(): void
     {
         $results = IncidentSearch::run(
             Team::factory()->create(),
@@ -38,8 +36,7 @@ final class IncidentSearchTest extends TestCase
         $this->assertInstanceOf(Collection::class, $results);
     }
 
-    #[Test]
-    public function anIncidentSearchCanBeHandled(): void
+    public function test_an_incident_search_can_be_handled(): void
     {
         $results = (new IncidentSearch)->handle(
             Team::factory()->create(),
@@ -49,8 +46,7 @@ final class IncidentSearchTest extends TestCase
         $this->assertInstanceOf(Collection::class, $results);
     }
 
-    #[Test]
-    public function someRequestKeysAreIgnored(): void
+    public function test_some_request_keys_are_ignored(): void
     {
         $hotlineStatusesId = AttributeOption::factory()->create(['name' => AttributeOptionName::HOTLINE_STATUSES])->id;
 
@@ -71,8 +67,7 @@ final class IncidentSearchTest extends TestCase
         );
     }
 
-    #[Test]
-    public function itSearchesTheHotlineIncidents(): void
+    public function test_it_searches_the_hotline_incidents(): void
     {
         $team = Team::factory()->create();
         $incidents = Incident::factory()->count(2)->create([

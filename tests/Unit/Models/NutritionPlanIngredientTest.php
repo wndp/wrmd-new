@@ -7,7 +7,6 @@ use App\Models\NutritionPlan;
 use App\Models\NutritionPlanIngredient;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreatesTeamUser;
@@ -20,15 +19,13 @@ final class NutritionPlanIngredientTest extends TestCase
     use GetsCareLogs;
     use RefreshDatabase;
 
-    #[Test]
-    public function aNutritionPlanIngredientBelongsToNutritionPlan()
+    public function test_a_nutrition_plan_ingredient_belongs_to_nutrition_plan()
     {
         $ingredient = NutritionPlanIngredient::factory()->make(['expense_category_id' => NutritionPlan::factory()]);
         $this->assertInstanceOf(NutritionPlan::class, $ingredient->nutritionPlan);
     }
 
-    #[Test]
-    public function aNutritionPlanIsRevisionable(): void
+    public function test_a_nutrition_plan_is_revisionable(): void
     {
         activity()->enableLogging();
 

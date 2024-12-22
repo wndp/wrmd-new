@@ -5,7 +5,6 @@ namespace Tests\Feature\Hotline;
 use App\Enums\Ability;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
@@ -20,22 +19,19 @@ final class HotlineSearchControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessHotlineSearch(): void
+    public function test_un_authenticated_users_cant_access_hotline_search(): void
     {
         $this->get(route('hotline.search.create'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessHotlineSearch(): void
+    public function test_un_authorized_users_cant_access_hotline_search(): void
     {
         $me = $this->createTeamUser();
 
         $this->actingAs($me->user)->get(route('hotline.search.create'))->assertForbidden();
     }
 
-    #[Test]
-    public function itCanReturnTheViewToSearchHotlineRecords(): void
+    public function test_it_can_return_the_view_to_search_hotline_records(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_HOTLINE->value);
@@ -47,8 +43,7 @@ final class HotlineSearchControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function itCanReturnAListOfTheSearchedHotlineRecords(): void
+    public function test_it_can_return_a_list_of_the_searched_hotline_records(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_HOTLINE->value);

@@ -9,7 +9,6 @@ use App\Models\AttributeOption;
 use App\Models\Donation;
 use App\Models\Person;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreatesTeamUser;
@@ -22,16 +21,14 @@ final class PersonDonationsControllerTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessAPersonsDonations(): void
+    public function test_un_authenticated_users_cant_access_a_persons_donations(): void
     {
         $person = Person::factory()->has(Donation::Factory())->create();
 
         $this->get(route('people.donations.index', $person))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessPeople(): void
+    public function test_un_authorized_users_cant_access_people(): void
     {
         $me = $this->createTeamUser(role: Role::USER);
         $person = Person::factory()->has(Donation::Factory())->create(['team_id' => $me->team->id]);
@@ -39,8 +36,7 @@ final class PersonDonationsControllerTest extends TestCase
         $this->actingAs($me->user)->get(route('people.donations.index', $person))->assertForbidden();
     }
 
-    #[Test]
-    public function itDisplaysPersonsDonations(): void
+    public function test_it_displays_persons_donations(): void
     {
         $donationMethodIsCashId = $this->createUiBehavior(
             AttributeOptionName::DONATION_METHODS,
@@ -61,8 +57,7 @@ final class PersonDonationsControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function itFailsValidationWhenTryingToStoreANewDonation(): void
+    public function test_it_fails_validation_when_trying_to_store_a_new_donation(): void
     {
         $me = $this->createTeamUser();
         $person = Person::factory()->create(['team_id' => $me->team->id]);
@@ -81,8 +76,7 @@ final class PersonDonationsControllerTest extends TestCase
             ->assertInvalid(['method_id' => 'The selected method is invalid.']);
     }
 
-    #[Test]
-    public function itStoresANewDonation(): void
+    public function test_it_stores_a_new_donation(): void
     {
         $cashId = AttributeOption::factory()->create([
             'name' => AttributeOptionName::DONATION_METHODS->value,
@@ -108,8 +102,7 @@ final class PersonDonationsControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfADonationBeforeUpdating(): void
+    public function test_it_validates_ownership_of_a_donation_before_updating(): void
     {
         $cashId = AttributeOption::factory()->create([
             'name' => AttributeOptionName::DONATION_METHODS->value,
@@ -126,8 +119,7 @@ final class PersonDonationsControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function itFailsValidationWhenTryingToUpdateAPerson(): void
+    public function test_it_fails_validation_when_trying_to_update_a_person(): void
     {
         $me = $this->createTeamUser();
         $person = Person::factory()->has(Donation::Factory())->create(['team_id' => $me->team->id]);
@@ -146,8 +138,7 @@ final class PersonDonationsControllerTest extends TestCase
             ->assertInvalid(['method_id' => 'The selected method is invalid.']);
     }
 
-    #[Test]
-    public function itUpdatesADonation(): void
+    public function test_it_updates_a_donation(): void
     {
         $cashId = AttributeOption::factory()->create([
             'name' => AttributeOptionName::DONATION_METHODS->value,
@@ -174,8 +165,7 @@ final class PersonDonationsControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfADonationBeforeDeleting(): void
+    public function test_it_validates_ownership_of_a_donation_before_deleting(): void
     {
         $me = $this->createTeamUser();
         $person = Person::factory()->has(Donation::Factory())->create();
@@ -184,8 +174,7 @@ final class PersonDonationsControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function itDeletesADonation(): void
+    public function test_it_deletes_a_donation(): void
     {
         $me = $this->createTeamUser();
         $person = Person::factory()->has(Donation::Factory())->create(['team_id' => $me->team->id]);

@@ -20,21 +20,18 @@ final class ExpenseCategoriesControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessExpenseCategories(): void
+    public function test_un_authenticated_users_cant_access_expense_categories(): void
     {
         $this->get(route('maintenance.expense_categories.index'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessExpenseCategories(): void
+    public function test_un_authorized_users_cant_access_expense_categories(): void
     {
         $me = $this->createTeamUser();
         $this->actingAs($me->user)->get(route('maintenance.expense_categories.index'))->assertForbidden();
     }
 
-    #[Test]
-    public function itDisplaysTheExpenseCategoriesIndexPage(): void
+    public function test_it_displays_the_expense_categories_index_page(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
@@ -47,8 +44,7 @@ final class ExpenseCategoriesControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function itDisplaysTheExpenseCategoryCreatePage(): void
+    public function test_it_displays_the_expense_category_create_page(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
@@ -73,8 +69,7 @@ final class ExpenseCategoriesControllerTest extends TestCase
     //         ->assertStatus(404);
     // }
 
-    #[Test]
-    public function aUiniqueNameIsRequiredToCreateAnExpenseCategory(): void
+    public function test_a_uinique_name_is_required_to_create_an_expense_category(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
@@ -93,8 +88,7 @@ final class ExpenseCategoriesControllerTest extends TestCase
             ->assertInvalid(['name' => 'The name has already been taken.']);
     }
 
-    #[Test]
-    public function aNewExpenseCategoryIsSavedToStorage(): void
+    public function test_a_new_expense_category_is_saved_to_storage(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
@@ -115,8 +109,7 @@ final class ExpenseCategoriesControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function parentCategoriesCanNotBeEdited()
+    public function test_parent_categories_can_not_be_edited()
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
@@ -127,8 +120,7 @@ final class ExpenseCategoriesControllerTest extends TestCase
             ->assertStatus(404);
     }
 
-    #[Test]
-    public function itDisplaysThePageToEditAnExpenseCategory(): void
+    public function test_it_displays_the_page_to_edit_an_expense_category(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
@@ -144,8 +136,7 @@ final class ExpenseCategoriesControllerTest extends TestCase
             );
     }
 
-    #[Test]
-    public function aUiniqueNameIsRequiredToUpdateACategory(): void
+    public function test_a_uinique_name_is_required_to_update_a_category(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
@@ -165,8 +156,7 @@ final class ExpenseCategoriesControllerTest extends TestCase
             ->assertInvalid(['name' => 'The name has already been taken.']);
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAnExpenseCategoryBeforeUpdating(): void
+    public function test_it_validates_ownership_of_an_expense_category_before_updating(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
@@ -178,8 +168,7 @@ final class ExpenseCategoriesControllerTest extends TestCase
         ])->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function anExpenseCategoryIsUpdatedToStorage(): void
+    public function test_an_expense_category_is_updated_to_storage(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
@@ -201,8 +190,7 @@ final class ExpenseCategoriesControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function parentCategoriesCanNotBeDeleted()
+    public function test_parent_categories_can_not_be_deleted()
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
@@ -213,8 +201,7 @@ final class ExpenseCategoriesControllerTest extends TestCase
             ->assertStatus(404);
     }
 
-    #[Test]
-    public function aUsedChildCategoryCanNotBeDeleted()
+    public function test_a_used_child_category_can_not_be_deleted()
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
@@ -234,8 +221,7 @@ final class ExpenseCategoriesControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAnExpenseCategoryBeforeDeleting(): void
+    public function test_it_validates_ownership_of_an_expense_category_before_deleting(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
@@ -246,8 +232,7 @@ final class ExpenseCategoriesControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function anExpenseCategoryCanBeDeleted(): void
+    public function test_an_expense_category_can_be_deleted(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);

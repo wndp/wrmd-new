@@ -9,7 +9,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 
@@ -18,8 +17,7 @@ final class MediaTest extends TestCase
     use Assertions;
     use RefreshDatabase;
 
-    #[Test]
-    public function aMediaHasAnAppendedPreviewUrlAttribute(): void
+    public function test_a_media_has_an_appended_preview_url_attribute(): void
     {
         $file = UploadedFile::fake()->image('avatar.jpg');
 
@@ -30,8 +28,7 @@ final class MediaTest extends TestCase
         $this->assertStringEndsWith('/conversions/avatar-preview.jpg', $media->getUrl('preview'));
     }
 
-    #[Test]
-    public function aMediaHasAnAppendedMediumUrlAttribute(): void
+    public function test_a_media_has_an_appended_medium_url_attribute(): void
     {
         $file = UploadedFile::fake()->image('avatar.jpg');
 
@@ -42,8 +39,7 @@ final class MediaTest extends TestCase
         $this->assertStringEndsWith('/conversions/avatar-medium.jpg', $media->getUrl('medium'));
     }
 
-    #[Test]
-    public function aMediaIsRevisionable(): void
+    public function test_a_media_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -53,8 +49,7 @@ final class MediaTest extends TestCase
         );
     }
 
-    #[Test]
-    public function ifAMediasPatientIsLockedThenItCanNotBeUpdated(): void
+    public function test_if_a_medias_patient_is_locked_then_it_can_not_be_updated(): void
     {
         $patient = Patient::factory()->create();
         $file = UploadedFile::fake()->image('avatar.jpg');
@@ -83,8 +78,7 @@ final class MediaTest extends TestCase
         $this->assertEquals('OLD', $media->fresh()->name);
     }
 
-    #[Test]
-    public function ifAMediasPatientIsLockedThenItCanNotBeCreated(): void
+    public function test_if_a_medias_patient_is_locked_then_it_can_not_be_created(): void
     {
         $patient = Patient::factory()->create(['locked_at' => Carbon::now()]);
         $file = UploadedFile::fake()->image('avatar.jpg');
@@ -96,8 +90,7 @@ final class MediaTest extends TestCase
         $this->assertFalse($media->exists);
     }
 
-    #[Test]
-    public function ifAMediasPatientIsLockedThenItCanNotBeDeleted(): void
+    public function test_if_a_medias_patient_is_locked_then_it_can_not_be_deleted(): void
     {
         $patient = Patient::factory()->create();
         $file = UploadedFile::fake()->image('avatar.jpg');
@@ -113,8 +106,7 @@ final class MediaTest extends TestCase
         $this->assertDatabaseHas('media', ['id' => $media->id]);
     }
 
-    #[Test]
-    public function whenAPatientIsReplicatedSoAreTheMedia(): void
+    public function test_when_a_patient_is_replicated_so_are_the_media(): void
     {
         Storage::fake('s3');
 

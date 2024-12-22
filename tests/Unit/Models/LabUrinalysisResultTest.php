@@ -6,7 +6,6 @@ use App\Models\LabReport;
 use App\Models\LabUrinalysisResult;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 
@@ -16,16 +15,14 @@ final class LabUrinalysisResultTest extends TestCase
     use Assertions;
     use RefreshDatabase;
 
-    #[Test]
-    public function aLabUrinalysisResultBelongsToALabReport(): void
+    public function test_a_lab_urinalysis_result_belongs_to_a_lab_report(): void
     {
         $labReport = LabReport::factory()->for(LabUrinalysisResult::factory(), 'labResult')->create();
 
         $this->assertInstanceOf(LabUrinalysisResult::class, $labReport->labResult);
     }
 
-    #[Test]
-    public function aLabUrinalysisResultIsRevisionable(): void
+    public function test_a_lab_urinalysis_result_is_revisionable(): void
     {
         activity()->enableLogging();
 

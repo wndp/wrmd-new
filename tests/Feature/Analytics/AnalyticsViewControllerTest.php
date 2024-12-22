@@ -5,7 +5,6 @@ namespace Tests\Feature\Analytics;
 use App\Enums\SettingKey;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreatesTeamUser;
 
@@ -14,8 +13,7 @@ final class AnalyticsViewControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function itDisplaysTheAnalyticsIndexView(): void
+    public function test_it_displays_the_analytics_index_view(): void
     {
         $me = $this->createTeamUser();
 

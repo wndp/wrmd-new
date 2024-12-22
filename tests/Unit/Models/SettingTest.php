@@ -5,7 +5,6 @@ namespace Tests\Unit\Models;
 use App\Models\Setting;
 use App\Models\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 
@@ -14,16 +13,14 @@ final class SettingTest extends TestCase
     use Assertions;
     use RefreshDatabase;
 
-    #[Test]
-    public function aSettingBelongsToATeam(): void
+    public function test_a_setting_belongs_to_a_team(): void
     {
         $setting = Setting::factory()->create();
 
         $this->assertInstanceOf(Team::class, $setting->team);
     }
 
-    #[Test]
-    public function aSettingIsRevisionable(): void
+    public function test_a_setting_is_revisionable(): void
     {
         activity()->enableLogging();
 

@@ -20,8 +20,7 @@ final class OilSpillEventTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function aSpillEventIsJustAnExtensionOfATeam(): void
+    public function test_a_spill_event_is_just_an_extension_of_a_team(): void
     {
         $spillEvent = OilSpillEvent::factory()->create();
 
@@ -29,8 +28,7 @@ final class OilSpillEventTest extends TestCase
         $this->assertEquals('teams', $spillEvent->getTable());
     }
 
-    #[Test]
-    public function itGetsTheListOfActiveSpillEvents(): void
+    public function test_it_gets_the_list_of_active_spill_events(): void
     {
         $team1 = Team::factory()->create();
         $team2 = Team::factory()->create();
@@ -42,8 +40,7 @@ final class OilSpillEventTest extends TestCase
         $this->assertEquals($team2->id, $events->first()->id);
     }
 
-    #[Test]
-    public function itFiltersTheAvailableSpillEvents(): void
+    public function test_it_filters_the_available_spill_events(): void
     {
         $team = Team::factory()->create();
         $this->setSetting($team, SettingKey::OSPR_SPILL_ID, 'SPILL-2');

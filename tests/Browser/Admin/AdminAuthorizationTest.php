@@ -4,7 +4,6 @@ namespace Tests\Browser\Admin;
 
 use App\Enums\Ability;
 use Illuminate\Foundation\Testing\DatabaseTruncation;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\DuskTestCase;
 use Tests\Traits\CreatesTeamUser;
@@ -14,8 +13,7 @@ final class AdminAuthorizationTest extends DuskTestCase
     use CreatesTeamUser;
     use DatabaseTruncation;
 
-    #[Test]
-    public function wrmdStaffCanAccessAdminArea(): void
+    public function test_wrmd_staff_can_access_admin_area(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -33,8 +31,7 @@ final class AdminAuthorizationTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function ensureOthersCanNotAccessAdminArea(): void
+    public function test_ensure_others_can_not_access_admin_area(): void
     {
         $me = $this->createTeamUser();
 

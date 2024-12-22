@@ -5,7 +5,6 @@ namespace Tests\Feature\DailyTasks;
 use App\Enums\Ability;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
@@ -18,22 +17,19 @@ final class DailyTasksControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessDailyTasksPage(): void
+    public function test_un_authenticated_users_cant_access_daily_tasks_page(): void
     {
         $this->get(route('daily-tasks.index'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessDailyTasksPage(): void
+    public function test_un_authorized_users_cant_access_daily_tasks_page(): void
     {
         $me = $this->createTeamUser();
 
         $this->actingAs($me->user)->get(route('daily-tasks.index'))->assertForbidden();
     }
 
-    #[Test]
-    public function itDisplaysTheDailyTasksIndexPage(): void
+    public function test_it_displays_the_daily_tasks_index_page(): void
     {
         $me = $this->createTeamUser();
 
@@ -48,22 +44,19 @@ final class DailyTasksControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessPatientDailyTasksPage(): void
+    public function test_un_authenticated_users_cant_access_patient_daily_tasks_page(): void
     {
         $this->get(route('patients.daily-tasks.edit'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessPatientDailyTasksPage(): void
+    public function test_un_authorized_users_cant_access_patient_daily_tasks_page(): void
     {
         $me = $this->createTeamUser();
 
         $this->actingAs($me->user)->get(route('patients.daily-tasks.edit'))->assertForbidden();
     }
 
-    #[Test]
-    public function itDisplaysThePatientsDailyTasksEditPage(): void
+    public function test_it_displays_the_patients_daily_tasks_edit_page(): void
     {
         $me = $this->createTeamUser();
 

@@ -3,7 +3,6 @@
 namespace Tests\Browser\Public;
 
 use Laravel\Dusk\Browser;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\DuskTestCase;
 use Tests\Traits\MailPit;
 
@@ -11,8 +10,7 @@ final class VisitPublicPagesTest extends DuskTestCase
 {
     use MailPit;
 
-    #[Test]
-    public function visitWelcomePage(): void
+    public function test_visit_welcome_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('home'))
@@ -21,8 +19,7 @@ final class VisitPublicPagesTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function visitTestimonialsPage(): void
+    public function test_visit_testimonials_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('about.testimonials'))
@@ -31,8 +28,7 @@ final class VisitPublicPagesTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function visitFeaturesPage(): void
+    public function test_visit_features_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('about.features'))
@@ -41,8 +37,7 @@ final class VisitPublicPagesTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function visitPricePage(): void
+    public function test_visit_price_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('about.pricing'))
@@ -51,8 +46,7 @@ final class VisitPublicPagesTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function visitDonatePage(): void
+    public function test_visit_donate_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('donate.index'))
@@ -61,8 +55,7 @@ final class VisitPublicPagesTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function visitThankYouPage(): void
+    public function test_visit_thank_you_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('donate.thanks'))
@@ -71,8 +64,7 @@ final class VisitPublicPagesTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function visitAboutPage(): void
+    public function test_visit_about_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('about'))
@@ -81,8 +73,7 @@ final class VisitPublicPagesTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function visitWhatsNewPage(): void
+    public function test_visit_whats_new_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('about.new'))
@@ -91,8 +82,7 @@ final class VisitPublicPagesTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function visitSecurityAndDataIntegrityPage(): void
+    public function test_visit_security_and_data_integrity_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('about.security'))
@@ -101,8 +91,7 @@ final class VisitPublicPagesTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function visitAgenciesPage(): void
+    public function test_visit_agencies_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('about.agencies'))
@@ -111,8 +100,7 @@ final class VisitPublicPagesTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function visitOilSpillPage(): void
+    public function test_visit_oil_spill_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('about.oil-spills'))
@@ -121,8 +109,7 @@ final class VisitPublicPagesTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function visitWildAlertPage(): void
+    public function test_visit_wild_alert_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('about.wildalert'))
@@ -131,8 +118,7 @@ final class VisitPublicPagesTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function visitApiPage(): void
+    public function test_visit_api_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('api/v3')
@@ -141,8 +127,7 @@ final class VisitPublicPagesTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function visitTermsAndConditionsPage(): void
+    public function test_visit_terms_and_conditions_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('about.terms'))
@@ -151,8 +136,7 @@ final class VisitPublicPagesTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function visitPrivacyPolicyPage(): void
+    public function test_visit_privacy_policy_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('about.privacy'))
@@ -161,8 +145,7 @@ final class VisitPublicPagesTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function visitInactiveAccountPolicyPage(): void
+    public function test_visit_inactive_account_policy_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('about.inactive-account'))
@@ -171,8 +154,7 @@ final class VisitPublicPagesTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function visitSlaPage(): void
+    public function test_visit_sla_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('about.sla'))
@@ -181,8 +163,7 @@ final class VisitPublicPagesTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function visitImportingPage(): void
+    public function test_visit_importing_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('about.importing'))
@@ -191,8 +172,7 @@ final class VisitPublicPagesTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function visitContactPage(): void
+    public function test_visit_contact_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('contact.create'))

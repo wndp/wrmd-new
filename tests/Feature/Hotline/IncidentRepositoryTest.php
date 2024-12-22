@@ -6,7 +6,6 @@ use App\Models\Incident;
 use App\Repositories\IncidentRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreatesTeamUser;
 
@@ -16,8 +15,7 @@ final class IncidentRepositoryTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function itGetsAPaginatedListOfTheDeletedIncidents(): void
+    public function test_it_gets_a_paginated_list_of_the_deleted_incidents(): void
     {
         $me = $this->createTeamUser();
 

@@ -10,7 +10,6 @@ use App\Models\Team;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;
@@ -39,8 +38,7 @@ final class PrescriptionsIsDueTest extends TestCase
         $this->setSetting($team, SettingKey::TIMEZONE, 'UTC');
     }
 
-    #[Test]
-    public function it_determines_that_a_prescription_that_starts_today_is_due_today(): void
+    public function test_it_determines_that_a_prescription_that_starts_today_is_due_today(): void
     {
         $prescription = Prescription::factory()->create([
             'rx_started_at' => Carbon::now(),
@@ -51,8 +49,7 @@ final class PrescriptionsIsDueTest extends TestCase
         $this->assertTrue($prescription->isDueToday());
     }
 
-    #[Test]
-    public function it_determines_that_a_prescription_that_has_ended_is_not_due_today(): void
+    public function test_it_determines_that_a_prescription_that_has_ended_is_not_due_today(): void
     {
         $prescription = Prescription::factory()->create([
             'rx_started_at' => Carbon::now()->subDays(5),
@@ -63,8 +60,7 @@ final class PrescriptionsIsDueTest extends TestCase
         $this->assertFalse($prescription->isDueToday());
     }
 
-    #[Test]
-    public function it_determines_that_a_prescription_started_in_the_past_and_ending_in_the_future_is_due_today(): void
+    public function test_it_determines_that_a_prescription_started_in_the_past_and_ending_in_the_future_is_due_today(): void
     {
         $endlessPrescription = Prescription::factory()->create([
             'rx_started_at' => Carbon::now()->subDays(2),
@@ -75,8 +71,7 @@ final class PrescriptionsIsDueTest extends TestCase
         $this->assertTrue($endlessPrescription->isDueToday());
     }
 
-    #[Test]
-    public function it_determines_that_a_prescription_started_in_the_past_and_ending_today_is_due_today(): void
+    public function test_it_determines_that_a_prescription_started_in_the_past_and_ending_today_is_due_today(): void
     {
         $endlessPrescription = Prescription::factory()->create([
             'rx_started_at' => Carbon::now()->subDays(2),
@@ -87,8 +82,7 @@ final class PrescriptionsIsDueTest extends TestCase
         $this->assertTrue($endlessPrescription->isDueToday());
     }
 
-    #[Test]
-    public function it_determines_that_a_prescription_with_a_q2d_frequency_that_started_2n_days_ago_is_due_today(): void
+    public function test_it_determines_that_a_prescription_with_a_q2d_frequency_that_started_2n_days_ago_is_due_today(): void
     {
         $frequencyIsQ2DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -105,8 +99,7 @@ final class PrescriptionsIsDueTest extends TestCase
         $this->assertTrue($prescription->isDueToday());
     }
 
-    #[Test]
-    public function it_determines_that_a_prescription_with_a_q2d_frequency_that_started_not_2n_days_ago_is_not_due_today(): void
+    public function test_it_determines_that_a_prescription_with_a_q2d_frequency_that_started_not_2n_days_ago_is_not_due_today(): void
     {
         $frequencyIsQ2DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -126,8 +119,7 @@ final class PrescriptionsIsDueTest extends TestCase
         $this->assertFalse($prescription->isDueToday());
     }
 
-    #[Test]
-    public function it_determines_that_a_prescription_with_a_q3d_frequency_that_started_3n_days_ago_is_due_today(): void
+    public function test_it_determines_that_a_prescription_with_a_q3d_frequency_that_started_3n_days_ago_is_due_today(): void
     {
         $frequencyIsQ3DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -153,8 +145,7 @@ final class PrescriptionsIsDueTest extends TestCase
         $this->assertTrue($prescription->isDueToday());
     }
 
-    #[Test]
-    public function it_determines_that_a_prescription_with_a_q3d_frequency_that_started_not_3n_days_ago_is_not_due_today(): void
+    public function test_it_determines_that_a_prescription_with_a_q3d_frequency_that_started_not_3n_days_ago_is_not_due_today(): void
     {
         $frequencyIsQ3DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -183,8 +174,7 @@ final class PrescriptionsIsDueTest extends TestCase
         $this->assertFalse($prescription->isDueToday());
     }
 
-    #[Test]
-    public function it_determines_that_a_prescription_with_a_q4d_frequency_that_started_4n_days_ago_is_due_today(): void
+    public function test_it_determines_that_a_prescription_with_a_q4d_frequency_that_started_4n_days_ago_is_due_today(): void
     {
         $frequencyIsQ4DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -210,8 +200,7 @@ final class PrescriptionsIsDueTest extends TestCase
         $this->assertTrue($prescription->isDueToday());
     }
 
-    #[Test]
-    public function it_determines_that_a_prescription_with_a_q4d_frequency_that_started_not_4n_days_ago_is_not_due_today(): void
+    public function test_it_determines_that_a_prescription_with_a_q4d_frequency_that_started_not_4n_days_ago_is_not_due_today(): void
     {
         $frequencyIsQ4DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -240,8 +229,7 @@ final class PrescriptionsIsDueTest extends TestCase
         $this->assertFalse($prescription->isDueToday());
     }
 
-    #[Test]
-    public function it_determines_that_a_prescription_with_a_q7d_frequency_that_started_7n_days_ago_is_due_today(): void
+    public function test_it_determines_that_a_prescription_with_a_q7d_frequency_that_started_7n_days_ago_is_due_today(): void
     {
         $frequencyIsQ7DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -267,8 +255,7 @@ final class PrescriptionsIsDueTest extends TestCase
         $this->assertTrue($prescription->isDueToday());
     }
 
-    #[Test]
-    public function it_determines_that_a_prescription_with_a_q7d_frequency_that_started_not_7n_days_ago_is_not_due_today(): void
+    public function test_it_determines_that_a_prescription_with_a_q7d_frequency_that_started_not_7n_days_ago_is_not_due_today(): void
     {
         $frequencyIsQ7DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,

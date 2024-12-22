@@ -4,7 +4,6 @@ namespace Tests\Feature\Maintenance;
 
 use App\Enums\Ability;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
@@ -16,21 +15,18 @@ final class UnrecognizedPatientsControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessUnrecognizedPatients(): void
+    public function test_un_authenticated_users_cant_access_unrecognized_patients(): void
     {
         $this->get(route('maintenance.unrecognized-patients'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessUnrecognizedPatients(): void
+    public function test_un_authorized_users_cant_access_unrecognized_patients(): void
     {
         $me = $this->createTeamUser();
         $this->actingAs($me->user)->get(route('maintenance.unrecognized-patients'))->assertForbidden();
     }
 
-    #[Test]
-    public function itDisplaysTheUnrecognizedPatientsPage(): void
+    public function test_it_displays_the_unrecognized_patients_page(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_ACCOUNT_MAINTENANCE->value);

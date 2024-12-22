@@ -9,7 +9,6 @@ use App\Models\Recheck;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;
@@ -22,8 +21,7 @@ final class PastDueTasksTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function itNotifiesIfThePatientHasPastDueTasks(): void
+    public function test_it_notifies_if_the_patient_has_past_due_tasks(): void
     {
         Event::fake();
 
@@ -49,8 +47,7 @@ final class PastDueTasksTest extends TestCase
         );
     }
 
-    #[Test]
-    public function itDoesNotNotifyIfThePatientDoesNotHavePastDueTasks(): void
+    public function test_it_does_not_notify_if_the_patient_does_not_have_past_due_tasks(): void
     {
         Event::fake();
 

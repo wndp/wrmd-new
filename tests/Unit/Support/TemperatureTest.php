@@ -4,7 +4,6 @@ namespace Tests\Unit\Support;
 
 use App\Support\Temperature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreatesUiBehavior;
 
@@ -13,8 +12,7 @@ final class TemperatureTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function itConvertsTemperaturesIntoCelsius(): void
+    public function test_it_converts_temperatures_into_celsius(): void
     {
         [$cTemperatureId, $fTemperatureId, $kTemperatureId] = $this->temperatureUnits();
 
@@ -23,8 +21,7 @@ final class TemperatureTest extends TestCase
         $this->assertSame(-263.15, Temperature::toCelsius(10, $kTemperatureId));
     }
 
-    #[Test]
-    public function itConvertsTemperaturesIntoFahrenheit(): void
+    public function test_it_converts_temperatures_into_fahrenheit(): void
     {
         [$cTemperatureId, $fTemperatureId, $kTemperatureId] = $this->temperatureUnits();
 
@@ -33,8 +30,7 @@ final class TemperatureTest extends TestCase
         $this->assertSame(-441.67, Temperature::toFahrenheit(10, $kTemperatureId));
     }
 
-    #[Test]
-    public function itConvertsTemperaturesIntoKelvin(): void
+    public function test_it_converts_temperatures_into_kelvin(): void
     {
         [$cTemperatureId, $fTemperatureId, $kTemperatureId] = $this->temperatureUnits();
 

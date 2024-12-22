@@ -4,7 +4,6 @@ namespace Tests\Unit\Support;
 
 use App\Support\Weight;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreatesUiBehavior;
 
@@ -13,8 +12,7 @@ final class WeightTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function itConvertsWeightsIntoKilograms(): void
+    public function test_it_converts_weights_into_kilograms(): void
     {
         [$kgWeightId, $gWeightId, $lbWeightId, $ozWeightId] = $this->weightUnits();
 
@@ -24,8 +22,7 @@ final class WeightTest extends TestCase
         $this->assertSame(0.2835, Weight::toKilograms(10, $ozWeightId));
     }
 
-    #[Test]
-    public function itConvertsWeightsIntoGrams(): void
+    public function test_it_converts_weights_into_grams(): void
     {
         [$kgWeightId, $gWeightId, $lbWeightId, $ozWeightId] = $this->weightUnits();
 
@@ -35,8 +32,7 @@ final class WeightTest extends TestCase
         $this->assertSame(283.50, Weight::toGrams(10, $ozWeightId));
     }
 
-    #[Test]
-    public function itConvertsWeightsIntoPounds(): void
+    public function test_it_converts_weights_into_pounds(): void
     {
         [$kgWeightId, $gWeightId, $lbWeightId, $ozWeightId] = $this->weightUnits();
 
@@ -46,8 +42,7 @@ final class WeightTest extends TestCase
         $this->assertSame(0.625, Weight::toPounds(10, $ozWeightId));
     }
 
-    #[Test]
-    public function itConvertsWeightsIntoOunces(): void
+    public function test_it_converts_weights_into_ounces(): void
     {
         [$kgWeightId, $gWeightId, $lbWeightId, $ozWeightId] = $this->weightUnits();
 

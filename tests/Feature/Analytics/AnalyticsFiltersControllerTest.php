@@ -4,7 +4,6 @@ namespace Tests\Feature\Analytics;
 
 use App\Analytics\AnalyticFiltersStore;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreatesTeamUser;
 
@@ -13,8 +12,7 @@ final class AnalyticsFiltersControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function itUpdatesTheFiltersToGenerateAnalyticsWith(): void
+    public function test_it_updates_the_filters_to_generate_analytics_with(): void
     {
         AnalyticFiltersStore::destroy();
 

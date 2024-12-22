@@ -12,7 +12,6 @@ use App\Support\Wrmd;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;
@@ -26,8 +25,7 @@ final class GetPrescriptionDailyTasksTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function nothingIsReturnedIfPrescriptionAreNotIncluded(): void
+    public function test_nothing_is_returned_if_prescription_are_not_included(): void
     {
         $result = GetPrescriptionDailyTasks::handle(
             new DailyTasksFilters(['include' => '']),
@@ -37,8 +35,7 @@ final class GetPrescriptionDailyTasksTest extends TestCase
         $this->assertNull($result);
     }
 
-    #[Test]
-    public function itGetsAPatientsPrescription(): void
+    public function test_it_gets_a_patients_prescription(): void
     {
         $frequencyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,

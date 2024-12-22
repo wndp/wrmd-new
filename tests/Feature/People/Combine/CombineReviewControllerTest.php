@@ -5,7 +5,6 @@ namespace Tests\Feature\People\Combine;
 use App\Enums\Role;
 use App\Models\Person;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreatesTeamUser;
@@ -16,15 +15,13 @@ final class CombineReviewControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessReviewPeople(): void
+    public function test_un_authenticated_users_cant_access_review_people(): void
     {
         $person = Person::factory()->create();
         $this->get(route('people.combine.review', $person))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessReviewPeople(): void
+    public function test_un_authorized_users_cant_access_review_people(): void
     {
         $me = $this->createTeamUser(role: Role::USER);
         $person = Person::factory()->create();
@@ -32,8 +29,7 @@ final class CombineReviewControllerTest extends TestCase
         $this->actingAs($me->user)->get(route('people.combine.review', $person))->assertForbidden();
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAPersonBeforeReviewing(): void
+    public function test_it_validates_ownership_of_a_person_before_reviewing(): void
     {
         $me = $this->createTeamUser();
         $person = Person::factory()->create();
@@ -42,8 +38,7 @@ final class CombineReviewControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function aFieldsArrayIsRequiredToSearchForMatches(): void
+    public function test_a_fields_array_is_required_to_search_for_matches(): void
     {
         $me = $this->createTeamUser();
         $person = Person::factory()->create(['team_id' => $me->team]);
@@ -58,8 +53,7 @@ final class CombineReviewControllerTest extends TestCase
             ->assertInvalid(['fields' => 'The fields field must be an array.']);
     }
 
-    #[Test]
-    public function itDisplaysTheCombineReviewPage(): void
+    public function test_it_displays_the_combine_review_page(): void
     {
         $me = $this->createTeamUser();
         $people = Person::factory()->count(2)->create([

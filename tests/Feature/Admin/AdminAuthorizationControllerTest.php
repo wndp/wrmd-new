@@ -5,7 +5,6 @@ namespace Tests\Feature\Admin;
 use App\Enums\Ability;
 use App\Enums\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Silber\Bouncer\Database\Ability as BouncerAbility;
 use Silber\Bouncer\Database\Role as BouncerRole;
@@ -17,22 +16,19 @@ final class AdminAuthorizationControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessAuthorization(): void
+    public function test_un_authenticated_users_cant_access_authorization(): void
     {
         $this->get(route('admin.authorization'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessAuthorization(): void
+    public function test_un_authorized_users_cant_access_authorization(): void
     {
         $me = $this->createTeamUser();
 
         $this->actingAs($me->user)->get(route('admin.authorization'))->assertForbidden();
     }
 
-    #[Test]
-    public function itDisplaysTheAuthorizationIndexPage(): void
+    public function test_it_displays_the_authorization_index_page(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -45,8 +41,7 @@ final class AdminAuthorizationControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function itFailsValidationWhenTryingToUpdateAuthorizations(): void
+    public function test_it_fails_validation_when_trying_to_update_authorizations(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -58,8 +53,7 @@ final class AdminAuthorizationControllerTest extends TestCase
             ->assertInvalid([Role::ADMIN->value => 'The ADMIN allowed abilities must be an array.']);
     }
 
-    #[Test]
-    public function itUpdatesTheAllowedAuthorizations(): void
+    public function test_it_updates_the_allowed_authorizations(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -80,8 +74,7 @@ final class AdminAuthorizationControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itUpdatesTheForbiddenAuthorizations(): void
+    public function test_it_updates_the_forbidden_authorizations(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);

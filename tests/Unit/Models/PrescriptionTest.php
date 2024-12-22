@@ -9,7 +9,6 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreatesTeamUser;
@@ -22,8 +21,7 @@ final class PrescriptionTest extends TestCase
     use GetsCareLogs;
     use RefreshDatabase;
 
-    #[Test]
-    public function aPrescriptionIsRevisionable(): void
+    public function test_a_prescription_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -33,8 +31,7 @@ final class PrescriptionTest extends TestCase
         );
     }
 
-    #[Test]
-    public function itFiltersPrescriptionsIntoTheCareLog(): void
+    public function test_it_filters_prescriptions_into_the_care_log(): void
     {
         $me = $this->createTeamUser();
         Auth::loginUsingId($me->user->id);
@@ -54,8 +51,7 @@ final class PrescriptionTest extends TestCase
         $this->assertEquals('2017-04-08 17:00:00', $logs[0]->logged_at_date_time->toDateTimeString());
     }
 
-    #[Test]
-    public function ifAPrescriptionsPatientIsLockedThenItCanNotBeUpdated(): void
+    public function test_if_a_prescriptions_patient_is_locked_then_it_can_not_be_updated(): void
     {
         $patient = Patient::factory()->create();
         $prescription = Prescription::factory()->create(['patient_id' => $patient->id, 'drug' => 'OLD']);
@@ -73,8 +69,7 @@ final class PrescriptionTest extends TestCase
         $this->assertEquals('OLD', $prescription->fresh()->drug);
     }
 
-    #[Test]
-    public function ifAPrescriptionsPatientIsLockedThenItCanNotBeCreated(): void
+    public function test_if_a_prescriptions_patient_is_locked_then_it_can_not_be_created(): void
     {
         $prescription = Prescription::factory()->create([
             'patient_id' => Patient::factory()->create(['locked_at' => Carbon::now()])->id,
@@ -83,8 +78,7 @@ final class PrescriptionTest extends TestCase
         $this->assertFalse($prescription->exists);
     }
 
-    #[Test]
-    public function ifAPrescriptionsPatientIsLockedThenItCanNotBeDeleted(): void
+    public function test_if_a_prescriptions_patient_is_locked_then_it_can_not_be_deleted(): void
     {
         $patient = Patient::factory()->create();
         $prescription = Prescription::factory()->create(['patient_id' => $patient->id]);
@@ -96,8 +90,7 @@ final class PrescriptionTest extends TestCase
         $this->assertDatabaseHas('prescriptions', ['id' => $prescription->id, 'deleted_at' => null]);
     }
 
-    #[Test]
-    public function whenAPatientIsReplicatedSoAreThePrescriptions(): void
+    public function test_when_a_patient_is_replicated_so_are_the_prescriptions(): void
     {
         $patient = Patient::factory()->create();
 

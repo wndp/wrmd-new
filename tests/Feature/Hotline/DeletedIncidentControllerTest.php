@@ -6,7 +6,6 @@ use App\Enums\Ability;
 use App\Models\Incident;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
@@ -21,8 +20,7 @@ final class DeletedIncidentControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function anIncidentNumberIsRequiredToRestoreAnIncident(): void
+    public function test_an_incident_number_is_required_to_restore_an_incident(): void
     {
         $me = $this->createTeamUser();
         $incident = Incident::factory()->create(['team_id' => $me->team->id]);
@@ -35,8 +33,7 @@ final class DeletedIncidentControllerTest extends TestCase
             ->assertInvalid(['incident_number' => 'The provided incident number does not match the displayed incident number.']);
     }
 
-    #[Test]
-    public function theAuthenticatedUsersPasswordIsRequiredToRestoreAnIncident(): void
+    public function test_the_authenticated_users_password_is_required_to_restore_an_incident(): void
     {
         $me = $this->createTeamUser();
         $incident = Incident::factory()->create(['team_id' => $me->team->id]);
@@ -49,8 +46,7 @@ final class DeletedIncidentControllerTest extends TestCase
             ->assertInvalid(['password' => 'The password is incorrect.']);
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAnIncidentBeforeRestoreIt(): void
+    public function test_it_validates_ownership_of_an_incident_before_restore_it(): void
     {
         $me = $this->createTeamUser();
         $incident = Incident::factory()->create();
@@ -63,8 +59,7 @@ final class DeletedIncidentControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function anIncidentCanBeRestored(): void
+    public function test_an_incident_can_be_restored(): void
     {
         $me = $this->createTeamUser();
         $incident = Incident::factory()->create(['team_id' => $me->team->id]);

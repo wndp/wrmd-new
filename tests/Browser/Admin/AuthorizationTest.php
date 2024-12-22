@@ -5,7 +5,6 @@ namespace Tests\Browser\Admin;
 use App\Enums\Ability;
 use App\Enums\Role;
 use Illuminate\Foundation\Testing\DatabaseTruncation;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Silber\Bouncer\Database\Ability as BouncerAbility;
 use Silber\Bouncer\Database\Role as BouncerRole;
@@ -17,8 +16,7 @@ final class AuthorizationTest extends DuskTestCase
     use CreatesTeamUser;
     use DatabaseTruncation;
 
-    #[Test]
-    public function saveAllowedAbilitiesToAvailableRoles(): void
+    public function test_save_allowed_abilities_to_available_roles(): void
     {
         $me = $this->createTeamUser(role: Role::WNDP_SUPER_ADMIN);
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);

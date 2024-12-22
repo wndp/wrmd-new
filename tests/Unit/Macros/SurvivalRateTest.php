@@ -3,13 +3,11 @@
 namespace Tests\Unit\Macros;
 
 use Illuminate\Support\Number;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 final class SurvivalRateTest extends TestCase
 {
-    #[Test]
-    public function itCalculatesTheSurvivalRateFromAnObjectOfDispositionAttributes(): void
+    public function test_it_calculates_the_survival_rate_from_an_object_of_disposition_attributes(): void
     {
         $result = Number::survivalRate((object) [
             'pending' => 10,
@@ -19,8 +17,7 @@ final class SurvivalRateTest extends TestCase
         $this->assertSame(100.0, $result);
     }
 
-    #[Test]
-    public function itCalculatesTheSurvivalRateFromACollectionOfObjectsWithDispositionAttributes(): void
+    public function test_it_calculates_the_survival_rate_from_a_collection_of_objects_with_disposition_attributes(): void
     {
         $result = Number::survivalRate((object) collect([
             [
@@ -36,8 +33,7 @@ final class SurvivalRateTest extends TestCase
         $this->assertSame(100.0, $result);
     }
 
-    #[Test]
-    public function doaIsSubtractedFromTheTotal(): void
+    public function test_doa_is_subtracted_from_the_total(): void
     {
         $result = Number::survivalRate((object) [
             'doa' => 2,
@@ -48,8 +44,7 @@ final class SurvivalRateTest extends TestCase
         $this->assertSame(100.0, $result);
     }
 
-    #[Test]
-    public function pendingIsSummedIntoTheNumerator(): void
+    public function test_pending_is_summed_into_the_numerator(): void
     {
         $result = Number::survivalRate((object) [
             'pending' => 10,
@@ -59,8 +54,7 @@ final class SurvivalRateTest extends TestCase
         $this->assertSame(100.0, $result);
     }
 
-    #[Test]
-    public function releasedIsSummedIntoTheNumerator(): void
+    public function test_released_is_summed_into_the_numerator(): void
     {
         $result = Number::survivalRate((object) [
             'released' => 10,
@@ -70,8 +64,7 @@ final class SurvivalRateTest extends TestCase
         $this->assertSame(100.0, $result);
     }
 
-    #[Test]
-    public function transferredIsSummedIntoTheNumerator(): void
+    public function test_transferred_is_summed_into_the_numerator(): void
     {
         $result = Number::survivalRate((object) [
             'transferred' => 10,
@@ -81,8 +74,7 @@ final class SurvivalRateTest extends TestCase
         $this->assertSame(100.0, $result);
     }
 
-    #[Test]
-    public function diedIn24IsSummedIntoTheDenominator(): void
+    public function test_died_in24_is_summed_into_the_denominator(): void
     {
         $result = Number::survivalRate((object) [
             'died_in_24' => 2,
@@ -93,8 +85,7 @@ final class SurvivalRateTest extends TestCase
         $this->assertSame(100.0, $result);
     }
 
-    #[Test]
-    public function euthanizedIn24IsSummedIntoTheDenominator(): void
+    public function test_euthanized_in24_is_summed_into_the_denominator(): void
     {
         $result = Number::survivalRate((object) [
             'euthanized_in_24' => 2,
@@ -105,8 +96,7 @@ final class SurvivalRateTest extends TestCase
         $this->assertSame(100.0, $result);
     }
 
-    #[Test]
-    public function diedAreDividedInTheCalculation(): void
+    public function test_died_are_divided_in_the_calculation(): void
     {
         $result = Number::survivalRate((object) [
             'pending' => 8,
@@ -116,8 +106,7 @@ final class SurvivalRateTest extends TestCase
         $this->assertSame(80.0, $result);
     }
 
-    #[Test]
-    public function diedAreAlwaysDividedInTheCalculation(): void
+    public function test_died_are_always_divided_in_the_calculation(): void
     {
         $result = Number::survivalRate((object) [
             'pending' => 8,
@@ -127,8 +116,7 @@ final class SurvivalRateTest extends TestCase
         $this->assertSame(80.0, $result);
     }
 
-    #[Test]
-    public function euthanizedAreDividedInTheCalculation(): void
+    public function test_euthanized_are_divided_in_the_calculation(): void
     {
         $result = Number::survivalRate((object) [
             'pending' => 8,
@@ -138,8 +126,7 @@ final class SurvivalRateTest extends TestCase
         $this->assertSame(80.0, $result);
     }
 
-    #[Test]
-    public function euthanizedAreAlwaysDividedInTheCalculation(): void
+    public function test_euthanized_are_always_divided_in_the_calculation(): void
     {
         $result = Number::survivalRate((object) [
             'pending' => 8,
@@ -149,8 +136,7 @@ final class SurvivalRateTest extends TestCase
         $this->assertSame(80.0, $result);
     }
 
-    #[Test]
-    public function itCalculatesTheSurvivalRateIncludingTheFirst24Hours(): void
+    public function test_it_calculates_the_survival_rate_including_the_first24_hours(): void
     {
         $result = Number::survivalRate((object) [
             'relased' => 1,
@@ -165,8 +151,7 @@ final class SurvivalRateTest extends TestCase
         $this->assertSame(29.41, $result);
     }
 
-    #[Test]
-    public function itCalculatesTheSurvivalRateAfterTheFirst24Hours(): void
+    public function test_it_calculates_the_survival_rate_after_the_first24_hours(): void
     {
         $result = Number::survivalRate((object) [
             'relased' => 1,

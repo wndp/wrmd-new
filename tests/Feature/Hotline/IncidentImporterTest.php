@@ -12,7 +12,6 @@ use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;
@@ -26,8 +25,7 @@ final class IncidentImporterTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function itImportsASpreadsheetOfNewHotlineIncidentData(): void
+    public function test_it_imports_a_spreadsheet_of_new_hotline_incident_data(): void
     {
         $hotlineWildlifeCategoryIsInjuredId = $this->createUiBehavior(
             AttributeOptionName::HOTLINE_WILDLIFE_CATEGORIES,

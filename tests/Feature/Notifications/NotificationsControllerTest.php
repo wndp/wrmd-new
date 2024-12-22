@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Notifications;
 
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreatesTeamUser;
 
@@ -10,14 +9,12 @@ final class NotificationsControllerTest extends TestCase
 {
     use CreatesTeamUser;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessNotifications(): void
+    public function test_un_authenticated_users_cant_access_notifications(): void
     {
         $this->get(route('notifications.index'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function itDisplaysTheNotificationsIndexPage(): void
+    public function test_it_displays_the_notifications_index_page(): void
     {
         $me = $this->createTeamUser();
 

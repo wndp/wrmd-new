@@ -6,7 +6,6 @@ use App\Enums\Ability;
 use App\Enums\SettingKey;
 use App\Models\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
@@ -20,16 +19,14 @@ final class SubAccountsSettingsControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessSubAccountsSettings(): void
+    public function test_un_authenticated_users_cant_access_sub_accounts_settings(): void
     {
         $team = Team::factory()->create();
 
         $this->get(route('sub_accounts.settings.edit', $team))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessSubAccountsSettings(): void
+    public function test_un_authorized_users_cant_access_sub_accounts_settings(): void
     {
         $me = $this->createTeamUser();
         $team = Team::factory()->create();
@@ -37,8 +34,7 @@ final class SubAccountsSettingsControllerTest extends TestCase
         $this->actingAs($me->user)->get(route('sub_accounts.settings.edit', $team))->assertForbidden();
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfASubAccountBeforeDisplayingTheSettingsPage(): void
+    public function test_it_validates_ownership_of_a_sub_account_before_displaying_the_settings_page(): void
     {
         $me = $this->createTeamUser([
             'is_master_account' => true,
@@ -52,8 +48,7 @@ final class SubAccountsSettingsControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function itDisplaysTheSubAccountSettingsEditPage(): void
+    public function test_it_displays_the_sub_account_settings_edit_page(): void
     {
         $me = $this->createTeamUser([
             'is_master_account' => true,
@@ -73,8 +68,7 @@ final class SubAccountsSettingsControllerTest extends TestCase
             );
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAnSubAccountBeforeUpdatingTheSettings(): void
+    public function test_it_validates_ownership_of_an_sub_account_before_updating_the_settings(): void
     {
         $me = $this->createTeamUser([
             'is_master_account' => true,
@@ -88,8 +82,7 @@ final class SubAccountsSettingsControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function aSubAccountIsUpdatedInStorage(): void
+    public function test_a_sub_account_is_updated_in_storage(): void
     {
         $me = $this->createTeamUser([
             'is_master_account' => true,

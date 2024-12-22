@@ -5,7 +5,6 @@ namespace Tests\Feature\Admin;
 use App\Enums\Ability;
 use App\Models\Testimonial;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\CreatesTeamUser;
@@ -15,22 +14,19 @@ final class AccountsTestimonialsControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessTestimonials(): void
+    public function test_un_authenticated_users_cant_access_testimonials(): void
     {
         $this->get(route('admin.testimonials.index'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessTestimonials(): void
+    public function test_un_authorized_users_cant_access_testimonials(): void
     {
         $me = $this->createTeamUser();
 
         $this->actingAs($me->user)->get(route('admin.testimonials.index'))->assertForbidden();
     }
 
-    #[Test]
-    public function itDisplaysTheTestimonialsIndexPage(): void
+    public function test_it_displays_the_testimonials_index_page(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -43,8 +39,7 @@ final class AccountsTestimonialsControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function itDisplaysThePageToCreateATestimonial(): void
+    public function test_it_displays_the_page_to_create_a_testimonial(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -58,8 +53,7 @@ final class AccountsTestimonialsControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function dataIsRequiredToStoreANewTestimonial(): void
+    public function test_data_is_required_to_store_a_new_testimonial(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -72,8 +66,7 @@ final class AccountsTestimonialsControllerTest extends TestCase
             ]);
     }
 
-    #[Test]
-    public function aNewTestimonialIsSavedToStorage(): void
+    public function test_a_new_testimonial_is_saved_to_storage(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -92,8 +85,7 @@ final class AccountsTestimonialsControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itDisplaysThePageToEditATestimonial(): void
+    public function test_it_displays_the_page_to_edit_a_testimonial(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -108,8 +100,7 @@ final class AccountsTestimonialsControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function dataIsRequiredToUpdateANewTestimonial(): void
+    public function test_data_is_required_to_update_a_new_testimonial(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -123,8 +114,7 @@ final class AccountsTestimonialsControllerTest extends TestCase
             ]);
     }
 
-    #[Test]
-    public function aTestimonialIsUpdatedInStorage(): void
+    public function test_a_testimonial_is_updated_in_storage(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -145,8 +135,7 @@ final class AccountsTestimonialsControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itDeletesATestimonial(): void
+    public function test_it_deletes_a_testimonial(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);

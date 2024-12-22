@@ -6,7 +6,6 @@ use App\Enums\Role;
 use App\Jobs\UnSpoofTeams;
 use App\Models\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreatesTeamUser;
 
@@ -15,8 +14,7 @@ final class UnSpoofTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function usersThatAreCurrentlySpoofingAreNotUnspoofed(): void
+    public function test_users_that_are_currently_spoofing_are_not_unspoofed(): void
     {
         $me = $this->createTeamUser();
         $team = Team::factory()->create();
@@ -29,8 +27,7 @@ final class UnSpoofTest extends TestCase
         $this->assertTrue($me->user->currentTeam->id === $team->id);
     }
 
-    #[Test]
-    public function onlyDevinAndRachelAreUnspoofed(): void
+    public function test_only_devin_and_rachel_are_unspoofed(): void
     {
         // $me = $this->createTeamUser(['id' => 1], ['id' => 143]);
         // $you = $this->createTeamUser(['id' => 2]);

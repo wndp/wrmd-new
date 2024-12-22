@@ -5,7 +5,6 @@ namespace Tests\Feature\SubAccounts;
 use App\Enums\Ability;
 use App\Models\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
@@ -19,22 +18,19 @@ final class SubAccountsControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessSubAccounts(): void
+    public function test_un_authenticated_users_cant_access_sub_accounts(): void
     {
         $this->get(route('sub_accounts.index'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessSubAccounts(): void
+    public function test_un_authorized_users_cant_access_sub_accounts(): void
     {
         $me = $this->createTeamUser();
 
         $this->actingAs($me->user)->get(route('sub_accounts.index'))->assertForbidden();
     }
 
-    #[Test]
-    public function itDisplaysTheSubAccountIndexPage(): void
+    public function test_it_displays_the_sub_account_index_page(): void
     {
         $me = $this->createTeamUser([
             'is_master_account' => true,
@@ -51,8 +47,7 @@ final class SubAccountsControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function itDisplaysThePageToCreateANewSubAccount(): void
+    public function test_it_displays_the_page_to_create_a_new_sub_account(): void
     {
         $me = $this->createTeamUser([
             'is_master_account' => true,
@@ -68,8 +63,7 @@ final class SubAccountsControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function validDataIsRequiredToCreateASubAccount(): void
+    public function test_valid_data_is_required_to_create_a_sub_account(): void
     {
         $me = $this->createTeamUser([
             'is_master_account' => true,
@@ -92,8 +86,7 @@ final class SubAccountsControllerTest extends TestCase
             ->assertInvalid(['phone' => 'The phone field must be a valid number.']);
     }
 
-    #[Test]
-    public function aNewSubAccountIsSavedToStorage(): void
+    public function test_a_new_sub_account_is_saved_to_storage(): void
     {
         $me = $this->createTeamUser([
             'is_master_account' => true,
@@ -130,8 +123,7 @@ final class SubAccountsControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfASubAccountBeforeDisplayingThePageToShowIt(): void
+    public function test_it_validates_ownership_of_a_sub_account_before_displaying_the_page_to_show_it(): void
     {
         $me = $this->createTeamUser([
             'is_master_account' => true,
@@ -145,8 +137,7 @@ final class SubAccountsControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfASubAccountBeforeDisplayingThePageToEditIt(): void
+    public function test_it_validates_ownership_of_a_sub_account_before_displaying_the_page_to_edit_it(): void
     {
         $me = $this->createTeamUser([
             'is_master_account' => true,
@@ -160,8 +151,7 @@ final class SubAccountsControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function itDisplaysThePageToEditAnIncident(): void
+    public function test_it_displays_the_page_to_edit_an_incident(): void
     {
         $me = $this->createTeamUser([
             'is_master_account' => true,
@@ -179,8 +169,7 @@ final class SubAccountsControllerTest extends TestCase
             );
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAnSubAccountBeforeUpdatingIt(): void
+    public function test_it_validates_ownership_of_an_sub_account_before_updating_it(): void
     {
         $me = $this->createTeamUser([
             'is_master_account' => true,
@@ -204,8 +193,7 @@ final class SubAccountsControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function validDataIsRequiredToUpdateASubAccount(): void
+    public function test_valid_data_is_required_to_update_a_sub_account(): void
     {
         $me = $this->createTeamUser([
             'is_master_account' => true,
@@ -230,8 +218,7 @@ final class SubAccountsControllerTest extends TestCase
             ->assertInvalid(['phone' => 'The phone field must be a valid number.']);
     }
 
-    #[Test]
-    public function aSubAccountIsUpdatedInStorage(): void
+    public function test_a_sub_account_is_updated_in_storage(): void
     {
         $me = $this->createTeamUser([
             'is_master_account' => true,

@@ -41,8 +41,7 @@ final class PatientTest extends TestCase
 
     public $connectionsToTransact = ['singlestore', 'wildalert'];
 
-    #[Test]
-    public function aPatientHasExams(): void
+    public function test_a_patient_has_exams(): void
     {
         $patient = Patient::factory()->make();
 
@@ -130,8 +129,7 @@ final class PatientTest extends TestCase
         $this->assertInstanceOf(LabToxicologyResult::class, $labReport->patient->labToxicologyResults->first());
     }
 
-    #[Test]
-    public function a_patient_belongs_to_many_locations(): void
+    public function test_a_patient_belongs_to_many_locations(): void
     {
         $patient = Patient::factory()->create();
         $locations = Location::factory()->count(3)->create();
@@ -143,8 +141,7 @@ final class PatientTest extends TestCase
         $this->assertInstanceOf(Location::class, $patient->locations->first());
     }
 
-    #[Test]
-    public function aPatientHasACommonNameFormattedAttribute(): void
+    public function test_a_patient_has_a_common_name_formatted_attribute(): void
     {
         Event::fake();
 
@@ -157,8 +154,7 @@ final class PatientTest extends TestCase
         });
     }
 
-    #[Test]
-    public function aPatientHasADaysInCareAttribute(): void
+    public function test_a_patient_has_a_days_in_care_attribute(): void
     {
         $pendingDispositionId = $this->pendingDispositionId();
 
@@ -173,8 +169,7 @@ final class PatientTest extends TestCase
         $this->assertSame(5, $patient->days_in_care);
     }
 
-    #[Test]
-    public function aPatientHasAnAppendedAdmittedAtForHumansAttribute(): void
+    public function test_a_patient_has_an_appended_admitted_at_for_humans_attribute(): void
     {
         $me = $this->createTeamUser();
         Auth::loginUsingId($me->user->id);
@@ -188,8 +183,7 @@ final class PatientTest extends TestCase
         $this->assertEquals('Mar 13, 2023 10:13 am', $patient->admitted_at_for_humans);
     }
 
-    #[Test]
-    public function aPatientIsRevisionable(): void
+    public function test_a_patient_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -294,16 +288,14 @@ final class PatientTest extends TestCase
     //     });
     // }
 
-    #[Test]
-    public function itDeterminesThatThePatientIsUnrecognizedIfTheTaxonIdIsNull(): void
+    public function test_it_determines_that_the_patient_is_unrecognized_if_the_taxon_id_is_null(): void
     {
         $patient = Patient::factory()->create(['taxon_id' => null]);
 
         $this->assertTrue($patient->isUnrecognized());
     }
 
-    #[Test]
-    public function itDeterminesThatThePatientIsNotUnrecognizedIfTheTaxonIdIsNullAndTheCommonNameIsAnExceptedUnidetifiedName(): void
+    public function test_it_determines_that_the_patient_is_not_unrecognized_if_the_taxon_id_is_null_and_the_common_name_is_an_excepted_unidetified_name(): void
     {
         $unidentified = Arr::random(['unknown', 'void']);
         $patient = Patient::factory()->create(['taxon_id' => null, 'common_name' => $unidentified]);
@@ -311,8 +303,7 @@ final class PatientTest extends TestCase
         $this->assertFalse($patient->isUnrecognized());
     }
 
-    #[Test]
-    public function aPatientCanScopePatientsThatAreUnrecognizedToWrmd(): void
+    public function test_a_patient_can_scope_patients_that_are_unrecognized_to_wrmd(): void
     {
         $patient = Patient::factory()->create(['taxon_id' => null]);
 
@@ -330,8 +321,7 @@ final class PatientTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function knownUnrecognizedPatientsAreNotScopped(): void
+    public function test_known_unrecognized_patients_are_not_scopped(): void
     {
         Patient::factory()->create(['common_name' => 'void']);
         Patient::factory()->create(['common_name' => 'UNBI']);
@@ -344,8 +334,7 @@ final class PatientTest extends TestCase
         $this->assertEmpty($result);
     }
 
-    #[Test]
-    public function knownMissidentifiedPatientsAreNotScopped(): void
+    public function test_known_missidentified_patients_are_not_scopped(): void
     {
         Patient::factory()->create(['common_name' => 'void']);
         Patient::factory()->create(['common_name' => 'UNBI']);
@@ -359,8 +348,7 @@ final class PatientTest extends TestCase
         $this->assertEmpty($result);
     }
 
-    #[Test]
-    public function taxonAlphaCodesAreNotMissidentified(): void
+    public function test_taxon_alpha_codes_are_not_missidentified(): void
     {
         $commonName = CommonName::factory()->create();
 
@@ -374,8 +362,7 @@ final class PatientTest extends TestCase
         $this->assertEmpty($result);
     }
 
-    #[Test]
-    public function commonNameAlphaCodesAreNotMissidentified(): void
+    public function test_common_name_alpha_codes_are_not_missidentified(): void
     {
         $taxonId = Taxon::factory()->create()->id;
 
@@ -394,8 +381,7 @@ final class PatientTest extends TestCase
         $this->assertEmpty($result);
     }
 
-    #[Test]
-    public function aPatientKnowsIfItIsLocked(): void
+    public function test_a_patient_knows_if_it_is_locked(): void
     {
         $patient = Patient::factory()->create();
         $this->assertNull($patient->locked_at);
@@ -404,8 +390,7 @@ final class PatientTest extends TestCase
         $this->assertNotNull($patient->locked_at);
     }
 
-    #[Test]
-    public function ifAPatientIsLockedThenItCanNotBeUpdated(): void
+    public function test_if_a_patient_is_locked_then_it_can_not_be_updated(): void
     {
         $patient = Patient::factory()->create(['locked_at' => Carbon::now(), 'common_name' => 'OLD']);
 

@@ -8,7 +8,6 @@ use App\Models\Patient;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreatesTeamUser;
@@ -20,8 +19,7 @@ final class ExamTest extends TestCase
     use GetsCareLogs;
     use RefreshDatabase;
 
-    #[Test]
-    public function examsAreFilteredIntoTheCareLog(): void
+    public function test_exams_are_filtered_into_the_care_log(): void
     {
         $me = $this->createTeamUser();
         Auth::loginUsingId($me->user->id);
@@ -42,8 +40,7 @@ final class ExamTest extends TestCase
         $this->assertEquals('2017-04-08 17:00:00', $logs[0]->logged_at_date_time->toDateTimeString());
     }
 
-    #[Test]
-    public function anExamIsRevisionable(): void
+    public function test_an_exam_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -53,8 +50,7 @@ final class ExamTest extends TestCase
         );
     }
 
-    #[Test]
-    public function ifAnExamsPatientIsLockedThenItCanNotBeUpdated(): void
+    public function test_if_an_exams_patient_is_locked_then_it_can_not_be_updated(): void
     {
         $patient = Patient::factory()->create();
         $exam = Exam::factory()->create(['patient_id' => $patient->id, 'weight' => 1]);
@@ -72,8 +68,7 @@ final class ExamTest extends TestCase
         $this->assertEquals(1, $exam->fresh()->weight);
     }
 
-    #[Test]
-    public function ifAnExamsPatientIsLockedThenItCanNotBeCreated(): void
+    public function test_if_an_exams_patient_is_locked_then_it_can_not_be_created(): void
     {
         $exam = Exam::factory()->create([
             'patient_id' => Patient::factory()->create(['locked_at' => Carbon::now()])->id,
@@ -82,8 +77,7 @@ final class ExamTest extends TestCase
         $this->assertFalse($exam->exists);
     }
 
-    #[Test]
-    public function ifAnExamsPatientIsLockedThenItCanNotBeDeleted(): void
+    public function test_if_an_exams_patient_is_locked_then_it_can_not_be_deleted(): void
     {
         $patient = Patient::factory()->create();
         $exam = Exam::factory()->create(['patient_id' => $patient->id]);

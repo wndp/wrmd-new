@@ -9,7 +9,6 @@ use App\Support\DailyTasksFilters;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;
@@ -23,16 +22,14 @@ final class DailyTasksCollectionTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function dailyTaskFiltersAreRequiredToCollectDailyTasks(): void
+    public function test_daily_task_filters_are_required_to_collect_daily_tasks(): void
     {
         $this->expectException(\TypeError::class);
 
         DailyTasksCollection::make()->withFilters([]);
     }
 
-    #[Test]
-    public function itGetsAnAccountsDailyTasks(): void
+    public function test_it_gets_an_accounts_daily_tasks(): void
     {
         $pendingDispositionId = $this->pendingDispositionId();
 
@@ -64,8 +61,7 @@ final class DailyTasksCollectionTest extends TestCase
         $this->assertSame($recheck->id, $onlyTask['type_id']);
     }
 
-    #[Test]
-    public function itGetsAPatientsDailyTasks(): void
+    public function test_it_gets_a_patients_daily_tasks(): void
     {
         $pendingDispositionId = $this->pendingDispositionId();
 
@@ -89,8 +85,7 @@ final class DailyTasksCollectionTest extends TestCase
         $this->assertSame($recheck->id, $dailyTasks->first()['type_id']);
     }
 
-    #[Test]
-    public function itGetsAPatientsPastDueDailyTasks(): void
+    public function test_it_gets_a_patients_past_due_daily_tasks(): void
     {
         $pendingDispositionId = $this->pendingDispositionId();
 
@@ -109,8 +104,7 @@ final class DailyTasksCollectionTest extends TestCase
         $this->assertSame($recheck->id, $pastDue->first()['tasks']->first()['type_id']);
     }
 
-    #[Test]
-    public function itGetsDailyTasksForPatientsInAnyLocation(): void
+    public function test_it_gets_daily_tasks_for_patients_in_any_location(): void
     {
         $pendingDispositionId = $this->pendingDispositionId();
 
@@ -144,8 +138,7 @@ final class DailyTasksCollectionTest extends TestCase
         $this->assertSame($location->enclosure, $patient['enclosure']);
     }
 
-    #[Test]
-    public function itGetsDailyTasksForPatientsInASpecificFacility(): void
+    public function test_it_gets_daily_tasks_for_patients_in_a_specific_facility(): void
     {
         $pendingDispositionId = $this->pendingDispositionId();
         [$clinicId] = $this->patientLocationFacilitiesIds();

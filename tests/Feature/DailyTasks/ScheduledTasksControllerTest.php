@@ -5,7 +5,6 @@ namespace Tests\Feature\DailyTasks;
 use App\Enums\Ability;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
@@ -19,22 +18,19 @@ final class ScheduledTasksControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessScheduledTasksPage(): void
+    public function test_un_authenticated_users_cant_access_scheduled_tasks_page(): void
     {
         $this->get(route('patients.scheduled-tasks.edit'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessScheduledTasksPage(): void
+    public function test_un_authorized_users_cant_access_scheduled_tasks_page(): void
     {
         $me = $this->createTeamUser();
 
         $this->actingAs($me->user)->get(route('patients.scheduled-tasks.edit'))->assertForbidden();
     }
 
-    #[Test]
-    public function itDisplaysTheScheduledTasksEditPage(): void
+    public function test_it_displays_the_scheduled_tasks_edit_page(): void
     {
         $me = $this->createTeamUser();
 

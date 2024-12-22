@@ -51,8 +51,7 @@ final class LocationTest extends TestCase
     //     $this->assertEquals('ICU', $location->location);
     // }
 
-    #[Test]
-    public function a_location_is_revisionable(): void
+    public function test_a_location_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -62,14 +61,12 @@ final class LocationTest extends TestCase
         );
     }
 
-    #[Test]
-    public function a_location_belongs_to_a_team(): void
+    public function test_a_location_belongs_to_a_team(): void
     {
         $this->assertInstanceOf(Team::class, Location::factory()->create()->team);
     }
 
-    #[Test]
-    public function a_location_belongs_to_many_patients(): void
+    public function test_a_location_belongs_to_many_patients(): void
     {
         $location = Location::factory()->create();
         $patients = Patient::factory()->count(3)->create();
@@ -81,8 +78,7 @@ final class LocationTest extends TestCase
         $this->assertInstanceOf(Patient::class, $location->patients->first());
     }
 
-    #[Test]
-    public function a_location_knows_its_current_patients(): void
+    public function test_a_location_knows_its_current_patients(): void
     {
         $pendingDispositionId = $this->pendingDispositionId();
 
@@ -110,8 +106,7 @@ final class LocationTest extends TestCase
         $this->assertContains($admission2->patient_id, $currentPatients->pluck('id'));
     }
 
-    #[Test]
-    public function aLocationHasAFormattedLocation(): void
+    public function test_a_location_has_a_formatted_location(): void
     {
         [$clinicId, $homeCareId] = $this->patientLocationFacilitiesIds();
 

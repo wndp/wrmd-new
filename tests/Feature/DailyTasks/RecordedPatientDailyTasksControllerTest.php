@@ -12,7 +12,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
@@ -28,8 +27,7 @@ final class RecordedPatientDailyTasksControllerTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantRecordPatientDailyTasks(): void
+    public function test_un_authenticated_users_cant_record_patient_daily_tasks(): void
     {
         $patient = Patient::factory()->create();
 
@@ -37,8 +35,7 @@ final class RecordedPatientDailyTasksControllerTest extends TestCase
             ->assertUnauthorized();
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantRecordPatientDailyTasks(): void
+    public function test_un_authorized_users_cant_record_patient_daily_tasks(): void
     {
         $me = $this->createTeamUser();
         $patient = Patient::factory()->create();
@@ -48,8 +45,7 @@ final class RecordedPatientDailyTasksControllerTest extends TestCase
             ->assertForbidden();
     }
 
-    #[Test]
-    public function itStoresANewPatientDailyTaskRecordInStorage(): void
+    public function test_it_stores_a_new_patient_daily_task_record_in_storage(): void
     {
         $date = Carbon::now();
         $me = $this->createTeamUser();
@@ -78,8 +74,7 @@ final class RecordedPatientDailyTasksControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itRemovesARecordedPatientDailyTaskFromStorage(): void
+    public function test_it_removes_a_recorded_patient_daily_task_from_storage(): void
     {
         $singleDoseId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,

@@ -6,7 +6,6 @@ use App\Models\LabFecalResult;
 use App\Models\LabReport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 
@@ -16,16 +15,14 @@ final class LabFecalResultTest extends TestCase
     use Assertions;
     use RefreshDatabase;
 
-    #[Test]
-    public function aLabFecalResultBelongsToALabReport(): void
+    public function test_a_lab_fecal_result_belongs_to_a_lab_report(): void
     {
         $labReport = LabReport::factory()->for(LabFecalResult::factory(), 'labResult')->create();
 
         $this->assertInstanceOf(LabFecalResult::class, $labReport->labResult);
     }
 
-    #[Test]
-    public function aLabFecalResultIsRevisionable(): void
+    public function test_a_lab_fecal_result_is_revisionable(): void
     {
         activity()->enableLogging();
 

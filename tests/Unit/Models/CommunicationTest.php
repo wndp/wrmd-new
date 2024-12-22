@@ -6,7 +6,6 @@ use App\Models\Communication;
 use App\Models\Incident;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 
@@ -16,14 +15,12 @@ final class CommunicationTest extends TestCase
     use Assertions;
     use RefreshDatabase;
 
-    #[Test]
-    public function aCommunicationBelongsToAnIncident(): void
+    public function test_a_communication_belongs_to_an_incident(): void
     {
         $this->assertInstanceOf(Incident::class, Communication::factory()->create()->incident);
     }
 
-    #[Test]
-    public function aCommunicationIsRevisionable(): void
+    public function test_a_communication_is_revisionable(): void
     {
         activity()->enableLogging();
 

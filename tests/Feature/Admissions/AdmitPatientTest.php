@@ -12,7 +12,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;
@@ -42,8 +41,7 @@ final class AdmitPatientTest extends TestCase
         Auth::loginUsingId($this->me->user->id);
     }
 
-    #[Test]
-    public function aKnownPersonCanBeUsedWhenAdmittingAPatient(): void
+    public function test_a_known_person_can_be_used_when_admitting_a_patient(): void
     {
         $person = Person::factory()->create([
             'team_id' => $this->me->team->id,
@@ -64,8 +62,7 @@ final class AdmitPatientTest extends TestCase
         $this->assertEquals('Jim Halpert', $result->first()->patient->rescuer->full_name);
     }
 
-    #[Test]
-    public function anotherTeamsKnownRescuerCannotBeUsedWhenAdmittingAPatient(): void
+    public function test_another_teams_known_rescuer_cannot_be_used_when_admitting_a_patient(): void
     {
         $wrongAccount = Team::factory()->create();
 
@@ -88,8 +85,7 @@ final class AdmitPatientTest extends TestCase
         $this->assertEquals('Jim Halpert', $result->first()->patient->rescuer->full_name);
     }
 
-    #[Test]
-    public function anUnknownRescuerCanBeUsedWhenAdmittingAPatient(): void
+    public function test_an_unknown_rescuer_can_be_used_when_admitting_a_patient(): void
     {
         $result = AdmitPatient::run($this->me->team, 2018, [
             'id' => null,
@@ -104,8 +100,7 @@ final class AdmitPatientTest extends TestCase
         $this->assertEquals('Jim Halpert', $result->first()->patient->rescuer->full_name);
     }
 
-    #[Test]
-    public function aRescuerModelCanBeUsedWhenAdmittingAPatient(): void
+    public function test_a_rescuer_model_can_be_used_when_admitting_a_patient(): void
     {
         $person = Person::factory()->create([
             'team_id' => $this->me->team->id,
@@ -122,8 +117,7 @@ final class AdmitPatientTest extends TestCase
         $this->assertEquals('Jim Halpert', $result->first()->patient->rescuer->full_name);
     }
 
-    #[Test]
-    public function eventsAreFiredWhenAnAdmissionsIsAdmitted(): void
+    public function test_events_are_fired_when_an_admissions_is_admitted(): void
     {
         Event::fake();
 
@@ -143,8 +137,7 @@ final class AdmitPatientTest extends TestCase
         Event::assertDispatched(PatientAdmitted::class);
     }
 
-    #[Test]
-    public function ifTheRescuerIsNotAModelThanItMustBeAnArrayWhenAdmittingAPatient(): void
+    public function test_if_the_rescuer_is_not_a_model_than_it_must_be_an_array_when_admitting_a_patient(): void
     {
         $team = Team::factory()->create();
         $this->expectException(\TypeError::class);
@@ -153,8 +146,7 @@ final class AdmitPatientTest extends TestCase
         AdmitPatient::run($team, 2018, 'wrong', []);
     }
 
-    #[Test]
-    public function theAccountPossessionIdIsSet(): void
+    public function test_the_account_possession_id_is_set(): void
     {
         $result = AdmitPatient::run($this->me->team, 2023, Person::factory()->create([
             'team_id' => $this->me->team->id,
@@ -166,8 +158,7 @@ final class AdmitPatientTest extends TestCase
         $this->assertSame($this->me->team->id, $result->first()->patient->team_possession_id);
     }
 
-    #[Test]
-    public function multipleAdmissionsArePersistedUsingTheCreatedModelsWhenAdmittingAPatient(): void
+    public function test_multiple_admissions_are_persisted_using_the_created_models_when_admitting_a_patient(): void
     {
         $collection = AdmitPatient::run(
             $this->me->team,
@@ -189,8 +180,7 @@ final class AdmitPatientTest extends TestCase
         $this->assertEquals('Red-headed Foo', $collection->get(1)->patient->common_name);
     }
 
-    #[Test]
-    public function theAdmissionIsPersistedUsingTheCreatedModelsWhenAdmittingAPatient(): void
+    public function test_the_admission_is_persisted_using_the_created_models_when_admitting_a_patient(): void
     {
         $collection = AdmitPatient::run(
             $this->me->team,
@@ -211,8 +201,7 @@ final class AdmitPatientTest extends TestCase
         $this->assertEquals('Red-headed Foo', $collection->first()->patient->common_name);
     }
 
-    #[Test]
-    public function theCoordinatesFoundCanBeSavedToThePatientWhenAdmittingAPatient(): void
+    public function test_the_coordinates_found_can_be_saved_to_the_patient_when_admitting_a_patient(): void
     {
         $result = AdmitPatient::run($this->me->team, 2018, [], [
             'admitted_at' => '2018-03-09 10:30:00',
@@ -227,8 +216,7 @@ final class AdmitPatientTest extends TestCase
         $this->assertEquals('somewhere', $result->first()->patient->county_found);
     }
 
-    #[Test]
-    public function theNumberOfCasesToCreateCanBeMoreThanOneWhenAdmittingAPatient(): void
+    public function test_the_number_of_cases_to_create_can_be_more_than_one_when_admitting_a_patient(): void
     {
         $results = AdmitPatient::run($this->me->team, 2018, [], [
             'admitted_at' => '2018-03-09 10:30:00',
@@ -239,8 +227,7 @@ final class AdmitPatientTest extends TestCase
         $this->assertSame(2, $results->count());
     }
 
-    #[Test]
-    public function thePatientsAdmittanceDetailsCanBeSetAndTheDispositionIsAlwaysOverridenToPendingWhenAdmittingAPatient(): void
+    public function test_the_patients_admittance_details_can_be_set_and_the_disposition_is_always_overriden_to_pending_when_admitting_a_patient(): void
     {
         $result = AdmitPatient::run($this->me->team, 2018, [], [
             'admitted_at' => '2023-01-17 7:51',
@@ -251,8 +238,7 @@ final class AdmitPatientTest extends TestCase
         $this->assertEquals($this->pendingDispositionUiBehavior->attribute_option_id, $result->first()->patient->disposition_id);
     }
 
-    #[Test]
-    public function typeErrorsAreCaughtWhenTryingToPersistThePatient(): void
+    public function test_type_errors_are_caught_when_trying_to_persist_the_patient(): void
     {
         $team = Team::factory()->create();
         $this->expectException(\TypeError::class);

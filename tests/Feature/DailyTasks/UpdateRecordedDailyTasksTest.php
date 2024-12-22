@@ -10,7 +10,6 @@ use App\Models\Recheck;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;
@@ -24,8 +23,7 @@ final class UpdateRecordedDailyTasksTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function whenASchedualableIsUpdatedUpdateRecordedDailyTasksIsDispatched(): void
+    public function test_when_a_schedualable_is_updated_update_recorded_daily_tasks_is_dispatched(): void
     {
         Bus::fake();
 
@@ -43,8 +41,7 @@ final class UpdateRecordedDailyTasksTest extends TestCase
         Bus::assertDispatched(UpdateRecordedDailyTasks::class, fn ($job) => $job->model->is($recheck));
     }
 
-    #[Test]
-    public function whenASchedualableIsUpdatedItsRecordedTasksOutsideTheWindowAreDeleted(): void
+    public function test_when_a_schedualable_is_updated_its_recorded_tasks_outside_the_window_are_deleted(): void
     {
         $me = $this->createTeamUser();
         $admission = $this->createCase($me->team);
@@ -76,8 +73,7 @@ final class UpdateRecordedDailyTasksTest extends TestCase
         $this->assertDatabaseHas('daily_tasks', ['id' => $check3->id]);
     }
 
-    #[Test]
-    public function whenASchedualablesFrequencyIsReducedItsRecordedTasksOutsideTheWindowAreDeleted(): void
+    public function test_when_a_schedualables_frequency_is_reduced_its_recorded_tasks_outside_the_window_are_deleted(): void
     {
         $bidId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,

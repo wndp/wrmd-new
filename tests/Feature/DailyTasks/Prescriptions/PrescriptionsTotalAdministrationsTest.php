@@ -8,7 +8,6 @@ use App\Models\Prescription;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreatesUiBehavior;
 
@@ -18,8 +17,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function an_open_sid_prescription_knows_how_many_total_administrations_it_is(): void
+    public function test_an_open_sid_prescription_knows_how_many_total_administrations_it_is(): void
     {
         $frequencyIs1DailyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -33,8 +31,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         ])->total_administrations, 'Failed asserting that start->now, no end date INF dosages.');
     }
 
-    #[Test]
-    public function an_sd_prescription_knows_how_many_total_administrations_it_is(): void
+    public function test_an_sd_prescription_knows_how_many_total_administrations_it_is(): void
     {
         $frequencyIsSdId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -48,8 +45,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         ])->total_administrations, 'Failed asserting that start->now, no end date, sd is 1 dosages.');
     }
 
-    #[Test]
-    public function an_sid_prescription_starting_and_ending_on_the_same_date_knows_how_many_total_administrations_it_is(): void
+    public function test_an_sid_prescription_starting_and_ending_on_the_same_date_knows_how_many_total_administrations_it_is(): void
     {
         $frequencyIsSidId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -63,8 +59,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         ])->total_administrations, 'Failed asserting that start->now, end->now, sid is 1 dosages.');
     }
 
-    #[Test]
-    public function a_sid_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
+    public function test_a_sid_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
     {
         $frequencyIsSidId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -78,8 +73,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         ])->total_administrations, 'Failed asserting that start->now, end->two days from now, sid is 3 dosages.');
     }
 
-    #[Test]
-    public function a_bid_prescription_starting_and_ending_on_the_same_dates_knows_how_many_total_administrations_it_is(): void
+    public function test_a_bid_prescription_starting_and_ending_on_the_same_dates_knows_how_many_total_administrations_it_is(): void
     {
         $frequencyIsBidId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -93,8 +87,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         ])->total_administrations, 'Failed asserting that start->now, end->now, bid is 2 dosages.');
     }
 
-    #[Test]
-    public function a_tid_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
+    public function test_a_tid_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
     {
         $frequencyIsTidId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -108,8 +101,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         ])->total_administrations, 'Failed asserting that start->now, end->tomorrow, tid is 6 dosages.');
     }
 
-    #[Test]
-    public function a_qid_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
+    public function test_a_qid_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
     {
         $frequencyIsQidId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -123,8 +115,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         ])->total_administrations, 'Failed asserting that start->now, end->tomorrow, qid is 8 dosages.');
     }
 
-    #[Test]
-    public function a_q2d_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
+    public function test_a_q2d_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
     {
         $frequencyIsQ2DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -138,8 +129,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         ])->total_administrations, 'Failed asserting that start->now, end->4 days from now, q2d is 3 dosages.');
     }
 
-    #[Test]
-    public function a_q3d_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
+    public function test_a_q3d_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
     {
         $frequencyIsQ3DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -153,8 +143,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         ])->total_administrations, 'Failed asserting that start->now, end->11 days from now, q3d is 4 dosages.');
     }
 
-    #[Test]
-    public function a_q4d_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
+    public function test_a_q4d_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
     {
         $frequencyIsQ4DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -168,8 +157,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         ])->total_administrations, 'Failed asserting that start->now, end->7 days from now, q4d is 2 dosages.');
     }
 
-    #[Test]
-    public function a_q5d_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
+    public function test_a_q5d_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
     {
         $frequencyIsQ5DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -183,8 +171,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         ])->total_administrations, 'Failed asserting that start->now, end->7 days from now, q4d is 2 dosages.');
     }
 
-    #[Test]
-    public function a_q7d_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
+    public function test_a_q7d_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
     {
         $frequencyIsQ7DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -198,8 +185,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         ])->total_administrations, 'Failed asserting that start->now, end->14 days from now, q7d is 2 dosages.');
     }
 
-    #[Test]
-    public function a_q14d_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
+    public function test_a_q14d_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
     {
         $frequencyIsQ14DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -213,8 +199,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         ])->total_administrations, 'Failed asserting that start->now, end->14 days from now, q14d is 2 dosages.');
     }
 
-    #[Test]
-    public function a_q21d_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
+    public function test_a_q21d_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
     {
         $frequencyIsQ21DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -228,8 +213,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         ])->total_administrations, 'Failed asserting that start->now, end->21 days from now, q21d is 2 dosages.');
     }
 
-    #[Test]
-    public function a_q28d_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
+    public function test_a_q28d_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
     {
         $frequencyIsQ28DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -243,8 +227,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         ])->total_administrations, 'Failed asserting that start->now, end->28 days from now, q28d is 2 dosages.');
     }
 
-    #[Test]
-    public function an_om_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
+    public function test_an_om_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
     {
         $this->assertSame(4, Prescription::factory()->make([
             'rx_started_at' => Carbon::now(),
@@ -253,8 +236,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         ])->total_administrations, 'Failed asserting that start->now, end->3 days from now, om is 4 dosages.');
     }
 
-    #[Test]
-    public function an_on_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
+    public function test_an_on_prescription_starting_and_ending_on_different_dates_knows_how_many_total_administrations_it_is(): void
     {
         $this->assertSame(4, Prescription::factory()->make([
             'rx_started_at' => Carbon::now(),

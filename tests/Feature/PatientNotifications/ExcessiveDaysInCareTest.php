@@ -7,7 +7,6 @@ use App\Jobs\PatientNotifications\ExcessiveDaysInCare;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;
@@ -24,8 +23,7 @@ final class ExcessiveDaysInCareTest extends TestCase
 
     public const LIMITED_DAYS = 100;
 
-    #[Test]
-    public function itNotifiesIfThePatientHasBeenInCareForExcessiveDays(): void
+    public function test_it_notifies_if_the_patient_has_been_in_care_for_excessive_days(): void
     {
         Event::fake();
 
@@ -45,8 +43,7 @@ final class ExcessiveDaysInCareTest extends TestCase
         );
     }
 
-    #[Test]
-    public function it_does_not_notify_if_the_patient_has_been_in_care_for_limited_days(): void
+    public function test_it_does_not_notify_if_the_patient_has_been_in_care_for_limited_days(): void
     {
         Event::fake();
 

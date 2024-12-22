@@ -11,7 +11,6 @@ use App\Models\AttributeOptionUiBehavior as AttributeOptionUiBehaviorModel;
 use App\Models\CustomField;
 use App\Models\CustomValue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
@@ -54,21 +53,18 @@ final class CustomFieldsControllerTest extends TestCase
         ];
     }
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessCustomFields(): void
+    public function test_un_authenticated_users_cant_access_custom_fields(): void
     {
         $this->get(route('maintenance.custom_fields.index'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessCustomFields(): void
+    public function test_un_authorized_users_cant_access_custom_fields(): void
     {
         $me = $this->createTeamUser();
         $this->actingAs($me->user)->get(route('maintenance.custom_fields.index'))->assertForbidden();
     }
 
-    #[Test]
-    public function itDisplaysTheCustomFieldsIndexPage(): void
+    public function test_it_displays_the_custom_fields_index_page(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_CUSTOM_FIELDS->value);
@@ -82,8 +78,7 @@ final class CustomFieldsControllerTest extends TestCase
             );
     }
 
-    #[Test]
-    public function itDisplaysTheCustomFieldsCreatePage(): void
+    public function test_it_displays_the_custom_fields_create_page(): void
     {
         AttributeOption::factory()->create([
             'name' => AttributeOptionName::CUSTOM_FIELD_TYPES,
@@ -100,8 +95,7 @@ final class CustomFieldsControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function theCustomFieldsCreatePageFailsToDisplayIfTheNumberOfAllowedFieldsIsExceeded(): void
+    public function test_the_custom_fields_create_page_fails_to_display_if_the_number_of_allowed_fields_is_exceeded(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_CUSTOM_FIELDS->value);
@@ -115,8 +109,7 @@ final class CustomFieldsControllerTest extends TestCase
             );
     }
 
-    #[Test]
-    public function aLabelIsRequiredToCreateACustomField(): void
+    public function test_a_label_is_required_to_create_a_custom_field(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_CUSTOM_FIELDS->value);
@@ -125,8 +118,7 @@ final class CustomFieldsControllerTest extends TestCase
             ->assertInvalid(['label' => 'The label field is required.']);
     }
 
-    #[Test]
-    public function aValidGroupIsRequiredToCreateACustomField(): void
+    public function test_a_valid_group_is_required_to_create_a_custom_field(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_CUSTOM_FIELDS->value);
@@ -139,8 +131,7 @@ final class CustomFieldsControllerTest extends TestCase
         //     ->assertInvalid(['group_id' => 'The selected group is invalid.']);
     }
 
-    #[Test]
-    public function aValidLocationIsRequiredToCreateACustomField(): void
+    public function test_a_valid_location_is_required_to_create_a_custom_field(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_CUSTOM_FIELDS->value);
@@ -153,8 +144,7 @@ final class CustomFieldsControllerTest extends TestCase
         //     ->assertInvalid(['location_id' => 'The selected location is invalid.']);
     }
 
-    #[Test]
-    public function aValidPanelIsRequiredToCreateACustomField(): void
+    public function test_a_valid_panel_is_required_to_create_a_custom_field(): void
     {
         $customFieldGroupIsPatientId = $this->createUiBehavior(
             AttributeOptionName::CUSTOM_FIELD_GROUPS,
@@ -172,8 +162,7 @@ final class CustomFieldsControllerTest extends TestCase
         //     ->assertInvalid(['panel_id' => 'The selected panel is invalid.']);
     }
 
-    #[Test]
-    public function aValidTypeIsRequiredToCreateACustomField(): void
+    public function test_a_valid_type_is_required_to_create_a_custom_field(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_CUSTOM_FIELDS->value);
@@ -186,8 +175,7 @@ final class CustomFieldsControllerTest extends TestCase
         //     ->assertInvalid(['type_id' => 'The selected type is invalid.']);
     }
 
-    #[Test]
-    public function aValidOptionsIsRequiredToCreateACustomField(): void
+    public function test_a_valid_options_is_required_to_create_a_custom_field(): void
     {
         $customFieldTypesRequiresOptionsId = $this->createUiBehavior(
             AttributeOptionName::CUSTOM_FIELD_TYPES,
@@ -209,8 +197,7 @@ final class CustomFieldsControllerTest extends TestCase
         //     ->assertInvalid(['options' => 'The options field is required.']);
     }
 
-    #[Test]
-    public function aNewCustomFieldIsSavedToStorage(): void
+    public function test_a_new_custom_field_is_saved_to_storage(): void
     {
         [
             $customFieldGroupIsPatientId,
@@ -246,8 +233,7 @@ final class CustomFieldsControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function aNewCustomFieldIsSavedToStorageInAVacantDeletedSpot(): void
+    public function test_a_new_custom_field_is_saved_to_storage_in_a_vacant_deleted_spot(): void
     {
         [
             $customFieldGroupIsPatientId,
@@ -284,8 +270,7 @@ final class CustomFieldsControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itDisplaysThePageToEditACustomField(): void
+    public function test_it_displays_the_page_to_edit_a_custom_field(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_CUSTOM_FIELDS->value);
@@ -300,8 +285,7 @@ final class CustomFieldsControllerTest extends TestCase
             );
     }
 
-    #[Test]
-    public function aLabelIsRequiredToUpdateACustomFields(): void
+    public function test_a_label_is_required_to_update_a_custom_fields(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_CUSTOM_FIELDS->value);
@@ -311,8 +295,7 @@ final class CustomFieldsControllerTest extends TestCase
             ->assertInvalid(['label' => 'The label field is required.']);
     }
 
-    #[Test]
-    public function aValidLocationIsRequiredToUpdateACustomFields(): void
+    public function test_a_valid_location_is_required_to_update_a_custom_fields(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_CUSTOM_FIELDS->value);
@@ -325,8 +308,7 @@ final class CustomFieldsControllerTest extends TestCase
         //     ->assertInvalid(['location_id' => 'The selected location is invalid.']);
     }
 
-    #[Test]
-    public function aValidPanelIsRequiredToUpdateACustomFields(): void
+    public function test_a_valid_panel_is_required_to_update_a_custom_fields(): void
     {
         [
             $customFieldGroupIsPatientId,
@@ -343,8 +325,7 @@ final class CustomFieldsControllerTest extends TestCase
         //     ->assertInvalid(['panel_id' => 'The selected panel is invalid.']);
     }
 
-    #[Test]
-    public function aValidOptionsIsRequiredToUpdateACustomFields(): void
+    public function test_a_valid_options_is_required_to_update_a_custom_fields(): void
     {
         $customFieldTypesRequiresOptionsId = $this->createUiBehavior(
             AttributeOptionName::CUSTOM_FIELD_TYPES,
@@ -367,8 +348,7 @@ final class CustomFieldsControllerTest extends TestCase
             ->assertInvalid(['options' => 'The options field is required.']);
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfACustomFieldBeforeUpdating(): void
+    public function test_it_validates_ownership_of_a_custom_field_before_updating(): void
     {
         [
             $customFieldGroupIsPatientId,
@@ -391,8 +371,7 @@ final class CustomFieldsControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function aCustomFieldIsUpdatedToStorage(): void
+    public function test_a_custom_field_is_updated_to_storage(): void
     {
         [
             $customFieldGroupIsPatientId,
@@ -434,8 +413,7 @@ final class CustomFieldsControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function aCustomFieldWithOptionsCanBeSavedInCommaSeperatedFormat()
+    public function test_a_custom_field_with_options_can_be_saved_in_comma_seperated_format()
     {
         [
             $customFieldGroupIsPatientId,
@@ -467,8 +445,7 @@ final class CustomFieldsControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function aCustomFieldWithOptionsCanBeSavedInOnePerLineFormat()
+    public function test_a_custom_field_with_options_can_be_saved_in_one_per_line_format()
     {
         [
             $customFieldGroupIsPatientId,
@@ -500,8 +477,7 @@ final class CustomFieldsControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfACustomFieldsBeforeDeleting(): void
+    public function test_it_validates_ownership_of_a_custom_fields_before_deleting(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_CUSTOM_FIELDS->value);
@@ -511,8 +487,7 @@ final class CustomFieldsControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function aCustomFieldCanBeDeleted(): void
+    public function test_a_custom_field_can_be_deleted(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_CUSTOM_FIELDS->value);

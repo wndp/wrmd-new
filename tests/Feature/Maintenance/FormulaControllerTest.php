@@ -9,7 +9,6 @@ use App\Enums\FormulaType;
 use App\Models\AttributeOption;
 use App\Models\Formula;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
@@ -27,21 +26,18 @@ final class FormulaControllerTest extends TestCase
     use FeatureMacros;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessFormula(): void
+    public function test_un_authenticated_users_cant_access_formula(): void
     {
         $this->get(route('maintenance.formulas.index'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessFormula(): void
+    public function test_un_authorized_users_cant_access_formula(): void
     {
         $me = $this->createTeamUser();
         $this->actingAs($me->user)->get(route('maintenance.formulas.index'))->assertForbidden();
     }
 
-    #[Test]
-    public function itDisplaysTheFormulaIndexPage(): void
+    public function test_it_displays_the_formula_index_page(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_ACCOUNT_MAINTENANCE->value);
@@ -54,8 +50,7 @@ final class FormulaControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function itDisplaysTheFormulaCreatePage(): void
+    public function test_it_displays_the_formula_create_page(): void
     {
         AttributeOption::factory()->create([
             'name' => AttributeOptionName::DAILY_TASK_ROUTES,
@@ -72,8 +67,7 @@ final class FormulaControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function aUiniqueNameIsRequiredToCreateAFormula(): void
+    public function test_a_uinique_name_is_required_to_create_a_formula(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_ACCOUNT_MAINTENANCE->value);
@@ -87,8 +81,7 @@ final class FormulaControllerTest extends TestCase
             ->assertInvalid(['name' => 'The name has already been taken.']);
     }
 
-    #[Test]
-    public function aPrescriptionDrugIsRequiredToCreateAFormula(): void
+    public function test_a_prescription_drug_is_required_to_create_a_formula(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_ACCOUNT_MAINTENANCE->value);
@@ -97,8 +90,7 @@ final class FormulaControllerTest extends TestCase
             ->assertInvalid(['drug' => 'The drug field is required.']);
     }
 
-    #[Test]
-    public function aNewFormulaIsSavedToStorage(): void
+    public function test_a_new_formula_is_saved_to_storage(): void
     {
         $concentrationUnitIsMgPerMlId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS,
@@ -133,8 +125,7 @@ final class FormulaControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itDisplaysThePageToEditAFormula(): void
+    public function test_it_displays_the_page_to_edit_a_formula(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_ACCOUNT_MAINTENANCE->value);
@@ -150,8 +141,7 @@ final class FormulaControllerTest extends TestCase
             );
     }
 
-    #[Test]
-    public function aUiniqueNameIsRequiredToUpdateAFormula(): void
+    public function test_a_uinique_name_is_required_to_update_a_formula(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_ACCOUNT_MAINTENANCE->value);
@@ -167,8 +157,7 @@ final class FormulaControllerTest extends TestCase
             ->assertInvalid(['name' => 'The name has already been taken.']);
     }
 
-    #[Test]
-    public function aPrescriptionDrugIsRequiredToUpdateAFormula(): void
+    public function test_a_prescription_drug_is_required_to_update_a_formula(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_ACCOUNT_MAINTENANCE->value);
@@ -179,8 +168,7 @@ final class FormulaControllerTest extends TestCase
             ->assertInvalid(['drug' => 'The drug field is required.']);
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAFormulaBeforeUpdating(): void
+    public function test_it_validates_ownership_of_a_formula_before_updating(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_ACCOUNT_MAINTENANCE->value);
@@ -193,8 +181,7 @@ final class FormulaControllerTest extends TestCase
         ])->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function aFormulaIsUpdatedToStorage(): void
+    public function test_a_formula_is_updated_to_storage(): void
     {
         $concentrationUnitIsMgPerMlId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS,
@@ -231,8 +218,7 @@ final class FormulaControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAFormulaBeforeDeleting(): void
+    public function test_it_validates_ownership_of_a_formula_before_deleting(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_ACCOUNT_MAINTENANCE->value);
@@ -243,8 +229,7 @@ final class FormulaControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function aFormulaCanBeDeleted(): void
+    public function test_a_formula_can_be_deleted(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_ACCOUNT_MAINTENANCE->value);

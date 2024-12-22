@@ -7,7 +7,6 @@ use App\Enums\AccountStatus;
 use App\Models\Team;
 use Illuminate\Foundation\Testing\DatabaseTruncation;
 use Illuminate\Support\Str;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\DuskTestCase;
 use Tests\Traits\BrowserMacros;
@@ -19,8 +18,7 @@ final class AccountsTest extends DuskTestCase
     use CreatesTeamUser;
     use DatabaseTruncation;
 
-    #[Test]
-    public function listAccounts(): void
+    public function test_list_accounts(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -40,8 +38,7 @@ final class AccountsTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function updateAnAccountProfile(): void
+    public function test_update_an_account_profile(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -115,8 +112,7 @@ final class AccountsTest extends DuskTestCase
         ]);
     }
 
-    #[Test]
-    public function searchAccountsOnAllFields(): void
+    public function test_search_accounts_on_all_fields(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -166,8 +162,7 @@ final class AccountsTest extends DuskTestCase
         });
     }
 
-    #[Test]
-    public function deleteAnAccount(): void
+    public function test_delete_an_account(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);

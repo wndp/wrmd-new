@@ -6,7 +6,6 @@ use App\Models\Admission;
 use App\Models\Transfer;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreateCase;
@@ -19,15 +18,13 @@ final class UncollaborateTransferControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantUncollaborateAPatient(): void
+    public function test_un_authenticated_users_cant_uncollaborate_a_patient(): void
     {
         $transfer = Transfer::factory()->create();
         $this->post(route('maintenance.transfers.uncollaborate', $transfer))->assertRedirect('login');
     }
 
-    #[Test]
-    public function aTransferMustBeAcceptedCollaboratedToUncollaboratedIt(): void
+    public function test_a_transfer_must_be_accepted_collaborated_to_uncollaborated_it(): void
     {
         $me = $this->createTeamUser();
         $fromAdmission = $this->createCase($me->team, 2021);
@@ -61,8 +58,7 @@ final class UncollaborateTransferControllerTest extends TestCase
             ->assertHasNotificationMessage('There was a problem accessing that record. Please try again or contact support for help.');
     }
 
-    #[Test]
-    public function aTransferIsUncollaboratedByTheFromAccount(): void
+    public function test_a_transfer_is_uncollaborated_by_the_from_account(): void
     {
         $me = $this->createTeamUser();
         $fromAdmission = $this->createCase($me->team, 2021);
@@ -95,8 +91,7 @@ final class UncollaborateTransferControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function aTransferIsUncollaboratedByTheToAccount(): void
+    public function test_a_transfer_is_uncollaborated_by_the_to_account(): void
     {
         $me = $this->createTeamUser();
         $you = $this->createTeamUser();

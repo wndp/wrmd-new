@@ -4,13 +4,11 @@ namespace Tests\Unit\Repositories;
 
 use App\Enums\PhoneFormat;
 use App\Repositories\AdministrativeDivision;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 final class AdministrativeDivisionTest extends TestCase
 {
-    #[Test]
-    public function itFormatsAnAddressInBlockFormat(): void
+    public function test_it_formats_an_address_in_block_format(): void
     {
         $administrativeDivision = new AdministrativeDivision('en', 'US');
 
@@ -29,8 +27,7 @@ final class AdministrativeDivisionTest extends TestCase
         );
     }
 
-    #[Test]
-    public function itFormatsAnAddressInInlineFormat(): void
+    public function test_it_formats_an_address_in_inline_format(): void
     {
         $administrativeDivision = new AdministrativeDivision('en', 'US');
 
@@ -46,8 +43,7 @@ final class AdministrativeDivisionTest extends TestCase
         $this->assertEquals('Jim Bob Foo Corporation 123 Main st. Any Town, CA 12345 United States', $result);
     }
 
-    #[Test]
-    public function itFormatsAPhoneNumberAsE164(): void
+    public function test_it_formats_a_phone_number_as_e164(): void
     {
         $administrativeDivision = new AdministrativeDivision('en', 'US');
 
@@ -56,8 +52,7 @@ final class AdministrativeDivisionTest extends TestCase
         $this->assertEquals('+19255551234', $result);
     }
 
-    #[Test]
-    public function itFormatsAPhoneNumberIntoTheNationalPattern(): void
+    public function test_it_formats_a_phone_number_into_the_national_pattern(): void
     {
         $administrativeDivision = new AdministrativeDivision('en', 'US');
 
@@ -66,8 +61,7 @@ final class AdministrativeDivisionTest extends TestCase
         $this->assertEquals('(925) 555-1234', $result);
     }
 
-    #[Test]
-    public function itFormatsAPhoneNumberIntoANormalizedPattern(): void
+    public function test_it_formats_a_phone_number_into_a_normalized_pattern(): void
     {
         $administrativeDivision = new AdministrativeDivision('en', 'US');
 
@@ -76,8 +70,7 @@ final class AdministrativeDivisionTest extends TestCase
         $this->assertEquals('9255551234', $result);
     }
 
-    #[Test]
-    public function aPhoneNumberThatIsNotValidFormatsIntoANormalizedPattern(): void
+    public function test_a_phone_number_that_is_not_valid_formats_into_a_normalized_pattern(): void
     {
         $administrativeDivision = new AdministrativeDivision('en', 'US');
 

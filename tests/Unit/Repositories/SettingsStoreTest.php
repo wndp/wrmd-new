@@ -6,7 +6,6 @@ use App\Enums\SettingKey;
 use App\Models\Setting;
 use App\Repositories\SettingsStore;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 final class SettingsStoreTest extends TestCase
@@ -30,22 +29,19 @@ final class SettingsStoreTest extends TestCase
         $this->settings = new SettingsStore($setting->team);
     }
 
-    #[Test]
-    public function itCantDeleteAProtectedSetting(): void
+    public function test_it_cant_delete_a_protected_setting(): void
     {
         $this->settings->set(SettingKey::LANGUAGE, 'en');
         $this->assertFalse($this->settings->delete(SettingKey::LANGUAGE));
     }
 
-    #[Test]
-    public function itDeletesAnExistingSetting(): void
+    public function test_it_deletes_an_existing_setting(): void
     {
         $this->settings->set(SettingKey::CLINIC_IP, 'fun');
         $this->assertTrue($this->settings->delete(SettingKey::CLINIC_IP));
     }
 
-    #[Test]
-    public function itDetectsIfASettingExists(): void
+    public function test_it_detects_if_a_setting_exists(): void
     {
         $result = $this->settings->has(SettingKey::CLINIC_IP);
         $this->assertTrue($result);
@@ -54,24 +50,21 @@ final class SettingsStoreTest extends TestCase
         $this->assertFalse($result);
     }
 
-    #[Test]
-    public function itGetsADefaultWhenASettingDoesNotExist(): void
+    public function test_it_gets_a_default_when_a_setting_does_not_exist(): void
     {
         $result = $this->settings->get(SettingKey::LOG_ORDER, 'default');
 
         $this->assertEquals('default', $result);
     }
 
-    #[Test]
-    public function itGetsASetting(): void
+    public function test_it_gets_a_setting(): void
     {
         $result = $this->settings->get(SettingKey::CLINIC_IP);
 
         $this->assertEquals('bar', $result);
     }
 
-    #[Test]
-    public function itSetsAnArrayOfSettings(): void
+    public function test_it_sets_an_array_of_settings(): void
     {
         $this->settings->set([
             SettingKey::AREAS->value => 'bang',
@@ -97,8 +90,7 @@ final class SettingsStoreTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itSetsASetting(): void
+    public function test_it_sets_a_setting(): void
     {
         $this->settings->set(SettingKey::SHOW_LOOKUP_RESCUER, 'value');
 
@@ -113,8 +105,7 @@ final class SettingsStoreTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itUpdatesAnExistingSetting(): void
+    public function test_it_updates_an_existing_setting(): void
     {
         $this->settings->set([SettingKey::LOG_SHARES->value => 'fun']);
 

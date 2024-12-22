@@ -10,7 +10,6 @@ use App\Models\Prescription;
 use App\Models\Veterinarian;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
@@ -27,23 +26,20 @@ final class PrescriptionControllerTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantStoreAPrescription(): void
+    public function test_un_authenticated_users_cant_store_a_prescription(): void
     {
         $patient = Patient::factory()->create();
         $this->post(route('patients.prescription.store', $patient))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantStoreAPrescription(): void
+    public function test_un_authorized_users_cant_store_a_prescription(): void
     {
         $me = $this->createTeamUser();
         $patient = Patient::factory()->create();
         $this->actingAs($me->user)->post(route('patients.prescription.store', $patient))->assertForbidden();
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAPatientBeforeStoring(): void
+    public function test_it_validates_ownership_of_a_patient_before_storing(): void
     {
         $frequencyIs1DailyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -63,8 +59,7 @@ final class PrescriptionControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function itFailsValidationWhenTryingToStoreAPrescription(): void
+    public function test_it_fails_validation_when_trying_to_store_a_prescription(): void
     {
         $me = $this->createTeamUser();
         $admission = $this->createCase($me->team);
@@ -92,8 +87,7 @@ final class PrescriptionControllerTest extends TestCase
             ->assertInvalid(['rx_ended_at' => 'The end date must be a date after or equal to the start date.']);
     }
 
-    #[Test]
-    public function itStoresAPrescription(): void
+    public function test_it_stores_a_prescription(): void
     {
         $concentrationUnitIsMgPerMlId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS,
@@ -173,8 +167,7 @@ final class PrescriptionControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAPrescriptionBeforeUpdating(): void
+    public function test_it_validates_ownership_of_a_prescription_before_updating(): void
     {
         $frequencyIs1DailyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -195,8 +188,7 @@ final class PrescriptionControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function itFailsValidationWhenTryingToUpdateAPrescription(): void
+    public function test_it_fails_validation_when_trying_to_update_a_prescription(): void
     {
         $me = $this->createTeamUser();
         $admission = $this->createCase($me->team);
@@ -225,8 +217,7 @@ final class PrescriptionControllerTest extends TestCase
             ->assertInvalid(['rx_ended_at' => 'The end date must be a date after or equal to the start date.']);
     }
 
-    #[Test]
-    public function itUpdatesAPrescription(): void
+    public function test_it_updates_a_prescription(): void
     {
         $concentrationUnitIsMgPerMlId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS,

@@ -20,16 +20,14 @@ final class AdmissionTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function anAdmissionBelongsToATeam(): void
+    public function test_an_admission_belongs_to_a_team(): void
     {
         $admission = $this->createCase();
 
         $this->assertInstanceOf(Team::class, $admission->team);
     }
 
-    #[Test]
-    public function anAdmissionBelongsToAnPatient(): void
+    public function test_an_admission_belongs_to_an_patient(): void
     {
         $admission = $this->createCase();
 
@@ -73,8 +71,7 @@ final class AdmissionTest extends TestCase
     //     ]);
     // }
 
-    #[Test]
-    public function anAdmissionHasAnAppendedCaseNumberAttribute(): void
+    public function test_an_admission_has_an_appended_case_number_attribute(): void
     {
         $admission = $this->createCase(caseYear: 2018);
         $this->assertEquals('18-1', $admission->case_number);
@@ -88,8 +85,7 @@ final class AdmissionTest extends TestCase
         $this->assertEquals("$admission->team_id::2018", $admission->case_number);
     }
 
-    #[Test]
-    public function itGetsTheAdmissionsWithADispositionDateThatWereInCareOnAGivenDate(): void
+    public function test_it_gets_the_admissions_with_a_disposition_date_that_were_in_care_on_a_given_date(): void
     {
         $team = Team::factory()->create();
 
@@ -121,8 +117,7 @@ final class AdmissionTest extends TestCase
         $this->assertCount(3, Admission::inCareOnDate($team, Carbon::createFromDate(2018, 1, 3)));
     }
 
-    #[Test]
-    public function itGetsTheAdmissionsWithoutADispositionDateThatWereAdmittedOnOrBeforeAGivenDate(): void
+    public function test_it_gets_the_admissions_without_a_disposition_date_that_were_admitted_on_or_before_a_given_date(): void
     {
         $team = Team::factory()->create();
 
@@ -151,8 +146,7 @@ final class AdmissionTest extends TestCase
         $this->assertCount(3, Admission::inCareOnDate($team, Carbon::createFromDate(2018, 1, 3)));
     }
 
-    #[Test]
-    public function itGetsTheAdmissionsWithoutAFinalDispositionThatWereInCareOnAGivenDate(): void
+    public function test_it_gets_the_admissions_without_a_final_disposition_that_were_in_care_on_a_given_date(): void
     {
         $team = Team::factory()->create();
 
@@ -176,8 +170,7 @@ final class AdmissionTest extends TestCase
         $this->assertCount(2, Admission::inCareOnDate($team, Carbon::createFromDate(2018, 1, 3)));
     }
 
-    #[Test]
-    public function itGetsTheLastCaseIdUsed(): void
+    public function test_it_gets_the_last_case_id_used(): void
     {
         $team = Team::factory()->create();
 
@@ -188,8 +181,7 @@ final class AdmissionTest extends TestCase
         $this->assertEquals(5, $results);
     }
 
-    #[Test]
-    public function itGetsTheYearsUsedInAnAccount(): void
+    public function test_it_gets_the_years_used_in_an_account(): void
     {
         $team = Team::factory()->create();
 
@@ -201,8 +193,7 @@ final class AdmissionTest extends TestCase
         $this->assertSame([date('Y') - 0, date('Y') - 1], $results->toArray());
     }
 
-    #[Test]
-    public function missingYearsAreFilledIn(): void
+    public function test_missing_years_are_filled_in(): void
     {
         $team = Team::factory()->create();
 

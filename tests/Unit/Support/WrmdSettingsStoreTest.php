@@ -7,7 +7,6 @@ use App\Models\Setting;
 use App\Repositories\SettingsStore;
 use App\Support\Wrmd;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 final class WrmdSettingsStoreTest extends TestCase
@@ -28,32 +27,28 @@ final class WrmdSettingsStoreTest extends TestCase
         });
     }
 
-    #[Test]
-    public function itGetsTheSettingsStore(): void
+    public function test_it_gets_the_settings_store(): void
     {
         $result = Wrmd::settings();
 
         $this->assertInstanceOf(SettingsStore::class, $result);
     }
 
-    #[Test]
-    public function itGetsAnAccountsSetting(): void
+    public function test_it_gets_an_accounts_setting(): void
     {
         $result = Wrmd::settings(SettingKey::TIMEZONE);
 
         $this->assertEquals('bar', $result);
     }
 
-    #[Test]
-    public function itGetsADefaultSetting(): void
+    public function test_it_gets_a_default_setting(): void
     {
         $result = Wrmd::settings(SettingKey::LANGUAGE, 'Yes');
 
         $this->assertEquals('Yes', $result);
     }
 
-    #[Test]
-    public function itSetsAnAccountsSetting(): void
+    public function test_it_sets_an_accounts_setting(): void
     {
         Wrmd::settings([SettingKey::LANGUAGE->value => 'bang']);
 

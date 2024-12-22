@@ -9,7 +9,6 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreatesUiBehavior;
 
@@ -19,14 +18,12 @@ final class PrescriptionAdministrationsTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function aPrescriptionHasAnAppendedAdministrationsAttribute(): void
+    public function test_a_prescription_has_an_appended_administrations_attribute(): void
     {
         $this->assertInstanceOf(Collection::class, Prescription::factory()->make()->administrations);
     }
 
-    #[Test]
-    public function aPrescriptionAdministrationShouldAppendAnAdministeredAtDate(): void
+    public function test_a_prescription_administration_should_append_an_administered_at_date(): void
     {
         $now = Carbon::now();
 
@@ -37,8 +34,7 @@ final class PrescriptionAdministrationsTest extends TestCase
         $this->assertEquals($now->timestamp, $prescription->administrations->first()->administered_at->timestamp);
     }
 
-    #[Test]
-    public function theAdministrationsCollectionShouldOnlyHaveAnInfinatePrescriptionOnce(): void
+    public function test_the_administrations_collection_should_only_have_an_infinate_prescription_once(): void
     {
         $frequencyIs1DailyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -55,8 +51,7 @@ final class PrescriptionAdministrationsTest extends TestCase
         $this->assertTrue($prescription->administrations->first()->is($prescription));
     }
 
-    #[Test]
-    public function aSingleDosePrescriptionShouldOnlyBeTheAdministrationsCollectionOnce(): void
+    public function test_a_single_dose_prescription_should_only_be_the_administrations_collection_once(): void
     {
         $frequencyIsSdId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -73,8 +68,7 @@ final class PrescriptionAdministrationsTest extends TestCase
         $this->assertEquals(Carbon::now()->toDateString(), $prescription->administrations->get(0)->administered_at->toDateString());
     }
 
-    #[Test]
-    public function anSidPrescriptionAdministrationsAdministeredAtDateShouldBeIncremented(): void
+    public function test_an_sid_prescription_administrations_administered_at_date_should_be_incremented(): void
     {
         $frequencyIs1DailyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -93,8 +87,7 @@ final class PrescriptionAdministrationsTest extends TestCase
         $this->assertEquals(Carbon::now()->addDays(2)->toDateString(), $prescription->administrations->get(2)->administered_at->toDateString());
     }
 
-    #[Test]
-    public function aBidPrescriptionAdministrationsAdministeredAtDateShouldBeIncremented(): void
+    public function test_a_bid_prescription_administrations_administered_at_date_should_be_incremented(): void
     {
         $frequencyIs2DailyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -116,8 +109,7 @@ final class PrescriptionAdministrationsTest extends TestCase
         $this->assertEquals(Carbon::now()->addDays(2)->toDateString(), $prescription->administrations->get(5)->administered_at->toDateString());
     }
 
-    #[Test]
-    public function aTidPrescriptionAdministrationsAdministeredAtDateShouldBeIncremented(): void
+    public function test_a_tid_prescription_administrations_administered_at_date_should_be_incremented(): void
     {
         $frequencyIs3DailyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -139,8 +131,7 @@ final class PrescriptionAdministrationsTest extends TestCase
         $this->assertEquals(Carbon::now()->addDays(1)->toDateString(), $prescription->administrations->get(5)->administered_at->toDateString());
     }
 
-    #[Test]
-    public function aQidPrescriptionAdministrationsAdministeredAtDateShouldBeIncremented(): void
+    public function test_a_qid_prescription_administrations_administered_at_date_should_be_incremented(): void
     {
         $frequencyIs4DailyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -164,8 +155,7 @@ final class PrescriptionAdministrationsTest extends TestCase
         $this->assertEquals(Carbon::now()->addDays(1)->toDateString(), $prescription->administrations->get(7)->administered_at->toDateString());
     }
 
-    #[Test]
-    public function aQ2dPrescriptionAdministrationsAdministeredAtDateShouldBeIncremented(): void
+    public function test_a_q2d_prescription_administrations_administered_at_date_should_be_incremented(): void
     {
         $frequencyIsQ2DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -184,8 +174,7 @@ final class PrescriptionAdministrationsTest extends TestCase
         $this->assertEquals(Carbon::now()->addDays(4)->toDateString(), $prescription->administrations->get(2)->administered_at->toDateString());
     }
 
-    #[Test]
-    public function aQ3dPrescriptionAdministrationsAdministeredAtDateShouldBeIncremented(): void
+    public function test_a_q3d_prescription_administrations_administered_at_date_should_be_incremented(): void
     {
         $frequencyIsQ3DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -204,8 +193,7 @@ final class PrescriptionAdministrationsTest extends TestCase
         $this->assertEquals(Carbon::now()->addDays(6)->toDateString(), $prescription->administrations->get(2)->administered_at->toDateString());
     }
 
-    #[Test]
-    public function aQ4dPrescriptionAdministrationsAdministeredAtDateShouldBeIncremented(): void
+    public function test_a_q4d_prescription_administrations_administered_at_date_should_be_incremented(): void
     {
         $frequencyIsQ4DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -224,8 +212,7 @@ final class PrescriptionAdministrationsTest extends TestCase
         $this->assertEquals(Carbon::now()->addDays(8)->toDateString(), $prescription->administrations->get(2)->administered_at->toDateString());
     }
 
-    #[Test]
-    public function aQ7dPrescriptionAdministrationsAdministeredAtDateShouldBeIncremented(): void
+    public function test_a_q7d_prescription_administrations_administered_at_date_should_be_incremented(): void
     {
         $frequencyIsQ7DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -244,8 +231,7 @@ final class PrescriptionAdministrationsTest extends TestCase
         $this->assertEquals(Carbon::now()->addDays(14)->toDateString(), $prescription->administrations->get(2)->administered_at->toDateString());
     }
 
-    #[Test]
-    public function aQ14dPrescriptionAdministrationsAdministeredAtDateShouldBeIncremented(): void
+    public function test_a_q14d_prescription_administrations_administered_at_date_should_be_incremented(): void
     {
         $frequencyIsQ14DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -264,8 +250,7 @@ final class PrescriptionAdministrationsTest extends TestCase
         $this->assertEquals(Carbon::now()->addDays(28)->toDateString(), $prescription->administrations->get(2)->administered_at->toDateString());
     }
 
-    #[Test]
-    public function aQ21dPrescriptionAdministrationsAdministeredAtDateShouldBeIncremented(): void
+    public function test_a_q21d_prescription_administrations_administered_at_date_should_be_incremented(): void
     {
         $frequencyIsQ21DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
@@ -284,8 +269,7 @@ final class PrescriptionAdministrationsTest extends TestCase
         $this->assertEquals(Carbon::now()->addDays(42)->toDateString(), $prescription->administrations->get(2)->administered_at->toDateString());
     }
 
-    #[Test]
-    public function aQ28dPrescriptionAdministrationsAdministeredAtDateShouldBeIncremented(): void
+    public function test_a_q28d_prescription_administrations_administered_at_date_should_be_incremented(): void
     {
         $frequencyIsQ28DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,

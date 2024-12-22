@@ -9,7 +9,6 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 
@@ -19,14 +18,12 @@ final class OilProcessingTest extends TestCase
     use Assertions;
     use RefreshDatabase;
 
-    #[Test]
-    public function anOilProcessingBelongsToAPatient(): void
+    public function test_an_oil_processing_belongs_to_a_patient(): void
     {
         $this->assertInstanceOf(Patient::class, OilProcessing::factory()->create()->patient);
     }
 
-    #[Test]
-    public function anOilProcessingIsRevisionable(): void
+    public function test_an_oil_processing_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -36,8 +33,7 @@ final class OilProcessingTest extends TestCase
         );
     }
 
-    #[Test]
-    public function ifAnOilProcessingsPatientIsLockedThenItCanNotBeUpdated(): void
+    public function test_if_an_oil_processings_patient_is_locked_then_it_can_not_be_updated(): void
     {
         $patient = Patient::factory()->create();
         $processing = OilProcessing::factory()->create(['patient_id' => $patient->id, 'comments' => 'OLD']);
@@ -55,8 +51,7 @@ final class OilProcessingTest extends TestCase
         $this->assertEquals('OLD', $processing->fresh()->comments);
     }
 
-    #[Test]
-    public function ifAnOilProcessingsPatientIsLockedThenItCanNotBeCreated(): void
+    public function test_if_an_oil_processings_patient_is_locked_then_it_can_not_be_created(): void
     {
         $processing = OilProcessing::factory()->create([
             'patient_id' => Patient::factory()->create(['locked_at' => Carbon::now()])->id,
@@ -65,8 +60,7 @@ final class OilProcessingTest extends TestCase
         $this->assertFalse($processing->exists);
     }
 
-    #[Test]
-    public function ifAnOilProcessingsPatientIsLockedThenItCanNotBeDeleted(): void
+    public function test_if_an_oil_processings_patient_is_locked_then_it_can_not_be_deleted(): void
     {
         $patient = Patient::factory()->create();
         $processing = OilProcessing::factory()->create(['patient_id' => $patient->id]);
@@ -78,8 +72,7 @@ final class OilProcessingTest extends TestCase
         $this->assertDatabaseHas('oil_processings', ['id' => $processing->id, 'deleted_at' => null]);
     }
 
-    #[Test]
-    public function whenAPatientIsReplicatedSoAreTheEventProcessings(): void
+    public function test_when_a_patient_is_replicated_so_are_the_event_processings(): void
     {
         $patient = Patient::factory()->create();
         OilProcessing::factory()->create(['patient_id' => $patient->id]);
@@ -90,8 +83,7 @@ final class OilProcessingTest extends TestCase
         $this->assertCount(1, OilProcessing::where('patient_id', $newPatient->id)->get());
     }
 
-    #[Test]
-    public function anOilProcessingCanValidateOwnership(): void
+    public function test_an_oil_processing_can_validate_ownership(): void
     {
         $team = Team::factory()->create();
         $processing = OilProcessing::factory()->create();

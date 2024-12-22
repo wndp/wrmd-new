@@ -3,7 +3,6 @@
 namespace Tests\Feature\Profile;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreatesTeamUser;
 
@@ -12,14 +11,12 @@ final class UserProfileControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessUserProfile(): void
+    public function test_un_authenticated_users_cant_access_user_profile(): void
     {
         $this->get(route('profile.edit'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function itDisplaysTheUserProfilePage(): void
+    public function test_it_displays_the_user_profile_page(): void
     {
         $me = $this->createTeamUser();
 
@@ -31,8 +28,7 @@ final class UserProfileControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function aNameIsRequiredToUpdateTheUserProfile(): void
+    public function test_a_name_is_required_to_update_the_user_profile(): void
     {
         $me = $this->createTeamUser();
 
@@ -40,8 +36,7 @@ final class UserProfileControllerTest extends TestCase
             ->assertInvalid(['name' => 'The name field is required.']);
     }
 
-    #[Test]
-    public function anEmailIsRequiredToUpdateTheUserProfile(): void
+    public function test_an_email_is_required_to_update_the_user_profile(): void
     {
         $me = $this->createTeamUser();
 
@@ -52,8 +47,7 @@ final class UserProfileControllerTest extends TestCase
             ->assertInvalid(['email' => 'The email field must be a valid email address.']);
     }
 
-    #[Test]
-    public function theUserProfileIsUpdatedInStorage(): void
+    public function test_the_user_profile_is_updated_in_storage(): void
     {
         $me = $this->createTeamUser();
 

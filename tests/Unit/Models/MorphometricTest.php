@@ -7,7 +7,6 @@ use App\Models\Morphometric;
 use App\Models\Patient;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreatesUiBehavior;
@@ -18,8 +17,7 @@ final class MorphometricTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function aMorphometricIsRevisionable(): void
+    public function test_a_morphometric_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -29,8 +27,7 @@ final class MorphometricTest extends TestCase
         );
     }
 
-    #[Test]
-    public function ifAMorphometricsPatientIsLockedThenItCanNotBeUpdated(): void
+    public function test_if_a_morphometrics_patient_is_locked_then_it_can_not_be_updated(): void
     {
         $patient = Patient::factory()->create();
         $morphometric = Morphometric::factory()->create(['patient_id' => $patient->id, 'remarks' => 'OLD']);
@@ -48,8 +45,7 @@ final class MorphometricTest extends TestCase
         $this->assertEquals('OLD', $morphometric->fresh()->remarks);
     }
 
-    #[Test]
-    public function ifAMorphometricsPatientIsLockedThenItCanNotBeCreated(): void
+    public function test_if_a_morphometrics_patient_is_locked_then_it_can_not_be_created(): void
     {
         $morphometric = Morphometric::factory()->create([
             'patient_id' => Patient::factory()->create(['locked_at' => Carbon::now()])->id,
@@ -58,8 +54,7 @@ final class MorphometricTest extends TestCase
         $this->assertFalse($morphometric->exists);
     }
 
-    #[Test]
-    public function ifAMorphometricsPatientIsLockedThenItCanNotBeDeleted(): void
+    public function test_if_a_morphometrics_patient_is_locked_then_it_can_not_be_deleted(): void
     {
         $patient = Patient::factory()->create();
         $morphometric = Morphometric::factory()->create(['patient_id' => $patient->id]);
@@ -71,8 +66,7 @@ final class MorphometricTest extends TestCase
         $this->assertDatabaseHas('morphometrics', ['id' => $morphometric->id, 'deleted_at' => null]);
     }
 
-    #[Test]
-    public function whenAPatientIsReplicatedSoIsTheMorphometric(): void
+    public function test_when_a_patient_is_replicated_so_is_the_morphometric(): void
     {
         $patient = Patient::factory()->create();
         Morphometric::factory()->create(['patient_id' => $patient->id]);
@@ -83,8 +77,7 @@ final class MorphometricTest extends TestCase
         $this->assertCount(1, Morphometric::where('patient_id', $newPatient->id)->get());
     }
 
-    #[Test]
-    public function itFiltersTheMorphometricWeightIntoThePatientWeightsCollection(): void
+    public function test_it_filters_the_morphometric_weight_into_the_patient_weights_collection(): void
     {
         [$kgWeightId, $gWeightId] = $this->weightUnits();
 

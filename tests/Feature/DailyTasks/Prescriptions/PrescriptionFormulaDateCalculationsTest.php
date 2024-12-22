@@ -7,7 +7,6 @@ use App\Models\Patient;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreatesTeamUser;
 
@@ -17,8 +16,7 @@ final class PrescriptionFormulaDateCalculationsTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function itStartsThePrescriptionTheDayItIsWritten(): void
+    public function test_it_starts_the_prescription_the_day_it_is_written(): void
     {
         $patient = Patient::factory()->create();
 
@@ -31,8 +29,7 @@ final class PrescriptionFormulaDateCalculationsTest extends TestCase
         $this->assertTrue(Carbon::parse($results['rx_started_at'])->isSameDay(Carbon::now()));
     }
 
-    #[Test]
-    public function itEndsThePrescriptionTheGiveNumberOfDaysPastTheStartDate(): void
+    public function test_it_ends_the_prescription_the_give_number_of_days_past_the_start_date(): void
     {
         $patient = Patient::factory()->create();
 
@@ -46,8 +43,7 @@ final class PrescriptionFormulaDateCalculationsTest extends TestCase
         $this->assertTrue(Carbon::parse($results['rx_ended_at'])->isSameDay(Carbon::now()->addDays(6)));
     }
 
-    #[Test]
-    public function itLeavesThePrescriptionOpenIfNoDurationIsGiven(): void
+    public function test_it_leaves_the_prescription_open_if_no_duration_is_given(): void
     {
         $patient = Patient::factory()->create();
 

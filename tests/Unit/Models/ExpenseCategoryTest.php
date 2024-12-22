@@ -8,7 +8,6 @@ use App\Models\ExpenseTransaction;
 use App\Models\Team;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 
@@ -17,8 +16,7 @@ final class ExpenseCategoryTest extends TestCase
     use Assertions;
     use RefreshDatabase;
 
-    #[Test]
-    public function anExpenseCategoryBelongsToATeam(): void
+    public function test_an_expense_category_belongs_to_a_team(): void
     {
         $category = ExpenseCategory::factory()->make([
             'team_id' => Team::Factory(),
@@ -27,8 +25,7 @@ final class ExpenseCategoryTest extends TestCase
         $this->assertInstanceOf(Team::class, $category->team);
     }
 
-    #[Test]
-    public function anExpenseCategoryHasManyTransactions(): void
+    public function test_an_expense_category_has_many_transactions(): void
     {
         $category = ExpenseCategory::factory()->has(ExpenseTransaction::factory()->count(3))->create();
 
@@ -36,8 +33,7 @@ final class ExpenseCategoryTest extends TestCase
         $this->assertInstanceOf(ExpenseTransaction::class, $category->expenseTransactions->first());
     }
 
-    #[Test]
-    public function anExpenseCategoryMayHaveChildCategories(): void
+    public function test_an_expense_category_may_have_child_categories(): void
     {
         $parent = ExpenseCategory::factory()->create();
         $this->assertTrue($parent->children->isEmpty());
@@ -47,8 +43,7 @@ final class ExpenseCategoryTest extends TestCase
         $this->assertTrue($parent->fresh()->children->first()->is($child));
     }
 
-    #[Test]
-    public function anExpenseCategoryMayHaveAParentCategory(): void
+    public function test_an_expense_category_may_have_a_parent_category(): void
     {
         $parent = ExpenseCategory::factory()->create(['name' => 'foo']);
         $child = ExpenseCategory::factory()->create(['parent_id' => $parent->id]);
@@ -56,8 +51,7 @@ final class ExpenseCategoryTest extends TestCase
         $this->assertTrue($child->fresh()->parent->is($parent));
     }
 
-    #[Test]
-    public function anExpenseCategoryIsRevisionable(): void
+    public function test_an_expense_category_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -67,16 +61,14 @@ final class ExpenseCategoryTest extends TestCase
         );
     }
 
-    #[Test]
-    public function aParentExpenseCategoryCanBeFoundByItsNameByAnyTeam(): void
+    public function test_a_parent_expense_category_can_be_found_by_its_name_by_any_team(): void
     {
         $anyTeam = Team::factory()->create();
         $category = ExpenseCategory::factory()->create(['team_id' => null, 'name' => 'Prescription']);
         $this->assertTrue(ExpenseCategory::findByName('Prescription', $anyTeam)->is($category));
     }
 
-    #[Test]
-    public function aChildExpenseCategoryCanOnlyBeFoundByItsNameByTheAccountThatCreatedIt(): void
+    public function test_a_child_expense_category_can_only_be_found_by_its_name_by_the_account_that_created_it(): void
     {
         $team = Team::factory()->create();
         $someOtherAccount = Team::factory()->create();
@@ -93,8 +85,7 @@ final class ExpenseCategoryTest extends TestCase
         $this->assertTrue(ExpenseCategory::findByName('Prescription', $team)->is($child));
     }
 
-    #[Test]
-    public function aChildExpenseCategoryNameThatExistsTwiceIsFoundByTheAccountThatCreatedIt(): void
+    public function test_a_child_expense_category_name_that_exists_twice_is_found_by_the_account_that_created_it(): void
     {
         $myTeam = Team::factory()->create();
         $wrongTeam = Team::factory()->create();
@@ -107,8 +98,7 @@ final class ExpenseCategoryTest extends TestCase
         $this->assertTrue(ExpenseCategory::findByName('Clavamox', $wrongTeam)->is($wrongChild));
     }
 
-    #[Test]
-    public function aCategoryKnowsIfItIsAParentCategory(): void
+    public function test_a_category_knows_if_it_is_a_parent_category(): void
     {
         $team = Team::factory()->create();
         $parent = ExpenseCategory::factory()->create(['team_id' => null]);

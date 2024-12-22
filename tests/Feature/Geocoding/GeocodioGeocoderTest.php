@@ -6,14 +6,12 @@ use App\Actions\GeocodioGeocoder;
 use App\ValueObjects\GeocodeComponents;
 use CommerceGuys\Addressing\Address;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 #[Group('integration')]
 final class GeocodioGeocoderTest extends TestCase
 {
-    #[Test]
-    public function itReturnsAnPredictableGeocodeComponentsObject(): void
+    public function test_it_returns_an_predictable_geocode_components_object(): void
     {
         $address = (new Address)
             ->withCountryCode('US')

@@ -8,7 +8,6 @@ use App\Models\Person;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Maatwebsite\Excel\Facades\Excel;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
@@ -21,8 +20,7 @@ final class ReportingPartyExportTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function itExportsHotlineIncidentReportingParties(): void
+    public function test_it_exports_hotline_incident_reporting_parties(): void
     {
         Excel::fake();
         Excel::matchByRegex();

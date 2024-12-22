@@ -3,7 +3,6 @@
 namespace Tests\Feature\Analytics;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreatesTeamUser;
 
@@ -12,8 +11,7 @@ final class AnalyticControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function anAnyliticNumberResponseHasADefinedJsonStructure(): void
+    public function test_an_anylitic_number_response_has_a_defined_json_structure(): void
     {
         $this->actingAs($this->createTeamUser()->user)
             ->get('analytics/numbers/patients-admitted')
@@ -26,8 +24,7 @@ final class AnalyticControllerTest extends TestCase
             ]);
     }
 
-    #[Test]
-    public function anAnyliticChartResponseHasADefinedJsonStructure(): void
+    public function test_an_anylitic_chart_response_has_a_defined_json_structure(): void
     {
         $this->actingAs($this->createTeamUser()->user)
             ->get('analytics/charts/patients-admitted')
@@ -38,8 +35,7 @@ final class AnalyticControllerTest extends TestCase
             ]);
     }
 
-    #[Test]
-    public function anAnyliticMapResponseHasADefinedJsonStructure(): void
+    public function test_an_anylitic_map_response_has_a_defined_json_structure(): void
     {
         $this->actingAs($this->createTeamUser()->user)
             ->get('analytics/maps/acquisition-location')

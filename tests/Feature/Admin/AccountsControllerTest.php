@@ -9,7 +9,6 @@ use App\Models\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\CreatesTeamUser;
@@ -19,22 +18,19 @@ final class AccountsControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessAccounts(): void
+    public function test_un_authenticated_users_cant_access_accounts(): void
     {
         $this->get(route('teams.index'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessAccounts(): void
+    public function test_un_authorized_users_cant_access_accounts(): void
     {
         $me = $this->createTeamUser();
 
         $this->actingAs($me->user)->get(route('teams.index'))->assertForbidden();
     }
 
-    #[Test]
-    public function itDisplaysTheAccountsIndexPage(): void
+    public function test_it_displays_the_accounts_index_page(): void
     {
         Team::factory()->create();
 
@@ -49,8 +45,7 @@ final class AccountsControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function itDisplaysAnAccount(): void
+    public function test_it_displays_an_account(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -71,8 +66,7 @@ final class AccountsControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function itDisplaysAnAccountEditPage(): void
+    public function test_it_displays_an_account_edit_page(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -86,8 +80,7 @@ final class AccountsControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function itFailsValidationWhenTryingToUpdateAnAccount(): void
+    public function test_it_fails_validation_when_trying_to_update_an_account(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
@@ -112,8 +105,7 @@ final class AccountsControllerTest extends TestCase
             ->assertInvalid(['phone' => 'The phone field must be a valid number.']);
     }
 
-    #[Test]
-    public function itUpdatesAnAccount(): void
+    public function test_it_updates_an_account(): void
     {
         Bus::fake();
         Event::fake();

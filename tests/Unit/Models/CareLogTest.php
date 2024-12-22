@@ -7,7 +7,6 @@ use App\Models\CareLog;
 use App\Models\Patient;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreatesTeamUser;
@@ -21,8 +20,7 @@ final class CareLogTest extends TestCase
     use GetsCareLogs;
     use RefreshDatabase;
 
-    #[Test]
-    public function aCareLogHasFormattedFullWeightAttribute(): void
+    public function test_a_care_log_has_formatted_full_weight_attribute(): void
     {
         [$kgWeightId, $gWeightId, $lbWeightId, $ozWeightId] = $this->weightUnits();
 
@@ -47,8 +45,7 @@ final class CareLogTest extends TestCase
         $this->assertEquals('', $log->full_weight);
     }
 
-    #[Test]
-    public function aCareLogHasFormattedFullTemperatureAttribute(): void
+    public function test_a_care_log_has_formatted_full_temperature_attribute(): void
     {
         [$cTemperatureId, $fTemperatureId, $kTemperatureId] = $this->temperatureUnits();
 
@@ -73,8 +70,7 @@ final class CareLogTest extends TestCase
         $this->assertEquals('', $log->full_temperature);
     }
 
-    #[Test]
-    public function aCareLogHasFormattedSummaryBodyAttribute(): void
+    public function test_a_care_log_has_formatted_summary_body_attribute(): void
     {
         [$kgWeightId, $gWeightId, $lbWeightId, $ozWeightId] = $this->weightUnits();
         [$cTemperatureId, $fTemperatureId, $kTemperatureId] = $this->temperatureUnits();
@@ -90,8 +86,7 @@ final class CareLogTest extends TestCase
         $this->assertSame('Weight: 123.01g. Temperature: 101.5F. foo bar', $careLog->summary_body);
     }
 
-    #[Test]
-    public function aCareLogIsRevisionable(): void
+    public function test_a_care_log_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -101,8 +96,7 @@ final class CareLogTest extends TestCase
         );
     }
 
-    #[Test]
-    public function ifACareLogsPatientIsLockedThenItCanNotBeUpdated(): void
+    public function test_if_a_care_logs_patient_is_locked_then_it_can_not_be_updated(): void
     {
         $patient = Patient::factory()->create();
         $CareLog = CareLog::factory()->create(['patient_id' => $patient->id, 'comments' => 'OLD']);
@@ -120,8 +114,7 @@ final class CareLogTest extends TestCase
         $this->assertEquals('OLD', $CareLog->fresh()->comments);
     }
 
-    #[Test]
-    public function ifACareLogsPatientIsLockedThenItCanNotBeCreated(): void
+    public function test_if_a_care_logs_patient_is_locked_then_it_can_not_be_created(): void
     {
         $CareLog = CareLog::factory()->create([
             'patient_id' => Patient::factory()->create(['locked_at' => Carbon::now()])->id,
@@ -130,8 +123,7 @@ final class CareLogTest extends TestCase
         $this->assertFalse($CareLog->exists);
     }
 
-    #[Test]
-    public function ifACareLogsPatientIsLockedThenItCanNotBeDeleted(): void
+    public function test_if_a_care_logs_patient_is_locked_then_it_can_not_be_deleted(): void
     {
         $patient = Patient::factory()->create();
         $careLog = CareLog::factory()->create(['patient_id' => $patient->id]);
@@ -143,8 +135,7 @@ final class CareLogTest extends TestCase
         $this->assertNotSoftDeleted($careLog);
     }
 
-    #[Test]
-    public function whenAPatientIsReplicatedSoAreTheCareLogs(): void
+    public function test_when_a_patient_is_replicated_so_are_the_care_logs(): void
     {
         $me = $this->createTeamUser();
         $patient = Patient::factory()->create();

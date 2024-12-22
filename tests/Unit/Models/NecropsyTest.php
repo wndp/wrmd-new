@@ -7,7 +7,6 @@ use App\Models\Necropsy;
 use App\Models\Patient;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreatesUiBehavior;
@@ -18,8 +17,7 @@ final class NecropsyTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function aNecropsyIsRevisionable(): void
+    public function test_a_necropsy_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -29,8 +27,7 @@ final class NecropsyTest extends TestCase
         );
     }
 
-    #[Test]
-    public function ifANecropsiesPatientIsLockedThenItCanNotBeUpdated(): void
+    public function test_if_a_necropsies_patient_is_locked_then_it_can_not_be_updated(): void
     {
         $patient = Patient::factory()->create();
         $necropsy = Necropsy::factory()->create(['patient_id' => $patient->id, 'prosector' => 'OLD']);
@@ -48,8 +45,7 @@ final class NecropsyTest extends TestCase
         $this->assertEquals('OLD', $necropsy->fresh()->prosector);
     }
 
-    #[Test]
-    public function ifANecropsiesPatientIsLockedThenItCanNotBeCreated(): void
+    public function test_if_a_necropsies_patient_is_locked_then_it_can_not_be_created(): void
     {
         $necropsy = Necropsy::factory()->create([
             'patient_id' => Patient::factory()->create(['locked_at' => Carbon::now()])->id,
@@ -58,8 +54,7 @@ final class NecropsyTest extends TestCase
         $this->assertFalse($necropsy->exists);
     }
 
-    #[Test]
-    public function ifANecropsiesPatientIsLockedThenItCanNotBeDeleted(): void
+    public function test_if_a_necropsies_patient_is_locked_then_it_can_not_be_deleted(): void
     {
         $patient = Patient::factory()->create();
         $necropsy = Necropsy::factory()->create(['patient_id' => $patient->id]);
@@ -71,8 +66,7 @@ final class NecropsyTest extends TestCase
         $this->assertDatabaseHas('necropsies', ['id' => $necropsy->id, 'deleted_at' => null]);
     }
 
-    #[Test]
-    public function whenAPatientIsReplicatedSoIsTheNecropsy(): void
+    public function test_when_a_patient_is_replicated_so_is_the_necropsy(): void
     {
         $patient = Patient::factory()->create();
         Necropsy::factory()->create(['patient_id' => $patient->id]);
@@ -83,8 +77,7 @@ final class NecropsyTest extends TestCase
         $this->assertCount(1, Necropsy::where('patient_id', $newPatient->id)->get());
     }
 
-    #[Test]
-    public function itFiltersTheNecropsyWeightIntoThePatientWeightsCollection(): void
+    public function test_it_filters_the_necropsy_weight_into_the_patient_weights_collection(): void
     {
         [$kgWeightId, $gWeightId] = $this->weightUnits();
 

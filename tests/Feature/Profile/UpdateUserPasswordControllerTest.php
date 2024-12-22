@@ -5,7 +5,6 @@ namespace Tests\Feature\Profile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreatesTeamUser;
 
@@ -14,8 +13,7 @@ final class UpdateUserPasswordControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function theCurrentPasswordIsRequiredToUpdateTheUserPassword(): void
+    public function test_the_current_password_is_required_to_update_the_user_password(): void
     {
         $me = $this->createTeamUser();
 
@@ -28,8 +26,7 @@ final class UpdateUserPasswordControllerTest extends TestCase
             ->assertInvalid(['current_password' => 'The provided password does not match your current password.']);
     }
 
-    #[Test]
-    public function aConfirmedPasswordIsRequiredToUpdateTheUserPassword(): void
+    public function test_a_confirmed_password_is_required_to_update_the_user_password(): void
     {
         $me = $this->createTeamUser();
 
@@ -41,8 +38,7 @@ final class UpdateUserPasswordControllerTest extends TestCase
             ->assertInvalid(['password' => 'The password field confirmation does not match.']);
     }
 
-    #[Test]
-    public function theUserPasswordIsUpdatedInStorage(): void
+    public function test_the_user_password_is_updated_in_storage(): void
     {
         $me = $this->createTeamUser();
         $newPassword = Str::random(8);

@@ -6,7 +6,6 @@ use App\Models\Patient;
 use App\Models\Person;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 
@@ -15,8 +14,7 @@ final class PersonTest extends TestCase
     use Assertions;
     use RefreshDatabase;
 
-    #[Test]
-    public function aPersonIsRevisionable(): void
+    public function test_a_person_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -26,8 +24,7 @@ final class PersonTest extends TestCase
         );
     }
 
-    #[Test]
-    public function whenAPersonsPhoneNumberIsAccessedItIsFormattedForTheirCountry(): void
+    public function test_when_a_persons_phone_number_is_accessed_it_is_formatted_for_their_country(): void
     {
         $person = Person::factory()->create([
             'phone' => '808-555-1234',
@@ -38,8 +35,7 @@ final class PersonTest extends TestCase
         $this->assertEquals('(808) 555-1234', $person->phone_national);
     }
 
-    #[Test]
-    public function whenAPersonsPhoneNumberIsSavedItIsFormattedForMultipleUses(): void
+    public function test_when_a_persons_phone_number_is_saved_it_is_formatted_for_multiple_uses(): void
     {
         $person = Person::factory()->create([
             'phone' => '808-555-1234',
@@ -54,8 +50,7 @@ final class PersonTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function whenAPersonsAlternatePhoneNumberIsAccessedItIsFormattedForTheirCountry(): void
+    public function test_when_a_persons_alternate_phone_number_is_accessed_it_is_formatted_for_their_country(): void
     {
         $person = Person::factory()->create([
             'alternate_phone' => '808-555-1234',
@@ -66,8 +61,7 @@ final class PersonTest extends TestCase
         $this->assertEquals('(808) 555-1234', $person->alternate_phone_national);
     }
 
-    #[Test]
-    public function whenAPersonsAlternatePhoneNumberIsSavedItIsFormattedForTheirCountry(): void
+    public function test_when_a_persons_alternate_phone_number_is_saved_it_is_formatted_for_their_country(): void
     {
         $person = Person::factory()->create([
             'county' => 'US',
@@ -83,8 +77,7 @@ final class PersonTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function whenAPhoneNumberDoesNotMatchACountryFormatItStillSavesToTheDatabase(): void
+    public function test_when_a_phone_number_does_not_match_a_country_format_it_still_saves_to_the_database(): void
     {
         $person = Person::factory()->create([
             'phone' => '123',
@@ -104,8 +97,7 @@ final class PersonTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function ifARescuersPatientIsLockedThenItCanNotBeUpdated(): void
+    public function test_if_a_rescuers_patient_is_locked_then_it_can_not_be_updated(): void
     {
         $rescuer = Person::factory()->create(['first_name' => 'OLD']);
         $patient = Patient::factory()->create(['rescuer_id' => $rescuer->id, 'locked_at' => Carbon::now()]);
@@ -120,8 +112,7 @@ final class PersonTest extends TestCase
         $this->assertEquals('OLD', $rescuer->fresh()->first_name);
     }
 
-    #[Test]
-    public function ifARescuersPatientIsLockedThenItCanNotBeDeleted(): void
+    public function test_if_a_rescuers_patient_is_locked_then_it_can_not_be_deleted(): void
     {
         $rescuer = Person::factory()->create(['first_name' => 'OLD']);
         $patient = Patient::factory()->create(['rescuer_id' => $rescuer->id, 'locked_at' => Carbon::now()]);

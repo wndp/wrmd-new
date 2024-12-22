@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreatesTeamUser;
@@ -24,8 +23,7 @@ final class NutritionPlanTest extends TestCase
     use GetsCareLogs;
     use RefreshDatabase;
 
-    #[Test]
-    public function aNutritionPlanHasManyIngredients()
+    public function test_a_nutrition_plan_has_many_ingredients()
     {
         $nutritionPlan = NutritionPlan::factory()->has(NutritionPlanIngredient::factory()->count(3), 'ingredients')->create();
 
@@ -33,8 +31,7 @@ final class NutritionPlanTest extends TestCase
         $this->assertInstanceOf(NutritionPlanIngredient::class, $nutritionPlan->ingredients->first());
     }
 
-    #[Test]
-    public function aNutritionPlanIsRevisionable(): void
+    public function test_a_nutrition_plan_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -44,8 +41,7 @@ final class NutritionPlanTest extends TestCase
         );
     }
 
-    #[Test]
-    public function itFiltersNutritionPlansIntoTheCareLog(): void
+    public function test_it_filters_nutrition_plans_into_the_care_log(): void
     {
         $me = $this->createTeamUser();
         Auth::loginUsingId($me->user->id);
@@ -65,8 +61,7 @@ final class NutritionPlanTest extends TestCase
         $this->assertEquals('2017-04-08 17:00:00', $logs[0]->logged_at_date_time->toDateTimeString());
     }
 
-    #[Test]
-    public function ifANutritionPlansPatientIsLockedThenItCanNotBeUpdated(): void
+    public function test_if_a_nutrition_plans_patient_is_locked_then_it_can_not_be_updated(): void
     {
         $patient = Patient::factory()->create();
         $nutritionPlan = NutritionPlan::factory()->create(['patient_id' => $patient->id, 'name' => 'OLD']);
@@ -84,8 +79,7 @@ final class NutritionPlanTest extends TestCase
         $this->assertEquals('OLD', $nutritionPlan->fresh()->name);
     }
 
-    #[Test]
-    public function ifANutritionPlansPatientIsLockedThenItCanNotBeCreated(): void
+    public function test_if_a_nutrition_plans_patient_is_locked_then_it_can_not_be_created(): void
     {
         $nutritionPlan = NutritionPlan::factory()->create([
             'patient_id' => Patient::factory()->create(['locked_at' => Carbon::now()])->id,
@@ -94,8 +88,7 @@ final class NutritionPlanTest extends TestCase
         $this->assertFalse($nutritionPlan->exists);
     }
 
-    #[Test]
-    public function ifANutritionPlansPatientIsLockedThenItCanNotBeDeleted(): void
+    public function test_if_a_nutrition_plans_patient_is_locked_then_it_can_not_be_deleted(): void
     {
         $patient = Patient::factory()->create();
         $nutritionPlan = NutritionPlan::factory()->create(['patient_id' => $patient->id]);
@@ -107,8 +100,7 @@ final class NutritionPlanTest extends TestCase
         $this->assertDatabaseHas('nutrition_plans', ['id' => $nutritionPlan->id, 'deleted_at' => null]);
     }
 
-    #[Test]
-    public function whenAPatientIsReplicatedSoAreTheNutritionPlans(): void
+    public function test_when_a_patient_is_replicated_so_are_the_nutrition_plans(): void
     {
         $patient = Patient::factory()->create();
 

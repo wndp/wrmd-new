@@ -8,7 +8,6 @@ use App\Models\Recheck;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;
@@ -21,8 +20,7 @@ final class DeleteRecordedDailyTasksTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function whenASchedualableIsDeletedDeleteRecordedDailyTasksIsDispatched(): void
+    public function test_when_a_schedualable_is_deleted_delete_recorded_daily_tasks_is_dispatched(): void
     {
         Bus::fake();
         $me = $this->createTeamUser();
@@ -35,8 +33,7 @@ final class DeleteRecordedDailyTasksTest extends TestCase
         Bus::assertDispatched(DeleteRecordedDailyTasks::class, fn ($job) => $job->model->is($recheck));
     }
 
-    #[Test]
-    public function whenASchedualableIsDeletedItsRecordedTasksAreAlsoDeleted(): void
+    public function test_when_a_schedualable_is_deleted_its_recorded_tasks_are_also_deleted(): void
     {
         $me = $this->createTeamUser();
 

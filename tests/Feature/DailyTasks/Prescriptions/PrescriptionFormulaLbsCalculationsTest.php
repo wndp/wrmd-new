@@ -9,7 +9,6 @@ use App\Models\Formula;
 use App\Models\Patient;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\CreatesTeamUser;
 use Tests\Traits\CreatesUiBehavior;
@@ -21,8 +20,7 @@ final class PrescriptionFormulaLbsCalculationsTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function itCalculatesTheDoseForMlPerLbFormulas(): void
+    public function test_it_calculates_the_dose_for_ml_per_lb_formulas(): void
     {
         [$kgWeightId] = $this->weightUnits();
 
@@ -48,8 +46,7 @@ final class PrescriptionFormulaLbsCalculationsTest extends TestCase
         //$this->assertSame('ml', $results['dose_unit']);
     }
 
-    #[Test]
-    public function itCalculatesTheDoseForIuPerLbFormulas(): void
+    public function test_it_calculates_the_dose_for_iu_per_lb_formulas(): void
     {
         [$kgWeightId] = $this->weightUnits();
 
@@ -74,8 +71,7 @@ final class PrescriptionFormulaLbsCalculationsTest extends TestCase
         $this->assertSame(1.32, $results['dose']);
     }
 
-    #[Test]
-    public function itCalculatesTheDoseForMgPerLbMgPerMlFormulas(): void
+    public function test_it_calculates_the_dose_for_mg_per_lb_mg_per_ml_formulas(): void
     {
         [$kgWeightId] = $this->weightUnits();
 
@@ -115,8 +111,7 @@ final class PrescriptionFormulaLbsCalculationsTest extends TestCase
         $this->assertSame($doseUnitIsMlId, $results['dose_unit_id']);
     }
 
-    #[Test]
-    public function itCalculatesTheDoseForMgPerLbMgPerTabFormulas(): void
+    public function test_it_calculates_the_dose_for_mg_per_lb_mg_per_tab_formulas(): void
     {
         [$kgWeightId] = $this->weightUnits();
 

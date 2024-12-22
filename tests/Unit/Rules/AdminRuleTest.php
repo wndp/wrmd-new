@@ -5,7 +5,6 @@ namespace Tests\Unit\Rules;
 use App\Enums\Role;
 use App\Rules\Admin;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\Support\AssistsWithAuthentication;
 use Tests\TestCase;
 use Tests\Traits\CreatesTeamUser;
@@ -17,8 +16,7 @@ final class AdminRuleTest extends TestCase
     //use AssistsWithAuthentication;
     use RefreshDatabase;
 
-    #[Test]
-    public function updateMyRoleToAllowedValue(): void
+    public function test_update_my_role_to_allowed_value(): void
     {
         // Give that I have a team and I am the only user
         $me = $this->createTeamUser();
@@ -30,8 +28,7 @@ final class AdminRuleTest extends TestCase
         $this->assertTrue($result);
     }
 
-    #[Test]
-    public function updateMyRoleToDisallowedValue(): void
+    public function test_update_my_role_to_disallowed_value(): void
     {
         // Give that I have a team and I am the only user
         $me = $this->createTeamUser();
@@ -43,8 +40,7 @@ final class AdminRuleTest extends TestCase
         $this->assertFalse($result);
     }
 
-    #[Test]
-    public function updateThierRoleToAllowedValue(): void
+    public function test_update_thier_role_to_allowed_value(): void
     {
         // Give that there is a team with two users
         $me = $this->createTeamUser();
@@ -57,8 +53,7 @@ final class AdminRuleTest extends TestCase
         $this->assertTrue($result);
     }
 
-    #[Test]
-    public function updateThierRoleToDisallowedValue(): void
+    public function test_update_thier_role_to_disallowed_value(): void
     {
         // Give that there is a team with two users and I am not an Admin
         $me = $this->createTeamUser(role: Role::USER);

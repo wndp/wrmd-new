@@ -6,7 +6,6 @@ use App\Models\Patient;
 use Illuminate\Bus\PendingBatch;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreateCase;
@@ -19,8 +18,7 @@ final class PatientNotificationsControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function itValidatesOwnershipOfThePatientBeforeSendingNotifications(): void
+    public function test_it_validates_ownership_of_the_patient_before_sending_notifications(): void
     {
         $me = $this->createTeamUser();
         $patient = Patient::factory()->create();
@@ -30,8 +28,7 @@ final class PatientNotificationsControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function aBatchOfJobsIsQueuedForThePatient(): void
+    public function test_a_batch_of_jobs_is_queued_for_the_patient(): void
     {
         Bus::fake();
 
@@ -47,8 +44,7 @@ final class PatientNotificationsControllerTest extends TestCase
         });
     }
 
-    #[Test]
-    public function patientNotificationsAreNotSentIfTheyWereAlreadyRecentlySent(): void
+    public function test_patient_notifications_are_not_sent_if_they_were_already_recently_sent(): void
     {
         Bus::fake();
 

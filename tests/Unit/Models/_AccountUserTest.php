@@ -12,8 +12,7 @@ final class AccountUserTest extends TestCase
 {
     //use CanJoinAccounts;
 
-    #[Test]
-    public function anAccountUserHasBelongsToAUser(): void
+    public function test_an_account_user_has_belongs_to_a_user(): void
     {
         $user = User::factory()->create();
         $account = Account::factory()->create();
@@ -23,8 +22,7 @@ final class AccountUserTest extends TestCase
         $this->assertTrue($accountUser->user->is($user));
     }
 
-    #[Test]
-    public function anAccountUserHasBelongsToAnAccount(): void
+    public function test_an_account_user_has_belongs_to_an_account(): void
     {
         $user = User::factory()->create();
         $account = Account::factory()->create();
@@ -53,8 +51,7 @@ final class AccountUserTest extends TestCase
     //     $this->assertTrue($result);
     // }
 
-    #[Test]
-    public function re_assign_a_user_deleted_from_single_account(): void
+    public function test_re_assign_a_user_deleted_from_single_account(): void
     {
         // Given that a user exists in one account
         $account = Account::factory()->create();
@@ -73,8 +70,7 @@ final class AccountUserTest extends TestCase
         $this->assertDatabaseMissing('users', ['email' => 'foo@example.com']);
     }
 
-    #[Test]
-    public function reAssignAUserDeletedFromForeignAccount(): void
+    public function test_re_assign_a_user_deleted_from_foreign_account(): void
     {
         // Given that a user exists in multiple accounts and is deleted from it's parent account
         $account1 = Account::factory()->create();
@@ -97,8 +93,7 @@ final class AccountUserTest extends TestCase
         $this->assertEquals($account1->id, $user->parent_account_id);
     }
 
-    #[Test]
-    public function reAssignAUserDeletedFromParentAccount(): void
+    public function test_re_assign_a_user_deleted_from_parent_account(): void
     {
         // Given that a user exists in multiple accounts and is deleted from it's parent account
         $account1 = Account::factory()->create();

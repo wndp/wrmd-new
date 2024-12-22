@@ -6,7 +6,6 @@ use App\Enums\Role;
 use App\Models\Donation;
 use App\Models\Person;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
@@ -20,21 +19,18 @@ final class PersonControllerTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessPeople(): void
+    public function test_un_authenticated_users_cant_access_people(): void
     {
         $this->get(route('people.rescuers.index'))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessPeople(): void
+    public function test_un_authorized_users_cant_access_people(): void
     {
         $me = $this->createTeamUser(role: Role::USER);
         $this->actingAs($me->user)->get(route('people.rescuers.index'))->assertForbidden();
     }
 
-    #[Test]
-    public function itDisplaysRescuersOnThePeopleIndexPage(): void
+    public function test_it_displays_rescuers_on_the_people_index_page(): void
     {
         $me = $this->createTeamUser();
 
@@ -50,8 +46,7 @@ final class PersonControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function itDisplaysVolunteersOnThePeopleIndexPage(): void
+    public function test_it_displays_volunteers_on_the_people_index_page(): void
     {
         $me = $this->createTeamUser();
         $volunteer = Person::factory()->create(['team_id' => $me->team->id, 'is_volunteer' => true]);
@@ -65,8 +60,7 @@ final class PersonControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function itDisplaysMembersOnThePeopleIndexPage(): void
+    public function test_it_displays_members_on_the_people_index_page(): void
     {
         $me = $this->createTeamUser();
         $member = Person::factory()->create(['team_id' => $me->team->id, 'is_member' => true]);
@@ -80,8 +74,7 @@ final class PersonControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function itDisplaysDonorsOnThePeopleIndexPage(): void
+    public function test_it_displays_donors_on_the_people_index_page(): void
     {
         $me = $this->createTeamUser();
         $donor = Person::factory()->has(Donation::Factory())->create(['team_id' => $me->team->id]);
@@ -95,8 +88,7 @@ final class PersonControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function itDisplaysThePersonCreatePage(): void
+    public function test_it_displays_the_person_create_page(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to('create-people');
@@ -108,8 +100,7 @@ final class PersonControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function itFailsValidationWhenTryingToStoreANewPerson(): void
+    public function test_it_fails_validation_when_trying_to_store_a_new_person(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to('create-people');
@@ -130,8 +121,7 @@ final class PersonControllerTest extends TestCase
             ->assertInvalid(['is_member' => 'The is member field must be true or false.']);
     }
 
-    #[Test]
-    public function itStoresANewPerson(): void
+    public function test_it_stores_a_new_person(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to('create-people');
@@ -175,8 +165,7 @@ final class PersonControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAPersonBeforeEditting(): void
+    public function test_it_validates_ownership_of_a_person_before_editting(): void
     {
         $me = $this->createTeamUser();
         $person = Person::factory()->create();
@@ -187,8 +176,7 @@ final class PersonControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function itDisplaysThePersonEditPage(): void
+    public function test_it_displays_the_person_edit_page(): void
     {
         $me = $this->createTeamUser();
         $person = Person::factory()->create(['team_id' => $me->team]);
@@ -202,8 +190,7 @@ final class PersonControllerTest extends TestCase
             });
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAPersonBeforeUpdating(): void
+    public function test_it_validates_ownership_of_a_person_before_updating(): void
     {
         $me = $this->createTeamUser();
         $person = Person::factory()->create();
@@ -214,8 +201,7 @@ final class PersonControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function itFailsValidationWhenTryingToUpdateAPerson(): void
+    public function test_it_fails_validation_when_trying_to_update_a_person(): void
     {
         $me = $this->createTeamUser();
         $person = Person::factory()->create(['team_id' => $me->team]);
@@ -236,8 +222,7 @@ final class PersonControllerTest extends TestCase
             ->assertInvalid(['is_member' => 'The is member field must be true or false.']);
     }
 
-    #[Test]
-    public function itUpdatesAPerson(): void
+    public function test_it_updates_a_person(): void
     {
         $me = $this->createTeamUser();
         $person = Person::factory()->create(['team_id' => $me->team]);

@@ -11,7 +11,6 @@ use App\Models\NutritionPlanIngredient;
 use App\Models\Patient;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
@@ -28,23 +27,20 @@ final class NutritionPlanControllerTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantStoreANutritionPlan(): void
+    public function test_un_authenticated_users_cant_store_a_nutrition_plan(): void
     {
         $patient = Patient::factory()->create();
         $this->post(route('patients.nutrition.store', $patient))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantStoreANutritionPlan(): void
+    public function test_un_authorized_users_cant_store_a_nutrition_plan(): void
     {
         $me = $this->createTeamUser();
         $patient = Patient::factory()->create();
         $this->actingAs($me->user)->post(route('patients.nutrition.store', $patient))->assertForbidden();
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAPatientBeforeStoringANutritionPlan(): void
+    public function test_it_validates_ownership_of_a_patient_before_storing_a_nutrition_plan(): void
     {
         $frequencyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_NUTRITION_FREQUENCIES,
@@ -63,8 +59,7 @@ final class NutritionPlanControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function itFailsValidationWhenTryingToStoreANutritionPlan(): void
+    public function test_it_fails_validation_when_trying_to_store_a_nutrition_plan(): void
     {
         $me = $this->createTeamUser();
         $admission = $this->createCase($me->team);
@@ -106,8 +101,7 @@ final class NutritionPlanControllerTest extends TestCase
             ]);
     }
 
-    #[Test]
-    public function itStoresANutritionPlan(): void
+    public function test_it_stores_a_nutrition_plan(): void
     {
         $frequencyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_NUTRITION_FREQUENCIES,
@@ -158,8 +152,7 @@ final class NutritionPlanControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfANutritionPlanBeforeUpdating(): void
+    public function test_it_validates_ownership_of_a_nutrition_plan_before_updating(): void
     {
         $frequencyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_NUTRITION_FREQUENCIES,
@@ -179,8 +172,7 @@ final class NutritionPlanControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function itFailsValidationWhenTryingToUpdateANutritionPlan(): void
+    public function test_it_fails_validation_when_trying_to_update_a_nutrition_plan(): void
     {
         $me = $this->createTeamUser();
         $admission = $this->createCase($me->team);
@@ -223,8 +215,7 @@ final class NutritionPlanControllerTest extends TestCase
             ]);
     }
 
-    #[Test]
-    public function itUpdatesANutritionPlan(): void
+    public function test_it_updates_a_nutrition_plan(): void
     {
         $frequencyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_NUTRITION_FREQUENCIES,
@@ -279,8 +270,7 @@ final class NutritionPlanControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itDeletesANutritionPlanIngredient(): void
+    public function test_it_deletes_a_nutrition_plan_ingredient(): void
     {
         $this->withOutExceptionHandling();
 

@@ -9,7 +9,6 @@ use App\Models\Patient;
 use App\Models\Recheck;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
@@ -45,15 +44,13 @@ final class RecheckControllerTest extends TestCase
         )->attribute_option_id;
     }
 
-    #[Test]
-    public function unAuthenticatedUsersCantStoreARecheck(): void
+    public function test_un_authenticated_users_cant_store_a_recheck(): void
     {
         $patient = Patient::factory()->create();
         $this->post(route('patients.recheck.store', $patient))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantStoreARecheck(): void
+    public function test_un_authorized_users_cant_store_a_recheck(): void
     {
         $me = $this->createTeamUser();
 
@@ -61,8 +58,7 @@ final class RecheckControllerTest extends TestCase
         $this->actingAs($me->user)->post(route('patients.recheck.store', $patient))->assertForbidden();
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAPatientBeforeStoring(): void
+    public function test_it_validates_ownership_of_a_patient_before_storing(): void
     {
         $me = $this->createTeamUser();
 
@@ -80,8 +76,7 @@ final class RecheckControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function itFailsValidationWhenTryingToStoreARecheck(): void
+    public function test_it_fails_validation_when_trying_to_store_a_recheck(): void
     {
         $me = $this->createTeamUser();
 
@@ -111,8 +106,7 @@ final class RecheckControllerTest extends TestCase
             ->assertInvalid(['recheck_end_at' => 'The recheck end at field must be a date after or equal to recheck start at.']);
     }
 
-    #[Test]
-    public function itStoresARecheck(): void
+    public function test_it_stores_a_recheck(): void
     {
         $me = $this->createTeamUser();
 
@@ -139,8 +133,7 @@ final class RecheckControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfARecheckBeforeUpdating(): void
+    public function test_it_validates_ownership_of_a_recheck_before_updating(): void
     {
         $me = $this->createTeamUser();
 
@@ -159,8 +152,7 @@ final class RecheckControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function itFailsValidationWhenTryingToUpdateARecheck(): void
+    public function test_it_fails_validation_when_trying_to_update_a_recheck(): void
     {
         $me = $this->createTeamUser();
 
@@ -191,8 +183,7 @@ final class RecheckControllerTest extends TestCase
             ->assertInvalid(['recheck_end_at' => 'The recheck end at field must be a date after or equal to recheck start at.']);
     }
 
-    #[Test]
-    public function itUpdatesARecheck(): void
+    public function test_it_updates_a_recheck(): void
     {
         $me = $this->createTeamUser();
 

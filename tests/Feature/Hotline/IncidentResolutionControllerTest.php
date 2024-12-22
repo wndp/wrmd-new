@@ -8,7 +8,6 @@ use App\Enums\AttributeOptionUiBehavior;
 use App\Models\Incident;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
@@ -25,16 +24,14 @@ final class IncidentResolutionControllerTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
-    #[Test]
-    public function unAuthenticatedUsersCantAccessHotline(): void
+    public function test_un_authenticated_users_cant_access_hotline(): void
     {
         $incident = Incident::factory()->create();
 
         $this->put(route('hotline.incident.update.resolution', $incident))->assertRedirect('login');
     }
 
-    #[Test]
-    public function unAuthorizedUsersCantAccessHotline(): void
+    public function test_un_authorized_users_cant_access_hotline(): void
     {
         $me = $this->createTeamUser();
         $incident = Incident::factory()->for($me->team)->create();
@@ -42,8 +39,7 @@ final class IncidentResolutionControllerTest extends TestCase
         $this->actingAs($me->user)->put(route('hotline.incident.update.resolution', $incident))->assertForbidden();
     }
 
-    #[Test]
-    public function itValidatesOwnershipOfAnIncidentBeforeUpdatingIt(): void
+    public function test_it_validates_ownership_of_an_incident_before_updating_it(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -53,8 +49,7 @@ final class IncidentResolutionControllerTest extends TestCase
             ->assertOwnershipValidationError();
     }
 
-    #[Test]
-    public function anResolvedAtDateIsRequiredWhenAResolutionIsPresentToUpdateAnIncident(): void
+    public function test_an_resolved_at_date_is_required_when_a_resolution_is_present_to_update_an_incident(): void
     {
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -82,8 +77,7 @@ final class IncidentResolutionControllerTest extends TestCase
             ->assertInvalid(['resolved_at' => 'The resolved at field must be a date after or equal to 2022-07-02 10:30:00.']);
     }
 
-    #[Test]
-    public function anIncidentIsUpdatedInStorage(): void
+    public function test_an_incident_is_updated_in_storage(): void
     {
         $hotlineStatusIsResolvedId = $this->createUiBehavior(AttributeOptionName::HOTLINE_STATUSES, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED)
             ->attribute_option_id;
@@ -113,8 +107,7 @@ final class IncidentResolutionControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function savingAResolutionDateWillAutomaticallyChangeTheIncidentStatusToResolved(): void
+    public function test_saving_a_resolution_date_will_automatically_change_the_incident_status_to_resolved(): void
     {
         $hotlineStatusIsResolvedId = $this->createUiBehavior(AttributeOptionName::HOTLINE_STATUSES, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED)
             ->attribute_option_id;

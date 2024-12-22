@@ -5,13 +5,11 @@ namespace Tests\Feature\Analytics;
 use App\Analytics\AnalyticFilters;
 use App\Analytics\Contracts\Number;
 use App\Models\Team;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 final class NumberTest extends TestCase
 {
-    #[Test]
-    public function itCalculatesThePercentageDifferenceBetweenEqualNumbers(): void
+    public function test_it_calculates_the_percentage_difference_between_equal_numbers(): void
     {
         $this->anonymousNumber->calculatePercentageDifference(1, 1);
 
@@ -19,8 +17,7 @@ final class NumberTest extends TestCase
         $this->assertEquals(0.0, $this->anonymousNumber->difference);
     }
 
-    #[Test]
-    public function itCalculatesThePercentageDifferenceBetweenAnDecreasedNumber(): void
+    public function test_it_calculates_the_percentage_difference_between_an_decreased_number(): void
     {
         $this->anonymousNumber->calculatePercentageDifference(1, 2);
 
@@ -28,8 +25,7 @@ final class NumberTest extends TestCase
         $this->assertEquals(50, $this->anonymousNumber->difference);
     }
 
-    #[Test]
-    public function itCalculatesThePercentageDifferenceBetweenAnIncreasedNumber(): void
+    public function test_it_calculates_the_percentage_difference_between_an_increased_number(): void
     {
         $this->anonymousNumber->calculatePercentageDifference(3, 1);
 

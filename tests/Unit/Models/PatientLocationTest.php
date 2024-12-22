@@ -9,7 +9,6 @@ use App\Models\PatientLocation;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreatesTeamUser;
@@ -23,20 +22,17 @@ final class PatientLocationTest extends TestCase
     use GetsCareLogs;
     use RefreshDatabase;
 
-    #[Test]
-    public function aPatientLocationBelongsToAPatient(): void
+    public function test_a_patient_location_belongs_to_a_patient(): void
     {
         $this->assertInstanceOf(Patient::class, PatientLocation::factory()->create()->patient);
     }
 
-    #[Test]
-    public function aPatientLocationBelongsToALocation(): void
+    public function test_a_patient_location_belongs_to_a_location(): void
     {
         $this->assertInstanceOf(Location::class, PatientLocation::factory()->create()->location);
     }
 
-    #[Test]
-    public function aPatientLocationHasSummaryBodyAttribute(): void
+    public function test_a_patient_location_has_summary_body_attribute(): void
     {
         [$clinicId, $homeCareId] = $this->patientLocationFacilitiesIds();
 
@@ -57,8 +53,7 @@ final class PatientLocationTest extends TestCase
         $this->assertEquals('Moved to ICU, Inc 1. foo bar', $patient->locations->first()->patientLocation->summary_body);
     }
 
-    #[Test]
-    public function patientLocationsAreFilteredIntoTheCareLog(): void
+    public function test_patient_locations_are_filtered_into_the_care_log(): void
     {
         [$clinicId] = $this->patientLocationFacilitiesIds();
 
@@ -85,8 +80,7 @@ final class PatientLocationTest extends TestCase
         //$this->assertEquals('Moved to ICU, Inc 1. foo bar', $logs[0]->body);
     }
 
-    #[Test]
-    public function aPatientLocationIsRevisionable(): void
+    public function test_a_patient_location_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -96,8 +90,7 @@ final class PatientLocationTest extends TestCase
         );
     }
 
-    #[Test]
-    public function ifAPatientLocationsPatientIsLockedThenItCanNotBeUpdated(): void
+    public function test_if_a_patient_locations_patient_is_locked_then_it_can_not_be_updated(): void
     {
         [$clinicId] = $this->patientLocationFacilitiesIds();
 
@@ -130,8 +123,7 @@ final class PatientLocationTest extends TestCase
         $this->assertEquals('OLD', $patientLocation->fresh()->comments);
     }
 
-    #[Test]
-    public function ifAPatientLocationsPatientIsLockedThenItCanNotBeCreated(): void
+    public function test_if_a_patient_locations_patient_is_locked_then_it_can_not_be_created(): void
     {
         $patientLocation = PatientLocation::factory()->create([
             'patient_id' => Patient::factory()->create(['locked_at' => Carbon::now()])->id,
@@ -140,8 +132,7 @@ final class PatientLocationTest extends TestCase
         $this->assertFalse($patientLocation->exists);
     }
 
-    #[Test]
-    public function ifAPatientLocationsPatientIsLockedThenItCanNotBeDeleted(): void
+    public function test_if_a_patient_locations_patient_is_locked_then_it_can_not_be_deleted(): void
     {
         $patient = Patient::factory()->create();
         $patientLocation = PatientLocation::factory()->create(['patient_id' => $patient->id]);

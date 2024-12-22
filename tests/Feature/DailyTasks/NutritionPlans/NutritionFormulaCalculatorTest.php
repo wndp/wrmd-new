@@ -7,7 +7,6 @@ use App\Models\Formula;
 use App\Models\Patient;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 #[Group('daily-tasks')]
@@ -15,8 +14,7 @@ final class NutritionFormulaCalculatorTest extends TestCase
 {
     use RefreshDatabase;
 
-    #[Test]
-    public function itStartsTheNutritionPlanTheDayItIsWritten(): void
+    public function test_it_starts_the_nutrition_plan_the_day_it_is_written(): void
     {
         $patient = Patient::factory()->create();
 
@@ -32,8 +30,7 @@ final class NutritionFormulaCalculatorTest extends TestCase
         $this->assertTrue(Carbon::parse($results['started_at'])->isSameDay(Carbon::now()));
     }
 
-    #[Test]
-    public function itEndsTheNutritionPlanTheGiveNumberOfDaysPastTheStartDate(): void
+    public function test_it_ends_the_nutrition_plan_the_give_number_of_days_past_the_start_date(): void
     {
         $patient = Patient::factory()->create();
 
@@ -50,8 +47,7 @@ final class NutritionFormulaCalculatorTest extends TestCase
         $this->assertTrue(Carbon::parse($results['ended_at'])->isSameDay(Carbon::now()->addDays(6)));
     }
 
-    #[Test]
-    public function itLeavesTheNutritionPlanOpenIfNoDurationIsGiven(): void
+    public function test_it_leaves_the_nutrition_plan_open_if_no_duration_is_given(): void
     {
         $patient = Patient::factory()->create();
 

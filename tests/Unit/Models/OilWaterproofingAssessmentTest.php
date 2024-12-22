@@ -7,7 +7,6 @@ use App\Models\Patient;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 
@@ -17,14 +16,12 @@ final class OilWaterproofingAssessmentTest extends TestCase
     use Assertions;
     use RefreshDatabase;
 
-    #[Test]
-    public function aOilWaterproofingAssessmentBelongsToAPatient(): void
+    public function test_a_oil_waterproofing_assessment_belongs_to_a_patient(): void
     {
         $this->assertInstanceOf(Patient::class, OilWaterproofingAssessment::factory()->create()->patient);
     }
 
-    #[Test]
-    public function aOilWaterproofingAssessmentIsRevisionable(): void
+    public function test_a_oil_waterproofing_assessment_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -34,8 +31,7 @@ final class OilWaterproofingAssessmentTest extends TestCase
         );
     }
 
-    #[Test]
-    public function ifAnOilWaterproofingAssessmentsPatientIsLockedThenItCanNotBeUpdated(): void
+    public function test_if_an_oil_waterproofing_assessments_patient_is_locked_then_it_can_not_be_updated(): void
     {
         $patient = Patient::factory()->create();
         $assessments = OilWaterproofingAssessment::factory()->create(['patient_id' => $patient->id, 'examiner' => 'OLD']);
@@ -53,8 +49,7 @@ final class OilWaterproofingAssessmentTest extends TestCase
         $this->assertEquals('OLD', $assessments->fresh()->examiner);
     }
 
-    #[Test]
-    public function ifAnOilWaterproofingAssessmentsPatientIsLockedThenItCanNotBeCreated(): void
+    public function test_if_an_oil_waterproofing_assessments_patient_is_locked_then_it_can_not_be_created(): void
     {
         $assessments = OilWaterproofingAssessment::factory()->create([
             'patient_id' => Patient::factory()->create(['locked_at' => Carbon::now()])->id,
@@ -63,8 +58,7 @@ final class OilWaterproofingAssessmentTest extends TestCase
         $this->assertFalse($assessments->exists);
     }
 
-    #[Test]
-    public function ifAOilWaterproofingAssessmentsPatientIsLockedThenItCanNotBeDeleted(): void
+    public function test_if_a_oil_waterproofing_assessments_patient_is_locked_then_it_can_not_be_deleted(): void
     {
         $patient = Patient::factory()->create();
         $assessments = OilWaterproofingAssessment::factory()->create(['patient_id' => $patient->id]);
@@ -76,8 +70,7 @@ final class OilWaterproofingAssessmentTest extends TestCase
         $this->assertDatabaseHas('oil_waterproofing_assessments', ['id' => $assessments->id, 'deleted_at' => null]);
     }
 
-    #[Test]
-    public function whenAPatientIsReplicatedSoAreTheOilWaterproofingAssessments(): void
+    public function test_when_a_patient_is_replicated_so_are_the_oil_waterproofing_assessments(): void
     {
         $patient = Patient::factory()->create();
         OilWaterproofingAssessment::factory()->create(['patient_id' => $patient->id]);

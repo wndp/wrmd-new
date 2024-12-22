@@ -6,7 +6,6 @@ use App\Models\Team;
 use App\Models\User;
 use App\Models\Veterinarian;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 
@@ -15,8 +14,7 @@ final class VeterinarianTest extends TestCase
     use Assertions;
     use RefreshDatabase;
 
-    #[Test]
-    public function aVeterinarianIsRevisionable(): void
+    public function test_a_veterinarian_is_revisionable(): void
     {
         activity()->enableLogging();
 
@@ -26,16 +24,14 @@ final class VeterinarianTest extends TestCase
         );
     }
 
-    #[Test]
-    public function aVeterinarianBelongsToATeam(): void
+    public function test_a_veterinarian_belongs_to_a_team(): void
     {
         $veterinarian = Veterinarian::factory()->create();
 
         $this->assertInstanceOf(Team::class, $veterinarian->team);
     }
 
-    #[Test]
-    public function aVeterinarianCanBelongToAUser(): void
+    public function test_a_veterinarian_can_belong_to_a_user(): void
     {
         $veterinarian = Veterinarian::factory()->create();
         $this->assertNull($veterinarian->user);
@@ -45,8 +41,7 @@ final class VeterinarianTest extends TestCase
         $this->assertInstanceOf(User::class, $veterinarian->user);
     }
 
-    #[Test]
-    public function whenAVeterinariansPhoneNumberIsAccessedItIsFormattedForTheirCountry(): void
+    public function test_when_a_veterinarians_phone_number_is_accessed_it_is_formatted_for_their_country(): void
     {
         $veterinarian = Veterinarian::factory()->create([
             'phone' => '808-555-1234',
@@ -57,8 +52,7 @@ final class VeterinarianTest extends TestCase
         $this->assertEquals('(808) 555-1234', $veterinarian->phone_national);
     }
 
-    #[Test]
-    public function whenAVeterinariansPhoneNumberIsSavedItIsFormattedForItsCountry(): void
+    public function test_when_a_veterinarians_phone_number_is_saved_it_is_formatted_for_its_country(): void
     {
         $veterinarian = Veterinarian::factory()->create([
             'phone' => '808-555-1234',
@@ -73,8 +67,7 @@ final class VeterinarianTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function whenAPhoneNumberDoesNotMatchACountryFormatItStillSavesToTheDatabase(): void
+    public function test_when_a_phone_number_does_not_match_a_country_format_it_still_saves_to_the_database(): void
     {
         $veterinarian = Veterinarian::factory()->create([
             'phone' => '123',
