@@ -17,7 +17,7 @@ class UncollaborateTransferController extends Controller
      */
     public function __invoke(Request $request, Transfer $transfer): RedirectResponse
     {
-        abort_unless($this->transferCanUncollaborate($transfer), new RecordNotOwned());
+        abort_unless($this->transferCanUncollaborate($transfer), new RecordNotOwned);
 
         $admission = Admission::custody($transfer->toTeam, $transfer->patient);
         $newPatient = $transfer->patient->clone();

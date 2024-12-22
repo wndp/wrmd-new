@@ -2,11 +2,9 @@
 
 namespace App\Jobs;
 
-use App\ValueObjects\SingleStorePoint;
 use App\ValueObjects\GeocodeComponents;
+use App\ValueObjects\SingleStorePoint;
 use CommerceGuys\Addressing\Address;
-use Geocodio\Exceptions\GeocodioException;
-use Geocodio\GeocodioFacade;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Queue\Queueable;

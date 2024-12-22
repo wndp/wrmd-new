@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Maintenance;
 
 use App\Events\AccountUpdated;
 use App\Events\PatientDeleted;
-use App\Extensions\ExtensionNavigation;
 use App\Http\Controllers\Controller;
 use App\Models\Admission;
 use Illuminate\Http\RedirectResponse;

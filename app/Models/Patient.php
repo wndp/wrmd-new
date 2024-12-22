@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Actions\ClonePatientRelations;
-use App\ValueObjects\SingleStorePoint;
 use App\Concerns\HasSpatial;
 use App\Concerns\InteractsWithMedia;
 use App\Concerns\JoinsTablesToPatients;
@@ -15,6 +14,7 @@ use App\Enums\AttributeOptionUiBehavior;
 use App\Models\Scopes\VoidedScope;
 use App\Repositories\AdministrativeDivision;
 use App\Support\Timezone;
+use App\ValueObjects\SingleStorePoint;
 use Carbon\Carbon;
 use CommerceGuys\Addressing\Address;
 use Illuminate\Database\Eloquent\Builder;
@@ -54,7 +54,7 @@ class Patient extends Model implements HasMedia
      */
     protected static function booted(): void
     {
-        static::addGlobalScope(new VoidedScope());
+        static::addGlobalScope(new VoidedScope);
     }
 
     protected $fillable = [
@@ -455,7 +455,7 @@ class Patient extends Model implements HasMedia
 
     public function getCoordinatesFoundAddress(): Address
     {
-        return (new Address())
+        return (new Address)
             ->withCountryCode(app(AdministrativeDivision::class)->alpha2CountryCode())
             ->withAdministrativeArea($this->subdivision_found ?: '')
             ->withLocality($this->city_found ?: '')

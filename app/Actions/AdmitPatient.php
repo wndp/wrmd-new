@@ -2,7 +2,6 @@
 
 namespace App\Actions;
 
-use App\ValueObjects\SingleStorePoint;
 use App\Concerns\AsAction;
 use App\Concerns\PersistsAdmission;
 use App\Enums\AttributeOptionName;
@@ -15,6 +14,7 @@ use App\Models\Patient;
 use App\Models\Person;
 use App\Models\Team;
 use App\Support\Timezone;
+use App\ValueObjects\SingleStorePoint;
 use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;

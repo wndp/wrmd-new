@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\ValueObjects\SingleStorePoint;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
 use App\Enums\SettingKey;
@@ -10,6 +9,7 @@ use App\Events\PatientUpdated;
 use App\Models\Patient;
 use App\Rules\AttributeOptionExistsRule;
 use App\Support\Wrmd;
+use App\ValueObjects\SingleStorePoint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

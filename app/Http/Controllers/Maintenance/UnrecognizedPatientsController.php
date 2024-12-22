@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Maintenance;
 
-use App\Extensions\ExtensionNavigation;
 use App\Http\Controllers\Controller;
 use App\Models\Admission;
 use Illuminate\Support\Facades\Auth;

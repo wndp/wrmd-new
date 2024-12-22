@@ -13,7 +13,7 @@ final class NullGeocoderTest extends TestCase
     #[Test]
     public function it_returns_an_empty_geocode_components_object(): void
     {
-        $response = NullGeocoder::run(new Address());
+        $response = NullGeocoder::run(new Address);
 
         $this->assertEquals(new GeocodeComponents(0, 0), $response);
     }

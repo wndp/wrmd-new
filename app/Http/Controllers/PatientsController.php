@@ -49,7 +49,7 @@ class PatientsController extends Controller
     public function create(Request $request)
     {
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             'actionsAfterStore' => Options::arrayToSelectable([
                 'return' => __('I want to admit another patient'),
                 'view' => __("I want to view this patient's record"),

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Maintenance;
 
 use App\Enums\SettingKey;
 use App\Events\AccountUpdated;
-use App\Extensions\ExtensionNavigation;
 use App\Http\Controllers\Controller;
 use App\Support\Wrmd;
 use Carbon\Carbon;

@@ -18,6 +18,7 @@ class CustomValue extends Model
 {
     /** @use HasFactory<\Database\Factories\CustomValueFactory> */
     use HasFactory;
+
     use HasVersion7Uuids;
     use LogsActivity;
     use Prunable;

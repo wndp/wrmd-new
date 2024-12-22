@@ -24,6 +24,7 @@ final class CustomFieldsControllerTest extends TestCase
     use Assertions;
     use CreateCase;
     use CreatesTeamUser;
+    use CreatesUiBehavior;
     use RefreshDatabase;
 
     private function createAttributeOptions()
@@ -34,22 +35,22 @@ final class CustomFieldsControllerTest extends TestCase
         )->attribute_option_id;
 
         $locationId = AttributeOption::factory()->create([
-            'name' => AttributeOptionName::CUSTOM_FIELD_LOCATIONS
+            'name' => AttributeOptionName::CUSTOM_FIELD_LOCATIONS,
         ])->id;
 
         $panelId = AttributeOption::factory()->create([
-            'name' => AttributeOptionName::CUSTOM_FIELD_PATIENT_PANELS
+            'name' => AttributeOptionName::CUSTOM_FIELD_PATIENT_PANELS,
         ])->id;
 
         $typeId = AttributeOption::factory()->create([
-            'name' => AttributeOptionName::CUSTOM_FIELD_TYPES
+            'name' => AttributeOptionName::CUSTOM_FIELD_TYPES,
         ])->id;
 
         return [
             $customFieldGroupIsPatientId,
             $locationId,
             $panelId,
-            $typeId
+            $typeId,
         ];
     }
 
@@ -72,7 +73,7 @@ final class CustomFieldsControllerTest extends TestCase
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_CUSTOM_FIELDS->value);
 
-        $response = $this->actingAs($me->user)->get(route('maintenance.custom_fields.index'))
+        $this->actingAs($me->user)->get(route('maintenance.custom_fields.index'))
             ->assertOk()
             ->assertInertia(
                 fn ($page) => $page->component('Maintenance/CustomFields/Index')
@@ -91,7 +92,7 @@ final class CustomFieldsControllerTest extends TestCase
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_CUSTOM_FIELDS->value);
 
-        $response = $this->actingAs($me->user)->get(route('maintenance.custom_fields.create'))
+        $this->actingAs($me->user)->get(route('maintenance.custom_fields.create'))
             ->assertOk()
             ->assertInertia(function ($page) {
                 $page->component('Maintenance/CustomFields/Create')
@@ -107,7 +108,7 @@ final class CustomFieldsControllerTest extends TestCase
         $numberOfAllowedFields = CustomFieldBuilder::NUMBER_OF_ALLOWED_FIELDS;
         CustomField::factory()->count($numberOfAllowedFields)->create(['team_id' => $me->team->id]);
 
-        $response = $this->actingAs($me->user)->get(route('maintenance.custom_fields.create'))
+        $this->actingAs($me->user)->get(route('maintenance.custom_fields.create'))
             ->assertStatus(302)
             ->assertHasNotificationMessage(
                 "You already have {$numberOfAllowedFields} custom fields created!"
@@ -290,7 +291,7 @@ final class CustomFieldsControllerTest extends TestCase
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_CUSTOM_FIELDS->value);
         $customField = CustomField::factory()->create(['team_id' => $me->team->id]);
 
-        $response = $this->actingAs($me->user)->get(route('maintenance.custom_fields.edit', $customField))
+        $this->actingAs($me->user)->get(route('maintenance.custom_fields.edit', $customField))
             ->assertOk()
             ->assertInertia(
                 fn ($page) => $page->component('Maintenance/CustomFields/Edit')
@@ -359,7 +360,7 @@ final class CustomFieldsControllerTest extends TestCase
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_CUSTOM_FIELDS->value);
         $customField = CustomField::factory()->create([
             'team_id' => $me->team->id,
-            'type_id' => $customFieldTypesRequiresOptionsId
+            'type_id' => $customFieldTypesRequiresOptionsId,
         ]);
 
         $this->actingAs($me->user)->put(route('maintenance.custom_fields.update', $customField))

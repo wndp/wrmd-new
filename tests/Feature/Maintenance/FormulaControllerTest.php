@@ -11,8 +11,6 @@ use App\Models\Formula;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
-use Tests\Support\AssistsWithAuthentication;
-use Tests\Support\AssistsWithTests;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreateCase;
@@ -25,9 +23,9 @@ final class FormulaControllerTest extends TestCase
     use Assertions;
     use CreateCase;
     use CreatesTeamUser;
+    use CreatesUiBehavior;
     use FeatureMacros;
     use RefreshDatabase;
-    use CreatesUiBehavior;
 
     #[Test]
     public function unAuthenticatedUsersCantAccessFormula(): void

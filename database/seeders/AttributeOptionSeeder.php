@@ -1585,7 +1585,7 @@ class AttributeOptionSeeder extends Seeder
         $this->createOrUpdateAttributes(AttributeOptionName::CUSTOM_FIELD_GROUPS, [
             __('Patient'),
             __('Person'),
-            __('Exam')
+            __('Exam'),
         ]);
         $this->createOrUpdateAttributeOptionUiBehaviors(
             AttributeOptionName::CUSTOM_FIELD_GROUPS,
@@ -1597,15 +1597,14 @@ class AttributeOptionSeeder extends Seeder
             __('Cage Card'),
             __('Intake'),
             __('Diagnosis'),
-            __('Outcome')
+            __('Outcome'),
         ]);
 
         $this->createOrUpdateAttributes(AttributeOptionName::CUSTOM_FIELD_LOCATIONS, [
             __('Top'),
-            __('Bottom')
+            __('Bottom'),
         ]);
     }
-
 
     private function createOrUpdateAttributes(AttributeOptionName $attributeName, array $values): void
     {

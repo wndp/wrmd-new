@@ -3,12 +3,11 @@
 namespace App\ValueObjects;
 
 use App\Casts\SingleStorePointCast;
+use geoPHP;
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
-use Illuminate\Contracts\Database\Query\Expression as ExpressionContract;
 use Illuminate\Support\Facades\DB;
 use Point as geoPHPPoint;
-use geoPHP;
 
 class SingleStorePoint implements Castable
 {
@@ -20,7 +19,7 @@ class SingleStorePoint implements Castable
 
     public static function castUsing(array $arguments): CastsAttributes
     {
-        return new SingleStorePointCast();
+        return new SingleStorePointCast;
     }
 
     public function toWkt(): string

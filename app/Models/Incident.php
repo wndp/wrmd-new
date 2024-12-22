@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use App\ValueObjects\SingleStorePoint;
 use App\Concerns\InteractsWithMedia;
 use App\Concerns\QueriesDateRange;
 use App\Concerns\QueriesOneOfMany;
 use App\Concerns\ValidatesOwnership;
+use App\ValueObjects\SingleStorePoint;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
