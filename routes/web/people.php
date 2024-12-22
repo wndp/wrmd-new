@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\Ability;
 use App\Http\Controllers\People\Combine\CombineMatchesController;
 use App\Http\Controllers\People\Combine\CombineMergeController;
 use App\Http\Controllers\People\Combine\CombineReviewController;

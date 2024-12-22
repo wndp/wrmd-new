@@ -62,7 +62,7 @@ class IncidentController extends Controller
     public function create(): Response
     {
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::PERSON_ENTITY_TYPES->value,
                 AttributeOptionName::HOTLINE_WILDLIFE_CATEGORIES->value,
@@ -174,7 +174,7 @@ class IncidentController extends Controller
             ]);
 
         OptionsStore::add([
-            new LocaleOptions(),
+            new LocaleOptions,
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::PERSON_ENTITY_TYPES->value,
                 AttributeOptionName::HOTLINE_WILDLIFE_CATEGORIES->value,

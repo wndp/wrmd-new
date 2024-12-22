@@ -2,14 +2,11 @@
 
 namespace Tests\Feature\People;
 
-use App\Domain\Taxonomy\Taxon;
 use App\Enums\Role;
 use App\Models\Person;
 use App\Models\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\AssistsWithAuthentication;
-use Tests\Support\AssistsWithCases;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreateCase;

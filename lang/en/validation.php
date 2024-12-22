@@ -192,7 +192,7 @@ return [
     */
 
     'attributes' => [
-        'method_id' => 'method'
+        'method_id' => 'method',
     ],
 
 ];

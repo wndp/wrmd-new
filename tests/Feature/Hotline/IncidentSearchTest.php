@@ -32,7 +32,7 @@ final class IncidentSearchTest extends TestCase
     {
         $results = IncidentSearch::run(
             Team::factory()->create(),
-            new Request()
+            new Request
         );
 
         $this->assertInstanceOf(Collection::class, $results);
@@ -41,9 +41,9 @@ final class IncidentSearchTest extends TestCase
     #[Test]
     public function anIncidentSearchCanBeHandled(): void
     {
-        $results = (new IncidentSearch())->handle(
+        $results = (new IncidentSearch)->handle(
             Team::factory()->create(),
-            new Request()
+            new Request
         );
 
         $this->assertInstanceOf(Collection::class, $results);
@@ -54,7 +54,7 @@ final class IncidentSearchTest extends TestCase
     {
         $hotlineStatusesId = AttributeOption::factory()->create(['name' => AttributeOptionName::HOTLINE_STATUSES])->id;
 
-        $hotlineSearch = tap(new IncidentSearch(), function ($hotlineSearch) use ($hotlineStatusesId) {
+        $hotlineSearch = tap(new IncidentSearch, function ($hotlineSearch) use ($hotlineStatusesId) {
             $hotlineSearch->handle(
                 Team::factory()->create(),
                 new Request([

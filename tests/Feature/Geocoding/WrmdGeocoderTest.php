@@ -24,7 +24,7 @@ final class WrmdGeocoderTest extends TestCase
             'coordinates_found' => new SingleStorePoint(38.82296602, -122.51286703),
         ]);
 
-        $address = (new Address())
+        $address = (new Address)
             ->withCountryCode('US')
             ->withAdministrativeArea('CA')
             ->withLocality('Lower Lake')
@@ -48,7 +48,7 @@ final class WrmdGeocoderTest extends TestCase
             'disposition_coordinates' => new SingleStorePoint(38.82296602, -122.51286703),
         ]);
 
-        $address = (new Address())
+        $address = (new Address)
             ->withCountryCode('US')
             ->withAdministrativeArea('CA')
             ->withLocality('Lower Lake')

@@ -2,15 +2,12 @@
 
 namespace Tests\Feature\People;
 
-use App\Enums\Ability;
 use App\Enums\Role;
 use App\Models\Donation;
 use App\Models\Person;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Silber\Bouncer\BouncerFacade;
-use Tests\Support\AssistsWithAuthentication;
-use Tests\Support\AssistsWithCases;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
 use Tests\Traits\CreateCase;

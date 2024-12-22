@@ -6,8 +6,6 @@ use App\Enums\Role;
 use App\Models\Person;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
-use Silber\Bouncer\BouncerFacade;
-use Tests\Support\AssistsWithAuthentication;
 use Tests\TestCase;
 use Tests\Traits\CreatesTeamUser;
 

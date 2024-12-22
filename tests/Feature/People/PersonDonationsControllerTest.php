@@ -10,11 +10,8 @@ use App\Models\Donation;
 use App\Models\Person;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\AssistsWithAuthentication;
-use Tests\Support\AssistsWithCases;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
-use Tests\Traits\CreateCase;
 use Tests\Traits\CreatesTeamUser;
 use Tests\Traits\CreatesUiBehavior;
 
@@ -22,8 +19,8 @@ final class PersonDonationsControllerTest extends TestCase
 {
     use Assertions;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     #[Test]
     public function unAuthenticatedUsersCantAccessAPersonsDonations(): void
@@ -77,7 +74,7 @@ final class PersonDonationsControllerTest extends TestCase
         $this->actingAs($me->user)->post(route('people.donations.store', $person), [
             'donated_at' => 'foo',
             'value' => 'foo',
-            'method_id' => AttributeOption::factory()->create()->id
+            'method_id' => AttributeOption::factory()->create()->id,
         ])
             ->assertInvalid(['donated_at' => 'The donation date is not a valid date.'])
             ->assertInvalid(['value' => 'The value field must be a number.'])
@@ -88,7 +85,7 @@ final class PersonDonationsControllerTest extends TestCase
     public function itStoresANewDonation(): void
     {
         $cashId = AttributeOption::factory()->create([
-            'name' => AttributeOptionName::DONATION_METHODS->value
+            'name' => AttributeOptionName::DONATION_METHODS->value,
         ])->id;
 
         $me = $this->createTeamUser();
@@ -115,7 +112,7 @@ final class PersonDonationsControllerTest extends TestCase
     public function itValidatesOwnershipOfADonationBeforeUpdating(): void
     {
         $cashId = AttributeOption::factory()->create([
-            'name' => AttributeOptionName::DONATION_METHODS->value
+            'name' => AttributeOptionName::DONATION_METHODS->value,
         ])->id;
 
         $me = $this->createTeamUser();
@@ -124,7 +121,7 @@ final class PersonDonationsControllerTest extends TestCase
         $this->actingAs($me->user)->put(route('people.donations.update', [$person, $person->donations->first()]), [
             'donated_at' => 'June 4, 2022',
             'value' => '10.00',
-            'method_id' => $cashId
+            'method_id' => $cashId,
         ])
             ->assertOwnershipValidationError();
     }
@@ -142,7 +139,7 @@ final class PersonDonationsControllerTest extends TestCase
         $this->actingAs($me->user)->put(route('people.donations.update', [$person, $person->donations->first()]), [
             'donated_at' => 'foo',
             'value' => 'foo',
-            'method_id' => AttributeOption::factory()->create()->id
+            'method_id' => AttributeOption::factory()->create()->id,
         ])
             ->assertInvalid(['donated_at' => 'The donation date is not a valid date.'])
             ->assertInvalid(['value' => 'The value field must be a number.'])
@@ -153,7 +150,7 @@ final class PersonDonationsControllerTest extends TestCase
     public function itUpdatesADonation(): void
     {
         $cashId = AttributeOption::factory()->create([
-            'name' => AttributeOptionName::DONATION_METHODS->value
+            'name' => AttributeOptionName::DONATION_METHODS->value,
         ])->id;
 
         $me = $this->createTeamUser();

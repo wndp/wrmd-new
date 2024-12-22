@@ -5,8 +5,6 @@ namespace Tests\Feature\People\Combine;
 use App\Enums\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
-use Silber\Bouncer\BouncerFacade;
-use Tests\Support\AssistsWithAuthentication;
 use Tests\TestCase;
 use Tests\Traits\CreatesTeamUser;
 
