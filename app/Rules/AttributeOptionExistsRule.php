@@ -12,7 +12,9 @@ class AttributeOptionExistsRule implements ValidationRule
 {
     private static array $attributeOptionIds = [];
 
-    public function __construct(private AttributeOptionName|array $attributeOptionName) {}
+    public function __construct(private AttributeOptionName|array $attributeOptionName)
+    {
+    }
 
     public static function clearCache(): void
     {
@@ -41,7 +43,7 @@ class AttributeOptionExistsRule implements ValidationRule
         if (
             ! isset(static::$attributeOptionIds[$value]) || ! in_array(static::$attributeOptionIds[$value]->value, $attributeOptionNames)
         ) {
-            $fail('validation.exists')->translate();
+            $fail('validation.in')->translate();
         }
     }
 }

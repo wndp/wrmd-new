@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Geocoding;
 
-use App\Casts\SingleStorePoint;
 use App\Jobs\GeocodeAddress;
 use App\Models\Patient;
+use App\ValueObjects\SingleStorePoint;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 

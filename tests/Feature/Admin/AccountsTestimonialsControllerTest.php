@@ -35,7 +35,7 @@ final class AccountsTestimonialsControllerTest extends TestCase
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
 
-        $response = $this->actingAs($me->user)->get(route('admin.testimonials.index'))
+        $this->actingAs($me->user)->get(route('admin.testimonials.index'))
             ->assertOk()
             ->assertInertia(function ($page) {
                 $page->component('Admin/Testimonials/Index')

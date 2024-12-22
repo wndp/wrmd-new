@@ -122,7 +122,7 @@ final class AccountsControllerTest extends TestCase
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
         $team = Team::factory()->create();
 
-        $response = $this->actingAs($me->user)
+        $this->actingAs($me->user)
             ->put(route('teams.update', $team), [
                 'status' => AccountStatus::ACTIVE->value,
                 'name' => 'foo wildlife place',

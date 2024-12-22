@@ -21,7 +21,7 @@ class IncidentFactory extends Factory
     {
         return [
             'team_id' => Team::factory()->createQuietly(),
-            'responder_id' => function (array $attributes) {
+            'reporting_party_id' => function (array $attributes) {
                 return Person::factory()->create(['team_id' => $attributes['team_id']]);
             },
             'reported_at' => $this->faker->dateTimeBetween('-10 days', '10 days')->format('Y-m-d'),

@@ -12,7 +12,10 @@ use App\Http\Controllers\People\PersonIncidentsController;
 use App\Http\Controllers\People\PersonPatientsController;
 use Illuminate\Auth\Middleware\Authorize;
 
-Route::middleware(Authorize::using(Ability::VIEW_PEOPLE->value))->group(function () {
+/**
+ * Authorization abilities are determined from methods in \App\Policies\PrivacyPolicy
+ */
+Route::middleware(Authorize::using('viewPeople'))->group(function () {
     Route::get('people/rescuers', [PersonController::class, 'index'])
         ->name('people.rescuers.index');
 
@@ -28,15 +31,15 @@ Route::middleware(Authorize::using(Ability::VIEW_PEOPLE->value))->group(function
     Route::get('people/donors', [PersonController::class, 'index'])
         ->name('people.donors.index');
 
-    Route::middleware(Authorize::using(Ability::CREATE_PEOPLE->value))
+    Route::middleware(Authorize::using('createPeople'))
         ->get('people/create', [PersonController::class, 'create'])
         ->name('people.create');
 
-    Route::middleware(Authorize::using(Ability::EXPORT_PEOPLE->value))
+    Route::middleware(Authorize::using('exportPeople'))
         ->post('people/export', PersonExportController::class)
         ->name('people.export');
 
-    Route::middleware(Authorize::using(Ability::CREATE_PEOPLE->value))
+    Route::middleware(Authorize::using('createPeople'))
         ->post('people', [PersonController::class, 'store'])
         ->name('people.store');
 
@@ -49,7 +52,7 @@ Route::middleware(Authorize::using(Ability::VIEW_PEOPLE->value))->group(function
     Route::delete('people/{person}', [PersonController::class, 'destroy'])
         ->name('people.destroy');
 
-    Route::middleware(Authorize::using(Ability::COMBINE_PEOPLE->value))->group(function () {
+    Route::middleware(Authorize::using('combinePeople'))->group(function () {
         Route::get('people/combine', CombineSearchController::class)
             ->name('people.combine.search');
 

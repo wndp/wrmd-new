@@ -46,7 +46,7 @@ final class FormulaControllerTest extends TestCase
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_ACCOUNT_MAINTENANCE->value);
 
-        $response = $this->actingAs($me->user)->get(route('maintenance.formulas.index'))
+        $this->actingAs($me->user)->get(route('maintenance.formulas.index'))
             ->assertOk()
             ->assertInertia(function ($page) {
                 $page->component('Maintenance/Formulary/Index')
@@ -64,7 +64,7 @@ final class FormulaControllerTest extends TestCase
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_ACCOUNT_MAINTENANCE->value);
 
-        $response = $this->actingAs($me->user)->get(route('maintenance.formulas.create'))
+        $this->actingAs($me->user)->get(route('maintenance.formulas.create'))
             ->assertOk()
             ->assertInertia(function ($page) {
                 $page->component('Maintenance/Formulary/Create')
@@ -141,7 +141,7 @@ final class FormulaControllerTest extends TestCase
 
         $formula = Formula::factory()->create(['team_id' => $me->team->id]);
 
-        $response = $this->actingAs($me->user)->get(route('maintenance.formulas.edit', $formula))
+        $this->actingAs($me->user)->get(route('maintenance.formulas.edit', $formula))
             ->assertOk()
             ->assertInertia(
                 fn ($page) => $page->component('Maintenance/Formulary/Edit')

@@ -191,6 +191,8 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'method_id' => 'method'
+    ],
 
 ];

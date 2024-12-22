@@ -27,7 +27,7 @@ class SaveDonationRequest extends FormRequest
             'donated_at' => 'required|date',
             'value' => 'required|numeric',
             'method_id' => [
-                'nullable',
+                'required',
                 'integer',
                 new AttributeOptionExistsRule(AttributeOptionName::DONATION_METHODS),
             ],

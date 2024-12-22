@@ -37,7 +37,7 @@ class PersonController extends Controller
     public function create()
     {
         OptionsStore::add([
-            new LocaleOptions,
+            new LocaleOptions(),
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::PERSON_ENTITY_TYPES->value,
             ]),
@@ -82,7 +82,7 @@ class PersonController extends Controller
     public function edit(Person $person)
     {
         OptionsStore::add([
-            new LocaleOptions,
+            new LocaleOptions(),
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::PERSON_ENTITY_TYPES->value,
             ]),
@@ -106,7 +106,7 @@ class PersonController extends Controller
             'first_name' => $request->input('first_name'),
             'last_name' => $request->input('last_name'),
             'phone' => $request->input('phone'),
-            'alt_phone' => $request->input('alt_phone'),
+            'alternate_phone' => $request->input('alternate_phone'),
             'email' => $request->input('email'),
             'subdivision' => $request->input('subdivision'),
             'city' => $request->input('city'),

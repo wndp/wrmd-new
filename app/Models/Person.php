@@ -98,9 +98,9 @@ class Person extends Model
         return $this->hasMany(Patient::class, 'rescuer_id');
     }
 
-    public function hotline(): HasMany
+    public function incidents(): HasMany
     {
-        return $this->hasMany(Incident::class, 'responder_id');
+        return $this->hasMany(Incident::class, 'reporting_party_id');
     }
 
     public function donations(): HasMany
@@ -155,7 +155,7 @@ class Person extends Model
     protected function isReportingParty(): Attribute
     {
         return Attribute::get(
-            fn () => $this->hotline->count() > 0,
+            fn () => $this->incidents->count() > 0,
         );
     }
 

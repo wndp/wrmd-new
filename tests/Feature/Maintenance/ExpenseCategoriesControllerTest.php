@@ -39,7 +39,7 @@ final class ExpenseCategoriesControllerTest extends TestCase
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
 
-        $response = $this->actingAs($me->user)->get(route('maintenance.expense_categories.index'))
+        $this->actingAs($me->user)->get(route('maintenance.expense_categories.index'))
             ->assertOk()
             ->assertInertia(function ($page) {
                 $page->component('Maintenance/ExpenseCategories/Index')

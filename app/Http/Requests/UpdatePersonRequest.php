@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\AttributeOptionName;
+use App\Repositories\AdministrativeDivision;
 use App\Rules\AttributeOptionExistsRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -23,6 +24,8 @@ class UpdatePersonRequest extends FormRequest
      */
     public function rules(): array
     {
+        $alpha2CountryCode = app(AdministrativeDivision::class)->alpha2CountryCode();
+
         return [
             'entity_id' => [
                 'nullable',
@@ -31,8 +34,8 @@ class UpdatePersonRequest extends FormRequest
             ],
             'organization' => 'required_without:first_name',
             'first_name' => 'required_without:organization',
-            'phone' => 'nullable|phone',
-            'alternate_phone' => 'nullable|phone',
+            'phone' => "nullable|phone:$alpha2CountryCode",
+            'alternate_phone' => "nullable|phone:$alpha2CountryCode",
             'email' => 'nullable|email',
             'no_solicitations' => 'nullable|boolean',
             'is_volunteer' => 'nullable|boolean',

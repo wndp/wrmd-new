@@ -21,7 +21,7 @@ class CombineReviewController extends Controller
         $person->validateOwnership(Auth::user()->current_team_id);
 
         OptionsStore::add([
-            new LocaleOptions,
+            new LocaleOptions(),
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::PERSON_ENTITY_TYPES->value,
             ]),
@@ -40,7 +40,7 @@ class CombineReviewController extends Controller
             $query->where($field, $person->getRawOriginal($column));
         }
 
-        $people = $query->get();
+        $people = $query->orderBy('id')->get();
 
         return Inertia::render('People/Combine/Review', compact('people'));
     }

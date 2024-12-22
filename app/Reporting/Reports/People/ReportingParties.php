@@ -81,7 +81,7 @@ class ReportingParties extends ExportableReport
     public function query(): Builder
     {
         return Person::where('team_id', $this->team->id)
-            ->whereHas('hotline', function ($query) {
+            ->whereHas('incidents', function ($query) {
                 $query->dateRange(
                     Carbon::parse($this->getAppliedFilterValue(DateFrom::class))->format('Y-m-d'),
                     Carbon::parse($this->getAppliedFilterValue(DateTo::class))->format('Y-m-d'),

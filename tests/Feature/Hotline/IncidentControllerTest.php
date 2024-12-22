@@ -177,7 +177,10 @@ final class IncidentControllerTest extends TestCase
     {
         $hotlineWildlifeCategoriesId = AttributeOption::factory()->create(['name' => AttributeOptionName::HOTLINE_WILDLIFE_CATEGORIES])->id;
         $hotlineStatusesId = AttributeOption::factory()->create(['name' => AttributeOptionName::HOTLINE_STATUSES])->id;
-        $hotlineStatusIsResolvedId = $this->createUiBehavior(AttributeOptionName::HOTLINE_STATUSES, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED)->attribute_option_id;
+        $hotlineStatusIsResolvedId = $this->createUiBehavior(
+            AttributeOptionName::HOTLINE_STATUSES,
+            AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED
+        )->attribute_option_id;
 
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -235,7 +238,7 @@ final class IncidentControllerTest extends TestCase
 
         $incident = Incident::where([
             'team_id' => $me->team->id,
-            'responder_id' => $reportingParty->id,
+            'reporting_party_id' => $reportingParty->id,
             'incident_number' => 'HL-18-0001',
             'reported_at' => '2018-02-08 17:20:00',
             'occurred_at' => '2018-02-07 23:30:00',

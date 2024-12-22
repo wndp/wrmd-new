@@ -33,7 +33,7 @@ final class ReportingPartyExportTest extends TestCase
         BouncerFacade::allow($me->user)->to(Ability::EXPORT_PEOPLE->value);
 
         $reportingParty = Person::factory()->create(['team_id' => $me->team->id, 'first_name' => 'John', 'last_name' => 'Doe']);
-        $incident = Incident::factory()->create(['team_id' => $me->team->id, 'responder_id' => $reportingParty->id, 'reported_at' => now()]);
+        $incident = Incident::factory()->create(['team_id' => $me->team->id, 'reporting_party_id' => $reportingParty->id, 'reported_at' => now()]);
 
         $this->actingAs($me->user)
             ->from(route('hotline.open.index'))

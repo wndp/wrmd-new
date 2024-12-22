@@ -20,7 +20,7 @@ class IncidentSearch extends Search
 
         return Incident::select('incidents.*')
             ->when($this->shouldJoinPerson(), function ($query) {
-                $query->join('people', 'incidents.responder_id', '=', 'people.id');
+                $query->join('people', 'incidents.reporting_party_id', '=', 'people.id');
             })
             ->when($this->shouldJoinCommunications(), function ($query) {
                 $query->join('communications', 'incidents.id', '=', 'communications.incident_id');

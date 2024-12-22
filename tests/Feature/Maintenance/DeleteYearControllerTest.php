@@ -38,7 +38,7 @@ final class DeleteYearControllerTest extends TestCase
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_DANGER_ZONE->value);
 
-        $response = $this->actingAs($me->user)->get(route('year.delete.index'))
+        $this->actingAs($me->user)->get(route('year.delete.index'))
             ->assertOk()
             ->assertInertia(function ($page) {
                 $page->component('Maintenance/DeleteYear')

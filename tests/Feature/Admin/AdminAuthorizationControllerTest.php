@@ -37,7 +37,7 @@ final class AdminAuthorizationControllerTest extends TestCase
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_WRMD_ADMIN->value);
 
-        $response = $this->actingAs($me->user)->get(route('admin.authorization'))
+        $this->actingAs($me->user)->get(route('admin.authorization'))
             ->assertOk()
             ->assertInertia(function ($page) {
                 $page->component('Admin/Authorization')
@@ -66,7 +66,7 @@ final class AdminAuthorizationControllerTest extends TestCase
 
         $this->assertDatabaseMissing('permissions', ['entity_type' => 'role']);
 
-        $response = $this->actingAs($me->user)
+        $this->actingAs($me->user)
             ->put(route('admin.authorization.update', 'allowed'), [
                 Role::ADMIN->value => ['view-reports'],
             ])
@@ -88,7 +88,7 @@ final class AdminAuthorizationControllerTest extends TestCase
 
         $this->assertDatabaseMissing('permissions', ['entity_type' => 'role']);
 
-        $response = $this->actingAs($me->user)
+        $this->actingAs($me->user)
             ->put(route('admin.authorization.update', 'forbidden'), [
                 Role::ADMIN->value => ['view-reports'],
             ])

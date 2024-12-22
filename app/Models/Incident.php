@@ -6,7 +6,9 @@ use App\Concerns\InteractsWithMedia;
 use App\Concerns\QueriesDateRange;
 use App\Concerns\QueriesOneOfMany;
 use App\Concerns\ValidatesOwnership;
+use App\Repositories\AdministrativeDivision;
 use App\ValueObjects\SingleStorePoint;
+use CommerceGuys\Addressing\Address;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -30,7 +32,7 @@ class Incident extends Model implements HasMedia
 
     protected $fillable = [
         'team_id',
-        'responder_id',
+        'reporting_party_id',
         'patient_id',
         'incident_number',
         'reported_at',
@@ -60,7 +62,7 @@ class Incident extends Model implements HasMedia
      */
     protected $casts = [
         'team_id' => 'integer',
-        'responder_id' => 'integer',
+        'reporting_party_id' => 'string',
         'patient_id' => 'integer',
         'incident_number' => 'string',
         'reported_at' => 'datetime',
@@ -90,7 +92,7 @@ class Incident extends Model implements HasMedia
 
     public function reportingParty(): BelongsTo
     {
-        return $this->belongsTo(Person::class, 'responder_id');
+        return $this->belongsTo(Person::class, 'reporting_party_id');
     }
 
     public function patient(): BelongsTo
@@ -142,6 +144,16 @@ class Incident extends Model implements HasMedia
 
             return true;
         });
+    }
+
+    public function getIncidentCoordinatesAddress(): Address
+    {
+        return (new Address())
+            ->withCountryCode(app(AdministrativeDivision::class)->alpha2CountryCode())
+            ->withAdministrativeArea($this->incident_subdivision ?: '')
+            ->withLocality($this->incident_city ?: '')
+            ->withAddressLine1($this->incident_address ?: '')
+            ->withPostalCode($this->incident_postal_code ?: '');
     }
 
     public function getActivitylogOptions(): LogOptions

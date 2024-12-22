@@ -103,7 +103,7 @@ final class IncidentImporterTest extends TestCase
         $this->assertInstanceOf(Person::class, $person1);
         $this->assertDatabaseHas('incidents', [
             'team_id' => $me->team->id,
-            'responder_id' => $person1->id,
+            'reporting_party_id' => $person1->id,
             'incident_number' => 'HL-19-0001',
             'reported_at' => '2019-11-01 15:20:00',
             'occurred_at' => '2019-10-31 00:00:00',
@@ -133,7 +133,7 @@ final class IncidentImporterTest extends TestCase
         $this->assertInstanceOf(Person::class, $person2);
         $this->assertDatabaseHas('incidents', [
             'team_id' => $me->team->id,
-            'responder_id' => $person2->id,
+            'reporting_party_id' => $person2->id,
             'incident_number' => 'HL-19-0002',
             'reported_at' => '2019-11-01 15:22:38',
             'occurred_at' => '2019-11-01 00:00:00',

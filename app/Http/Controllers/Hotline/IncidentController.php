@@ -62,7 +62,7 @@ class IncidentController extends Controller
     public function create(): Response
     {
         OptionsStore::add([
-            new LocaleOptions,
+            new LocaleOptions(),
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::PERSON_ENTITY_TYPES->value,
                 AttributeOptionName::HOTLINE_WILDLIFE_CATEGORIES->value,
@@ -139,7 +139,7 @@ class IncidentController extends Controller
         ]);
 
         $incident->team_id = Auth::user()->current_team_id;
-        $incident->responder_id = $reportingParty->id;
+        $incident->reporting_party_id = $reportingParty->id;
         $incident->save();
 
         if ($request->filled('communication_at', 'communication')) {
@@ -174,7 +174,7 @@ class IncidentController extends Controller
             ]);
 
         OptionsStore::add([
-            new LocaleOptions,
+            new LocaleOptions(),
             AttributeOption::getDropdownOptions([
                 AttributeOptionName::PERSON_ENTITY_TYPES->value,
                 AttributeOptionName::HOTLINE_WILDLIFE_CATEGORIES->value,

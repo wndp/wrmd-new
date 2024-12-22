@@ -43,7 +43,7 @@ class IncidentImporter extends Importer implements SkipsEmptyRows, ToModel
 
         //$incident->id = Str::uuid7();
         $incident->team_id = $this->team->id;
-        $incident->responder_id = $reportingParty->id;
+        $incident->reporting_party_id = $reportingParty->id;
 
         return $incident;
     }

@@ -21,11 +21,11 @@ class CombineMergeController extends Controller
         $request->validate([
             'newPerson' => 'required|array',
             'oldPeople' => 'required|array',
-            'oldPeople.*' => 'string',
+            'oldPeople.*' => 'uuid',
         ], [
             'newPerson.required' => 'There was a problem creating the new person.',
             'newPerson.array' => 'There was a problem creating the new person.',
-            'oldPeople.*.string' => 'There was a problem with one of the duplicate persons.',
+            'oldPeople.*.uuid' => 'There was a problem with one of the duplicate persons.',
         ]);
 
         DB::beginTransaction();
@@ -78,12 +78,12 @@ class CombineMergeController extends Controller
 
     private function reAssociateIncidents(Person $newPerson, array $oldPeople)
     {
-        Incident::withTrashed()->whereIn('responder_id', $oldPeople)->update(['responder_id' => $newPerson->id]);
+        Incident::withTrashed()->whereIn('reporting_party_id', $oldPeople)->update(['reporting_party_id' => $newPerson->id]);
     }
 
     private function reAssociateDonations(Person $newPerson, array $oldPeople)
     {
-        Donation::whereIn('person_id', $oldPeople)->update(['person_id' => $newPerson->id]);
+        Donation::withTrashed()->whereIn('person_id', $oldPeople)->update(['person_id' => $newPerson->id]);
     }
 
     private function destroyOldPeople(array $oldPeople): void
