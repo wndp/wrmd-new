@@ -7,6 +7,7 @@ enum Ability: string
     case VIEW_WRMD_ADMIN = 'VIEW_WRMD_ADMIN';
     case VIEW_ACCOUNT_SETTINGS = 'VIEW_ACCOUNT_SETTINGS';
     case VIEW_ACCOUNT_MAINTENANCE = 'VIEW_ACCOUNT_MAINTENANCE';
+    case VIEW_NOTIFICATIONS = 'VIEW_NOTIFICATIONS';
     case VIEW_DANGER_ZONE = 'VIEW_DANGER_ZONE';
     case VIEW_EXTENSION_SETTINGS = 'VIEW_EXTENSION_SETTINGS';
     case CREATE_PEOPLE = 'CREATE_PEOPLE';
@@ -66,6 +67,7 @@ enum Ability: string
             self::VIEW_WRMD_ADMIN => 'View WRMD Admin',
             self::VIEW_ACCOUNT_SETTINGS => 'View Account Settings',
             self::VIEW_ACCOUNT_MAINTENANCE => 'View Account Maintenance',
+            self::VIEW_NOTIFICATIONS => 'View Notifications',
             self::VIEW_DANGER_ZONE => 'View Danger Zone',
             self::VIEW_EXTENSION_SETTINGS => 'View Extension Settings',
             self::CREATE_PEOPLE => 'Create People',
@@ -126,6 +128,7 @@ enum Ability: string
         return [
             self::VIEW_ACCOUNT_SETTINGS,
             self::VIEW_ACCOUNT_MAINTENANCE,
+            self::VIEW_NOTIFICATIONS,
             self::VIEW_DANGER_ZONE,
             self::VIEW_EXTENSION_SETTINGS,
             self::CREATE_PEOPLE,

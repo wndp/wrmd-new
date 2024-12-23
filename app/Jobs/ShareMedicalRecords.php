@@ -2,8 +2,11 @@
 
 namespace App\Jobs;
 
+use App\Enums\SettingKey;
+use App\Mail\ReportEmail;
 use App\Models\Team;
 use App\Models\User;
+use App\Reporting\Reports\PatientMedicalRecord;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
@@ -93,11 +96,11 @@ class ShareMedicalRecords implements ShouldQueue
      */
     protected function recordSharedCases($patientIds, string $message): void
     {
-        if ((bool) $this->team->settingsStore()->get('logShares')) {
+        if ((bool) $this->team->settingsStore()->get(SettingKey::LOG_SHARES)) {
             dispatch(new RecordSharedCases(
                 $this->user,
                 $patientIds,
-                now($this->team->settingsStore()->get('timezone')),
+                now($this->team->settingsStore()->get(SettingKey::TIMEZONE)),
                 $message
             ));
         }

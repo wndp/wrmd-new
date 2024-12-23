@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Concerns\HasSubAccounts;
+use App\Concerns\QueriesSpatialValues;
 use App\Enums\AccountStatus;
 use App\Enums\PhoneFormat;
 use App\Repositories\AdministrativeDivision;
 use App\Repositories\SettingsStore;
+use App\ValueObjects\SingleStorePoint;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -28,6 +30,7 @@ class Team extends JetstreamTeam
     use HasSubAccounts;
     use LogsActivity;
     use Notifiable;
+    use QueriesSpatialValues;
 
     protected $fillable = [
         'name',
@@ -59,6 +62,7 @@ class Team extends JetstreamTeam
             'is_master_account' => 'boolean',
             'personal_team' => 'boolean',
             'status' => AccountStatus::class,
+            'coordinates' => SingleStorePoint::class,
             'phone' => 'string',
             'phone_normalized' => 'string',
             'phone_e164' => 'string',

@@ -2,13 +2,18 @@
 
 namespace App\Mail;
 
+use App\Models\User;
+use App\Reporting\Contracts\Report;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ReportEmail extends Mailable
+class ReportEmail extends Mailable implements ShouldQueue
 {
     use Queueable;
     use SerializesModels;
@@ -16,7 +21,13 @@ class ReportEmail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct() {}
+    public function __construct(public User $user, public Report $report, public $subject, public string $body)
+    {
+        $this->user = $user;
+        $this->report = $report;
+        $this->subject = $subject;
+        $this->body = $body;
+    }
 
     /**
      * Get the message envelope.
@@ -24,7 +35,9 @@ class ReportEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Report Email',
+            from: new Address('noreply@wildneighborsdp.org', $this->user->name),
+            replyTo: new Address($this->user->email),
+            subject: $this->subject,
         );
     }
 
@@ -34,7 +47,7 @@ class ReportEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.report',
         );
     }
 
@@ -45,6 +58,14 @@ class ReportEmail extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        $generator = tap($this->report->shouldNotQueue()->pdf(), function ($generator) {
+            $generator->temporaryUrl();
+        });
+
+        return [
+            Attachment::fromStorageDisk('s3', $generator->filePath)
+                ->as($generator->basename().'.pdf')
+                ->withMime('application/pdf'),
+        ];
     }
 }

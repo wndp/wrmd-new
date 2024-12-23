@@ -70,7 +70,7 @@ class TransferIoaPatient implements ShouldQueue
     public function recordTransfer($patient, $fromTeam, $owcnIoa)
     {
         $transfer = new Transfer([
-            'uuid' => Str::uuid(),
+            //'uuid' => Str::uuid(),
             'is_collaborative' => true,
             'is_accepted' => true,
             'responded_at' => Carbon::now(),

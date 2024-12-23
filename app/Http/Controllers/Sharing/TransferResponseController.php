@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers\Sharing;
 
+use App\Concerns\PersistsAdmission;
 use App\Events\PatientAdmitted;
 use App\Http\Controllers\Controller;
 use App\Models\Admission;
 use App\Models\Transfer;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 class TransferResponseController extends Controller
 {
+    use PersistsAdmission;
+
     /**
      * Accept a transfer request.
      *
@@ -36,11 +40,7 @@ class TransferResponseController extends Controller
         $rootAdmission = Admission::custody($transfer->fromTeam, $transfer->patient);
         $newPatient = $transfer->is_collaborative ? $rootAdmission->patient : $rootAdmission->patient->clone();
 
-        $newAdmission = tap(new Admission(['case_year' => date('Y')]), function ($newAdmission) use ($transfer, $newPatient) {
-            $newAdmission->team()->associate($transfer->toTeam);
-            $newAdmission->patient()->associate($newPatient);
-            $newAdmission->save();
-        });
+        $newAdmission = $this->persistAdmission($transfer->toTeam, $newPatient, Carbon::now()->format('Y'));
 
         $newPatient->team_possession_id = $transfer->toTeam->id;
         $newPatient->save();
@@ -50,7 +50,7 @@ class TransferResponseController extends Controller
         }
 
         $transfer->accept();
-        event(new PatientAdmitted($transfer->toTeam, $newAdmission->patientPromise()));
+        event(new PatientAdmitted($transfer->toTeam, $newAdmission->patient));
 
         return redirect()->route('patients.initial.edit', ['c' => $newAdmission->case_id, 'y' => $newAdmission->case_year])
             ->with('notification.heading', __('Success!'))

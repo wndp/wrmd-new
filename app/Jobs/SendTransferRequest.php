@@ -2,11 +2,13 @@
 
 namespace App\Jobs;
 
+use App\Enums\SettingKey;
 use App\Models\Patient;
 use App\Models\Team;
 use App\Models\Transfer;
 use App\Models\User;
 use App\Notifications\TransferRequestWasSent;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -47,17 +49,17 @@ class SendTransferRequest implements ShouldQueue
     {
         $transfer = $this->storeTransferRequest();
 
-        // $this->toTeam->notify(new TransferRequestWasSent(
-        //     "Transfer request from {$this->fromTeam->organization}",
-        //     URL::route('maintenance.transfers', ['uuid' => $transfer->uuid]),
-        // ));
+        $this->toTeam->notify(new TransferRequestWasSent(
+            __('Transfer request from :organization', ['organization' => $this->fromTeam->name]),
+            URL::route('maintenance.transfers', ['id' => $transfer->id]),
+        ));
 
-        if ((bool) $this->fromTeam->settingsStore()->get('logShares')) {
+        if ((bool) $this->fromTeam->settingsStore()->get(SettingKey::LOG_SHARES)) {
             dispatch(new RecordSharedCases(
                 $this->user,
                 [$this->patient->id],
-                now($this->fromTeam->settingsStore()->get('timezone')),
-                __('A transfer request was sent to :organization.', ['organization' => $this->toTeam->organization])
+                Carbon::now($this->fromTeam->settingsStore()->get(SettingKey::TIMEZONE)),
+                __('A transfer request was sent to :organization.', ['organization' => $this->toTeam->name])
             ));
         }
     }

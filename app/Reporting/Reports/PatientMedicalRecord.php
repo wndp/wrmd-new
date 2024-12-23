@@ -64,7 +64,7 @@ class PatientMedicalRecord extends ExportableReport implements FromCollection
             //$this->admission->load('patient');
         }
 
-        return Admission::where('account_id', $this->team->id)
+        return Admission::where('team_id', $this->team->id)
             ->whereIn('patient_id', Arr::wrap($this->patient))
             ->get();
 
@@ -109,7 +109,7 @@ class PatientMedicalRecord extends ExportableReport implements FromCollection
                 'deleted_at',
                 'created_at',
                 'updated_at',
-                'account_id',
+                'team_id',
                 'href',
                 'id',
                 'patient_id',
@@ -121,6 +121,8 @@ class PatientMedicalRecord extends ExportableReport implements FromCollection
      */
     public function getRequestedComputedAttributes(): Collection
     {
+        return collect();
+
         if (is_null($this->requestedComputedAttributes)) {
             $computedFields = fields()->where('computed', true)->keys();
 

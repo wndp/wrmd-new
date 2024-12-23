@@ -24,9 +24,9 @@ Route::middleware(Authorize::using(Ability::SHARE_PATIENTS->value))->group(funct
     Route::post('share/transfer/{patient}', [TransferRequestController::class, 'store'])
         ->name('share.transfer.store');
 
-    Route::post('share/transfer/{transfer:uuid}/accept', [TransferResponseController::class, 'store'])
+    Route::post('share/transfer/{transfer}/accept', [TransferResponseController::class, 'store'])
         ->name('share.transfer.accept');
 
-    Route::delete('share/transfer/{transfer:uuid}/deny', [TransferResponseController::class, 'destroy'])
+    Route::delete('share/transfer/{transfer}/deny', [TransferResponseController::class, 'destroy'])
         ->name('share.transfer.deny');
 });

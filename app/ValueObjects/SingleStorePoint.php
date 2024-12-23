@@ -6,15 +6,27 @@ use App\Casts\SingleStorePointCast;
 use geoPHP;
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
+use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Facades\DB;
 use Point as geoPHPPoint;
+use Stringable;
 
-class SingleStorePoint implements Castable
+class SingleStorePoint implements Castable, Jsonable, Stringable
 {
     public function __construct(public float $latitude, public float $longitude)
     {
         $this->latitude = $latitude;
         $this->longitude = $longitude;
+    }
+
+    public function __toString(): string
+    {
+        return $this->toWkt();
+    }
+
+    public function toJson($options = 0): string
+    {
+        return json_encode($this, $options | JSON_THROW_ON_ERROR);
     }
 
     public static function castUsing(array $arguments): CastsAttributes

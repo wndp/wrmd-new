@@ -9,13 +9,13 @@ use App\Models\Admission;
 use App\Models\Patient;
 use App\Models\Team;
 use App\Options\Options;
+use App\ValueObjects\SingleStorePoint;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
-use MatanYadaev\EloquentSpatial\Objects\Point;
 
 class TransferRequestController extends Controller
 {
@@ -26,7 +26,7 @@ class TransferRequestController extends Controller
         $team = Auth::user()->currentTeam;
         $subAccounts = $team->subAccounts;
 
-        $nearest = $team->coordinates instanceof Point
+        $nearest = $team->coordinates instanceof SingleStorePoint
             ? Team::where('status', AccountStatus::ACTIVE->value)
                 ->where('id', '!=', $team->id)
                 ->whereNotIn('id', $subAccounts->pluck('id'))
