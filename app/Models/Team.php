@@ -154,14 +154,6 @@ class Team extends JetstreamTeam
         );
     }
 
-    // public function phoneNumber(): Attribute
-    // {
-    //     return Attribute::make(
-    //         get: fn ($value) => app(AdministrativeDivision::class)->phoneNumber($value),
-    //         set: fn ($value) => preg_replace('/[^0-9]/', '', $value)
-    //     );
-    // }
-
     /**
      * Get the name that should be associated with the Paddle customer.
      */

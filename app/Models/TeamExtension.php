@@ -4,10 +4,12 @@ namespace App\Models;
 
 use App\Enums\Extension;
 use Illuminate\Database\Eloquent\Concerns\HasVersion7Uuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class TeamExtension extends Model
 {
+    use HasFactory;
     use HasVersion7Uuids;
 
     protected $fillable = [

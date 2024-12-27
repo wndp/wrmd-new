@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('team_invitations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('team_id');
+            $table->unsignedBigInteger('team_id')->index();
+            $table->string('name');
             $table->string('email');
-            $table->string('role')->nullable();
+            $table->string('role');
             $table->timestamps();
         });
     }

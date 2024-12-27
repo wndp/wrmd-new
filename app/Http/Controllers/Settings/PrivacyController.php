@@ -71,9 +71,10 @@ class PrivacyController extends Controller
         $this->disallowAllPeopleAbilities($teammates);
         $this->allowPeopleAbilities($teammates, $abilities);
 
-        Wrmd::settings([
-            SettingKey::FULL_PEOPLE_ACCESS => $request->input('fullPeopleAccess'),
-        ]);
+        Wrmd::settings()->set(
+            SettingKey::FULL_PEOPLE_ACCESS,
+            $request->input('fullPeopleAccess'),
+        );
 
         event(new TeamUpdated(auth()->user()->currentTeam));
         BouncerFacade::refresh();

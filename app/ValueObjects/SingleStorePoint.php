@@ -29,11 +29,6 @@ class SingleStorePoint implements Castable, Jsonable, Stringable
         return json_encode($this, $options | JSON_THROW_ON_ERROR);
     }
 
-    public static function castUsing(array $arguments): CastsAttributes
-    {
-        return new SingleStorePointCast;
-    }
-
     public function toWkt(): string
     {
         $wktData = $this->getWktData();
@@ -84,5 +79,10 @@ class SingleStorePoint implements Castable, Jsonable, Stringable
 
             return new static($geoPHPGeometry->coords[1], $geoPHPGeometry->coords[0]);
         }
+    }
+
+    public static function castUsing(array $arguments): CastsAttributes
+    {
+        return new SingleStorePointCast;
     }
 }

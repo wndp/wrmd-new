@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Settings;
 
+use App\Enums\SettingKey;
 use App\Events\TeamUpdated;
 use App\Http\Controllers\Controller;
 use App\Support\Wrmd;
@@ -18,14 +19,15 @@ class RestrictRemoteAccessController extends Controller
     public function __invoke(Request $request): RedirectResponse
     {
         $request->validate([
-            'clinicIp' => 'nullable|required_if:remoteRestricted,true|ip',
+            'clinicIp' => 'nullable|required_if_accepted:remoteRestricted|ip',
         ]);
 
-        $settings = $request->all('remoteRestricted', 'clinicIp', 'roleRemotePermission', 'userRemotePermission');
-        $settings[SettingKey::ROLE_REMOTE_PERMISSION] = array_values(Arr::wrap($settings['roleRemotePermission']));
-        $settings[SettingKey::USER_REMOTE_PERMISSION] = array_values(Arr::wrap($settings['userRemotePermission']));
-
-        Wrmd::settings($settings);
+        Wrmd::settings([
+            SettingKey::REMOTE_RESTRICTED->value => $request->boolean('remoteRestricted'),
+            SettingKey::CLINIC_IP->value => $request->input('clinicIp'),
+            SettingKey::ROLE_REMOTE_PERMISSION->value => array_values(Arr::wrap($request->input('roleRemotePermission'))),
+            SettingKey::USER_REMOTE_PERMISSION->value => array_values(Arr::wrap($request->input('userRemotePermission'))),
+        ]);
 
         event(new TeamUpdated(Auth::user()->currentTeam));
 

@@ -49,7 +49,7 @@ class ApiController extends Controller
 
         TeamUpdated::dispatch($team);
 
-        return back()
+        return to_route('api.index')
             ->with('notification.heading', __('Success!'))
             ->with('notification.text', __(':tokenName token was created.', [
                 'tokenName' => $request->get('token_name'),

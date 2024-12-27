@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Concerns\AssistsWithTeams;
 use App\Concerns\AssistWithRolesAndAbilities;
+use App\Concerns\HasNoPersonalTeam;
 use App\Concerns\HasUniqueFields;
 use App\Concerns\ValidatesOwnership;
-use App\Enums\Role;
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -16,30 +18,28 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
-use Silber\Bouncer\BouncerFacade;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
+    use AssistsWithTeams;
     use AssistWithRolesAndAbilities;
     use HasApiTokens;
     use HasFactory;
+    use HasNoPersonalTeam, HasTeams {
+        HasNoPersonalTeam::ownsTeam insteadof HasTeams;
+        HasNoPersonalTeam::isCurrentTeam insteadof HasTeams;
+    }
     use HasProfilePhoto;
     use HasRolesAndAbilities;
-    use HasTeams;
     use HasUniqueFields;
     use LogsActivity;
     use Notifiable;
     use TwoFactorAuthenticatable;
     use ValidatesOwnership;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
@@ -47,11 +47,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'is_api_user',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
@@ -59,20 +54,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'two_factor_secret',
     ];
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array<int, string>
-     */
     protected $appends = [
         'profile_photo_url',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -82,35 +67,10 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    /**
-     * The attributes that should be unique in the database.
-     *
-     * @var array<string, string>
-     */
     protected array $unique = [
         'email',
     ];
 
-    public function teammates()
-    {
-        return $this->currentTeam
-            ->allUsers()
-            ->where('user_id', '!=', $this->id);
-    }
-
-    public function joinTeam(Team $team, Role $role)
-    {
-        $team->users()->attach($this);
-
-        BouncerFacade::scope()->to($team->id)->onlyRelations()->dontScopeRoleAbilities();
-        BouncerFacade::assign($role->value)->to($this->id);
-
-        return $this;
-    }
-
-    /**
-     * Return a team's API user.
-     */
     public static function apiUserFor(Team $team): User
     {
         $user = static::firstOrCreate([
@@ -131,7 +91,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return static::firstOrCreate([
             'email' => 'support@wildneighborsdp.org',
         ], [
-            'name' => 'Wrmdbot',
+            'name' => 'WRMD Bot',
+            'password' => Hash::make(Str::random()),
+            'email_verified_at' => Carbon::now(),
         ]);
     }
 

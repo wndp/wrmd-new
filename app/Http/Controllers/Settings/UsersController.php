@@ -6,23 +6,20 @@ use App\Enums\Ability as AbilityEnum;
 use App\Enums\Role as RoleEnum;
 use App\Exceptions\RecordNotOwned;
 use App\Http\Controllers\Controller;
-use App\Mail\WelcomeEmail;
+use App\Http\Requests\SaveNewUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use App\Options\Options;
 use App\Repositories\OptionsStore;
-use App\Rules\Admin;
-use App\Rules\Role;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
-use Laravel\Jetstream\Contracts\AddsTeamMembers;
+use Laravel\Jetstream\Mail\TeamInvitation;
 use Silber\Bouncer\BouncerFacade;
 use Silber\Bouncer\Database\Ability;
 
@@ -75,43 +72,19 @@ class UsersController extends Controller
     /**
      * Store a newly created user in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(SaveNewUserRequest $request): RedirectResponse
     {
-        $request->validate([
-            'email' => 'required|email',
-            'role' => new Role,
+        $invitation = Auth::user()->currentTeam->teamInvitations()->create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'role' => $request->input('role'),
         ]);
 
-        $user = User::whereEmail($request->email)->first();
-
-        if (! $user) {
-            $request->validate([
-                'email' => 'confirmed|unique:users',
-                'password' => 'required|confirmed',
-                'name' => 'required',
-            ]);
-
-            $user = User::create([
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'name' => $request->name,
-            ]);
-        }
-
-        app(AddsTeamMembers::class)->add(
-            Auth::user(),
-            Auth::user()->currentTeam,
-            $request->email ?: '',
-            $request->role
-        );
-
-        if ($request->send_email) {
-            Mail::send(new WelcomeEmail($user, Auth::user()->currentTeam, $request->password));
-        }
+        Mail::to($request->input('email'))->send(new TeamInvitation($invitation));
 
         return redirect()->route('users.index')
-            ->with('notification.heading', __('User Created'))
-            ->with('notification.text', __(':userName was added to your account.', ['userName' => $user->name]));
+            ->with('notification.heading', __('User Invited'))
+            ->with('notification.text', __(':userName was invited to your account.', ['userName' => $request->input('name')]));
     }
 
     /**
@@ -143,31 +116,13 @@ class UsersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user): RedirectResponse
+    public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
         abort_unless($user->belongsToTeam(Auth::user()->currentTeam), new RecordNotOwned);
 
-        if ($user->parent_account_id === Auth::user()->current_team_id) {
-            $request->validate([
-                'email' => 'required|email|confirmed|unique:users,email,'.$user->id,
-                'password' => 'nullable|confirmed',
-                'name' => 'required',
-                'role' => ['required', Rule::enum(RoleEnum::class), new Admin(Auth::user())],
-            ]);
-
-            if ($request->filled('password')) {
-                $user->update(['password' => bcrypt($request->password)]);
-            }
-
-            $user->update($request->all('name', 'email'));
-        } else {
-            $request->validate([
-                'role' => ['required', new Admin($user), Rule::enum(RoleEnum::class)],
-            ]);
-        }
+        $user->update($request->only('name', 'email'));
 
         $user->switchRoleTo($request->role);
-
         BouncerFacade::disallow($user)->to(Ability::all());
         BouncerFacade::refreshFor($user);
 
@@ -181,9 +136,11 @@ class UsersController extends Controller
      */
     public function destroy(User $user): RedirectResponse
     {
-        abort_unless($user->inAccount(Auth::user()->currentTeam), new RecordNotOwned);
+        abort_unless($user->belongsToTeam(Auth::user()->currentTeam), new RecordNotOwned);
 
-        $user->leaveAccount(Auth::user()->currentTeam);
+        Auth::user()->currentTeam->removeUser($user);
+
+        //$user->leaveAccount(Auth::user()->currentTeam);
 
         return redirect()->route('users.index')
             ->with('notification.heading', __('User Deleted'))

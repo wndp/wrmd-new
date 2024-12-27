@@ -189,8 +189,13 @@ Route::prefix('patients')->name('patients.')->group(function () {
         //Route::put('batch/api', [BatchUpdateApiController::class, 'update']);
     });
 
-    Route::controller(PatientRevisionsController::class)->middleware('can:displayRevisions')->group(function () {
-        Route::get('revisions', 'index')->name('revisions.index');
-        Route::get('revisions/{revision}', 'show')->name('revisions.show');
+    Route::middleware(Authorize::using(Ability::VIEW_REVISIONS->value))->group(function () {
+        //Route::put('internal-api/revisions/restore/{revision}/{column?}', PatientRevisionRestorationController::class);
+        //Route::get('revisions/restore/create', [PatientBulkRevisionRestorationController::class, 'create'])->name('revisions.restore.create');
+        //Route::put('revisions/restore', [PatientBulkRevisionRestorationController::class, 'bulkUpdate'])->name('revisions.restore.update');
+        Route::controller(PatientRevisionsController::class)->group(function () {
+            Route::get('revisions', 'index')->name('revisions.index');
+            Route::get('revisions/{revision}', 'show')->name('revisions.show');
+        });
     });
 });

@@ -10,6 +10,7 @@ enum Ability: string
     case VIEW_NOTIFICATIONS = 'VIEW_NOTIFICATIONS';
     case VIEW_DANGER_ZONE = 'VIEW_DANGER_ZONE';
     case VIEW_EXTENSION_SETTINGS = 'VIEW_EXTENSION_SETTINGS';
+    case VIEW_REVISIONS = 'VIEW_REVISIONS';
     case CREATE_PEOPLE = 'CREATE_PEOPLE';
     case COMBINE_PEOPLE = 'COMBINE_PEOPLE';
     case EXPORT_PEOPLE = 'EXPORT_PEOPLE';
@@ -70,6 +71,7 @@ enum Ability: string
             self::VIEW_NOTIFICATIONS => 'View Notifications',
             self::VIEW_DANGER_ZONE => 'View Danger Zone',
             self::VIEW_EXTENSION_SETTINGS => 'View Extension Settings',
+            self::VIEW_REVISIONS => 'View Revisions',
             self::CREATE_PEOPLE => 'Create People',
             self::COMBINE_PEOPLE => 'Combine People',
             self::EXPORT_PEOPLE => 'Export People',

@@ -3,27 +3,22 @@
 namespace App\Rules;
 
 use App\Enums\Role;
+use App\Models\Team;
 use App\Models\User;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 
-class Admin implements ValidationRule
+class AdminRule implements ValidationRule
 {
-    /**
-     * The user to validate their co-account users against.
-     *
-     * @var \App\Domain\Users\User
-     */
-    protected $user;
-
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(protected User $user, protected Team $team)
     {
         $this->user = $user;
+        $this->team = $team;
     }
 
     /**
@@ -50,7 +45,8 @@ class Admin implements ValidationRule
             return true;
         }
 
-        foreach ($this->user->fresh()->teammates() as $teammate) {
+        // ->fresh()
+        foreach ($this->user->teammatesOnTeam($this->team) as $teammate) {
             if ($teammate->isA(Role::ADMIN->value)) {
                 $doesAdminExist = true;
 

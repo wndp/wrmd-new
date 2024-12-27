@@ -7,6 +7,7 @@ use App\Models\Veterinarian;
 use App\Options\LocaleOptions;
 use App\Options\Options;
 use App\Repositories\OptionsStore;
+use App\Rules\SubdivisionRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -47,6 +48,13 @@ class VeterinariansController extends Controller
         $request->validate([
             'name' => 'required',
             'license' => 'required',
+            'business_name' => ['nullable', 'string'],
+            'address' => ['nullable', 'string'],
+            'city' => ['nullable', 'string'],
+            'subdivision' => ['nullable', 'string', new SubdivisionRule],
+            'postal_code' => ['nullable', 'string'],
+            'phone' => ['nullable', 'phone:'.Auth::user()->currentTeam->country],
+            'email' => ['nullable', 'email'],
         ]);
 
         $veterinarian = tap(new Veterinarian($request->only(
@@ -94,6 +102,13 @@ class VeterinariansController extends Controller
         $request->validate([
             'name' => 'required',
             'license' => 'required',
+            'business_name' => ['nullable', 'string'],
+            'address' => ['nullable', 'string'],
+            'city' => ['nullable', 'string'],
+            'subdivision' => ['nullable', 'string', new SubdivisionRule],
+            'postal_code' => ['nullable', 'string'],
+            'phone' => ['nullable', 'phone:'.Auth::user()->currentTeam->country],
+            'email' => ['nullable', 'email'],
         ]);
 
         $veterinarian->validateOwnership(Auth::user()->currentTeam->id);

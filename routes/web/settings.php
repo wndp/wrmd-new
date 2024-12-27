@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\Ability;
 use App\Http\Controllers\Settings\AccountExtensionsController;
 use App\Http\Controllers\Settings\AccountProfileController;
 use App\Http\Controllers\Settings\ApiController;
@@ -16,8 +15,7 @@ use App\Http\Controllers\Settings\UsersController;
 use App\Http\Controllers\Settings\VeterinariansController;
 use Illuminate\Auth\Middleware\Authorize;
 
-// ->middleware(Authorize::using(Ability::VIEW_WRMD_SETTINGS->value))
-Route::prefix('settings')->group(function () {
+Route::prefix('settings')->middleware(Authorize::using('viewSettings'))->group(function () {
     Route::controller(AccountProfileController::class)->group(function () {
         Route::get('account/profile', 'edit')->name('account.profile.edit');
         Route::put('account/profile', 'update')->name('account.profile.update');
@@ -54,7 +52,7 @@ Route::prefix('settings')->group(function () {
     Route::controller(GeneralSettingsController::class)->group(function () {
         Route::get('general', 'edit')->name('general-settings.edit');
         Route::put('general', 'update')->name('general-settings.update');
-        Route::put('general/treatment-log', 'updateTreatmentLog')->name('general-settings.update.treatment-log');
+        Route::put('general/care-log', 'updateCareLog')->name('general-settings.update.care-log');
         Route::put('general/locations', 'updateLocations')->name('general-settings.update.locations');
     });
 

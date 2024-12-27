@@ -77,9 +77,9 @@ class GeneralSettingsController extends Controller
     public function update(Request $request): RedirectResponse
     {
         Wrmd::settings([
-            SettingKey::SHOW_LOOKUP_RESCUER => $request->get('showLookupRescuer'),
-            SettingKey::SHOW_GEOLOCATION_FIELDS => $request->get('showGeolocationFields'),
-            SettingKey::LIST_FIELDS => $request->get('listFields'),
+            SettingKey::SHOW_LOOKUP_RESCUER->value => $request->boolean('showLookupRescuer'),
+            SettingKey::SHOW_GEOLOCATION_FIELDS->value => $request->boolean('showGeolocationFields'),
+            SettingKey::LIST_FIELDS->value => $request->get('listFields'),
         ]);
 
         event(new TeamUpdated(Auth::user()->currentTeam));
@@ -92,14 +92,14 @@ class GeneralSettingsController extends Controller
     /**
      * Update the treatment log settings in storage.
      */
-    public function updateTreatmentLog(Request $request): RedirectResponse
+    public function updateCareLog(Request $request): RedirectResponse
     {
         Wrmd::settings([
-            SettingKey::LOG_ORDER => $request->get('logOrder'),
-            SettingKey::LOG_ALLOW_AUTHOR_EDIT => $request->get('logAllowAuthorEdit'),
-            SettingKey::LOG_ALLOW_EDIT => $request->get('logAllowEdit'),
-            SettingKey::LOG_ALLOW_DELETE => $request->get('logAllowDelete'),
-            SettingKey::LOG_SHARES => $request->get('logShares'),
+            SettingKey::LOG_ORDER->value => $request->get('logOrder'),
+            SettingKey::LOG_ALLOW_AUTHOR_EDIT->value => $request->boolean('logAllowAuthorEdit'),
+            SettingKey::LOG_ALLOW_EDIT->value => $request->boolean('logAllowEdit'),
+            SettingKey::LOG_ALLOW_DELETE->value => $request->boolean('logAllowDelete'),
+            SettingKey::LOG_SHARES->value => $request->boolean('logShares'),
         ]);
 
         event(new TeamUpdated(Auth::user()->currentTeam));

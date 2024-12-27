@@ -13,7 +13,7 @@ class ProfilePhotoController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $request->user()->currentAccount()->deleteProfilePhoto();
+        $request->user()->currentTeam->deleteProfilePhoto();
 
         return redirect()->route('account.profile.edit')->with('status', 'profile-photo-deleted');
     }

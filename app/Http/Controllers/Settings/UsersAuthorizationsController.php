@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Settings;
 
-use App\Domain\Database\RecordNotOwnedResponse;
-use App\Domain\Users\User;
+use App\Exceptions\RecordNotOwned;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +17,7 @@ class UsersAuthorizationsController extends Controller
      */
     public function update(Request $request, User $user): RedirectResponse
     {
-        abort_unless($user->inAccount(Auth::user()->currentAccount), new RecordNotOwnedResponse);
+        abort_unless($user->belongsToTeam(Auth::user()->currentTeam), new RecordNotOwned);
 
         $data = $request->validate([
             'userAbilities' => 'required|array',

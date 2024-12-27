@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Enums\SettingKey;
+use App\Events\TeamUpdated;
 use App\Http\Controllers\Controller;
 use App\Options\LocaleOptions;
 use App\Repositories\OptionsStore;
+use App\Rules\CountryRule;
+use App\Rules\SubdivisionRule;
 use App\Support\Wrmd;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -35,8 +38,8 @@ class AccountProfileController extends Controller
 
         $team->update($request->validate([
             'name' => 'required',
-            'country' => 'required',
-            'subdivision' => 'required',
+            'country' => ['required', 'string', new CountryRule],
+            'subdivision' => ['required', 'string', new SubdivisionRule],
             'city' => 'required',
             'address' => 'required',
             'postal_code' => 'nullable',
@@ -57,6 +60,8 @@ class AccountProfileController extends Controller
             ]), 100);
         }
 
+        event(new TeamUpdated(Auth::user()->currentTeam));
+
         return redirect()->route('account.profile.edit')
             ->with('notification.heading', __('Success!'))
             ->with('notification.text', __('Your account profile was updated.'));
@@ -71,7 +76,7 @@ class AccountProfileController extends Controller
 
         $team->update($request->validate([
             'contact_name' => 'required',
-            'phone_number' => 'required',
+            'phone' => 'required|phone:'.$team->country,
             'contact_email' => 'required|email',
             'website' => 'nullable',
         ]));
@@ -81,6 +86,8 @@ class AccountProfileController extends Controller
                 'email' => $request->input('contact_email'),
             ]), 100);
         }
+
+        event(new TeamUpdated(Auth::user()->currentTeam));
 
         return redirect()->route('account.profile.edit')
             ->with('notification.heading', __('Success!'))
@@ -111,6 +118,8 @@ class AccountProfileController extends Controller
         // }
 
         //Cache::forget('timezone.'.Auth::id());
+
+        event(new TeamUpdated(Auth::user()->currentTeam));
 
         return redirect()->route('account.profile.edit')->cookie(
             'locale',

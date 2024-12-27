@@ -12,7 +12,20 @@ use Tests\Traits\Assertions;
 final class UserTest extends TestCase
 {
     use Assertions;
+    use CreatesTeamUser;
     use RefreshDatabase;
+
+    #[Test]
+    public function aUserBelongsToManyTeams(): void
+    {
+        $user = User::factory()->create();
+        $userTeam = $this->createTeamUser(userOverrides: $user);
+
+        $user = $user->fresh();
+
+        $this->assertInstanceOf(Collection::class, $user->teams);
+        $this->assertTrue($user->teams->first()->is($userTeam->team));
+    }
 
     public function test_a_user_is_revisionable(): void
     {

@@ -12,18 +12,22 @@ use Silber\Bouncer\BouncerFacade;
 
 trait CreatesTeamUser
 {
-    public function createTeamUser(array $teamOverrides = [], array $userOverrides = [], ?Role $role = null)
+    public function createTeamUser(array $teamOverrides = [], array|User $userOverrides = [], ?Role $role = null)
     {
         $role = $role?->value ?? Role::ADMIN->value;
 
         // $role = isset($userOverrides['role']) ? $userOverrides['role'] : Role::ADMIN->value;
         // unset($userOverrides['role']);
 
-        if (isset($userOverrides['email'])) {
-            $teamOverrides = array_merge($teamOverrides, ['contact_email' => $userOverrides['email']]);
-        }
+        if ($userOverrides instanceof User) {
+            $user = $userOverrides;
+        } else {
+            if (isset($userOverrides['email'])) {
+                $teamOverrides = array_merge($teamOverrides, ['contact_email' => $userOverrides['email']]);
+            }
 
-        $user = User::factory()->create($userOverrides);
+            $user = User::factory()->create($userOverrides);
+        }
 
         $teamOverrides['user_id'] = $user->id;
 

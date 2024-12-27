@@ -6,6 +6,8 @@ use App\Enums\AccountStatus;
 use App\Enums\Role;
 use App\Models\Team;
 use App\Models\User;
+use App\Rules\CountryRule;
+use App\Rules\SubdivisionRule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -13,7 +15,7 @@ use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
 use Silber\Bouncer\BouncerFacade;
 
-class CreateNewUser implements CreatesNewUsers
+class CreateNewAccount implements CreatesNewUsers
 {
     use PasswordValidationRules;
 
@@ -29,11 +31,11 @@ class CreateNewUser implements CreatesNewUsers
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users', 'confirmed'],
             'password' => $this->passwordRules(),
             'organization' => ['required', 'string'],
-            'country' => ['required', 'string'],
+            'country' => ['required', 'string', new CountryRule],
             'address' => ['required', 'string'],
             'city' => ['required', 'string'],
-            'subdivision' => ['required', 'string'],
-            'phone_number' => ['required', 'string'],
+            'subdivision' => ['required', 'string', new SubdivisionRule],
+            'phone' => ['required', 'string', 'phone:country'],
             'timezone' => ['required', 'timezone'],
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
@@ -65,7 +67,7 @@ class CreateNewUser implements CreatesNewUsers
             'address' => $input['address'],
             'city' => $input['city'],
             'subdivision' => $input['subdivision'],
-            'phone_number' => $input['phone_number'],
+            'phone' => $input['phone'],
             'timezone' => $input['timezone'],
         ]));
 

@@ -76,7 +76,6 @@ Route::middleware([
     require __DIR__.'/web/patient.php';
     require __DIR__.'/web/people.php';
     require __DIR__.'/web/reports.php';
-    // require __DIR__.'/web/revisions.php';
     require __DIR__.'/web/searching.php';
     require __DIR__.'/web/profile.php';
     require __DIR__.'/web/settings.php';

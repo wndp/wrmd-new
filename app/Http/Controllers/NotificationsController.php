@@ -32,7 +32,7 @@ class NotificationsController extends Controller
      */
     public function update(DatabaseNotification $notification)
     {
-        abort_unless($notification->notifiable->is(Auth::user()->currentAccount), 404);
+        abort_unless($notification->notifiable->is(Auth::user()->currentTeam), 404);
 
         $notification->markAsUnread();
 
@@ -44,7 +44,7 @@ class NotificationsController extends Controller
      */
     public function destroy(DatabaseNotification $notification)
     {
-        abort_unless($notification->notifiable->is(Auth::user()->currentAccount), 404);
+        abort_unless($notification->notifiable->is(Auth::user()->currentTeam), 404);
 
         return $notification->markAsRead();
     }

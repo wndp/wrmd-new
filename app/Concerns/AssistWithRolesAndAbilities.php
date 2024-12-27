@@ -26,13 +26,13 @@ trait AssistWithRolesAndAbilities
     /**
      * Switch the user's role.
      */
-    public function switchRoleTo(string $role): static
+    public function switchRoleTo(RoleEnum $role): static
     {
         $this->getRoles()->each(
             fn ($role) => $this->retract($role)
         );
 
-        $this->assign($role);
+        $this->assign($role->value);
 
         return $this;
     }
@@ -78,11 +78,12 @@ trait AssistWithRolesAndAbilities
     }
 
     /**
-     * Determine if the user has a viewer Role.
+     * Determine if the user has a viewer Role on the provided team.
      */
-    public function isAViewer(): bool
+    public function isAViewer(Team $team): bool
     {
-        return $this->getAuthenticatedUsersCurrentRoleNameAttribute() === RoleEnum::VIEWER->value;
+        return $this->roleOn($team)->name === RoleEnum::VIEWER->value;
+        //return $this->getAuthenticatedUsersCurrentRoleNameAttribute() === RoleEnum::VIEWER->value;
     }
 
     public function getRoleNameOnTeamForHumans($team)
