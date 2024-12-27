@@ -15,8 +15,7 @@ final class UserTest extends TestCase
     use CreatesTeamUser;
     use RefreshDatabase;
 
-    #[Test]
-    public function aUserBelongsToManyTeams(): void
+    public function test_a_user_belongs_to_many_teams(): void
     {
         $user = User::factory()->create();
         $userTeam = $this->createTeamUser(userOverrides: $user);

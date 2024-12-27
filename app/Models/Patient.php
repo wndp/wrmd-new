@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Actions\ClonePatientRelations;
+use App\Concerns\CustomFieldAble;
 use App\Concerns\HasSpatial;
 use App\Concerns\InteractsWithMedia;
 use App\Concerns\JoinsTablesToPatients;
@@ -11,6 +12,7 @@ use App\Concerns\QueriesDateRange;
 use App\Concerns\ValidatesOwnership;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
+use App\Jobs\AttemptTaxaIdentification;
 use App\Models\Scopes\VoidedScope;
 use App\Repositories\AdministrativeDivision;
 use App\Support\Timezone;
@@ -35,6 +37,7 @@ use Spatie\MediaLibrary\HasMedia;
 
 class Patient extends Model implements HasMedia
 {
+    use CustomFieldAble;
     use HasFactory;
     use HasSpatial;
     use HasVersion7Uuids;
@@ -252,6 +255,11 @@ class Patient extends Model implements HasMedia
         return $this->hasMany(LabReport::class);
     }
 
+    public function wildlifeRecovery(): HasOne
+    {
+        return $this->hasOne(WildlifeRecoveryPatient::class);
+    }
+
     public function labFecalResults(): MorphToMany
     {
         return $this->morphedByMany(LabFecalResult::class, 'lab_result', 'lab_reports')->withPivot([
@@ -417,6 +425,11 @@ class Patient extends Model implements HasMedia
     public function isUnrecognized(): bool
     {
         return is_null($this->locked_at) && ! Str::contains($this->common_name, ['Void', 'UNBI', 'Unidentified', 'Unknown'], true);
+    }
+
+    public function attemptIdentification(bool $isMisidentified = false): void
+    {
+        AttemptTaxaIdentification::dispatch($this, $isMisidentified);
     }
 
     protected function daysInCare(): Attribute

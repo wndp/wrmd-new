@@ -2,6 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\RecordNotOwned;
+use App\Models\Admission;
+use App\Models\Patient;
+use Illuminate\Support\Collection;
+use Inertia\Inertia;
+use Spatie\Activitylog\Models\Activity;
+
 class PatientRevisionsController extends Controller
 {
     /**
@@ -14,27 +21,27 @@ class PatientRevisionsController extends Controller
         $admission = $this->loadAdmissionAndSharePagination();
 
         $patientRelations = [
-            'media.revisions',
-            'banding.revisions',
-            'exams.revisions',
-            'expenses.revisions',
-            'labs.revisions',
-            'locations.revisions',
-            'necropsy.revisions',
-            'morphometric.revisions',
-            'eventProcessing.revisions',
-            //'eventPrewash.revisions',
-            'eventWash.revisions',
-            'eventConditioning.revisions',
-            'prescriptions.revisions',
-            'rechecks.revisions',
-            'rescuer.revisions',
-            'treatmentLogs.revisions',
-            'wildlifeRecovery.revisions',
-            'customValues.revisions',
+            'media.activities',
+            'banding.activities',
+            'exams.activities',
+            'expenseTransactions.activities',
+            'labReports.activities',
+            'locations.activities',
+            'necropsy.activities',
+            'morphometric.activities',
+            'oilProcessing.activities',
+            //'eventPrewash.activities',
+            'oilWashes.activities',
+            'oilWaterproofingAssessments.activities',
+            'prescriptions.activities',
+            'rechecks.activities',
+            'rescuer.activities',
+            'careLogs.activities',
+            'wildlifeRecovery.activities',
+            'customValues.activities',
         ];
 
-        $relations = collect($admission->patient->load('admissions.account')->load($patientRelations)->getRelations())->flatMap(function ($collection) {
+        $relations = collect($admission->patient->load('admissions.team')->load($patientRelations)->getRelations())->flatMap(function ($collection) {
             $collection = ! $collection instanceof Collection ? collect([$collection]) : $collection;
 
             return $collection->filter()->flatMap(function ($model) {
@@ -42,23 +49,23 @@ class PatientRevisionsController extends Controller
             });
         });
 
-        $revisions = $admission->patient->revisions->merge($relations)->sortBy('created_at')->values();
+        $activities = $admission->patient->activities->merge($relations)->sortBy('created_at')->values();
 
-        return Inertia::render('Revisions/Index', compact('revisions'));
+        return Inertia::render('Patients/Revisions/Index', compact('activities'));
     }
 
     /**
      * Display the view for the specified patient and revision.
      */
-    public function show(Revision $revision)
+    public function show(Activity $activity)
     {
         $admission = $this->loadAdmissionAndSharePagination();
 
-        abort_unless($this->belongsToAdmission($revision, $admission), new RecordNotOwnedResponse);
+        abort_unless($this->belongsToAdmission($activity, $admission), new RecordNotOwned);
 
-        $revision->append('diff', 'updated_attributes');
+        //$activity->append('diff', 'updated_attributes');
 
-        return Inertia::render('Revisions/Show', compact('revision'));
+        return Inertia::render('Patients/Revisions/Show', compact('activity'));
     }
 
     /**
@@ -66,10 +73,10 @@ class PatientRevisionsController extends Controller
      *
      * @return bool
      */
-    public function belongsToAdmission(Revision $revision, Admission $admission)
+    public function belongsToAdmission(Activity $activity, Admission $admission)
     {
-        return ($revision->revisionable instanceof Patient && (int) $revision->revisionable_id === (int) $admission->patient_id)
-            || ($revision->revisionable->patient instanceof Patient && (int) $revision->revisionable->patient->id === (int) $admission->patient_id)
-            || ($revision->revisionable->patients instanceof Collection && $revision->revisionable->patients->containsStrict('id', $admission->patient_id));
+        return ($activity->subject instanceof Patient && (int) $activity->subject_id === (int) $admission->patient_id)
+            || ($activity->subject->patient instanceof Patient && (int) $activity->subject->patient->id === (int) $admission->patient_id)
+            || ($activity->subject->patients instanceof Collection && $activity->subject->patients->containsStrict('id', $admission->patient_id));
     }
 }

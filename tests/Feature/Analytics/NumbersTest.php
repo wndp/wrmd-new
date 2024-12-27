@@ -23,6 +23,8 @@ final class NumbersTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
+    public $connectionsToTransact = ['singlestore', 'wildalert'];
+
     public function test_it_gets_the_number_of_cases_for_this_year(): void
     {
         $team = Team::factory()->create();
@@ -171,7 +173,7 @@ final class NumbersTest extends TestCase
         Event::fake();
 
         $pendingDispositionId = $this->pendingDispositionId();
-        $taxon = Taxon::factory()->create();
+        $taxon = Taxon::factory()->createQuietly();
         $this->createCase(Team::factory()->create(), 2024, ['taxon_id' => null, 'disposition_id' => $pendingDispositionId]);
         $this->createCase(Team::factory()->create(), 2024, ['taxon_id' => $taxon->id, 'disposition_id' => $pendingDispositionId]);
 
@@ -193,7 +195,7 @@ final class NumbersTest extends TestCase
 
         $pendingDispositionId = $this->pendingDispositionId();
         $team = Team::factory()->create();
-        $taxon = Taxon::factory()->create();
+        $taxon = Taxon::factory()->createQuietly();
 
         $this->createCase(Team::factory()->create(), 2024, ['taxon_id' => null]);
         $this->createCase($team, 2024, ['taxon_id' => null, 'disposition_id' => $pendingDispositionId]);
@@ -217,8 +219,8 @@ final class NumbersTest extends TestCase
 
         $pendingDispositionId = $this->pendingDispositionId();
 
-        $taxon = Taxon::factory()->create();
-        CommonName::factory()->create(['common_name' => 'Big Bat', 'taxon_id' => $taxon->id]);
+        $taxon = Taxon::factory()->createQuietly();
+        CommonName::factory()->createQuietly(['common_name' => 'Big Bat', 'taxon_id' => $taxon->id]);
 
         $this->createCase(Team::factory()->create(), 2024, ['taxon_id' => $taxon->id, 'common_name' => 'Big Bat', 'disposition_id' => $pendingDispositionId]);
         $this->createCase(Team::factory()->create(), 2024, ['taxon_id' => $taxon->id, 'common_name' => 'Foo Bird', 'disposition_id' => $pendingDispositionId]);
@@ -241,8 +243,8 @@ final class NumbersTest extends TestCase
 
         $pendingDispositionId = $this->pendingDispositionId();
         $team = Team::factory()->create();
-        $taxon = Taxon::factory()->create();
-        CommonName::factory()->create(['common_name' => 'Big Bat', 'taxon_id' => $taxon->id]);
+        $taxon = Taxon::factory()->createQuietly();
+        CommonName::factory()->createQuietly(['common_name' => 'Big Bat', 'taxon_id' => $taxon->id]);
 
         $this->createCase(Team::factory()->create(), 2024, ['taxon_id' => $taxon->id, 'common_name' => 'Foo Bird']);
         $this->createCase($team, 2024, ['taxon_id' => $taxon->id, 'common_name' => 'Big Bat', 'disposition_id' => $pendingDispositionId]);

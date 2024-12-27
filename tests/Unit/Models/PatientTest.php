@@ -350,10 +350,10 @@ final class PatientTest extends TestCase
 
     public function test_taxon_alpha_codes_are_not_missidentified(): void
     {
-        $commonName = CommonName::factory()->create();
+        $commonName = CommonName::factory()->createQuietly();
 
         Patient::factory()->create([
-            'taxon_id' => Taxon::factory()->create(['id' => $commonName->taxon_id, 'alpha_code' => 'CAGO'])->id,
+            'taxon_id' => Taxon::factory()->createQuietly(['id' => $commonName->taxon_id, 'alpha_code' => 'CAGO'])->id,
             'common_name' => 'CAGO',
         ]);
 
@@ -364,14 +364,14 @@ final class PatientTest extends TestCase
 
     public function test_common_name_alpha_codes_are_not_missidentified(): void
     {
-        $taxonId = Taxon::factory()->create()->id;
+        $taxonId = Taxon::factory()->createQuietly()->id;
 
         Patient::factory()->create([
             'taxon_id' => $taxonId,
             'common_name' => 'CAGO',
         ]);
 
-        CommonName::factory()->create([
+        CommonName::factory()->createQuietly([
             'taxon_id' => $taxonId,
             'alpha_code' => 'CAGO',
         ]);

@@ -20,6 +20,8 @@ final class HasWildAlertEventTest extends TestCase
     use CreatesUiBehavior;
     use RefreshDatabase;
 
+    public $connectionsToTransact = ['singlestore', 'wildalert'];
+
     public function test_it_notifies_if_the_patient_has_been_in_care_for_excessive_days(): void
     {
         Event::fake();
@@ -35,7 +37,7 @@ final class HasWildAlertEventTest extends TestCase
 
         $me = $this->createTeamUser();
         $admission = $this->createCase($me->team, patientOverrides: [
-            'taxon_id' => Taxon::factory()->create()->id,
+            'taxon_id' => Taxon::factory()->createQuietly()->id,
             'disposition_id' => $pendingDispositionId,
         ]);
 
