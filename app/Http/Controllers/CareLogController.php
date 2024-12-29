@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SaveCareLogRequest;
 use App\Models\CareLog;
 use App\Models\Patient;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CareLogController extends Controller
@@ -25,7 +24,7 @@ class CareLogController extends Controller
             $request->dataFromRequest(),
             [
                 'patient_id' => $patient->id,
-                'user_id' => Auth::id()
+                'user_id' => Auth::id(),
             ]
         ));
 

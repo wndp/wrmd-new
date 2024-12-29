@@ -43,7 +43,7 @@ final class CageCardControllerTest extends TestCase
             ->put(route('patients.cage_card.update', $admission->patient))
             ->assertInvalid([
                 'common_name' => 'The common name field is required.',
-                'admitted_at' => 'The date admitted field is required.'
+                'admitted_at' => 'The date admitted field is required.',
             ]);
 
         $this->actingAs($me->user)

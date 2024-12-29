@@ -57,7 +57,7 @@ class Patient extends Model implements HasMedia
      */
     protected static function booted(): void
     {
-        static::addGlobalScope(new VoidedScope());
+        static::addGlobalScope(new VoidedScope);
     }
 
     protected $fillable = [
@@ -468,7 +468,7 @@ class Patient extends Model implements HasMedia
 
     public function getCoordinatesFoundAddress(): Address
     {
-        return (new Address())
+        return (new Address)
             ->withCountryCode(app(AdministrativeDivision::class)->alpha2CountryCode())
             ->withAdministrativeArea($this->subdivision_found ?: '')
             ->withLocality($this->city_found ?: '')

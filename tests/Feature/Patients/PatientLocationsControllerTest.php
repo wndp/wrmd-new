@@ -4,14 +4,10 @@ namespace Tests\Feature\Patients;
 
 use App\Enums\Ability;
 use App\Enums\AttributeOptionName;
-use App\Enums\SettingKey;
 use App\Models\AttributeOption;
 use App\Models\Location;
 use App\Models\Patient;
 use App\Models\PatientLocation;
-use App\Models\patients;
-use App\Support\Timezone;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
@@ -59,19 +55,19 @@ final class PatientLocationsControllerTest extends TestCase
         $this->actingAs($me->user)
             ->post(route('patients.location.store', $admission->patient))
             ->assertInvalid([
-                'moved_in_at' =>  'The moved in date field is required.',
+                'moved_in_at' => 'The moved in date field is required.',
                 'facility_id' => 'The facility field is required.',
-                'area' => 'The area field is required when hash is not present.'
+                'area' => 'The area field is required when hash is not present.',
             ])
             ->assertValid('hash');
 
         $this->actingAs($me->user)
             ->post(route('patients.location.store', $admission->patient), [
                 'moved_in_at' => 'foo',
-                'facility_id' => 123
+                'facility_id' => 123,
             ])
             ->assertInvalid([
-                'moved_in_at' =>  'The moved in date field must be a valid date.',
+                'moved_in_at' => 'The moved in date field must be a valid date.',
                 'facility_id' => 'The selected facility is invalid.',
             ]);
 
@@ -111,7 +107,7 @@ final class PatientLocationsControllerTest extends TestCase
                 'facility_id' => $facilityId,
                 'area' => 'ICU',
                 'enclosure' => 'Inc 1',
-                'comments' => 'lorem ipsum'
+                'comments' => 'lorem ipsum',
             ])
             ->assertRedirect(route('dashboard'));
 
@@ -126,7 +122,7 @@ final class PatientLocationsControllerTest extends TestCase
             'location_id' => $location->id,
             'patient_id' => $admission->patient_id,
             'moved_in_at' => '2024-12-29 01:17:00',
-            'comments' => 'lorem ipsum'
+            'comments' => 'lorem ipsum',
         ]);
     }
 
@@ -233,16 +229,16 @@ final class PatientLocationsControllerTest extends TestCase
             ->assertInvalid([
                 'moved_in_at' => 'The moved in date field is required.',
                 'facility_id' => 'The facility field is required.',
-                'area' => 'The area field is required.'
+                'area' => 'The area field is required.',
             ]);
 
         $this->actingAs($me->user)
             ->put(route('patients.location.update', [$admission->patient, $patientLocation]), [
                 'moved_in_at' => 'foo',
-                'facility_id' => 123
+                'facility_id' => 123,
             ])
             ->assertInvalid([
-                'moved_in_at' =>  'The moved in date field must be a valid date.',
+                'moved_in_at' => 'The moved in date field must be a valid date.',
                 'facility_id' => 'The selected facility is invalid.',
             ]);
 

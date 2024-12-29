@@ -196,7 +196,7 @@ class ExamRequest extends FormRequest
             'comments' => [
                 'nullable',
                 'string',
-            ]
+            ],
         ];
     }
 

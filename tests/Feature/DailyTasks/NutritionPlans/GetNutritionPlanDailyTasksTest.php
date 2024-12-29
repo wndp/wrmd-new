@@ -56,7 +56,7 @@ final class GetNutritionPlanDailyTasksTest extends TestCase
         ]);
 
         $result = GetNutritionPlanDailyTasks::handle(
-            new DailyTasksFilters(),
+            new DailyTasksFilters,
             [$admission->patient_id]
         );
 

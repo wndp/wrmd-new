@@ -56,7 +56,7 @@ final class GetRecheckDailyTasksTest extends TestCase
         ]);
 
         $result = GetRecheckDailyTasks::handle(
-            new DailyTasksFilters(),
+            new DailyTasksFilters,
             [$admission->patient_id]
         );
 

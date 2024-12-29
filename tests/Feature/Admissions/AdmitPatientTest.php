@@ -3,8 +3,6 @@
 namespace Tests\Feature\Admissions;
 
 use App\Actions\AdmitPatient;
-use App\Enums\AttributeOptionName;
-use App\Enums\AttributeOptionUiBehavior;
 use App\Events\PatientAdmitted;
 use App\Models\Person;
 use App\Models\Team;

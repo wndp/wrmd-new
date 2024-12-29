@@ -6,7 +6,6 @@ use App\Models\Exam;
 use App\Models\Patient;
 use App\Support\WeightsCollection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Collection;
 use Tests\TestCase;
 use Tests\Traits\CreatesUiBehavior;
 
@@ -16,6 +15,7 @@ final class GetPatientWeightsTest extends TestCase
     use RefreshDatabase;
 
     private $patient;
+
     private $gWeightId;
 
     protected function setUp(): void

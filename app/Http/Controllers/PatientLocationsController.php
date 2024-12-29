@@ -123,10 +123,6 @@ class PatientLocationsController extends Controller
 
     /**
      * Determine if the physical location of the request differs from the patient location.
-     *
-     * @param  Request $request
-     * @param  PatientLocation $patientLocation
-     * @return bool
      */
     private function physicalLocationChanged(Request $request, PatientLocation $patientLocation): bool
     {

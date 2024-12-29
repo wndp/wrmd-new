@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\SettingKey;
 use App\Events\PatientUpdated;
 use App\Http\Requests\SaveIntakeRequest;
 use App\Models\Patient;
-use App\Support\Wrmd;
 use App\ValueObjects\SingleStorePoint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 
 class IntakeController extends Controller
 {

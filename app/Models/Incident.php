@@ -148,7 +148,7 @@ class Incident extends Model implements HasMedia
 
     public function getIncidentCoordinatesAddress(): Address
     {
-        return (new Address())
+        return (new Address)
             ->withCountryCode(app(AdministrativeDivision::class)->alpha2CountryCode())
             ->withAdministrativeArea($this->incident_subdivision ?: '')
             ->withLocality($this->incident_city ?: '')

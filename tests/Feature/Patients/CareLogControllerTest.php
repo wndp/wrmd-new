@@ -18,8 +18,8 @@ final class CareLogControllerTest extends TestCase
     use Assertions;
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     public function test_un_authenticated_users_cant_store_a_care_log(): void
     {
@@ -45,19 +45,19 @@ final class CareLogControllerTest extends TestCase
             ->assertInvalid([
                 'care_at' => 'The care date field is required.',
                 'weight' => 'The weight field is required when comments is not present.',
-                'comments' => 'The comments field is required when weight is not present.'
+                'comments' => 'The comments field is required when weight is not present.',
             ]);
 
         $this->actingAs($me->user)
             ->post(route('patients.care_log.store', $admission->patient), [
                 'care_at' => 'foo',
                 'weight' => 'foo',
-                'weight_unit_id' => 123
+                'weight_unit_id' => 123,
             ])
             ->assertInvalid([
                 'care_at' => 'The care date field must be a valid date.',
                 'weight' => 'The weight field must be a number.',
-                'weight_unit_id' => 'The selected weight unit is invalid.'
+                'weight_unit_id' => 'The selected weight unit is invalid.',
             ]);
     }
 
@@ -118,19 +118,19 @@ final class CareLogControllerTest extends TestCase
             ->assertInvalid([
                 'care_at' => 'The care date field is required.',
                 'weight' => 'The weight field is required when comments is not present.',
-                'comments' => 'The comments field is required when weight is not present.'
+                'comments' => 'The comments field is required when weight is not present.',
             ]);
 
         $this->actingAs($me->user)
             ->put(route('patients.care_log.update', [$admission->patient, $careLog]), [
                 'care_at' => 'foo',
                 'weight' => 'foo',
-                'weight_unit_id' => 123
+                'weight_unit_id' => 123,
             ])
             ->assertInvalid([
                 'care_at' => 'The care date field must be a valid date.',
                 'weight' => 'The weight field must be a number.',
-                'weight_unit_id' => 'The selected weight unit is invalid.'
+                'weight_unit_id' => 'The selected weight unit is invalid.',
             ]);
     }
 

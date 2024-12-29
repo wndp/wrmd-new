@@ -27,32 +27,32 @@ class SaveCareLogRequest extends FormRequest
         return [
             'care_at' => [
                 'required',
-                'date'
+                'date',
             ],
             'weight' => [
                 'nullable',
                 'numeric',
-                'required_without:comments'
+                'required_without:comments',
             ],
             'weight_unit_id' => [
                 'nullable',
                 'required_with:weight',
                 'integer',
-                new AttributeOptionExistsRule(AttributeOptionName::EXAM_WEIGHT_UNITS)
+                new AttributeOptionExistsRule(AttributeOptionName::EXAM_WEIGHT_UNITS),
             ],
             'temperature' => [
                 'nullable',
-                'numeric'
+                'numeric',
             ],
             'temperature_unit_id' => [
                 'nullable',
                 'required_with:temperature',
                 'integer',
-                new AttributeOptionExistsRule(AttributeOptionName::EXAM_TEMPERATURE_UNITS)
+                new AttributeOptionExistsRule(AttributeOptionName::EXAM_TEMPERATURE_UNITS),
             ],
             'comments' => [
                 'nullable',
-                'required_without:weight'
+                'required_without:weight',
             ],
         ];
     }

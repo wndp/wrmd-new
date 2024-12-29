@@ -19,8 +19,8 @@ final class PatientsControllerTest extends TestCase
     use Assertions;
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     public function test_un_authenticated_users_cant_list_patients(): void
     {
@@ -82,7 +82,7 @@ final class PatientsControllerTest extends TestCase
                 'city_found' => 'The city found field is required.',
                 'subdivision_found' => 'The subdivision found field is required.',
                 'found_at' => 'The date found field is required.',
-                'reason_for_admission' => 'The reason for admission field is required.'
+                'reason_for_admission' => 'The reason for admission field is required.',
             ]);
 
         $this->actingAs($me->user)->post(route('patients.store'), [
@@ -100,7 +100,7 @@ final class PatientsControllerTest extends TestCase
             ->assertInvalid([
                 'admitted_at' => 'The date admitted is not a valid date.',
                 'case_year' => 'The selected case year is invalid.',
-                'found_at' => 'The date found is not a valid date.'
+                'found_at' => 'The date found is not a valid date.',
             ]);
     }
 

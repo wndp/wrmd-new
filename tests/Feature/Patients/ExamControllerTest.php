@@ -21,8 +21,8 @@ final class ExamControllerTest extends TestCase
     use Assertions;
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     public function test_un_authenticated_users_cant_access_exams(): void
     {
@@ -117,7 +117,7 @@ final class ExamControllerTest extends TestCase
             ->assertInvalid([
                 'exam_type_id' => 'The exam type field is required.',
                 'examined_at' => 'The examined at date field is required.',
-                'examiner' => 'The examiner field is required.'
+                'examiner' => 'The examiner field is required.',
             ]);
 
         $this->actingAs($me->user)
@@ -127,7 +127,7 @@ final class ExamControllerTest extends TestCase
             ])
             ->assertInvalid([
                 'examined_at' => 'The examined at date is not a valid date.',
-                'exam_type_id' => 'The selected exam type is invalid.'
+                'exam_type_id' => 'The selected exam type is invalid.',
             ]);
 
         $intakeExamTypeId = $this->createUiBehavior(AttributeOptionName::EXAM_TYPES, AttributeOptionUiBehavior::EXAM_TYPE_IS_INTAKE);
@@ -272,7 +272,7 @@ final class ExamControllerTest extends TestCase
             ->assertInvalid([
                 'exam_type_id' => 'The exam type field is required.',
                 'examined_at' => 'The examined at date field is required.',
-                'examiner' => 'The examiner field is required.'
+                'examiner' => 'The examiner field is required.',
             ]);
 
         $this->actingAs($me->user)
@@ -282,7 +282,7 @@ final class ExamControllerTest extends TestCase
             ])
             ->assertInvalid([
                 'examined_at' => 'The examined at date is not a valid date.',
-                'exam_type_id' => 'The selected exam type is invalid.'
+                'exam_type_id' => 'The selected exam type is invalid.',
             ]);
 
         Exam::factory()->create(['patient_id' => $admission->patient_id, 'exam_type_id' => $intakeExamTypeId]);

@@ -5,7 +5,6 @@ namespace Tests\Unit\Rules;
 use App\Enums\Role;
 use App\Rules\AdminRule;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Support\AssistsWithAuthentication;
 use Tests\TestCase;
 use Tests\Traits\CreatesTeamUser;
 

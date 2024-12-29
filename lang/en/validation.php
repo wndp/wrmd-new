@@ -232,7 +232,7 @@ return [
 
         'care_at' => 'care date',
         'necropsied_at' => 'necropsy date',
-        'moved_in_at' => 'moved in date'
+        'moved_in_at' => 'moved in date',
     ],
 
 ];

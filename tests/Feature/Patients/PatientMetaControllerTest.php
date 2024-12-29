@@ -54,7 +54,7 @@ final class PatientMetaControllerTest extends TestCase
             ->assertInvalid([
                 'is_locked' => 'The is locked field is required.',
                 'is_voided' => 'The is voided field is required.',
-                'is_criminal_activity' => 'The criminal activity field is required.'
+                'is_criminal_activity' => 'The criminal activity field is required.',
             ]);
 
         $this->actingAs($me->user)

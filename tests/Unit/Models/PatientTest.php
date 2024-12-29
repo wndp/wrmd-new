@@ -49,7 +49,7 @@ final class PatientTest extends TestCase
     }
 
     #[Group('lab')]
-    public function test_aPatientHasLabReports(): void
+    public function test_a_patient_has_lab_reports(): void
     {
         $patient = Patient::factory()->make();
 
@@ -57,7 +57,7 @@ final class PatientTest extends TestCase
     }
 
     #[Group('lab')]
-    public function test_aPatientHasLabFecalResults(): void
+    public function test_a_patient_has_lab_fecal_results(): void
     {
         $labReport = LabReport::factory()
             ->for(LabFecalResult::factory(), 'labResult')
@@ -68,7 +68,7 @@ final class PatientTest extends TestCase
     }
 
     #[Group('lab')]
-    public function test_aPatientHasLabCbcResults(): void
+    public function test_a_patient_has_lab_cbc_results(): void
     {
         $labReport = LabReport::factory()
             ->for(LabCbcResult::factory(), 'labResult')
@@ -79,7 +79,7 @@ final class PatientTest extends TestCase
     }
 
     #[Group('lab')]
-    public function test_aPatientHasLabCytologyResults(): void
+    public function test_a_patient_has_lab_cytology_results(): void
     {
         $labReport = LabReport::factory()
             ->for(LabCytologyResult::factory(), 'labResult')
@@ -90,7 +90,7 @@ final class PatientTest extends TestCase
     }
 
     #[Group('lab')]
-    public function test_aPatientHasLabChemistryResults(): void
+    public function test_a_patient_has_lab_chemistry_results(): void
     {
         $labReport = LabReport::factory()
             ->for(LabChemistryResult::factory(), 'labResult')
@@ -101,7 +101,7 @@ final class PatientTest extends TestCase
     }
 
     #[Group('lab')]
-    public function test_aPatientHasLabUrinalysisResults(): void
+    public function test_a_patient_has_lab_urinalysis_results(): void
     {
         $labReport = LabReport::factory()
             ->for(LabUrinalysisResult::factory(), 'labResult')
@@ -112,7 +112,7 @@ final class PatientTest extends TestCase
     }
 
     #[Group('lab')]
-    public function test_aPatientHasLabToxicologyResults(): void
+    public function test_a_patient_has_lab_toxicology_results(): void
     {
         $labReport = LabReport::factory()
             ->for(LabToxicologyResult::factory(), 'labResult')

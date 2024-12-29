@@ -85,7 +85,7 @@ final class ExpensesControllerTest extends TestCase
             ->assertInvalid([
                 'transacted_at' => 'The transaction date field is required.',
                 'category' => 'A category is required.',
-                'charge' => 'A debit or credit is required.'
+                'charge' => 'A debit or credit is required.',
             ]);
 
         $this->actingAs($me->user)
@@ -97,7 +97,7 @@ final class ExpensesControllerTest extends TestCase
             ->assertInvalid([
                 'transacted_at' => 'The transaction date is not a valid date.',
                 'category' => 'The selected category is invalid.',
-                'debit' => 'The debit field must be a number.'
+                'debit' => 'The debit field must be a number.',
             ]);
 
         $this->actingAs($me->user)
@@ -176,7 +176,7 @@ final class ExpensesControllerTest extends TestCase
             ->assertInvalid([
                 'transacted_at' => 'The transaction date field is required.',
                 'category' => 'A category is required.',
-                'charge' => 'A debit or credit is required.'
+                'charge' => 'A debit or credit is required.',
             ]);
 
         $this->actingAs($me->user)
@@ -188,7 +188,7 @@ final class ExpensesControllerTest extends TestCase
             ->assertInvalid([
                 'transacted_at' => 'The transaction date is not a valid date.',
                 'category' => 'The selected category is invalid.',
-                'debit' => 'The debit field must be a number.'
+                'debit' => 'The debit field must be a number.',
             ]);
 
         $this->actingAs($me->user)

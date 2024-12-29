@@ -3,8 +3,6 @@
 namespace Tests\Feature\Admissions;
 
 use App\Enums\Ability;
-use App\Enums\AttributeOptionName;
-use App\Enums\AttributeOptionUiBehavior;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;

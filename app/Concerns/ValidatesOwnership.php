@@ -22,7 +22,7 @@ trait ValidatesOwnership
         }
 
         throw new HttpResponseException(
-            (new RecordNotOwned())->toResponse(request())
+            (new RecordNotOwned)->toResponse(request())
         );
     }
 
@@ -33,7 +33,7 @@ trait ValidatesOwnership
         }
 
         throw new HttpResponseException(
-            (new RecordNotOwned())->toResponse(request())
+            (new RecordNotOwned)->toResponse(request())
         );
     }
 

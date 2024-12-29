@@ -6,14 +6,12 @@ use App\Concerns\GetsCareLogs;
 use App\Enums\Ability;
 use App\Enums\Role;
 use App\Enums\SettingKey;
-use App\Events\getCareLogs;
 use App\Models\CareLog;
 use App\Models\Exam;
 use App\Models\Patient;
 use App\Models\PatientLocation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Event;
 use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
 use Tests\Traits\CreateCase;
@@ -23,8 +21,8 @@ final class GetsCareLogsTest extends TestCase
 {
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use GetsCareLogs;
+    use RefreshDatabase;
 
     protected $me;
 

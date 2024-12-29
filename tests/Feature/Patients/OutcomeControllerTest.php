@@ -19,8 +19,8 @@ final class OutcomeControllerTest extends TestCase
     use Assertions;
     use CreateCase;
     use CreatesTeamUser;
-    use RefreshDatabase;
     use CreatesUiBehavior;
+    use RefreshDatabase;
 
     public function test_un_authenticated_users_cant_update_the_outcome(): void
     {
@@ -64,7 +64,7 @@ final class OutcomeControllerTest extends TestCase
             ])
             ->assertInvalid([
                 'disposition_id' => 'The selected disposition is invalid.',
-                'dispositioned_at' => 'The disposition date field is required unless disposition is in Pending.'
+                'dispositioned_at' => 'The disposition date field is required unless disposition is in Pending.',
             ]);
 
         $this->actingAs($me->user)
@@ -92,7 +92,7 @@ final class OutcomeControllerTest extends TestCase
             ->assertInvalid([
                 'release_type_id' => 'The selected release type is invalid.',
                 'transfer_type_id' => 'The selected transfer type is invalid.',
-                'is_carcass_saved' => 'The carcass saved field must be true or false.'
+                'is_carcass_saved' => 'The carcass saved field must be true or false.',
             ]);
     }
 

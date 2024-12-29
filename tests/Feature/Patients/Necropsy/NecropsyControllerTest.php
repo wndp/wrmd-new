@@ -63,7 +63,7 @@ final class NecropsyControllerTest extends TestCase
         $this->actingAs($me->user)
             ->put(route('patients.necropsy.update', $patient), [
                 'prosector' => 'Jim',
-                'necropsied_at' => '2024-12-28'
+                'necropsied_at' => '2024-12-28',
             ])
             ->assertOwnershipValidationError();
     }
@@ -79,7 +79,7 @@ final class NecropsyControllerTest extends TestCase
             ->put(route('patients.necropsy.update', $admission->patient))
             ->assertInvalid([
                 'prosector' => 'The prosector field is required.',
-                'necropsied_at' => 'The necropsy date field is required.'
+                'necropsied_at' => 'The necropsy date field is required.',
             ]);
 
         $this->actingAs($me->user)
@@ -90,7 +90,7 @@ final class NecropsyControllerTest extends TestCase
                 'is_carcass_radiographed' => 'foo',
                 'is_previously_frozen' => 'foo',
                 'is_scavenged' => 'foo',
-                'is_discarded' => 'foo'
+                'is_discarded' => 'foo',
             ])
             ->assertInvalid([
                 'necropsied_at' => 'The necropsy date field must be a valid date.',
@@ -99,7 +99,7 @@ final class NecropsyControllerTest extends TestCase
                 'is_carcass_radiographed' => 'The carcass radiographed field must be true or false.',
                 'is_previously_frozen' => 'The previously frozen field must be true or false.',
                 'is_scavenged' => 'The scavenged field must be true or false.',
-                'is_discarded' => 'The discarded field must be true or false.'
+                'is_discarded' => 'The discarded field must be true or false.',
             ]);
     }
 

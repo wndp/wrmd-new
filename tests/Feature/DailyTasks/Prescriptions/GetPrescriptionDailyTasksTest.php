@@ -56,7 +56,7 @@ final class GetPrescriptionDailyTasksTest extends TestCase
         ]);
 
         $result = GetPrescriptionDailyTasks::handle(
-            new DailyTasksFilters(),
+            new DailyTasksFilters,
             [$admission->patient_id]
         );
 
