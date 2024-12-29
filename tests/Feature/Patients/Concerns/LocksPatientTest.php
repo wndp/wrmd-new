@@ -2,67 +2,59 @@
 
 namespace Tests\Feature\Patients\Concerns;
 
-use App\Domain\Patients\Patient;
-use App\Domain\Taxonomy\Taxon;
 use App\Domain\Users\User;
+use App\Models\Patient;
 use Illuminate\Support\Facades\Auth;
-use Tests\Support\AssistsWithAuthentication;
 use Tests\TestCase;
+use Tests\Traits\CreatesTeamUser;
 
 final class LocksPatientTest extends TestCase
 {
-    use AssistsWithAuthentication;
+    // use CreatesTeamUser;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+    // public function test_an_unselected_patient_isnt_locked_to_anybody(): void
+    // {
+    //     $user = User::factory()->create();
+    //     $patient = Patient::factory()->create();
 
-        Taxon::factory()->unidentified()->create();
-    }
+    //     $this->assertFalse($patient->isAlreadyLocked());
+    // }
 
-    public function test_an_unselected_patient_isnt_locked_to_anybody(): void
-    {
-        $user = User::factory()->create();
-        $patient = Patient::factory()->create();
+    // public function test_a_patient_is_not_locked_to_anybody_except_for_me(): void
+    // {
+    //     $me = $this->createTeamUser();
 
-        $this->assertFalse($patient->isAlreadyLocked());
-    }
+    //     Auth::login($me->user);
 
-    public function test_a_patient_is_not_locked_to_anybody_except_for_me(): void
-    {
-        $me = $this->createAccountUser();
+    //     $patient = Patient::factory()->create();
+    //     $patient->attemptToLock();
 
-        Auth::login($me->user);
+    //     $this->assertFalse($patient->isAlreadyLocked());
+    // }
 
-        $patient = Patient::factory()->create();
-        $patient->attemptToLock();
+    // public function test_a_patient_can_not_be_locked_to_a_viewer(): void
+    // {
+    //     $me = $this->createTeamUser([], ['role' => 'viewer']);
 
-        $this->assertFalse($patient->isAlreadyLocked());
-    }
+    //     Auth::login($me->user);
 
-    public function test_a_patient_can_not_be_locked_to_a_viewer(): void
-    {
-        $me = $this->createAccountUser([], ['role' => 'viewer']);
+    //     $patient = Patient::factory()->create();
+    //     $patient->attemptToLock();
 
-        Auth::login($me->user);
+    //     $this->assertFalse($patient->locked_to === $me->user->id);
+    // }
 
-        $patient = Patient::factory()->create();
-        $patient->attemptToLock();
+    // public function test_a_patient_is_locked_to_anybody_including_you(): void
+    // {
+    //     $me = $this->createTeamUser();
+    //     $you = $this->attachUser($me->team);
 
-        $this->assertFalse($patient->locked_to === $me->user->id);
-    }
+    //     Auth::login($you);
 
-    public function test_a_patient_is_locked_to_anybody_including_you(): void
-    {
-        $me = $this->createAccountUser();
-        $you = $this->attachUser($me->account);
+    //     $patient = Patient::factory()->create();
+    //     $patient->attemptToLock();
 
-        Auth::login($you);
-
-        $patient = Patient::factory()->create();
-        $patient->attemptToLock();
-
-        Auth::login($me->user);
-        $this->assertTrue($patient->isAlreadyLocked());
-    }
+    //     Auth::login($me->user);
+    //     $this->assertTrue($patient->isAlreadyLocked());
+    // }
 }

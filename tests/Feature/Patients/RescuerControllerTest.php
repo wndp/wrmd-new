@@ -2,23 +2,19 @@
 
 namespace Tests\Feature\Patients;
 
-use App\Domain\Patients\Patient;
-use App\Domain\Taxonomy\Taxon;
-use Tests\Support\AssistsWithAuthentication;
-use Tests\Support\AssistsWithCases;
+use App\Enums\Ability;
+use App\Models\Patient;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Silber\Bouncer\BouncerFacade;
 use Tests\TestCase;
+use Tests\Traits\CreateCase;
+use Tests\Traits\CreatesTeamUser;
 
 final class RescuerControllerTest extends TestCase
 {
-    use AssistsWithAuthentication;
-    use AssistsWithCases;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        Taxon::factory()->unidentified()->create();
-    }
+    use CreateCase;
+    use CreatesTeamUser;
+    use RefreshDatabase;
 
     public function test_un_authenticated_users_cant_access_the_rescuer_view(): void
     {
@@ -28,15 +24,17 @@ final class RescuerControllerTest extends TestCase
 
     public function test_un_authorized_users_cant_access_the_rescuer_view(): void
     {
-        $me = $this->createAccountUser([], ['role' => 'viewer']);
+        $me = $this->createTeamUser();
         $patient = Patient::factory()->create();
         $this->actingAs($me->user)->get(route('patients.rescuer.edit', $patient))->assertForbidden();
     }
 
     public function test_it_displays_the_rescuer_view(): void
     {
-        $me = $this->createAccountUser();
-        $admission = $this->createCase(['account_id' => $me->account->id]);
+        $me = $this->createTeamUser();
+        BouncerFacade::allow($me->user)->to(Ability::VIEW_RESCUER->value);
+
+        $admission = $this->createCase($me->team);
 
         $this->actingAs($me->user)->get(route('patients.rescuer.edit'))
             ->assertOk()

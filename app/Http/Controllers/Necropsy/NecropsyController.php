@@ -35,7 +35,7 @@ class NecropsyController extends Controller
             $admission->load('patient.possession');
         }
 
-        $patientTaxaClassAgeUnits = match ('Aves') {
+        $patientTaxaClassAgeUnits = match ($admission->patient->taxon?->class) {
             'Mammalia' => AttributeOptionName::EXAM_MAMMALIA_AGE_UNITS->value,
             'Amphibia' => AttributeOptionName::EXAM_AMPHIBIA_AGE_UNITS->value,
             'Reptilia' => AttributeOptionName::EXAM_REPTILIA_AGE_UNITS->value,
@@ -45,7 +45,7 @@ class NecropsyController extends Controller
 
         OptionsStore::add([
             'bodyPartOptions' => Options::enumsToSelectable(NecropsyBodyPart::cases()),
-            'taxaClassAgeUnits' => Options::arrayToSelectable(AttributeOption::getDropdownOptions([
+            'taxaClassAgeUnits' => is_null($patientTaxaClassAgeUnits) ? [] : Options::arrayToSelectable(AttributeOption::getDropdownOptions([
                 $patientTaxaClassAgeUnits,
             ])->first()),
             AttributeOption::getDropdownOptions([
@@ -71,8 +71,6 @@ class NecropsyController extends Controller
 
     public function update(Request $request, Patient $patient)
     {
-        $patient->validateOwnership(Auth::user()->current_team_id);
-
         $request->validate([
             'necropsied_at' => 'required|date',
             'prosector' => 'required|string',
@@ -86,23 +84,23 @@ class NecropsyController extends Controller
             'is_previously_frozen' => 'nullable|boolean',
             'is_scavenged' => 'nullable|boolean',
             'is_discarded' => 'nullable|boolean',
-        ], [
-            'necropsied_at.required' => 'The necropsy date field is required.',
-            'necropsied_at.date' => 'The necropsy date is not a valid date.',
         ]);
+
+        $patient->validateOwnership(Auth::user()->current_team_id);
 
         $necropsiedAt = Timezone::convertFromLocalToUtc($request->input('necropsied_at'));
 
-        $necropsy = Necropsy::firstOrNew(['patient_id' => $patient->id]);
-        $necropsy->patient_id = $patient->id;
-        $necropsy->fill([
+        Necropsy::updateOrCreate(['patient_id' => $patient->id], [
             'date_necropsied_at' => $necropsiedAt->toDateString(),
             'time_necropsied_at' => $necropsiedAt->toTimeString(),
             'prosector' => $request->input('prosector'),
+            'carcass_condition_id' => $request->input('carcass_condition_id'),
             'is_photos_collected' => $request->boolean('is_photos_collected'),
             'is_carcass_radiographed' => $request->boolean('is_carcass_radiographed'),
+            'is_previously_frozen' => $request->boolean('is_previously_frozen'),
+            'is_scavenged' => $request->boolean('is_scavenged'),
+            'is_discarded' => $request->boolean('is_discarded'),
         ]);
-        $necropsy->save();
 
         return back();
     }

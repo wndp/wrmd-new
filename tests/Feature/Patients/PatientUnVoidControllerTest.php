@@ -2,24 +2,22 @@
 
 namespace Tests\Feature\Patients;
 
-use App\Domain\Patients\Patient;
-use App\Domain\Taxonomy\Taxon;
+use App\Enums\Ability;
+use App\Models\Patient;
+use Carbon\Carbon;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Silber\Bouncer\BouncerFacade;
-use Tests\Support\AssistsWithAuthentication;
-use Tests\Support\AssistsWithCases;
 use Tests\TestCase;
+use Tests\Traits\Assertions;
+use Tests\Traits\CreateCase;
+use Tests\Traits\CreatesTeamUser;
 
 final class PatientUnVoidControllerTest extends TestCase
 {
-    use AssistsWithAuthentication;
-    use AssistsWithCases;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        Taxon::factory()->unidentified()->create();
-    }
+    use Assertions;
+    use CreateCase;
+    use CreatesTeamUser;
+    use RefreshDatabase;
 
     public function test_un_authenticated_users_cant_un_void_a_patient(): void
     {
@@ -29,16 +27,16 @@ final class PatientUnVoidControllerTest extends TestCase
 
     public function test_un_authorized_users_cant_un_void_a_patient(): void
     {
-        $me = $this->createAccountUser();
+        $me = $this->createTeamUser();
         $patient = Patient::factory()->voided()->create();
         $this->actingAs($me->user)->put(route('patients.unvoid.update', $patient))->assertForbidden();
     }
 
     public function test_it_validates_ownership_of_the_patient_before_un_voiding(): void
     {
-        $me = $this->createAccountUser();
+        $me = $this->createTeamUser();
         $patient = Patient::factory()->voided()->create();
-        BouncerFacade::allow($me->user)->to('un-void');
+        BouncerFacade::allow($me->user)->to(Ability::UN_VOID_PATIENT->value);
 
         $this->actingAs($me->user)
             ->json('put', route('patients.unvoid.update', $patient))
@@ -47,9 +45,9 @@ final class PatientUnVoidControllerTest extends TestCase
 
     public function test_it_un_voids_a_patient(): void
     {
-        $me = $this->createAccountUser();
-        $admission = $this->createCase(['account_id' => $me->account->id], ['is_voided' => true]);
-        BouncerFacade::allow($me->user)->to('un-void');
+        $me = $this->createTeamUser();
+        $admission = $this->createCase($me->team, patientOverrides: ['voided_at' => Carbon::now()]);
+        BouncerFacade::allow($me->user)->to(Ability::UN_VOID_PATIENT->value);
 
         $voidedPatient = $admission->patient()->withVoided()->first();
 
@@ -60,7 +58,7 @@ final class PatientUnVoidControllerTest extends TestCase
 
         $this->assertDatabaseHas('patients', [
             'id' => $admission->patient_id,
-            'is_voided' => false,
+            'voided_at' => null,
         ]);
     }
 }

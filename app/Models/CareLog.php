@@ -30,7 +30,10 @@ class CareLog extends Model implements Summarizable, Weighable
     use ValidatesOwnership;
 
     protected $fillable = [
+        'patient_id',
+        'user_id',
         'date_care_at',
+        'time_care_at',
         'weight',
         'weight_unit_id',
         'temperature',
@@ -39,7 +42,10 @@ class CareLog extends Model implements Summarizable, Weighable
     ];
 
     protected $casts = [
-        'date_care_at' => 'datetime',
+        'patient_id' => 'string',
+        'user_id' => 'integer',
+        'date_care_at' => 'date:Y-m-d',
+        'time_care_at' => 'string',
         'weight' => 'float',
         'weight_unit_id' => 'integer',
         'temperature' => 'float',
@@ -71,31 +77,31 @@ class CareLog extends Model implements Summarizable, Weighable
         return $this->belongsTo(AttributeOption::class, 'temperature_unit_id');
     }
 
-    public static function store($patientId, Collection $data, User $user): static
-    {
-        if ($data->get('date_care_at') instanceof Carbon) {
-            $dateCareAt = $data->get('date_care_at');
-        } else {
-            $dateCareAtParsed = Carbon::parse($data->get('date_care_at'), Wrmd::settings(SettingKey::TIMEZONE));
-            $dateCareAt = $dateCareAtParsed->isToday() ? Carbon::now(Wrmd::settings(SettingKey::TIMEZONE)) : $dateCareAtParsed;
-        }
+    // public static function store($patientId, Collection $data, User $user): static
+    // {
+    //     if ($data->get('date_care_at') instanceof Carbon) {
+    //         $dateCareAt = $data->get('date_care_at');
+    //     } else {
+    //         $dateCareAtParsed = Carbon::parse($data->get('date_care_at'), Wrmd::settings(SettingKey::TIMEZONE));
+    //         $dateCareAt = $dateCareAtParsed->isToday() ? Carbon::now(Wrmd::settings(SettingKey::TIMEZONE)) : $dateCareAtParsed;
+    //     }
 
-        $careLog = new static([
-            'date_care_at' => Timezone::convertFromLocalToUtc($dateCareAt),
-            'weight' => $data->get('weight'),
-            'weight_unit_id' => $data->get('weight_unit_id'),
-            'temperature' => $data->get('temperature'),
-            'temperature_unit_id' => $data->get('temperature_unit_id'),
-            'comments' => $data->get('comments'),
-        ]);
+    //     $careLog = new static([
+    //         'date_care_at' => Timezone::convertFromLocalToUtc($dateCareAt),
+    //         'weight' => $data->get('weight'),
+    //         'weight_unit_id' => $data->get('weight_unit_id'),
+    //         'temperature' => $data->get('temperature'),
+    //         'temperature_unit_id' => $data->get('temperature_unit_id'),
+    //         'comments' => $data->get('comments'),
+    //     ]);
 
-        $careLog->patient_id = $patientId;
-        $careLog->user_id = $user->id;
+    //     $careLog->patient_id = $patientId;
+    //     $careLog->user_id = $user->id;
 
-        $careLog->save();
+    //     $careLog->save();
 
-        return $careLog;
-    }
+    //     return $careLog;
+    // }
 
     protected function fullWeight(): Attribute
     {

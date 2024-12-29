@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      */
@@ -27,7 +26,7 @@ return new class extends Migration
             $table->double('tarsus_length')->nullable();
             $table->double('middle_toe_length')->nullable();
             $table->double('toe_pad_length')->nullable();
-            $table->double('halux_length')->nullable();
+            $table->double('hallux_length')->nullable();
             $table->double('tail_length')->nullable();
             $table->double('weight')->nullable();
             $table->text('samples_collected')->nullable();

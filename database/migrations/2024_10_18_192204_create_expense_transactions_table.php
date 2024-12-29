@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      */
@@ -15,7 +14,7 @@ return new class extends Migration
             $table->uuid('id');
             $table->unsignedBigInteger('legacy_id')->index()->nullable();
             $table->foreignUuid('patient_id')->index()->nullable();
-            $table->foreignUuid('expense_category_id')->index()->nullable();
+            $table->foreignUuid('expense_category_id')->index();
             $table->date('transacted_at');
             $table->text('memo')->nullable();
             $table->integer('credit')->unsigned()->default(0);

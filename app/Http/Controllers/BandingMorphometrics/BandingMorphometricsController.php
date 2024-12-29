@@ -3,15 +3,23 @@
 namespace App\Http\Controllers\BandingMorphometrics;
 
 use App\Enums\AttributeOptionName;
+use App\Enums\Extension;
 use App\Http\Controllers\Controller;
 use App\Models\AttributeOption;
 use App\Repositories\OptionsStore;
+use App\Support\ExtensionManager;
 use Inertia\Inertia;
+use Symfony\Component\HttpFoundation\Response;
 
 class BandingMorphometricsController extends Controller
 {
     public function __invoke()
     {
+        abort_unless(
+            ExtensionManager::isActivated(Extension::BANDING_MORPHOMETRICS),
+            Response::HTTP_FORBIDDEN
+        );
+
         $admission = $this->loadAdmissionAndSharePagination();
         $admission->patient->load(['banding', 'morphometric']);
 

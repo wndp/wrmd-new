@@ -9,24 +9,26 @@ use App\Models\AttributeOptionUiBehavior as AttributeOptionUiBehaviorModel;
 
 trait CreatesUiBehavior
 {
-    public function createUiBehavior(AttributeOptionName|int $attributeOptionName, AttributeOptionUiBehavior $behavior): AttributeOptionUiBehaviorModel
+    public function createUiBehavior(AttributeOptionName|int $attributeOptionName, AttributeOptionUiBehavior $behavior): int
     {
         $attributeOptionId = is_int($attributeOptionName)
             ? $attributeOptionName
             : AttributeOption::factory()->create(['name' => $attributeOptionName])->id;
 
-        return AttributeOptionUiBehaviorModel::factory()->create([
+        AttributeOptionUiBehaviorModel::factory()->create([
             'attribute_option_id' => $attributeOptionId,
             'behavior' => $behavior->value,
         ]);
+
+        return $attributeOptionId;
     }
 
-    public function pendingDispositionId()
+    public function pendingDispositionId(): int
     {
         return $this->createUiBehavior(
             AttributeOptionName::PATIENT_DISPOSITIONS,
             AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_PENDING
-        )->attribute_option_id;
+        );
     }
 
     public function weightUnits()

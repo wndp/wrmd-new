@@ -2,23 +2,17 @@
 
 namespace Tests\Feature\Patients;
 
-use App\Domain\Patients\Patient;
-use App\Domain\Taxonomy\Taxon;
-use Tests\Support\AssistsWithAuthentication;
-use Tests\Support\AssistsWithCases;
+use App\Models\Patient;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Tests\Traits\CreateCase;
+use Tests\Traits\CreatesTeamUser;
 
 final class InitialCareControllerTest extends TestCase
 {
-    use AssistsWithAuthentication;
-    use AssistsWithCases;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        Taxon::factory()->unidentified()->create();
-    }
+    use CreateCase;
+    use CreatesTeamUser;
+    use RefreshDatabase;
 
     public function test_un_authenticated_users_cant_access_the_initial_care_view(): void
     {
@@ -28,8 +22,8 @@ final class InitialCareControllerTest extends TestCase
 
     public function test_it_displays_the_initial_care_view(): void
     {
-        $me = $this->createAccountUser();
-        $admission = $this->createCase(['account_id' => $me->account->id]);
+        $me = $this->createTeamUser();
+        $admission = $this->createCase($me->team);
 
         $this->actingAs($me->user)->get(route('patients.initial.edit'))
             ->assertOk()

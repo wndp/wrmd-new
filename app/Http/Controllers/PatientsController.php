@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\AdmitPatient;
+use App\Caches\PatientSelector;
 use App\Caches\QueryCache;
 use App\Enums\AttributeOptionName;
 use App\Http\Requests\StorePatientRequest;
@@ -49,7 +50,7 @@ class PatientsController extends Controller
     public function create(Request $request)
     {
         OptionsStore::add([
-            new LocaleOptions,
+            new LocaleOptions(),
             'actionsAfterStore' => Options::arrayToSelectable([
                 'return' => __('I want to admit another patient'),
                 'view' => __("I want to view this patient's record"),
@@ -112,6 +113,7 @@ class PatientsController extends Controller
                 'admitted_at',
                 'admitted_by',
                 'taxon_id',
+                'morph_id',
                 'common_name',
                 'transported_by',
                 'found_at',
@@ -160,9 +162,7 @@ class PatientsController extends Controller
 
             case 'batch':
                 PatientSelector::empty();
-                $admissions->pluck('patient_id')->each(function ($patientId) {
-                    PatientSelector::add($patientId);
-                });
+                $admissions->pluck('patient_id')->each(fn ($patientId) => PatientSelector::add($patientId));
 
                 $redirect = redirect()->route('patients.batch.edit', [], 303);
                 break;

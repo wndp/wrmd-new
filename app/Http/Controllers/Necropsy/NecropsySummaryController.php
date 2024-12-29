@@ -27,7 +27,7 @@ class NecropsySummaryController extends Controller
             ],
             'other_sample' => [
                 'nullable',
-                'array',
+                'string',
             ],
             'morphologic_diagnosis' => [
                 'nullable',
@@ -39,10 +39,12 @@ class NecropsySummaryController extends Controller
             ],
         ]);
 
-        $necropsy = Necropsy::firstOrNew(['patient_id' => $patient->id]);
-        $necropsy->patient_id = $patient->id;
-        $necropsy->fill($data);
-        $necropsy->save();
+        Necropsy::updateOrCreate(['patient_id' => $patient->id], [
+            'samples_collected' => $request->input('samples_collected'),
+            'other_sample' => $request->input('other_sample'),
+            'morphologic_diagnosis' => $request->input('morphologic_diagnosis'),
+            'gross_summary_diagnosis' => $request->input('gross_summary_diagnosis'),
+        ]);
 
         return back();
     }

@@ -25,6 +25,7 @@ class Necropsy extends Model implements Summarizable, Weighable
     use ValidatesOwnership;
 
     protected $fillable = [
+        'patient_id',
         'date_necropsied_at',
         'time_necropsied_at',
         'prosector',
@@ -76,6 +77,7 @@ class Necropsy extends Model implements Summarizable, Weighable
     ];
 
     protected $casts = [
+        'patient_id' => 'string',
         'date_necropsied_at' => 'date:Y-m-d',
         'time_necropsied_at' => 'string',
         'prosector',

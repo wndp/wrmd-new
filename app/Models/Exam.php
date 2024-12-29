@@ -69,7 +69,7 @@ class Exam extends Model implements Summarizable, Weighable
     ];
 
     protected $casts = [
-        'patient_id' => 'integer',
+        'patient_id' => 'string',
         'date_examined_at' => 'datetime',
         'time_examined_at' => 'string',
         'exam_type_id' => 'integer',

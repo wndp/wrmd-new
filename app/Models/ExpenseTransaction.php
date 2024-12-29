@@ -24,6 +24,7 @@ class ExpenseTransaction extends Model
     use ValidatesOwnership;
 
     protected $fillable = [
+        'expense_category_id',
         'transacted_at',
         'memo',
         'debit',
@@ -31,6 +32,7 @@ class ExpenseTransaction extends Model
     ];
 
     protected $casts = [
+        'expense_category_id' => 'string',
         'transacted_at' => 'date',
         'debit' => 'integer',
         'credit' => 'integer',

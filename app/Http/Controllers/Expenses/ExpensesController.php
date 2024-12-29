@@ -21,7 +21,7 @@ class ExpensesController extends Controller
     public function index()
     {
         $admission = $this->loadAdmissionAndSharePagination();
-        $transactions = $admission->patient->expenses;
+        $transactions = $admission->patient->expenseTransactions;
 
         $expenseTotals = [
             'totalDebits' => $transactions->totalDebits(true),
@@ -67,7 +67,7 @@ class ExpensesController extends Controller
     {
         $transaction = new ExpenseTransaction($request->only(['transacted_at', 'debit', 'credit', 'memo']));
         $transaction->patient_id = $patient->id;
-        $transaction->category_id = ExpenseCategory::findByName($request->input('category'), Auth::user()->currentTeam)->id;
+        $transaction->expense_category_id = ExpenseCategory::findByName($request->input('category'), Auth::user()->currentTeam)->id;
         $transaction->save();
 
         $admission = Admission::custody(Auth::user()->currentTeam, $patient);
@@ -85,7 +85,7 @@ class ExpensesController extends Controller
             ->validateRelationshipWithPatient($patient);
 
         $transaction->update($request->only(['transacted_at', 'debit', 'credit', 'memo']));
-        $transaction->category_id = ExpenseCategory::findByName($request->input('category'), Auth::user()->currentTeam)->id;
+        $transaction->expense_category_id = ExpenseCategory::findByName($request->input('category'), Auth::user()->currentTeam)->id;
         $transaction->save();
 
         $admission = Admission::custody(Auth::user()->currentTeam, $patient);
@@ -97,7 +97,7 @@ class ExpensesController extends Controller
             ], 303);
     }
 
-    public function destroy(Request $request, Patient $patient, Transaction $transaction)
+    public function destroy(Request $request, Patient $patient, ExpenseTransaction $transaction)
     {
         $transaction->validateOwnership(Auth::user()->current_team_id)
             ->validateRelationshipWithPatient($patient)
@@ -112,7 +112,7 @@ class ExpensesController extends Controller
             ], 303)
             ->with('notification.heading', __('Transaction Deleted'))
             ->with('notification.text', __(':categoryName transaction on :transactionDate was deleted.', [
-                'categoryName' => $transaction->category->name,
+                'categoryName' => $transaction->expenseCategory->name,
                 'transactionDate' => $transaction->transacted_at_for_humans,
             ]));
     }

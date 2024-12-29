@@ -35,14 +35,18 @@ class ExamRequest extends FormRequest
                 'integer',
                 new AttributeOptionExistsRule(AttributeOptionName::EXAM_TYPES),
                 Rule::when(
-                    in_array($this->input('type_id'), $examTypeCanOnlyOccurOnceIds),
+                    in_array($this->input('exam_type_id'), $examTypeCanOnlyOccurOnceIds),
                     Rule::unique('exams')
                         ->where('patient_id', $patient->id)
-                        ->where('type_id', $this->input('type_id'))
+                        ->where('exam_type_id', $this->input('exam_type_id'))
                         ->ignore($this->route('exam') ?? 'NULL')
                 ),
             ],
             'examined_at' => 'required|date|after_or_equal:'.$admittedAt,
+            'examiner' => [
+                'required',
+                'string',
+            ],
             'sex_id' => [
                 'nullable',
                 'integer',
@@ -192,11 +196,7 @@ class ExamRequest extends FormRequest
             'comments' => [
                 'nullable',
                 'string',
-            ],
-            'examiner' => [
-                'required',
-                'string',
-            ],
+            ]
         ];
     }
 

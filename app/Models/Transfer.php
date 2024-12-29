@@ -24,8 +24,8 @@ class Transfer extends Model
     ];
 
     protected $casts = [
-        'patient_id' => 'integer',
-        'cloned_patient_id' => 'integer',
+        'patient_id' => 'string',
+        'cloned_patient_id' => 'string',
         'from_team_id' => 'integer',
         'to_team_id' => 'integer',
         'is_collaborative' => 'boolean',

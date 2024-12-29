@@ -23,6 +23,7 @@ class Location extends Model
     use LogsActivity;
 
     protected $fillable = [
+        'team_id',
         'hash',
         'facility_id',
         'area',
@@ -30,6 +31,7 @@ class Location extends Model
     ];
 
     protected $casts = [
+        'team_id' => 'integer',
         'facility_id' => 'integer',
         'area' => 'string',
         'enclosure' => 'string',

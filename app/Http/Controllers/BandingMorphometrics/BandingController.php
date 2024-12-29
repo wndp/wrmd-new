@@ -6,13 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveBandingRequest;
 use App\Models\Banding;
 use App\Models\Patient;
+use Illuminate\Support\Facades\Auth;
 
 class BandingController extends Controller
 {
     public function __invoke(SaveBandingRequest $request, Patient $patient)
     {
-        $banding = Banding::firstOrNew(['patient_id' => $patient->id]);
-        $banding->fill($request->only([
+        $patient->validateOwnership(Auth::user()->current_team_id);
+
+        Banding::updateOrCreate(['patient_id' => $patient->id], $request->only([
             'band_number',
             'banded_at',
             'age_code_id',
@@ -28,7 +30,6 @@ class BandingController extends Controller
             'band_disposition_id',
             'remarks',
         ]));
-        $banding->save();
 
         return back();
     }

@@ -67,10 +67,19 @@ class NecropsyMorphometricsController extends Controller
             ],
         ]);
 
-        $necropsy = Necropsy::firstOrNew(['patient_id' => $patient->id]);
-        $necropsy->patient_id = $patient->id;
-        $necropsy->fill($data);
-        $necropsy->save();
+        Necropsy::updateOrCreate(['patient_id' => $patient->id], [
+            'sex_id' => $request->input('sex_id'),
+            'weight' => $request->input('weight'),
+            'weight_unit_id' => $request->input('weight_unit_id'),
+            'body_condition_id' => $request->input('body_condition_id'),
+            'age' => $request->input('age'),
+            'age_unit_id' => $request->input('age_unit_id'),
+            'wing' => $request->input('wing'),
+            'tarsus' => $request->input('tarsus'),
+            'culmen' => $request->input('culmen'),
+            'exposed_culmen' => $request->input('exposed_culmen'),
+            'bill_depth' => $request->input('bill_depth'),
+        ]);
 
         return back();
     }

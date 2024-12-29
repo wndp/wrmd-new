@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\ExpenseCategory;
 use App\Models\Patient;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,6 +20,7 @@ class ExpenseTransactionFactory extends Factory
     {
         return [
             'patient_id' => Patient::factory(),
+            'expense_category_id' => ExpenseCategory::factory(),
             'transacted_at' => $this->faker->dateTimeBetween('1 days', '90 days')->format('Y-m-d'),
         ];
     }

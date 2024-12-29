@@ -11,8 +11,7 @@ class MorphometricsController extends Controller
 {
     public function __invoke(SaveBandingMorphometricsRequest $request, Patient $patient)
     {
-        $morphometric = Morphometric::firstOrNew(['patient_id' => $patient->id]);
-        $morphometric->fill($request->only([
+        Morphometric::updateOrCreate(['patient_id' => $patient->id], $request->only([
             'measured_at',
             'bill_length',
             'bill_width',
@@ -31,7 +30,6 @@ class MorphometricsController extends Controller
             'samples_collected',
             'remarks',
         ]));
-        $morphometric->save();
 
         return back();
     }

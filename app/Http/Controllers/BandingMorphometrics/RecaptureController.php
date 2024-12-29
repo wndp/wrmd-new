@@ -11,14 +11,12 @@ class RecaptureController extends Controller
 {
     public function __invoke(SaveBandingRecaptureRequest $request, Patient $patient)
     {
-        $banding = Banding::firstOrNew(['patient_id' => $patient->id]);
-        $banding->fill($request->only([
+        Banding::updateOrCreate(['patient_id' => $patient->id], $request->only([
             'recaptured_at',
             'recapture_disposition_id',
             'present_condition_id',
             'how_present_condition_id',
         ]));
-        $banding->save();
 
         return back();
     }

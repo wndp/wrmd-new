@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SaveCareLogRequest;
 use App\Models\CareLog;
 use App\Models\Patient;
 use Illuminate\Http\Request;
@@ -14,23 +15,19 @@ class CareLogController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Patient $patient)
+    public function store(SaveCareLogRequest $request, Patient $patient)
     {
         $patient->validateOwnership(Auth::user()->current_team_id);
 
-        $request->validate([
-            'date_care_at' => 'required|date',
-            'weight' => 'nullable|numeric',
-            'weight_unit_id' => 'nullable|required_with:weight|integer',
-            'temperature' => 'nullable|numeric',
-            'temperature_unit_id' => 'nullable|required_with:temperature|integer',
-            'comments' => 'nullable',
-        ], [
-            'date_care_at.required' => __('The care date field is required.'),
-            'date_care_at.date' => __('The care date is not a valid date.'),
-        ]);
+        //CareLog::store($patient->id, collect($request->dataFromRequest()), Auth::user());
 
-        CareLog::store($patient->id, collect($request->all()), Auth::user());
+        CareLog::create(array_merge(
+            $request->dataFromRequest(),
+            [
+                'patient_id' => $patient->id,
+                'user_id' => Auth::id()
+            ]
+        ));
 
         $caseNumber = $patient->admissions->firstWhere('team_id', Auth::user()->current_team_id)->case_number;
 
@@ -46,18 +43,10 @@ class CareLogController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Patient $patient, CareLog $care_log)
+    public function update(SaveCareLogRequest $request, Patient $patient, CareLog $care_log)
     {
         $care_log->validateOwnership(Auth::user()->current_team_id)
-            ->update($request->validate([
-                'treated_at' => 'required|date',
-                'weight' => 'nullable|required_without:comments|numeric',
-                'weight_unit_id' => 'nullable',
-                'comments' => 'required_without:weight',
-            ], [
-                'treated_at.required' => 'The treated at date field is required.',
-                'treated_at.date' => 'The treated at date is not a valid date.',
-            ]));
+            ->update($request->dataFromRequest());
 
         return back();
     }

@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\AttributeOption;
 use App\Models\Person;
 use App\Models\Team;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -51,5 +52,14 @@ class PatientFactory extends Factory
             'is_carcass_saved' => $this->faker->randomElement([0, 1]),
             'is_criminal_activity' => $this->faker->randomElement([0, 1]),
         ];
+    }
+
+    public function voided()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'voided_at' => Carbon::now(),
+            ];
+        });
     }
 }

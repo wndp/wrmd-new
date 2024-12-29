@@ -27,12 +27,16 @@ class PatientLocation extends Pivot implements Summarizable
     protected $table = 'patient_locations';
 
     protected $fillable = [
+        'patient_id',
+        'location_id',
         'moved_in_at',
         'hours',
         'comments',
     ];
 
     protected $casts = [
+        'patient_id' => 'string',
+        'location_id' => 'string',
         'moved_in_at' => 'datetime',
         'hours' => 'float',
         'comments' => 'string',

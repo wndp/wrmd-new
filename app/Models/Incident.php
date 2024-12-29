@@ -63,7 +63,7 @@ class Incident extends Model implements HasMedia
     protected $casts = [
         'team_id' => 'integer',
         'reporting_party_id' => 'string',
-        'patient_id' => 'integer',
+        'patient_id' => 'string',
         'incident_number' => 'string',
         'reported_at' => 'datetime',
         'occurred_at' => 'datetime',
@@ -148,7 +148,7 @@ class Incident extends Model implements HasMedia
 
     public function getIncidentCoordinatesAddress(): Address
     {
-        return (new Address)
+        return (new Address())
             ->withCountryCode(app(AdministrativeDivision::class)->alpha2CountryCode())
             ->withAdministrativeArea($this->incident_subdivision ?: '')
             ->withLocality($this->incident_city ?: '')

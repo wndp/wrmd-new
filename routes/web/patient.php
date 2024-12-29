@@ -132,8 +132,8 @@ Route::prefix('patients')->name('patients.')->group(function () {
 
     Route::controller(PatientLocationsController::class)->middleware(Authorize::using(Ability::MANAGE_LOCATIONS->value))->group(function () {
         Route::post('{patient}/location', 'store')->name('location.store');
-        Route::put('{patient}/location/{location}', 'update')->name('location.update');
-        Route::delete('{patient}/location/{location}', 'destroy')->name('location.destroy');
+        Route::put('{patient}/location/{patientLocation}', 'update')->name('location.update');
+        Route::delete('{patient}/location/{patientLocation}', 'destroy')->name('location.destroy');
     });
 
     Route::get('/necropsy', [NecropsyController::class, 'edit'])->name('necropsy.edit');
@@ -144,7 +144,7 @@ Route::prefix('patients')->name('patients.')->group(function () {
         Route::put('/{patient}/necropsy/summary', NecropsySummaryController::class)->name('summary.update');
     });
 
-    Route::get('/banding-morphometrics', BandingMorphometricsController::class)->name('banding_morphometrics.edit');
+    Route::get('/banding-morphometrics', BandingMorphometricsController::class)->name('banding-morphometrics.edit');
     Route::name('banding-morphometrics.')->middleware(Authorize::using(Ability::UPDATE_BANDING_AND_MORPHOMETRICS->value))->group(function () {
         Route::put('/{patient}/banding', BandingController::class)->name('banding.update');
         Route::put('/{patient}/auxiliary-marker', AuxiliaryMarkerController::class)->name('auxiliary_marker.update');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\SettingKey;
 use App\Events\PatientUpdated;
+use App\Http\Requests\SaveIntakeRequest;
 use App\Models\Patient;
 use App\Support\Wrmd;
 use App\ValueObjects\SingleStorePoint;
@@ -18,26 +19,8 @@ class IntakeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Request $request, Patient $patient)
+    public function __invoke(SaveIntakeRequest $request, Patient $patient)
     {
-        $request->validate([
-            'transported_by' => 'nullable',
-            'admitted_by' => 'required',
-            'found_at' => 'required|date',
-            'address_found' => 'required',
-            'city_found' => 'required',
-            'county_found' => 'nullable',
-            'subdivision_found' => 'required',
-            'lat_found' => Rule::when(Wrmd::settings(SettingKey::SHOW_GEOLOCATION_FIELDS), 'nullable|required_with:lng_found|numeric|between:-90,90'),
-            'lng_found' => Rule::when(Wrmd::settings(SettingKey::SHOW_GEOLOCATION_FIELDS), 'nullable|required_with:lat_found|numeric|between:-180,180'),
-            'reason_for_admission' => 'required',
-            'care_by_rescuer' => 'nullable',
-            'notes_about_rescue' => 'nullable',
-        ], [
-            'lat_found.between' => 'The latitude must be between -90 and 90',
-            'lng_found.between' => 'The longitude must be between -180 and 180',
-        ]);
-
         $patient->validateOwnership(Auth::user()->current_team_id)
             ->update($request->only([
                 'transported_by',
@@ -47,15 +30,13 @@ class IntakeController extends Controller
                 'city_found',
                 'county_found',
                 'subdivision_found',
-                'lat_found',
-                'lng_found',
                 'reason_for_admission',
                 'care_by_rescuer',
                 'notes_about_rescue',
             ]));
 
-        if ($request->filled('lat_found', 'lng_found')) {
-            $patient->coordinates_found = new SingleStorePoint($request->lat_found, $request->lng_found);
+        if ($request->filled('latitude_found', 'longitude_found')) {
+            $patient->coordinates_found = new SingleStorePoint($request->input('latitude_found'), $request->input('longitude_found'));
             $patient->save();
         }
 

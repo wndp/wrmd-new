@@ -2,24 +2,24 @@
 
 namespace Tests\Feature\Patients;
 
-use App\Domain\People\Person;
-use App\Domain\Taxonomy\Taxon;
-use Tests\Support\AssistsWithAuthentication;
-use Tests\Support\AssistsWithCases;
+use App\Models\Person;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Tests\Traits\CreateCase;
+use Tests\Traits\CreatesTeamUser;
 
 final class DetachRescuerControllerTest extends TestCase
 {
-    use AssistsWithAuthentication;
-    use AssistsWithCases;
+    use CreateCase;
+    use CreatesTeamUser;
+    use RefreshDatabase;
 
     public function test_it_detatches_a_patient_from_its_rescuer(): void
     {
-        Taxon::factory()->unidentified()->create();
-        $me = $this->createAccountUser();
-        $rescuer = Person::factory()->create(['account_id' => $me->account->id, 'first_name' => 'Jimmy']);
+        $me = $this->createTeamUser();
+        $rescuer = Person::factory()->create(['team_id' => $me->team->id, 'first_name' => 'Jimmy']);
 
-        $admission = $this->createCase(['account_id' => $me->account->id, 'case_year' => date('Y')], [
+        $admission = $this->createCase($me->team, date('Y'), [
             'rescuer_id' => $rescuer->id,
             'common_name' => 'fooSpecies',
         ]);

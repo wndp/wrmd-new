@@ -192,7 +192,47 @@ return [
     */
 
     'attributes' => [
+        'disposition_id' => 'disposition',
+        'release_type_id' => 'release type',
+        'transfer_type_id' => 'transfer type',
         'method_id' => 'method',
+        'exam_type_id' => 'exam type',
+        'weight_unit_id' => 'weight unit',
+        'temperature_unit_id' => 'temperature unit',
+        'age_code_id' => 'age code',
+        'how_aged_id' => 'how age code',
+        'sex_code_id' => 'sex code',
+        'how_sexed_id' => 'hoe sexed code',
+        'status_code_id' => 'status code',
+        'additional_status_code_id' => 'additional status code',
+        'band_size_id' => 'band size',
+        'band_disposition_id' => 'band disposition',
+        'auxiliary_marker_color_id' => 'auxiliary marker color',
+        'auxiliary_side_of_bird_id' => 'auxiliary side of bird',
+        'auxiliary_marker_type_id' => 'auxiliary marker type',
+        'auxiliary_marker_code_color_id' => 'auxiliary marker code color',
+        'auxiliary_placement_on_leg_id' => 'auxiliary placement on leg',
+        'recapture_disposition_id' => 'recapture disposition',
+        'present_condition_id' => 'present condition',
+        'how_present_condition_id' => 'how present condition',
+        'carcass_condition_id' => 'carcass condition',
+        'sex_id' => 'sex',
+        'weight_unit_id' => 'weight unit',
+        'body_condition_id' => 'body condition',
+        'age_unit_id' => 'age unit',
+        'facility_id' => 'facility',
+
+        'is_criminal_activity' => 'criminal activity',
+        'is_carcass_saved' => 'carcass saved',
+        'is_photos_collected' => 'photos collected',
+        'is_carcass_radiographed' => 'carcass radiographed',
+        'is_previously_frozen' => 'previously frozen',
+        'is_scavenged' => 'scavenged',
+        'is_discarded' => 'discarded',
+
+        'care_at' => 'care date',
+        'necropsied_at' => 'necropsy date',
+        'moved_in_at' => 'moved in date'
     ],
 
 ];

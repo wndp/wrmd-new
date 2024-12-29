@@ -30,7 +30,7 @@ class SaveBandingRequest extends FormRequest
 
         return [
             'band_number' => 'required|string',
-            'banded_at' => 'required|date|after_or_equal:'.$admittedAt,
+            'banded_at' => 'required|date|after_or_equal:'.$admittedAt->format('Y-m-d'),
             'age_code_id' => [
                 'nullable',
                 'integer',

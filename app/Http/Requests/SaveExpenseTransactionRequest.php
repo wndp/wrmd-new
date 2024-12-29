@@ -4,10 +4,10 @@ namespace App\Http\Requests;
 
 use App\Enums\SettingKey;
 use App\Support\Wrmd;
-use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class SaveExpenseTransactionRequest extends FormRequest
 {

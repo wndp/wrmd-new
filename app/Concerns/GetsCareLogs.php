@@ -4,6 +4,7 @@ namespace App\Concerns;
 
 use App\Enums\Ability;
 use App\Enums\Entity;
+use App\Enums\SettingKey;
 use App\Models\CareLog;
 use App\Models\Exam;
 use App\Models\LabReport;
@@ -14,6 +15,7 @@ use App\Models\Prescription;
 use App\Models\User;
 use App\Summarizable;
 use App\Support\Timezone;
+use App\Support\Wrmd;
 use Illuminate\Support\Collection;
 
 trait GetsCareLogs
@@ -64,7 +66,7 @@ trait GetsCareLogs
     private function canEdit($user, $record): bool
     {
         return $user->can(Ability::MANAGE_CARE_LOGS->value)
-            || (Wrmd::settings('logAllowAuthorEdit') && (int) $record->user_id === (int) $user->id);
+            || (Wrmd::settings(SettingKey::LOG_ALLOW_AUTHOR_EDIT) && (int) $record->user_id === (int) $user->id);
     }
 
     /**
@@ -75,6 +77,6 @@ trait GetsCareLogs
     private function canDelete($user, $record): bool
     {
         return $user->can(Ability::MANAGE_CARE_LOGS->value)
-            || (Wrmd::settings('logAllowAuthorEdit') && (int) $record->user_id === (int) $user->id);
+            || (Wrmd::settings(SettingKey::LOG_ALLOW_AUTHOR_EDIT) && (int) $record->user_id === (int) $user->id);
     }
 }

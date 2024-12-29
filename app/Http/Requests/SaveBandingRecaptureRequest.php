@@ -29,7 +29,7 @@ class SaveBandingRecaptureRequest extends FormRequest
         $admittedAt = $patient->admitted_at->setTimezone(Wrmd::settings(SettingKey::TIMEZONE))->startOfDay();
 
         return [
-            'recaptured_at' => 'required|date|after_or_equal:'.$admittedAt,
+            'recaptured_at' => 'required|date|after_or_equal:'.$admittedAt->format('Y-m-d'),
             'recapture_disposition_id' => [
                 'nullable',
                 'integer',

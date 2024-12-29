@@ -10,7 +10,7 @@ class PatientSelector
     /**
      * Push a patientId into memory.
      */
-    public static function add(int $patientId): void
+    public static function add(string $patientId): void
     {
         Redis::connection('cache')->sadd(static::fingerprint(), $patientId);
         Redis::connection('cache')->expire(static::fingerprint(), 7200);
@@ -43,7 +43,7 @@ class PatientSelector
     /**
      * Remove a patientId from memory.
      */
-    public static function remove(int $patientId): void
+    public static function remove(string $patientId): void
     {
         Redis::connection('cache')->srem(static::fingerprint(), $patientId);
     }

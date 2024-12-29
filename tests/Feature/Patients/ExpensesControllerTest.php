@@ -2,26 +2,23 @@
 
 namespace Tests\Feature\Patients;
 
-use App\Domain\Patients\Patient;
-use App\Domain\Taxonomy\Taxon;
-use App\Extensions\Expenses\Models\Category;
-use App\Extensions\Expenses\Models\Transaction;
+use App\Enums\Ability;
+use App\Models\ExpenseCategory;
+use App\Models\ExpenseTransaction;
+use App\Models\Patient;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Silber\Bouncer\BouncerFacade;
-use Tests\Support\AssistsWithAuthentication;
-use Tests\Support\AssistsWithCases;
 use Tests\TestCase;
+use Tests\Traits\Assertions;
+use Tests\Traits\CreateCase;
+use Tests\Traits\CreatesTeamUser;
 
 final class ExpensesControllerTest extends TestCase
 {
-    use AssistsWithAuthentication;
-    use AssistsWithCases;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        Taxon::factory()->unidentified()->create();
-    }
+    use Assertions;
+    use CreateCase;
+    use CreatesTeamUser;
+    use RefreshDatabase;
 
     public function test_un_authenticated_users_cant_access_expenses(): void
     {
@@ -31,22 +28,22 @@ final class ExpensesControllerTest extends TestCase
 
     public function test_un_authorized_users_cant_access_expenses(): void
     {
-        $me = $this->createAccountUser();
+        $me = $this->createTeamUser();
         $patient = Patient::factory()->create();
         $this->actingAs($me->user)->get(route('patients.expenses.index', $patient))->assertForbidden();
     }
 
     public function test_it_displays_the_expenses_index_view(): void
     {
-        $me = $this->createAccountUser();
-        $admission = $this->createCase(['account_id' => $me->account->id]);
-        BouncerFacade::allow($me->user)->to('display-expenses');
+        $me = $this->createTeamUser();
+        $admission = $this->createCase($me->team);
+        BouncerFacade::allow($me->user)->to(Ability::VIEW_EXPENSES->value);
 
         $this->actingAs($me->user)->get(route('patients.expenses.index'))
             ->assertOk()
             ->assertInertia(
                 fn ($page) => $page->component('Patients/Expenses/Index')
-                    ->hasAll(['transactions', 'expenseTotals'])
+                    ->hasAll(['expenseTransactions', 'expenseTotals'])
             );
     }
 
@@ -58,18 +55,18 @@ final class ExpensesControllerTest extends TestCase
 
     public function test_un_authorized_users_cant_store_an_expense(): void
     {
-        $me = $this->createAccountUser();
+        $me = $this->createTeamUser();
         $patient = Patient::factory()->create();
-        BouncerFacade::allow($me->user)->to('display-expenses');
+        BouncerFacade::allow($me->user)->to(Ability::VIEW_EXPENSES->value);
         $this->actingAs($me->user)->post(route('patients.expenses.store', $patient))->assertForbidden();
     }
 
     public function test_it_validates_ownership_of_the_patient_before_storing_the_expense(): void
     {
-        $me = $this->createAccountUser();
+        $me = $this->createTeamUser();
         $patient = Patient::factory()->create();
-        BouncerFacade::allow($me->user)->to('display-expenses');
-        BouncerFacade::allow($me->user)->to('manage-expenses');
+        BouncerFacade::allow($me->user)->to(Ability::VIEW_EXPENSES->value);
+        BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
 
         $this->actingAs($me->user)
             ->post(route('patients.expenses.store', $patient))
@@ -78,17 +75,18 @@ final class ExpensesControllerTest extends TestCase
 
     public function test_it_fails_validation_when_trying_to_store_the_expenses(): void
     {
-        $me = $this->createAccountUser();
-        $admission = $this->createCase(['account_id' => $me->account->id], ['admitted_at' => '2017-02-13 00:00:00']);
-        BouncerFacade::allow($me->user)->to('display-expenses');
-        BouncerFacade::allow($me->user)->to('manage-expenses');
-        app()->register(\App\Extensions\Expenses\ExpensesServiceProvider::class);
+        $me = $this->createTeamUser();
+        $admission = $this->createCase($me->team, patientOverrides: ['date_admitted_at' => '2017-02-13']);
+        BouncerFacade::allow($me->user)->to(Ability::VIEW_EXPENSES->value);
+        BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
 
         $this->actingAs($me->user)
             ->post(route('patients.expenses.store', $admission->patient))
-            ->assertHasValidationError('transacted_at', 'The transaction date field is required.')
-            ->assertHasValidationError('category', 'A category is required.')
-            ->assertHasValidationError('charge', 'A debit or credit is required.');
+            ->assertInvalid([
+                'transacted_at' => 'The transaction date field is required.',
+                'category' => 'A category is required.',
+                'charge' => 'A debit or credit is required.'
+            ]);
 
         $this->actingAs($me->user)
             ->post(route('patients.expenses.store', $admission->patient), [
@@ -96,24 +94,26 @@ final class ExpensesControllerTest extends TestCase
                 'category' => 'xxxx',
                 'debit' => 'foo',
             ])
-            ->assertHasValidationError('transacted_at', 'The transaction date is not a valid date.')
-            ->assertHasValidationError('category', 'The selected category is invalid.')
-            ->assertHasValidationError('debit', 'The debit must be a number.');
+            ->assertInvalid([
+                'transacted_at' => 'The transaction date is not a valid date.',
+                'category' => 'The selected category is invalid.',
+                'debit' => 'The debit field must be a number.'
+            ]);
 
         $this->actingAs($me->user)
             ->post(route('patients.expenses.store', $admission->patient), [
                 'credit' => 'foo',
             ])
-            ->assertHasValidationError('credit', 'The credit must be a number.');
+            ->assertInvalid(['credit' => 'The credit field must be a number.']);
     }
 
     public function test_it_stores_an_expense(): void
     {
-        $me = $this->createAccountUser();
-        $admission = $this->createCase(['account_id' => $me->account->id], ['admitted_at' => '2017-02-13 00:00:00']);
-        $category = Category::factory()->create(['account_id' => $me->account->id, 'name' => 'Prescription']);
-        BouncerFacade::allow($me->user)->to('display-expenses');
-        BouncerFacade::allow($me->user)->to('manage-expenses');
+        $me = $this->createTeamUser();
+        $admission = $this->createCase($me->team, patientOverrides: ['date_admitted_at' => '2017-02-13']);
+        $category = ExpenseCategory::factory()->create(['team_id' => $me->team->id, 'name' => 'Prescription']);
+        BouncerFacade::allow($me->user)->to(Ability::VIEW_EXPENSES->value);
+        BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
 
         $this->actingAs($me->user)
             ->post(route('patients.expenses.store', $admission->patient), [
@@ -126,7 +126,7 @@ final class ExpensesControllerTest extends TestCase
 
         $this->assertDatabaseHas('expense_transactions', [
             'patient_id' => $admission->patient_id,
-            'category_id' => $category->id,
+            'expense_category_id' => $category->id,
             'transacted_at' => '2017-04-09',
             'debit' => 1550,
             'credit' => 0,
@@ -137,26 +137,26 @@ final class ExpensesControllerTest extends TestCase
     public function test_un_authenticated_users_cant_update_an_expense(): void
     {
         $patient = Patient::factory()->create();
-        $transaction = Transaction::factory()->create(['patient_id' => $patient->id]);
+        $transaction = ExpenseTransaction::factory()->create(['patient_id' => $patient->id]);
         $this->put(route('patients.expenses.update', [$patient, $transaction]))->assertRedirect('login');
     }
 
     public function test_un_authorized_users_cant_update_an_expense(): void
     {
-        $me = $this->createAccountUser();
+        $me = $this->createTeamUser();
         $patient = Patient::factory()->create();
-        $transaction = Transaction::factory()->create(['patient_id' => $patient->id]);
-        BouncerFacade::allow($me->user)->to('display-expenses');
+        $transaction = ExpenseTransaction::factory()->create(['patient_id' => $patient->id]);
+        BouncerFacade::allow($me->user)->to(Ability::VIEW_EXPENSES->value);
         $this->actingAs($me->user)->put(route('patients.expenses.update', [$patient, $transaction]))->assertForbidden();
     }
 
     public function test_it_validates_ownership_of_the_expense_before_updating_it(): void
     {
-        $me = $this->createAccountUser();
+        $me = $this->createTeamUser();
         $patient = Patient::factory()->create();
-        $transaction = Transaction::factory()->create(['patient_id' => $patient->id]);
-        BouncerFacade::allow($me->user)->to('display-expenses');
-        BouncerFacade::allow($me->user)->to('manage-expenses');
+        $transaction = ExpenseTransaction::factory()->create(['patient_id' => $patient->id]);
+        BouncerFacade::allow($me->user)->to(Ability::VIEW_EXPENSES->value);
+        BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
 
         $this->actingAs($me->user)
             ->put(route('patients.expenses.update', [$patient, $transaction]))
@@ -165,19 +165,19 @@ final class ExpensesControllerTest extends TestCase
 
     public function test_it_fails_validation_when_trying_to_update_the_expense(): void
     {
-        $me = $this->createAccountUser();
-        $admission = $this->createCase(['account_id' => $me->account->id], ['admitted_at' => '2017-02-13 00:00:00']);
-        $transaction = Transaction::factory()->create(['patient_id' => $admission->patient_id]);
-        BouncerFacade::allow($me->user)->to('display-expenses');
-        BouncerFacade::allow($me->user)->to('manage-expenses');
-
-        app()->register(\App\Extensions\Expenses\ExpensesServiceProvider::class);
+        $me = $this->createTeamUser();
+        $admission = $this->createCase($me->team, patientOverrides: ['date_admitted_at' => '2017-02-13']);
+        $transaction = ExpenseTransaction::factory()->create(['patient_id' => $admission->patient_id]);
+        BouncerFacade::allow($me->user)->to(Ability::VIEW_EXPENSES->value);
+        BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
 
         $this->actingAs($me->user)
             ->put(route('patients.expenses.update', [$admission->patient, $transaction]))
-            ->assertHasValidationError('transacted_at', 'The transaction date field is required.')
-            ->assertHasValidationError('category', 'A category is required.')
-            ->assertHasValidationError('charge', 'A debit or credit is required.');
+            ->assertInvalid([
+                'transacted_at' => 'The transaction date field is required.',
+                'category' => 'A category is required.',
+                'charge' => 'A debit or credit is required.'
+            ]);
 
         $this->actingAs($me->user)
             ->put(route('patients.expenses.update', [$admission->patient, $transaction]), [
@@ -185,25 +185,27 @@ final class ExpensesControllerTest extends TestCase
                 'category' => 'xxxx',
                 'debit' => 'foo',
             ])
-            ->assertHasValidationError('transacted_at', 'The transaction date is not a valid date.')
-            ->assertHasValidationError('category', 'The selected category is invalid.')
-            ->assertHasValidationError('debit', 'The debit must be a number.');
+            ->assertInvalid([
+                'transacted_at' => 'The transaction date is not a valid date.',
+                'category' => 'The selected category is invalid.',
+                'debit' => 'The debit field must be a number.'
+            ]);
 
         $this->actingAs($me->user)
             ->put(route('patients.expenses.update', [$admission->patient, $transaction]), [
                 'credit' => 'foo',
             ])
-            ->assertHasValidationError('credit', 'The credit must be a number.');
+            ->assertInvalid(['credit' => 'The credit field must be a number.']);
     }
 
     public function test_it_updates_an_expense(): void
     {
-        $me = $this->createAccountUser();
-        $admission = $this->createCase(['account_id' => $me->account->id], ['admitted_at' => '2017-02-13 00:00:00']);
-        $transaction = Transaction::factory()->create(['patient_id' => $admission->patient_id]);
-        $category = Category::factory()->create(['account_id' => $me->account->id, 'name' => 'Prescription']);
-        BouncerFacade::allow($me->user)->to('display-expenses');
-        BouncerFacade::allow($me->user)->to('manage-expenses');
+        $me = $this->createTeamUser();
+        $admission = $this->createCase($me->team, patientOverrides: ['date_admitted_at' => '2017-02-13']);
+        $transaction = ExpenseTransaction::factory()->create(['patient_id' => $admission->patient_id]);
+        $category = ExpenseCategory::factory()->create(['team_id' => $me->team->id, 'name' => 'Prescription']);
+        BouncerFacade::allow($me->user)->to(Ability::VIEW_EXPENSES->value);
+        BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
 
         $this->actingAs($me->user)
             ->put(route('patients.expenses.update', [$admission->patient, $transaction]), [
@@ -216,7 +218,7 @@ final class ExpensesControllerTest extends TestCase
 
         $this->assertDatabaseHas('expense_transactions', [
             'id' => $transaction->id,
-            'category_id' => $category->id,
+            'expense_category_id' => $category->id,
             'transacted_at' => '2017-04-09',
             'debit' => 1550,
             'credit' => 0,
@@ -224,31 +226,29 @@ final class ExpensesControllerTest extends TestCase
         ]);
     }
 
-    ///
-
     public function test_un_authenticated_users_cant_delete_an_exam(): void
     {
         $patient = Patient::factory()->create();
-        $transaction = Transaction::factory()->create(['patient_id' => $patient->id]);
+        $transaction = ExpenseTransaction::factory()->create(['patient_id' => $patient->id]);
         $this->delete(route('patients.expenses.destroy', [$patient, $transaction]))->assertRedirect('login');
     }
 
     public function test_un_authorized_users_cant_delete_an_exam(): void
     {
-        $me = $this->createAccountUser();
+        $me = $this->createTeamUser();
         $patient = Patient::factory()->create();
-        $transaction = Transaction::factory()->create(['patient_id' => $patient->id]);
-        BouncerFacade::allow($me->user)->to('display-expenses');
+        $transaction = ExpenseTransaction::factory()->create(['patient_id' => $patient->id]);
+        BouncerFacade::allow($me->user)->to(Ability::VIEW_EXPENSES->value);
         $this->actingAs($me->user)->delete(route('patients.expenses.destroy', [$patient, $transaction]))->assertForbidden();
     }
 
     public function test_it_validates_ownership_of_the_expense_before_delete_it(): void
     {
-        $me = $this->createAccountUser();
+        $me = $this->createTeamUser();
         $patient = Patient::factory()->create();
-        $transaction = Transaction::factory()->create(['patient_id' => $patient->id]);
-        BouncerFacade::allow($me->user)->to('display-expenses');
-        BouncerFacade::allow($me->user)->to('manage-expenses');
+        $transaction = ExpenseTransaction::factory()->create(['patient_id' => $patient->id]);
+        BouncerFacade::allow($me->user)->to(Ability::VIEW_EXPENSES->value);
+        BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
 
         $this->actingAs($me->user)
             ->delete(route('patients.expenses.destroy', [$patient, $transaction]))
@@ -257,11 +257,11 @@ final class ExpensesControllerTest extends TestCase
 
     public function test_it_deletes_an_expense(): void
     {
-        $me = $this->createAccountUser();
-        $admission = $this->createCase(['account_id' => $me->account->id]);
-        $transaction = Transaction::factory()->create(['patient_id' => $admission->patient_id]);
-        BouncerFacade::allow($me->user)->to('display-expenses');
-        BouncerFacade::allow($me->user)->to('manage-expenses');
+        $me = $this->createTeamUser();
+        $admission = $this->createCase($me->team);
+        $transaction = ExpenseTransaction::factory()->create(['patient_id' => $admission->patient_id]);
+        BouncerFacade::allow($me->user)->to(Ability::VIEW_EXPENSES->value);
+        BouncerFacade::allow($me->user)->to(Ability::MANAGE_EXPENSES->value);
 
         $this->actingAs($me->user)
             ->delete(route('patients.expenses.destroy', [$admission->patient, $transaction]))
