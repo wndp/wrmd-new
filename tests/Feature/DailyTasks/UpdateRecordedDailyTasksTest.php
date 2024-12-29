@@ -30,7 +30,7 @@ final class UpdateRecordedDailyTasksTest extends TestCase
         $bidId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_2_DAYS
-        )->attribute_option_id;
+        );
 
         $me = $this->createTeamUser();
         $admission = $this->createCase($me->team);
@@ -78,7 +78,7 @@ final class UpdateRecordedDailyTasksTest extends TestCase
         $bidId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_2_DAYS
-        )->attribute_option_id;
+        );
 
         $me = $this->createTeamUser();
         $admission = $this->createCase($me->team);

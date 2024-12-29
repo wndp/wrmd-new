@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Tests\Traits\Assertions;
+use Tests\Traits\CreatesTeamUser;
 
 final class UserTest extends TestCase
 {

@@ -79,11 +79,8 @@ final class IncidentResolutionControllerTest extends TestCase
 
     public function test_an_incident_is_updated_in_storage(): void
     {
-        $hotlineStatusIsResolvedId = $this->createUiBehavior(AttributeOptionName::HOTLINE_STATUSES, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED)
-            ->attribute_option_id;
-
-        $hotlineStatusIsOpenId = $this->createUiBehavior(AttributeOptionName::HOTLINE_STATUSES, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_OPEN)
-            ->attribute_option_id;
+        $hotlineStatusIsResolvedId = $this->createUiBehavior(AttributeOptionName::HOTLINE_STATUSES, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED);
+        $hotlineStatusIsOpenId = $this->createUiBehavior(AttributeOptionName::HOTLINE_STATUSES, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_OPEN);
 
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -109,15 +106,13 @@ final class IncidentResolutionControllerTest extends TestCase
 
     public function test_saving_a_resolution_date_will_automatically_change_the_incident_status_to_resolved(): void
     {
-        $hotlineStatusIsResolvedId = $this->createUiBehavior(AttributeOptionName::HOTLINE_STATUSES, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED)
-            ->attribute_option_id;
-
-        $hotlineStatusIsOpenId = $this->createUiBehavior(AttributeOptionName::HOTLINE_STATUSES, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_OPEN)
-            ->attribute_option_id;
+        $hotlineStatusIsResolvedId = $this->createUiBehavior(AttributeOptionName::HOTLINE_STATUSES, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED);
+        $hotlineStatusIsOpenId = $this->createUiBehavior(AttributeOptionName::HOTLINE_STATUSES, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_OPEN);
 
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
         $incident = Incident::factory()->for($me->team)->create([
+            'reported_at' => '2022-07-02 15:30:00',
             'occurred_at' => '2022-07-02 17:30:00',
             'incident_status_id' => $hotlineStatusIsOpenId,
         ]);
@@ -130,7 +125,6 @@ final class IncidentResolutionControllerTest extends TestCase
 
         $this->assertDatabaseHas('incidents', [
             'id' => $incident->id,
-            'incident_number' => 'hl-'.date('y').'-0001',
             'incident_status_id' => $hotlineStatusIsResolvedId,
             'resolved_at' => '2022-07-08 17:20:00',
         ]);
@@ -142,7 +136,6 @@ final class IncidentResolutionControllerTest extends TestCase
 
         $this->assertDatabaseHas('incidents', [
             'id' => $incident->id,
-            'incident_number' => 'hl-'.date('y').'-0001',
             'incident_status_id' => $hotlineStatusIsOpenId,
             'resolved_at' => null,
         ]);

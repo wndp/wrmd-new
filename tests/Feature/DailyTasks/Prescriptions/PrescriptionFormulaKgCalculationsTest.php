@@ -27,7 +27,7 @@ final class PrescriptionFormulaKgCalculationsTest extends TestCase
         $doseUnitIsMlId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_DOSE_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_DOSE_UNIT_IS_ML
-        )->attribute_option_id;
+        );
 
         $patient = Patient::factory()->create();
         $formula = Formula::factory()->create(['defaults' => [
@@ -49,19 +49,19 @@ final class PrescriptionFormulaKgCalculationsTest extends TestCase
         $doseUnitIsMlId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_DOSE_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_DOSE_UNIT_IS_ML
-        )->attribute_option_id;
+        );
 
         $dosageUnitIsPerKgId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_DOSAGE_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_PER_KG
-        )->attribute_option_id;
+        );
 
         $this->createUiBehavior($dosageUnitIsPerKgId, AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_MG_PER_KG);
 
         $concentrationUnitIsMgIds = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_CONCENTRATION_UNIT_IS_MG
-        )->attribute_option_id;
+        );
 
         $this->createUiBehavior($concentrationUnitIsMgIds, AttributeOptionUiBehavior::DAILY_TASK_CONCENTRATION_UNIT_IS_MG_PER_ML);
 
@@ -89,19 +89,19 @@ final class PrescriptionFormulaKgCalculationsTest extends TestCase
         $doseUnitIsTabId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_DOSE_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_DOSE_UNIT_IS_TAB
-        )->attribute_option_id;
+        );
 
         $dosageUnitIsPerKgId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_DOSAGE_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_PER_KG
-        )->attribute_option_id;
+        );
 
         $this->createUiBehavior($dosageUnitIsPerKgId, AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_MG_PER_KG);
 
         $concentrationUnitIsMgIds = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_CONCENTRATION_UNIT_IS_MG
-        )->attribute_option_id;
+        );
 
         $this->createUiBehavior($concentrationUnitIsMgIds, AttributeOptionUiBehavior::DAILY_TASK_CONCENTRATION_UNIT_IS_MG_PER_TAB);
 
@@ -129,7 +129,7 @@ final class PrescriptionFormulaKgCalculationsTest extends TestCase
         $dosageUnitIsMgPerKgId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_DOSAGE_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_MG_PER_KG
-        )->attribute_option_id;
+        );
 
         $this->createUiBehavior($dosageUnitIsMgPerKgId, AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_PER_KG);
 
@@ -154,7 +154,7 @@ final class PrescriptionFormulaKgCalculationsTest extends TestCase
         $dosageUnitIsMlPerKgId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_DOSAGE_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_ML_PER_KG
-        )->attribute_option_id;
+        );
 
         $this->createUiBehavior($dosageUnitIsMlPerKgId, AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_PER_KG);
 
@@ -179,7 +179,7 @@ final class PrescriptionFormulaKgCalculationsTest extends TestCase
         $dosageUnitIsIuPerKgId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_DOSAGE_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_IU_PER_KG
-        )->attribute_option_id;
+        );
 
         $this->createUiBehavior($dosageUnitIsIuPerKgId, AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_PER_KG);
 
@@ -204,19 +204,19 @@ final class PrescriptionFormulaKgCalculationsTest extends TestCase
         $doseUnitIsMlId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_DOSE_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_DOSE_UNIT_IS_ML
-        )->attribute_option_id;
+        );
 
         $concentrationUnitIsIuPerMlId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_CONCENTRATION_UNIT_IS_IU_PER_ML
-        )->attribute_option_id;
+        );
 
         $this->createUiBehavior($concentrationUnitIsIuPerMlId, AttributeOptionUiBehavior::DAILY_TASK_CONCENTRATION_UNIT_IS_IU);
 
         $dosageUnitIsIuPerKgId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_DOSAGE_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_IU_PER_KG
-        )->attribute_option_id;
+        );
 
         $this->createUiBehavior($dosageUnitIsIuPerKgId, AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_PER_KG);
 

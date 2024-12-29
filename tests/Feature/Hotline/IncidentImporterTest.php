@@ -30,17 +30,17 @@ final class IncidentImporterTest extends TestCase
         $hotlineWildlifeCategoryIsInjuredId = $this->createUiBehavior(
             AttributeOptionName::HOTLINE_WILDLIFE_CATEGORIES,
             AttributeOptionUiBehavior::HOTLINE_WILDLIFE_CATEGORY_IS_INJURED
-        )->attribute_option_id;
+        );
 
         $hotlineStatusIsOpenId = $this->createUiBehavior(
             AttributeOptionName::HOTLINE_STATUSES,
             AttributeOptionUiBehavior::HOTLINE_STATUS_IS_OPEN
-        )->attribute_option_id;
+        );
 
         $hotlineStatusIsResolvedId = $this->createUiBehavior(
             AttributeOptionName::HOTLINE_STATUSES,
             AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED
-        )->attribute_option_id;
+        );
 
         // "Upload" the import file to storage
         Storage::putFileAs('imports', new File(__DIR__.'/../../storage/import_hotline_incidents.xlsx'), 'import_hotline_incidents.xlsx');

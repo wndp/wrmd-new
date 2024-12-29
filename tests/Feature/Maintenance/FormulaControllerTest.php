@@ -95,7 +95,7 @@ final class FormulaControllerTest extends TestCase
         $concentrationUnitIsMgPerMlId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_CONCENTRATION_UNIT_IS_MG_PER_ML
-        )->attribute_option_id;
+        );
 
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_ACCOUNT_MAINTENANCE->value);
@@ -186,7 +186,7 @@ final class FormulaControllerTest extends TestCase
         $concentrationUnitIsMgPerMlId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_CONCENTRATION_UNIT_IS_MG_PER_ML
-        )->attribute_option_id;
+        );
 
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_ACCOUNT_MAINTENANCE->value);

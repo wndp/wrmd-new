@@ -79,7 +79,7 @@ final class RecordedPatientDailyTasksControllerTest extends TestCase
         $singleDoseId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_SINGLE_DOSE
-        )->attribute_option_id;
+        );
 
         $date = Carbon::now();
         $me = $this->createTeamUser();

@@ -44,7 +44,7 @@ final class PrescriptionControllerTest extends TestCase
         $frequencyIs1DailyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_1_DAILY
-        )->attribute_option_id;
+        );
 
         $me = $this->createTeamUser();
         $patient = Patient::factory()->create();
@@ -92,32 +92,32 @@ final class PrescriptionControllerTest extends TestCase
         $concentrationUnitIsMgPerMlId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_CONCENTRATION_UNIT_IS_MG_PER_ML
-        )->attribute_option_id;
+        );
 
         $dosageUnitIsMgPerKgId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_DOSAGE_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_MG_PER_KG
-        )->attribute_option_id;
+        );
 
         $doseUnitIsMlId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_DOSE_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_DOSE_UNIT_IS_ML
-        )->attribute_option_id;
+        );
 
         $doseUnitIsCapId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_DOSE_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_DOSE_UNIT_IS_CAP
-        )->attribute_option_id;
+        );
 
         $frequencyIs1DailyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_1_DAILY
-        )->attribute_option_id;
+        );
 
         $routeIsOralId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_ROUTES,
             AttributeOptionUiBehavior::DAILY_TASK_ROUTE_IS_ORAL
-        )->attribute_option_id;
+        );
 
         $me = $this->createTeamUser();
         $admission = $this->createCase($me->team);
@@ -172,7 +172,7 @@ final class PrescriptionControllerTest extends TestCase
         $frequencyIs1DailyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_1_DAILY
-        )->attribute_option_id;
+        );
 
         $me = $this->createTeamUser();
         $patient = Patient::factory()->create();
@@ -222,32 +222,32 @@ final class PrescriptionControllerTest extends TestCase
         $concentrationUnitIsMgPerMlId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_CONCENTRATION_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_CONCENTRATION_UNIT_IS_MG_PER_ML
-        )->attribute_option_id;
+        );
 
         $dosageUnitIsMgPerKgId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_DOSAGE_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_DOSAGE_UNIT_IS_MG_PER_KG
-        )->attribute_option_id;
+        );
 
         $doseUnitIsMlId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_DOSE_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_DOSE_UNIT_IS_ML
-        )->attribute_option_id;
+        );
 
         $doseUnitIsCapId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_DOSE_UNITS,
             AttributeOptionUiBehavior::DAILY_TASK_DOSE_UNIT_IS_CAP
-        )->attribute_option_id;
+        );
 
         $frequencyIs1DailyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_1_DAILY
-        )->attribute_option_id;
+        );
 
         $routeIsOralId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_ROUTES,
             AttributeOptionUiBehavior::DAILY_TASK_ROUTE_IS_ORAL
-        )->attribute_option_id;
+        );
 
         $me = $this->createTeamUser();
         $admission = $this->createCase($me->team);

@@ -26,16 +26,13 @@ final class AdmitPatientTest extends TestCase
 
     private $me;
 
-    private $pendingDispositionUiBehavior;
+    private $pendingDispositionId;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->pendingDispositionUiBehavior = $this->createUiBehavior(
-            AttributeOptionName::PATIENT_DISPOSITIONS,
-            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_PENDING
-        );
+        $this->pendingDispositionId = $this->pendingDispositionId();
 
         $this->me = $this->createTeamUser();
         Auth::loginUsingId($this->me->user->id);
@@ -195,7 +192,7 @@ final class AdmitPatientTest extends TestCase
             ]
         );
         $this->assertInstanceOf(Collection::class, $collection);
-        $this->assertEquals($this->pendingDispositionUiBehavior->attribute_option_id, $collection->first()->patient->disposition_id);
+        $this->assertEquals($this->pendingDispositionId, $collection->first()->patient->disposition_id);
         $this->assertEquals('2023-01-17', $collection->first()->patient->date_admitted_at->toDateString());
         $this->assertEquals('15:51:00', $collection->first()->patient->time_admitted_at);
         $this->assertEquals('Red-headed Foo', $collection->first()->patient->common_name);
@@ -235,7 +232,7 @@ final class AdmitPatientTest extends TestCase
             'disposition_id' => 999,
         ]);
 
-        $this->assertEquals($this->pendingDispositionUiBehavior->attribute_option_id, $result->first()->patient->disposition_id);
+        $this->assertEquals($this->pendingDispositionId, $result->first()->patient->disposition_id);
     }
 
     public function test_type_errors_are_caught_when_trying_to_persist_the_patient(): void

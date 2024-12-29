@@ -7,6 +7,7 @@ use App\Analytics\AnalyticFiltersStore;
 use App\Enums\AttributeOptionName;
 use App\Enums\AttributeOptionUiBehavior;
 use App\Models\CommonName;
+use App\Models\Patient;
 use App\Models\Taxon;
 use App\Models\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -95,7 +96,7 @@ final class NumbersTest extends TestCase
         $releasedDispositionId = $this->createUiBehavior(
             AttributeOptionName::PATIENT_DISPOSITIONS,
             AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_RELEASED
-        )->attribute_option_id;
+        );
 
         $this->createCase($team, $thisYear, ['disposition_id' => $pendingDispositionId,
             'dispositioned_at' => null, 'date_admitted_at' => now(),
@@ -179,7 +180,7 @@ final class NumbersTest extends TestCase
 
         $result = \App\Analytics\Numbers\AllUnrecognizedPatients::analyze(
             Team::factory()->create(),
-            new AnalyticFilters
+            new AnalyticFilters()
         );
 
         $this->assertEquals(null, $result->difference);
@@ -203,7 +204,7 @@ final class NumbersTest extends TestCase
 
         $result = \App\Analytics\Numbers\UnrecognizedPatients::analyze(
             $team,
-            new AnalyticFilters
+            new AnalyticFilters()
         );
 
         $this->assertEquals(null, $result->difference);
@@ -219,15 +220,21 @@ final class NumbersTest extends TestCase
 
         $pendingDispositionId = $this->pendingDispositionId();
 
-        $taxon = Taxon::factory()->createQuietly();
-        CommonName::factory()->createQuietly(['common_name' => 'Big Bat', 'taxon_id' => $taxon->id]);
+        $taxon = Taxon::factory()->create();
+        CommonName::factory()->create(['common_name' => 'Big Bat', 'taxon_id' => $taxon->id]);
 
         $this->createCase(Team::factory()->create(), 2024, ['taxon_id' => $taxon->id, 'common_name' => 'Big Bat', 'disposition_id' => $pendingDispositionId]);
         $this->createCase(Team::factory()->create(), 2024, ['taxon_id' => $taxon->id, 'common_name' => 'Foo Bird', 'disposition_id' => $pendingDispositionId]);
 
+        // dd(
+        //     Taxon::pluck('id')->toArray(),
+        //     CommonName::pluck('common_name', 'taxon_id')->toArray(),
+        //     Patient::pluck('common_name', 'taxon_id')->toArray()
+        // );
+
         $result = \App\Analytics\Numbers\AllMissidentifiedPatients::analyze(
             Team::factory()->create(),
-            new AnalyticFilters
+            new AnalyticFilters()
         );
 
         $this->assertEquals(null, $result->difference);
@@ -252,7 +259,7 @@ final class NumbersTest extends TestCase
 
         $result = \App\Analytics\Numbers\MissidentifiedPatients::analyze(
             $team,
-            new AnalyticFilters
+            new AnalyticFilters()
         );
 
         $this->assertEquals(null, $result->difference);

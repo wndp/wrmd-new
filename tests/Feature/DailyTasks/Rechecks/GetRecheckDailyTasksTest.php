@@ -40,7 +40,7 @@ final class GetRecheckDailyTasksTest extends TestCase
         $frequencyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_2_DAYS
-        )->attribute_option_id;
+        );
 
         $me = $this->createTeamUser();
 
@@ -56,7 +56,7 @@ final class GetRecheckDailyTasksTest extends TestCase
         ]);
 
         $result = GetRecheckDailyTasks::handle(
-            new DailyTasksFilters,
+            new DailyTasksFilters(),
             [$admission->patient_id]
         );
 

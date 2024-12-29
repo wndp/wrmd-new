@@ -31,7 +31,7 @@ final class CustomFieldsControllerTest extends TestCase
         $customFieldGroupIsPatientId = $this->createUiBehavior(
             AttributeOptionName::CUSTOM_FIELD_GROUPS,
             AttributeOptionUiBehavior::CUSTOM_FIELD_GROUP_IS_PATIENT
-        )->attribute_option_id;
+        );
 
         $locationId = AttributeOption::factory()->create([
             'name' => AttributeOptionName::CUSTOM_FIELD_LOCATIONS,
@@ -149,7 +149,7 @@ final class CustomFieldsControllerTest extends TestCase
         $customFieldGroupIsPatientId = $this->createUiBehavior(
             AttributeOptionName::CUSTOM_FIELD_GROUPS,
             AttributeOptionUiBehavior::CUSTOM_FIELD_GROUP_IS_PATIENT
-        )->attribute_option_id;
+        );
 
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_CUSTOM_FIELDS->value);
@@ -180,7 +180,7 @@ final class CustomFieldsControllerTest extends TestCase
         $customFieldTypesRequiresOptionsId = $this->createUiBehavior(
             AttributeOptionName::CUSTOM_FIELD_TYPES,
             AttributeOptionUiBehavior::CUSTOM_FIELD_TYPES_REQUIRES_OPTIONS
-        )->attribute_option_id;
+        );
 
         AttributeOptionUiBehaviorModel::factory()->create([
             'attribute_option_id' => $customFieldTypesRequiresOptionsId,
@@ -330,7 +330,7 @@ final class CustomFieldsControllerTest extends TestCase
         $customFieldTypesRequiresOptionsId = $this->createUiBehavior(
             AttributeOptionName::CUSTOM_FIELD_TYPES,
             AttributeOptionUiBehavior::CUSTOM_FIELD_TYPES_REQUIRES_OPTIONS
-        )->attribute_option_id;
+        );
 
         AttributeOptionUiBehaviorModel::factory()->create([
             'attribute_option_id' => $customFieldTypesRequiresOptionsId,

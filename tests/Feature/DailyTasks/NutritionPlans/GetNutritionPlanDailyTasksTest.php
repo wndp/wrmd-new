@@ -40,7 +40,7 @@ final class GetNutritionPlanDailyTasksTest extends TestCase
         $frequencyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_NUTRITION_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_NUTRITION_FREQUENCY_IS_HOURS
-        )->attribute_option_id;
+        );
 
         $me = $this->createTeamUser();
 
@@ -56,7 +56,7 @@ final class GetNutritionPlanDailyTasksTest extends TestCase
         ]);
 
         $result = GetNutritionPlanDailyTasks::handle(
-            new DailyTasksFilters,
+            new DailyTasksFilters(),
             [$admission->patient_id]
         );
 

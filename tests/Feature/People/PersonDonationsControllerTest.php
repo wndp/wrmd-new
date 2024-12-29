@@ -41,7 +41,7 @@ final class PersonDonationsControllerTest extends TestCase
         $donationMethodIsCashId = $this->createUiBehavior(
             AttributeOptionName::DONATION_METHODS,
             AttributeOptionUiBehavior::DONATION_METHOD_IS_CASH
-        )->attribute_option_id;
+        );
 
         $me = $this->createTeamUser();
         $person = Person::factory()->has(Donation::Factory())->create(['team_id' => $me->team->id]);

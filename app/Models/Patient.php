@@ -57,7 +57,7 @@ class Patient extends Model implements HasMedia
      */
     protected static function booted(): void
     {
-        static::addGlobalScope(new VoidedScope);
+        static::addGlobalScope(new VoidedScope());
     }
 
     protected $fillable = [
@@ -405,21 +405,21 @@ class Patient extends Model implements HasMedia
                     ->from("$wildAlertDbName.common_names")
                     ->join('patients as p2', "$wildAlertDbName.common_names.taxon_id", '=', 'p2.taxon_id')
                     ->whereRaw('patients.id = p2.id');
-            })
-            ->whereNotIn('patients.common_name', function ($query) use ($wildAlertDbName) {
-                $query->select("$wildAlertDbName.taxa.alpha_code")
-                    ->from("$wildAlertDbName.taxa")
-                    ->join('patients as p2', "$wildAlertDbName.taxa.id", '=', 'p2.taxon_id')
-                    ->whereRaw('patients.id = p2.id')
-                    ->whereNotNull("$wildAlertDbName.taxa.alpha_code");
-            })
-            ->whereNotIn('patients.common_name', function ($query) use ($wildAlertDbName) {
-                $query->select("$wildAlertDbName.common_names.alpha_code")
-                    ->from("$wildAlertDbName.common_names")
-                    ->join('patients as p2', "$wildAlertDbName.common_names.taxon_id", '=', 'p2.taxon_id')
-                    ->whereRaw('patients.id = p2.id')
-                    ->whereNotNull("$wildAlertDbName.common_names.alpha_code");
             });
+        // ->whereNotIn('patients.common_name', function ($query) use ($wildAlertDbName) {
+        //     $query->select("$wildAlertDbName.taxa.alpha_code")
+        //         ->from("$wildAlertDbName.taxa")
+        //         ->join('patients as p2', "$wildAlertDbName.taxa.id", '=', 'p2.taxon_id')
+        //         ->whereRaw('patients.id = p2.id')
+        //         ->whereNotNull("$wildAlertDbName.taxa.alpha_code");
+        // })
+        // ->whereNotIn('patients.common_name', function ($query) use ($wildAlertDbName) {
+        //     $query->select("$wildAlertDbName.common_names.alpha_code")
+        //         ->from("$wildAlertDbName.common_names")
+        //         ->join('patients as p2', "$wildAlertDbName.common_names.taxon_id", '=', 'p2.taxon_id')
+        //         ->whereRaw('patients.id = p2.id')
+        //         ->whereNotNull("$wildAlertDbName.common_names.alpha_code");
+        // });
     }
 
     public function isUnrecognized(): bool
@@ -468,7 +468,7 @@ class Patient extends Model implements HasMedia
 
     public function getCoordinatesFoundAddress(): Address
     {
-        return (new Address)
+        return (new Address())
             ->withCountryCode(app(AdministrativeDivision::class)->alpha2CountryCode())
             ->withAdministrativeArea($this->subdivision_found ?: '')
             ->withLocality($this->city_found ?: '')

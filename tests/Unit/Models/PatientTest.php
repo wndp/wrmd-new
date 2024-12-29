@@ -48,18 +48,16 @@ final class PatientTest extends TestCase
         $this->assertInstanceOf(Collection::class, $patient->exams);
     }
 
-    #[Test]
     #[Group('lab')]
-    public function aPatientHasLabReports(): void
+    public function test_aPatientHasLabReports(): void
     {
         $patient = Patient::factory()->make();
 
         $this->assertInstanceOf(Collection::class, $patient->labReports);
     }
 
-    #[Test]
     #[Group('lab')]
-    public function aPatientHasLabFecalResults(): void
+    public function test_aPatientHasLabFecalResults(): void
     {
         $labReport = LabReport::factory()
             ->for(LabFecalResult::factory(), 'labResult')
@@ -69,9 +67,8 @@ final class PatientTest extends TestCase
         $this->assertInstanceOf(LabFecalResult::class, $labReport->patient->labFecalResults->first());
     }
 
-    #[Test]
     #[Group('lab')]
-    public function aPatientHasLabCbcResults(): void
+    public function test_aPatientHasLabCbcResults(): void
     {
         $labReport = LabReport::factory()
             ->for(LabCbcResult::factory(), 'labResult')
@@ -81,9 +78,8 @@ final class PatientTest extends TestCase
         $this->assertInstanceOf(LabCbcResult::class, $labReport->patient->labCbcResults->first());
     }
 
-    #[Test]
     #[Group('lab')]
-    public function aPatientHasLabCytologyResults(): void
+    public function test_aPatientHasLabCytologyResults(): void
     {
         $labReport = LabReport::factory()
             ->for(LabCytologyResult::factory(), 'labResult')
@@ -93,9 +89,8 @@ final class PatientTest extends TestCase
         $this->assertInstanceOf(LabCytologyResult::class, $labReport->patient->labCytologyResults->first());
     }
 
-    #[Test]
     #[Group('lab')]
-    public function aPatientHasLabChemistryResults(): void
+    public function test_aPatientHasLabChemistryResults(): void
     {
         $labReport = LabReport::factory()
             ->for(LabChemistryResult::factory(), 'labResult')
@@ -105,9 +100,8 @@ final class PatientTest extends TestCase
         $this->assertInstanceOf(LabChemistryResult::class, $labReport->patient->labChemistryResults->first());
     }
 
-    #[Test]
     #[Group('lab')]
-    public function aPatientHasLabUrinalysisResults(): void
+    public function test_aPatientHasLabUrinalysisResults(): void
     {
         $labReport = LabReport::factory()
             ->for(LabUrinalysisResult::factory(), 'labResult')
@@ -117,9 +111,8 @@ final class PatientTest extends TestCase
         $this->assertInstanceOf(LabUrinalysisResult::class, $labReport->patient->labUrinalysisResults->first());
     }
 
-    #[Test]
     #[Group('lab')]
-    public function aPatientHasLabToxicologyResults(): void
+    public function test_aPatientHasLabToxicologyResults(): void
     {
         $labReport = LabReport::factory()
             ->for(LabToxicologyResult::factory(), 'labResult')

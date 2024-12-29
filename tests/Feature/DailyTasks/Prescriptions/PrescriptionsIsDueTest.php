@@ -87,7 +87,7 @@ final class PrescriptionsIsDueTest extends TestCase
         $frequencyIsQ2DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_2_DAYS
-        )->attribute_option_id;
+        );
 
         $prescription = Prescription::factory()->create([
             'rx_started_at' => Carbon::now()->subDays(2),
@@ -104,7 +104,7 @@ final class PrescriptionsIsDueTest extends TestCase
         $frequencyIsQ2DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_2_DAYS
-        )->attribute_option_id;
+        );
 
         $this->createUiBehavior($frequencyIsQ2DaysId, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_SCATTERED_DAYS);
         $this->createUiBehavior(AttributeOptionName::DAILY_TASK_FREQUENCIES, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_SCATTERED_DAYS);
@@ -124,7 +124,7 @@ final class PrescriptionsIsDueTest extends TestCase
         $frequencyIsQ3DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_3_DAYS
-        )->attribute_option_id;
+        );
 
         $prescription = Prescription::factory()->create([
             'rx_started_at' => Carbon::now()->subDays(3),
@@ -150,7 +150,7 @@ final class PrescriptionsIsDueTest extends TestCase
         $frequencyIsQ3DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_3_DAYS
-        )->attribute_option_id;
+        );
 
         $this->createUiBehavior($frequencyIsQ3DaysId, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_SCATTERED_DAYS);
         $this->createUiBehavior(AttributeOptionName::DAILY_TASK_FREQUENCIES, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_SCATTERED_DAYS);
@@ -179,7 +179,7 @@ final class PrescriptionsIsDueTest extends TestCase
         $frequencyIsQ4DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_4_DAYS
-        )->attribute_option_id;
+        );
 
         $prescription = Prescription::factory()->create([
             'rx_started_at' => Carbon::now()->subDays(4),
@@ -205,7 +205,7 @@ final class PrescriptionsIsDueTest extends TestCase
         $frequencyIsQ4DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_4_DAYS
-        )->attribute_option_id;
+        );
 
         $this->createUiBehavior($frequencyIsQ4DaysId, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_SCATTERED_DAYS);
         $this->createUiBehavior(AttributeOptionName::DAILY_TASK_FREQUENCIES, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_SCATTERED_DAYS);
@@ -234,7 +234,7 @@ final class PrescriptionsIsDueTest extends TestCase
         $frequencyIsQ7DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_7_DAYS
-        )->attribute_option_id;
+        );
 
         $prescription = Prescription::factory()->create([
             'rx_started_at' => Carbon::now()->subDays(7),
@@ -260,7 +260,7 @@ final class PrescriptionsIsDueTest extends TestCase
         $frequencyIsQ7DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_7_DAYS
-        )->attribute_option_id;
+        );
 
         $this->createUiBehavior($frequencyIsQ7DaysId, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_SCATTERED_DAYS);
         $this->createUiBehavior(AttributeOptionName::DAILY_TASK_FREQUENCIES, AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_SCATTERED_DAYS);

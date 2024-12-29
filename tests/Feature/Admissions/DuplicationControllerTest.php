@@ -21,16 +21,13 @@ final class DuplicationControllerTest extends TestCase
 
     private $me;
 
-    private $pendingDispositionUiBehavior;
+    private $pendingDispositionId;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->pendingDispositionUiBehavior = $this->createUiBehavior(
-            AttributeOptionName::PATIENT_DISPOSITIONS,
-            AttributeOptionUiBehavior::PATIENT_DISPOSITION_IS_PENDING
-        );
+        $this->pendingDispositionId = $this->pendingDispositionId();
 
         $this->me = $this->createTeamUser();
     }
@@ -104,7 +101,7 @@ final class DuplicationControllerTest extends TestCase
 
         $admission = $this->createCase($this->me->team, date('Y'), [
             'common_name' => 'finch',
-            'disposition_id' => $this->pendingDispositionUiBehavior->attribute_option_id,
+            'disposition_id' => $this->pendingDispositionId,
         ]);
 
         $this->actingAs($this->me->user)->post(route('patients.duplicate.store', $admission->patient), [
@@ -138,7 +135,7 @@ final class DuplicationControllerTest extends TestCase
             'subdivision_found' => 'CA',
             'found_at' => date('Y').'-04-24',
             'reason_for_admission' => 'sick',
-            'disposition_id' => $this->pendingDispositionUiBehavior->attribute_option_id,
+            'disposition_id' => $this->pendingDispositionId,
         ]);
     }
 
@@ -151,7 +148,7 @@ final class DuplicationControllerTest extends TestCase
 
         $admission = $this->createCase($this->me->team, $lastYear, [
             'common_name' => 'finch',
-            'disposition_id' => $this->pendingDispositionUiBehavior->attribute_option_id,
+            'disposition_id' => $this->pendingDispositionId,
         ]);
 
         $this->actingAs($this->me->user)->post(route('patients.duplicate.store', $admission->patient), [
@@ -166,7 +163,7 @@ final class DuplicationControllerTest extends TestCase
             'subdivision_found' => 'CA',
             'found_at' => $lastYear.'-04-24',
             'reason_for_admission' => 'sick',
-            'disposition_id' => $this->pendingDispositionUiBehavior->attribute_option_id,
+            'disposition_id' => $this->pendingDispositionId,
         ])
             ->assertRedirect('patients/initial?y='.$thisYear.'&c=1');
 

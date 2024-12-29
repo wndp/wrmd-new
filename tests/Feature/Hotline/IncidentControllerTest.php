@@ -44,7 +44,7 @@ final class IncidentControllerTest extends TestCase
         $hotlineStatusIsOpenId = $this->createUiBehavior(
             AttributeOptionName::HOTLINE_STATUSES,
             AttributeOptionUiBehavior::HOTLINE_STATUS_IS_OPEN
-        )->attribute_option_id;
+        );
 
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::VIEW_HOTLINE->value);
@@ -168,7 +168,7 @@ final class IncidentControllerTest extends TestCase
         $hotlineStatusIsResolvedId = $this->createUiBehavior(
             AttributeOptionName::HOTLINE_STATUSES,
             AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED
-        )->attribute_option_id;
+        );
 
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);
@@ -376,7 +376,7 @@ final class IncidentControllerTest extends TestCase
     public function test_an_incident_is_updated_in_storage(): void
     {
         $hotlineWildlifeCategoriesId = AttributeOption::factory()->create(['name' => AttributeOptionName::HOTLINE_WILDLIFE_CATEGORIES])->id;
-        $hotlineStatusIsResolvedId = $this->createUiBehavior(AttributeOptionName::HOTLINE_STATUSES, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED)->attribute_option_id;
+        $hotlineStatusIsResolvedId = $this->createUiBehavior(AttributeOptionName::HOTLINE_STATUSES, AttributeOptionUiBehavior::HOTLINE_STATUS_IS_RESOLVED);
 
         $me = $this->createTeamUser();
         BouncerFacade::allow($me->user)->to(Ability::MANAGE_HOTLINE->value);

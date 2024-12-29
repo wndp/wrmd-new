@@ -45,7 +45,7 @@ final class NutritionPlanControllerTest extends TestCase
         $frequencyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_NUTRITION_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_NUTRITION_FREQUENCY_IS_HOURS
-        )->attribute_option_id;
+        );
 
         $me = $this->createTeamUser();
         $patient = Patient::factory()->create();
@@ -106,7 +106,7 @@ final class NutritionPlanControllerTest extends TestCase
         $frequencyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_NUTRITION_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_NUTRITION_FREQUENCY_IS_HOURS
-        )->attribute_option_id;
+        );
 
         $routeId = AttributeOption::factory()->create(['name' => AttributeOptionName::DAILY_TASK_NUTRITION_ROUTES])->id;
         $ingredientUnitId = AttributeOption::factory()->create(['name' => AttributeOptionName::DAILY_TASK_NUTRITION_INGREDIENT_UNITS])->id;
@@ -157,7 +157,7 @@ final class NutritionPlanControllerTest extends TestCase
         $frequencyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_NUTRITION_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_NUTRITION_FREQUENCY_IS_HOURS
-        )->attribute_option_id;
+        );
 
         $me = $this->createTeamUser();
         $patient = Patient::factory()->create();
@@ -220,7 +220,7 @@ final class NutritionPlanControllerTest extends TestCase
         $frequencyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_NUTRITION_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_NUTRITION_FREQUENCY_IS_HOURS
-        )->attribute_option_id;
+        );
 
         $routeId = AttributeOption::factory()->create(['name' => AttributeOptionName::DAILY_TASK_NUTRITION_ROUTES])->id;
         $ingredientUnitId = AttributeOption::factory()->create(['name' => AttributeOptionName::DAILY_TASK_NUTRITION_INGREDIENT_UNITS])->id;
@@ -277,7 +277,7 @@ final class NutritionPlanControllerTest extends TestCase
         $frequencyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_NUTRITION_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_NUTRITION_FREQUENCY_IS_HOURS
-        )->attribute_option_id;
+        );
 
         $me = $this->createTeamUser();
         $admission = $this->createCase($me->team);

@@ -12,8 +12,6 @@ use Tests\Traits\CreatesTeamUser;
 final class AdminRuleTest extends TestCase
 {
     use CreatesTeamUser;
-
-    //use AssistsWithAuthentication;
     use RefreshDatabase;
 
     public function test_update_my_role_to_allowed_value(): void
@@ -22,7 +20,7 @@ final class AdminRuleTest extends TestCase
         $me = $this->createTeamUser();
 
         // When I try to change my role to Admin
-        $result = (new AdminRule($me->user))->passes('role', Role::ADMIN->value);
+        $result = (new AdminRule($me->user, $me->team))->passes('role', Role::ADMIN->value);
 
         // Then I should pass validation
         $this->assertTrue($result);
@@ -34,7 +32,7 @@ final class AdminRuleTest extends TestCase
         $me = $this->createTeamUser();
 
         // When I try to change my role to anything but Admin
-        $result = (new AdminRule($me->user))->passes('role', Role::USER->value);
+        $result = (new AdminRule($me->user, $me->team))->passes('role', Role::USER->value);
 
         // Then I should fail validation
         $this->assertFalse($result);
@@ -47,7 +45,7 @@ final class AdminRuleTest extends TestCase
         $you = $this->attachUser($me->team);
 
         // When I try to change their role to anything
-        $result = (new AdminRule($you))->passes('role', Role::USER->value);
+        $result = (new AdminRule($you, $me->team))->passes('role', Role::USER->value);
 
         // Then I should pass validation
         $this->assertTrue($result);
@@ -60,7 +58,7 @@ final class AdminRuleTest extends TestCase
         $you = $this->attachUser($me->team);
 
         // When I try to change their role to anything but Admin
-        $result = (new AdminRule($you))->passes('role', Role::USER->value);
+        $result = (new AdminRule($you, $me->team))->passes('role', Role::USER->value);
 
         // Then I should pass validation
         $this->assertFalse($result);

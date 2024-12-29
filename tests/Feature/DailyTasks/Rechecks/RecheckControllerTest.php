@@ -36,12 +36,12 @@ final class RecheckControllerTest extends TestCase
         $this->frequencyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_2_DAYS
-        )->attribute_option_id;
+        );
 
         $this->assignmentId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_ASSIGNMENTS,
             AttributeOptionUiBehavior::DAILY_TASK_ASSIGNMENT_IS_VETERINARIAN
-        )->attribute_option_id;
+        );
     }
 
     public function test_un_authenticated_users_cant_store_a_recheck(): void

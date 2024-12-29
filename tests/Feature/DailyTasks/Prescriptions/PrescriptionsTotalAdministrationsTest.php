@@ -22,7 +22,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         $frequencyIs1DailyId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_1_DAILY
-        )->attribute_option_id;
+        );
 
         $this->assertSame(INF, Prescription::factory()->make([
             'rx_started_at' => Carbon::now(),
@@ -36,7 +36,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         $frequencyIsSdId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_SINGLE_DOSE
-        )->attribute_option_id;
+        );
 
         $this->assertSame(1, Prescription::factory()->make([
             'rx_started_at' => Carbon::now(),
@@ -50,7 +50,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         $frequencyIsSidId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_1_DAILY
-        )->attribute_option_id;
+        );
 
         $this->assertSame(1, Prescription::factory()->make([
             'rx_started_at' => Carbon::now(),
@@ -64,7 +64,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         $frequencyIsSidId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_1_DAILY
-        )->attribute_option_id;
+        );
 
         $this->assertSame(3, Prescription::factory()->make([
             'rx_started_at' => Carbon::now(),
@@ -78,7 +78,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         $frequencyIsBidId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_2_DAILY
-        )->attribute_option_id;
+        );
 
         $this->assertSame(2, Prescription::factory()->make([
             'rx_started_at' => Carbon::now(),
@@ -92,7 +92,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         $frequencyIsTidId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_3_DAILY
-        )->attribute_option_id;
+        );
 
         $this->assertSame(6, Prescription::factory()->make([
             'rx_started_at' => Carbon::now(),
@@ -106,7 +106,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         $frequencyIsQidId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_4_DAILY
-        )->attribute_option_id;
+        );
 
         $this->assertSame(8, Prescription::factory()->make([
             'rx_started_at' => Carbon::now(),
@@ -120,7 +120,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         $frequencyIsQ2DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_2_DAYS
-        )->attribute_option_id;
+        );
 
         $this->assertSame(3, Prescription::factory()->make([
             'rx_started_at' => Carbon::now(),
@@ -134,7 +134,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         $frequencyIsQ3DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_3_DAYS
-        )->attribute_option_id;
+        );
 
         $this->assertSame(4, Prescription::factory()->make([
             'rx_started_at' => Carbon::now(),
@@ -148,7 +148,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         $frequencyIsQ4DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_4_DAYS
-        )->attribute_option_id;
+        );
 
         $this->assertSame(2, Prescription::factory()->make([
             'rx_started_at' => Carbon::now(),
@@ -162,7 +162,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         $frequencyIsQ5DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_5_DAYS
-        )->attribute_option_id;
+        );
 
         $this->assertSame(2, Prescription::factory()->make([
             'rx_started_at' => Carbon::now(),
@@ -176,7 +176,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         $frequencyIsQ7DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_7_DAYS
-        )->attribute_option_id;
+        );
 
         $this->assertSame(3, Prescription::factory()->make([
             'rx_started_at' => Carbon::now(),
@@ -190,7 +190,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         $frequencyIsQ14DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_14_DAYS
-        )->attribute_option_id;
+        );
 
         $this->assertSame(2, Prescription::factory()->make([
             'rx_started_at' => Carbon::now(),
@@ -204,7 +204,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         $frequencyIsQ21DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_21_DAYS
-        )->attribute_option_id;
+        );
 
         $this->assertSame(2, Prescription::factory()->make([
             'rx_started_at' => Carbon::now(),
@@ -218,7 +218,7 @@ final class PrescriptionsTotalAdministrationsTest extends TestCase
         $frequencyIsQ28DaysId = $this->createUiBehavior(
             AttributeOptionName::DAILY_TASK_FREQUENCIES,
             AttributeOptionUiBehavior::DAILY_TASK_FREQUENCY_IS_EVERY_28_DAYS
-        )->attribute_option_id;
+        );
 
         $this->assertSame(2, Prescription::factory()->make([
             'rx_started_at' => Carbon::now(),

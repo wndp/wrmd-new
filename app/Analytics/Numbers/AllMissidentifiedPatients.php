@@ -24,7 +24,8 @@ class AllMissidentifiedPatients extends Number
 
     public function query()
     {
-        $query = Admission::join('teams', 'admissions.team_id', '=', 'teams.id')
+        $query = Admission::select('admissions.id')
+            ->join('teams', 'admissions.team_id', '=', 'teams.id')
             ->where('status', AccountStatus::ACTIVE)
             ->whereMisidentified();
 
